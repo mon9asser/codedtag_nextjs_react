@@ -1,14 +1,38 @@
+ 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
+
+
+
 import reportWebVitals from './reportWebVitals';
+
+
+// import components 
+import { Register } from './components/register';
+
+
+var WrappApplication = () => (
+  <BrowserRouter> 
+      <Routes>
+        
+        <Route path="/register" element={<Register/>} />
+
+      </Routes>
+  </BrowserRouter>
+);
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <WrappApplication />
 );
 
 // If you want to start measuring performance in your app, pass a function

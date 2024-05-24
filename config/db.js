@@ -1,0 +1,1 @@
+module.exports = {"db_name":"aaa_freeaccountingtutorial","domain":"FreeAccountingTutorial.com","name":"FreeAccountingTutorial"}
