@@ -2,11 +2,9 @@
   "name": "dashboard",
   "version": "1.0.0",
   "main": "index.js",
-  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-
   "devDependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
@@ -19,9 +17,11 @@
     "sendmail": "^1.6.1",
     "yargs": "^17.7.2"
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "react-notifications": "^1.7.4"
+  }
 }
