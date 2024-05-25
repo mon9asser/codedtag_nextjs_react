@@ -119,21 +119,23 @@ class Register extends Component {
             method: "post",
             data: data_object
         });
-
+         
         if(reqs.is_error) {
             NotificationManager.error(reqs.message, "Error"); 
             return;
-        }    
-
-         
+        }
+        
         // success message
         NotificationManager.success(reqs.message, "Account Created !");  
         
         this.setState({ 
             is_pressed: false 
         }); 
+        console.log(reqs.data);
+        // store tokens in localstorage 
+        // localStorage.setItem("session", )
+        // redirect after moments 
 
-        // redirect to dashboard with token 
 
     }
     
@@ -214,7 +216,12 @@ class Register extends Component {
                         <div className="field grouped">
                             <div className="control">
                                 <button type="submit" onClick={this.registeruser} className="button blue">
-                                    Register
+                                    {
+                                        ( this.state.is_pressed ) ?
+                                        <span class="loader"></span> : 
+                                        "Register"
+                                    } 
+                                    
                                 </button>
                             </div> 
                         </div>

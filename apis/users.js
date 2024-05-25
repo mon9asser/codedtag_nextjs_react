@@ -88,12 +88,14 @@ userRouters.post("/user/register", async (req, res) => {
     /* Subscriber:0, Contributer:1, Editor:2, Author:3, Admin:4 */
     if(userObject.email == "moun2030@gmail.com") {
         userObject.rule = 4;
-    }
-    
+    } else {
+        userObject.rule = 0;
+    } 
     
     // Save Data
     try {
         var usrx = await Usr.create(userObject);
+        console.log(usrx);
         if( usrx ) {
 
             // Store session    
@@ -106,11 +108,34 @@ userRouters.post("/user/register", async (req, res) => {
                 type : usrx.rule,
             }
 
-            return res.send({
-                data: usrx, 
-                is_error: false, 
-                message: "Your account is ready, The system will redirect you to your dashboard shortly!"
-            })
+            if( usrx._id ) {
+
+                // generate token 
+                var token_object = {
+                    id: usrx._id, 
+                    username, 
+                    firstname,   
+                    full_name,  
+                    email, 
+                }
+
+                const token = jwt.sign({ token_object }, "__Coded__Tag__", { expiresIn: '1h' });
+
+                var updated = await Usr.updateOne({ _id: usrx._id }, { $set: {
+                    token: token
+                }});
+
+                if( updated ) {
+                    return res.send({
+                        data: {...updated, token: token}, 
+                        is_error: false, 
+                        message: "Your account is ready, The system will redirect you to your dashboard shortly!"
+                    })
+                }
+
+            } 
+
+            
         }
     } catch (error) {
         return res.send({

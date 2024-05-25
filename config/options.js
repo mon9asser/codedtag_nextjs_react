@@ -1,6 +1,6 @@
 
 const { db_name } = require("./db")
-
+ 
 const Config = {
 
     server: {
@@ -17,8 +17,8 @@ const Config = {
         },
         link: () => {
 
-            return  Config.database.host + ':'
-                    Config.database.port + '/'
+            return  Config.database.host + ':' +
+                    Config.database.port + '/' +
                     Config.database.name;
         
         }

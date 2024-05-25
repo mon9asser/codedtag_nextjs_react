@@ -69,6 +69,10 @@ let usersSchema = new Schema({
           type: Boolean,
           default: false
     }, 
+    token: {
+      type: String, 
+      default: ""
+    }, 
     register_date:Date,
     last_log:Date, 
 });
