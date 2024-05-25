@@ -14,7 +14,7 @@ const {Usr} = require("./../models/user-model");
 // configuration
 const {Config} = require('./../config/options');
 
-
+ 
 
 
 userRouters.post("/user/register", async (req, res) => {
