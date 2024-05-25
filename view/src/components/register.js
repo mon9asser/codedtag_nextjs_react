@@ -94,10 +94,11 @@ class Register extends Component {
             this.setState({ 
                 is_pressed: false 
             }); 
-            
+
             NotificationManager.error( "The password does not match the confirm password; please ensure both fields are identical.", "Error"); 
             
             return;
+            
         }
 
         var data_object = {
