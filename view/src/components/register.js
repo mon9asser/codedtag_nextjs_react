@@ -94,14 +94,15 @@ class Register extends Component {
             this.setState({ 
                 is_pressed: false 
             }); 
+            
             NotificationManager.error( "The password does not match the confirm password; please ensure both fields are identical.", "Error"); 
+            
             return;
         }
 
         var data_object = {
 
-          //  capcha: this.state.captcha, 
-
+            // capcha: this.state.captcha, 
             username: this.state.username,
             firstname: this.state.firstname,
             secondname: this.state.secondname,
@@ -109,6 +110,7 @@ class Register extends Component {
             password: this.state.password,
             confirm_password: this.state.confirm_password,
             email: this.state.email,
+
         }
 
         var reqs = await Helper.sendRequest({
@@ -121,7 +123,8 @@ class Register extends Component {
             NotificationManager.error(reqs.message, "Error"); 
             return;
         }    
- 
+
+         
         // success message
         NotificationManager.success(reqs.message, "Account Created !");  
         
@@ -129,7 +132,7 @@ class Register extends Component {
             is_pressed: false 
         }); 
 
-
+        // redirect to dashboard with token 
 
     }
     
@@ -198,7 +201,7 @@ class Register extends Component {
 
                         <ReCAPTCHA
                             ref={this.recaptchaRef}
-                            sitekey={Settings.google.captcha}
+                            sitekey={Settings.google.captcha.public}
                             onChange={this.changedCapcha} 
                             onReset={this.handleCaptchaReset}
                         />
