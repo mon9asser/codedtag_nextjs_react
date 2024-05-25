@@ -2,8 +2,11 @@ import './assets/css/main-css.min.css';
 import React, {Component} from 'react'
 import ReCAPTCHA from "react-google-recaptcha";
 
+import { Helper } from './../helper';
+
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import { Settings } from '../settings';
 
 class Register extends Component {
 
@@ -41,8 +44,7 @@ class Register extends Component {
     registeruser = async (e) => {
         
         e.preventDefault();
-        
-        var errorMessageHandler; 
+         
 
         this.setState({
             result_message: "",
@@ -57,7 +59,7 @@ class Register extends Component {
         }
 
         // check for captch  
-        if( this.state.captcha == null ) {
+        if( this.state.captcha === null ) {
 
             /*
             this.setState({
@@ -76,7 +78,7 @@ class Register extends Component {
         }
 
         // check for email 
-        var email_validator = validateEmail(this.state.email);
+        var email_validator = Helper.validateEmail(this.state.email);
         if( !email_validator ) {
  
             this.setState({ 
@@ -87,7 +89,7 @@ class Register extends Component {
         }
         
         // check for password
-        if(this.state.password != this.state.confirm_password ) { 
+        if(this.state.password !== this.state.confirm_password ) { 
 
             this.setState({ 
                 is_pressed: false 
@@ -109,7 +111,7 @@ class Register extends Component {
             email: this.state.email,
         }
 
-        var reqs = await sendRequest({
+        var reqs = await Helper.sendRequest({
             api: "user/register",
             method: "post",
             data: data_object
@@ -131,96 +133,7 @@ class Register extends Component {
 
     }
     
-    registeruser = async (e) => {
-        
-        e.preventDefault();
-        
-        var errorMessageHandler; 
-
-        this.setState({
-            result_message: "",
-            result_message_type: "",
-            result_message_appear: false,
-            is_pressed: true 
-        });
-
-
-        if( this.state.is_pressed ) {
-            return; 
-        }
-
-        // check for captch  
-        if( this.state.captcha == null ) {
-
-            /*
-            this.setState({
-                result_message: "Please confirm that you are not a robot.",
-                result_message_type: "error-result",
-                result_message_appear: true,
-                is_pressed: false 
-            }); 
-            */ 
-            this.setState({ 
-                is_pressed: false 
-            }); 
-            NotificationManager.error("Please confirm that you are not a robot.", "Error"); 
-            return 
-
-        }
-
-        // check for email 
-        var email_validator = validateEmail(this.state.email);
-        if( !email_validator ) {
- 
-            this.setState({ 
-                is_pressed: false 
-            }); 
-            NotificationManager.error("Email is not valid.", "Error"); 
-            return;
-        }
-        
-        // check for password
-        if(this.state.password != this.state.confirm_password ) { 
-
-            this.setState({ 
-                is_pressed: false 
-            }); 
-            NotificationManager.error( "The password does not match the confirm password; please ensure both fields are identical.", "Error"); 
-            return;
-        }
-
-        var data_object = {
-
-          //  capcha: this.state.captcha, 
-
-            username: this.state.username,
-            firstname: this.state.firstname,
-            secondname: this.state.secondname,
-            full_name: this.state.firstname + " " + this.state.secondname,
-            password: this.state.password,
-            confirm_password: this.state.confirm_password,
-            email: this.state.email,
-        }
-
-        var reqs = await sendRequest({
-            api: "user/register",
-            method: "post",
-            data: data_object
-        });
-
-        if(reqs.is_error) {
-            NotificationManager.error(reqs.message, "Error"); 
-            return;
-        }    
- 
-        // success message
-        NotificationManager.success(reqs.message, "Account Created !");  
-        
-        this.setState({ 
-            is_pressed: false 
-        }); 
- 
-    }
+     
 
     handleCaptchaReset = () => {
 
@@ -285,7 +198,7 @@ class Register extends Component {
 
                         <ReCAPTCHA
                             ref={this.recaptchaRef}
-                            sitekey={siteKey.public}
+                            sitekey={Settings.google.captcha}
                             onChange={this.changedCapcha} 
                             onReset={this.handleCaptchaReset}
                         />

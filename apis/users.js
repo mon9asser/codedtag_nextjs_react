@@ -16,7 +16,7 @@ const {Config} = require('./../config/options');
 
  
 
-
+// Register
 userRouters.post("/user/register", async (req, res) => {
     
     var {
@@ -122,6 +122,10 @@ userRouters.post("/user/register", async (req, res) => {
 });
 
 
+
+// Login 
+
+// Subscribe 
 
 
 module.exports = { userRouters }

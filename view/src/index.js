@@ -5,9 +5,7 @@ import ReactDOM from 'react-dom/client';
 import {
   BrowserRouter,
   Routes,
-  Route,
-  Link,
-  useParams
+  Route, 
 } from "react-router-dom";
 
 
