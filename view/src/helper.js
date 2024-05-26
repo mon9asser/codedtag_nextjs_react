@@ -18,7 +18,7 @@ class HelperData {
         data["Secret-codedtag-api-key"] = Settings.keys.secret ;
          
         try {
-    
+          
           var reqs = await axios({
             method: method,
             url: `${Settings.server.api}/${api}`,
@@ -30,22 +30,16 @@ class HelperData {
           });
     
           if( reqs.status === 200 ) {
-            return {
-              data: reqs.data.data,
-              message: reqs.data.message,
-              is_error: false 
-            }
-          } else {
-    
-            console.log(reqs);
-            return {
-              data: [],
-              message: "Something went wrong, try later",
-              is_error: true 
-            }
+              return reqs.data;
+          } else { 
+              return {
+                data: [],
+                message: "Something went wrong, try later",
+                is_error: true 
+              }
           }
     
-        } catch (error) {
+        } catch (error) { 
           return  {
               data: [],
               message: "Something went wrong, try later",

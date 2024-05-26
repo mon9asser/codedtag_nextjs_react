@@ -17,6 +17,97 @@ const {Config} = require('./../config/options');
 
  
 
+// Login 
+userRouters.post("/user/login", async (req, res) => { 
+    
+    var {
+        password, 
+        email_username 
+    } = req.body;
+
+    if( password == undefined || password == "" || email_username == undefined || email_username == "" ) {
+        return res.send({
+            message: "User fields are required!",
+            data: [],
+            is_error: true 
+        });
+    }
+
+    // check email or username exists in our database 
+    var user_check = await Usr.findOne({
+        $or: [
+            { email: email_username },
+            { username: email_username }
+        ]
+    });
+      
+    if( user_check == null ) {
+        return res.send({
+            is_error: true, 
+            data: [],
+            message: "Incorrect login details. Please check your username and password and try again."
+        });
+    } 
+ 
+    // verify password
+    bcrypt.compare(password, user_check.password, async (err, result) => {
+        if (err) {
+            return res.send({
+                is_error: true, 
+                data: [],
+                message: "Incorrect login details. Please check your username and password and try again."
+            });
+          return;
+        }
+      
+        if (result) {
+
+            var user_data = {
+                id:user_check._id, 
+                name:user_check.firstname,  
+                email: user_check.email, 
+                full_name: user_check.full_name, 
+                token: user_check.token, 
+                site_name: user_check.domain,
+                dashboard: Config.dashboard.url,
+                is_user: (user_check.rule == 0 )? true: false 
+            }
+
+            const token = await jwt.sign({ user_data }, "__Coded__Tag__", { expiresIn: '1h' });
+
+            var updated = await Usr.updateOne({ _id: user_check._id }, { $set: {
+                token: token
+            }});
+
+            if( updated ) {
+                return res.send({
+                    data: {
+                        id:user_check._id, 
+                        name: user_check.firstname,  
+                        email: user_check.email, 
+                        full_name: user_check.full_name, 
+                        token: user_check.token, 
+                        site_name: domain,
+                        dashboard: Config.dashboard.url,
+                        is_user: (user_check.rule == 0 )? true: false 
+                    }, 
+                    is_error: false, 
+                    message: "You logged in successfully, The system will redirect you to your dashboard shortly!"
+                })
+            } 
+          // Proceed with login
+        } else {
+            return res.send({
+                is_error: true, 
+                data: [],
+                message: "Incorrect login details. Please check your username and password and try again."
+            });
+          // Handle incorrect password
+        }
+    }); 
+
+});
+
 // Register
 userRouters.post("/user/register", async (req, res) => {
     
@@ -96,7 +187,7 @@ userRouters.post("/user/register", async (req, res) => {
     // Save Data
     try {
         var usrx = await Usr.create(userObject);
-        console.log(usrx);
+         
         if( usrx ) {
             
 

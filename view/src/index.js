@@ -15,13 +15,14 @@ import reportWebVitals from './reportWebVitals';
 
 // import components 
 import { Register } from './components/register';
-
+import { Login } from './components/login';
 
 var WrappApplication = () => (
   <BrowserRouter> 
       <Routes>
-        
+      
         <Route path="/register" element={<Register/>} />
+        <Route path="/login" element={<Login/>} />
 
       </Routes>
   </BrowserRouter>
