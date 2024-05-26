@@ -16,6 +16,8 @@ import reportWebVitals from './reportWebVitals';
 // import components 
 import { Register } from './components/register';
 import { Login } from './components/login';
+import { Dashboard } from "./components/dashboard.js";
+import { Settings } from './components/settings.js';
 
 var WrappApplication = () => (
   <BrowserRouter> 
@@ -23,6 +25,9 @@ var WrappApplication = () => (
       
         <Route path="/register" element={<Register/>} />
         <Route path="/login" element={<Login/>} />
+
+        <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/dashboard/settings" element={<Settings/>} />
 
       </Routes>
   </BrowserRouter>
