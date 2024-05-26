@@ -3,6 +3,10 @@ const { db_name } = require("./db")
  
 const Config = {
 
+    dashboard: {
+        url: "http://localhost:3000/dashboard"
+    },
+
     server: {
         api: "/api",
         port: process.env.port || 5000 

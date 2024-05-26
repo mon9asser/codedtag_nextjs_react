@@ -4,7 +4,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import { Helper } from './../helper';
 
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+// import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import { Settings } from '../settings';
 
@@ -15,6 +15,7 @@ class Register extends Component {
         super(props);
 
         this.recaptchaRef = React.createRef();
+        this.request_result_ref = React.createRef();
 
         this.state = {
 
@@ -25,15 +26,17 @@ class Register extends Component {
             secondname: "",
             password: "",
             confirm_password: "", 
-            email: "",
+            email: "", 
+            
+            is_pressed: false,
 
-            result_message: "",
-            result_message_type: "error",
-            result_message_appear: false,
-            is_pressed: false 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
         }
 
     }
+ 
 
     changedCapcha = (value) => { 
         this.setState({
@@ -46,11 +49,11 @@ class Register extends Component {
         e.preventDefault();
          
 
-        this.setState({
-            result_message: "",
-            result_message_type: "",
-            result_message_appear: false,
-            is_pressed: true 
+        this.setState({ 
+            is_pressed: true, 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
         }); 
 
 
@@ -70,9 +73,12 @@ class Register extends Component {
             }); 
             */ 
             this.setState({ 
-                is_pressed: false 
+                is_pressed: false,
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "Please confirm that you are not a robot" 
             }); 
-            NotificationManager.error("Please confirm that you are not a robot.", "Error"); 
+            // NotificationManager.error("Please confirm that you are not a robot.", "Error"); 
             return 
 
         }
@@ -82,9 +88,13 @@ class Register extends Component {
         if( !email_validator ) {
  
             this.setState({ 
-                is_pressed: false 
+                is_pressed: false,
+
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "Email is not valid" 
             }); 
-            NotificationManager.error("Email is not valid.", "Error"); 
+            // NotificationManager.error("Email is not valid.", "Error"); 
             return;
         }
         
@@ -92,10 +102,14 @@ class Register extends Component {
         if(this.state.password !== this.state.confirm_password ) { 
 
             this.setState({ 
-                is_pressed: false 
+                is_pressed: false,
+
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "The password does not match the confirm password; please ensure both fields are identical." 
             }); 
 
-            NotificationManager.error( "The password does not match the confirm password; please ensure both fields are identical.", "Error"); 
+            // NotificationManager.error( "The password does not match the confirm password; please ensure both fields are identical.", "Error"); 
             
             return;
             
@@ -121,18 +135,55 @@ class Register extends Component {
         });
          
         if(reqs.is_error) {
-            NotificationManager.error(reqs.message, "Error"); 
+            // NotificationManager.error(reqs.message, "Error"); 
+            this.setState({
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: reqs.message
+            })
             return;
         }
         
-        // success message
-        NotificationManager.success(reqs.message, "Account Created !");  
         
-        this.setState({ 
-            is_pressed: false 
-        }); 
-        console.log(reqs.data);
-        // store tokens in localstorage 
+
+        if( reqs.data.id ) {
+
+            // subscriber
+            if( reqs.data.is_user ) {
+
+                // success message
+                // NotificationManager.success("Thank you for subscribing to our tutorials. You will be redirected shortly.", "Account Created!");
+                
+                this.setState({ 
+                    is_pressed: false,
+                    show_message: "show_message",
+                    request_status_class: "error",
+                    request_message: "Thank you for subscribing to our tutorials. You will be redirected shortly."
+                });  
+
+                return; 
+            }
+            
+            // success message
+            // NotificationManager.success(reqs.message, "Account Created !");  
+            
+            this.setState({ 
+                is_pressed: false ,
+                show_message: "show_message",
+                request_status_class: "success",
+                request_message: reqs.message
+            }); 
+
+            // store  localstorage  
+            localStorage.setItem("session", JSON.stringify(reqs.data) );
+
+            // redirect after moments 
+            setTimeout(() => { 
+                window.location.href = reqs.data.dashboard
+            }, 1000);
+        }
+
+
         // localStorage.setItem("session", )
         // redirect after moments 
 
@@ -211,17 +262,19 @@ class Register extends Component {
 
                         <hr/>
  
-                            
-                        <NotificationContainer /> 
+                        
+                        <div ref={this.request_result_ref} className={`${this.state.request_status_class} ${this.state.show_message} request-result-notifiction `}>
+                            {this.state.request_message}
+                        </div>
+
                         <div className="field grouped">
                             <div className="control">
                                 <button type="submit" onClick={this.registeruser} className="button blue">
                                     {
                                         ( this.state.is_pressed ) ?
-                                        <span class="loader"></span> : 
+                                        <span className="loader"></span> : 
                                         "Register"
-                                    } 
-                                    
+                                    }
                                 </button>
                             </div> 
                         </div>

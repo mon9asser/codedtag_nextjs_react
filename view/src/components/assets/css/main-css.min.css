@@ -457,6 +457,27 @@ h1.ce-header {
     outline: none;
 }
 
+.request-result-notifiction { 
+    margin-bottom: 20px;
+    padding: 10px;
+    display: none;
+}
+.error {
+    background-color: #ff000029;
+    border: 1px solid #dd9595;
+    color: red;
+}
+
+.success {
+    background-color: #00ff3429;
+    border: 1px solid #167f22;
+    color: #1c6142;
+}
+
+.show_message {
+    display: block;
+}
+
 .loader {
     width: 20px;
     height: 20px;

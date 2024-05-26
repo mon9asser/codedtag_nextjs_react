@@ -6,7 +6,8 @@ var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
  
 
- const {Helper} = require("./../config/helper")
+const {Helper} = require("./../config/helper")
+const { domain } = require("./../config/db");
 
 // Models of DB
 const {Usr} = require("./../models/user-model");
@@ -97,16 +98,7 @@ userRouters.post("/user/register", async (req, res) => {
         var usrx = await Usr.create(userObject);
         console.log(usrx);
         if( usrx ) {
-
-            // Store session    
-            var session_data = {
-                id: usrx._id,
-                email: usrx.email,
-                firstname: usrx.firstname,
-                secondname: usrx.secondname,
-                username: usrx.username,
-                type : usrx.rule,
-            }
+            
 
             if( usrx._id ) {
 
@@ -119,7 +111,7 @@ userRouters.post("/user/register", async (req, res) => {
                     email, 
                 }
 
-                const token = jwt.sign({ token_object }, "__Coded__Tag__", { expiresIn: '1h' });
+                const token = await jwt.sign({ token_object }, "__Coded__Tag__", { expiresIn: '1h' });
 
                 var updated = await Usr.updateOne({ _id: usrx._id }, { $set: {
                     token: token
@@ -127,7 +119,16 @@ userRouters.post("/user/register", async (req, res) => {
 
                 if( updated ) {
                     return res.send({
-                        data: {...updated, token: token}, 
+                        data: {
+                            id:usrx._id, 
+                            name:firstname,  
+                            email: email, 
+                            full_name: full_name, 
+                            token: token, 
+                            site_name: domain,
+                            dashboard: Config.dashboard.url,
+                            is_user: (userObject.rule == 0 )? true: false 
+                        }, 
                         is_error: false, 
                         message: "Your account is ready, The system will redirect you to your dashboard shortly!"
                     })
