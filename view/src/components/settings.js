@@ -6,7 +6,9 @@ import { Helper } from "../helper.js";
 class Settings extends Component {
 
     constructor(props) {
+        
         super(props);
+
         this.state = {
             
             page_name: "settings",
@@ -30,9 +32,11 @@ class Settings extends Component {
                 url: ""
             }
         };
+
     }
 
     async componentDidUpdate() {
+
         // check user capabilities 
         var access = await Helper.checkUserCapabilities(this.state.page_name);
                 
@@ -40,7 +44,9 @@ class Settings extends Component {
             
             this.props.history.push('/login'); 
             // window.location.href = access.redirect_to;
+            
         }
+
     }
     
     async componentDidMount(){
