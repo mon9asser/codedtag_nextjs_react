@@ -2,14 +2,15 @@ import { Component } from "react";
 import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { Helper } from "../helper.js";
-
-
+ 
 class Settings extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            
             page_name: "settings",
+
             banner_site_title: "",
             banner_site_description: "",
             site_address: "",
@@ -31,11 +32,14 @@ class Settings extends Component {
         };
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         
         // check user capabilities 
-        var isCaps = Helper.checkUserCapabilities(this.state.page_name);
-        console.log(isCaps);
+        var access = await Helper.checkUserCapabilities(this.state.page_name);
+         
+        if( !access.is_accessed ) {
+            window.location.href = access.redirect_to;
+        }
 
         // load data 
         this.setState({

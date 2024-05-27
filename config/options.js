@@ -3,8 +3,10 @@ const { db_name } = require("./db")
  
 const Config = {
 
+    jwt_screret: "__Coded__Tag__",
     dashboard: {
-        url: "http://localhost:3000/dashboard"
+        url: "http://localhost:3000/dashboard",
+        login: "http://localhost:3000/login",
     },
 
     server: {

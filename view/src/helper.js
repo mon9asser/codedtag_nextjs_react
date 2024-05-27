@@ -9,18 +9,40 @@ class HelperData {
         return re.test(email);
     }
 
-    checkUserCapabilities(pageName) {
+    async checkUserCapabilities(pageName) {
       
       // session data 
-      var session = localStorage.getItem("session");
-      
+      var session = JSON.parse(localStorage.getItem("session"));
+       
       if( session == null || session.token == undefined || session.token == "" ) {
-        return false; 
+        return {
+          redirect_to: "",
+          is_accessed: false
+        }; 
       }
       
       // passed check caps by request = settings
-      
-      // access to page name: settings
+      var reqs = await this.sendRequest({
+          api: "user/capabilities",
+          method: "post",
+          data: {
+            token: session.token,
+            page: pageName
+          }
+      })
+
+      if( reqs.is_error ) { 
+        return {
+          redirect_to: reqs.redirect_to,
+          is_accessed: false
+        }; 
+      }
+
+      return {
+        redirect_to: reqs.redirect_to,
+        is_accessed: true
+      }; 
+
     }
 
     async sendRequest ({api, method, data, headers} = null) {

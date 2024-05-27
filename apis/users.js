@@ -56,8 +56,7 @@ userRouters.post("/user/login", async (req, res) => {
                 is_error: true, 
                 data: [],
                 message: "Incorrect login details. Please check your username and password and try again."
-            });
-          return;
+            }); 
         }
       
         if (result) {
@@ -68,12 +67,13 @@ userRouters.post("/user/login", async (req, res) => {
                 email: user_check.email, 
                 full_name: user_check.full_name, 
                 token: user_check.token, 
+                idx: user_check.rule,
                 site_name: user_check.domain,
                 dashboard: Config.dashboard.url,
                 is_user: (user_check.rule == 0 )? true: false 
             }
 
-            const token = await jwt.sign({ user_data }, "__Coded__Tag__", { expiresIn: '1h' });
+            const token = await jwt.sign({ user_data }, Config.jwt_screret, { expiresIn: '1h' });
 
             var updated = await Usr.updateOne({ _id: user_check._id }, { $set: {
                 token: token
@@ -196,13 +196,14 @@ userRouters.post("/user/register", async (req, res) => {
                 // generate token 
                 var token_object = {
                     id: usrx._id, 
+                    idx: usrx.rule,
                     username, 
                     firstname,   
                     full_name,  
                     email, 
                 }
 
-                const token = await jwt.sign({ token_object }, "__Coded__Tag__", { expiresIn: '1h' });
+                const token = await jwt.sign({ token_object }, Config.jwt_screret, { expiresIn: '1h' });
 
                 var updated = await Usr.updateOne({ _id: usrx._id }, { $set: {
                     token: token
@@ -239,6 +240,129 @@ userRouters.post("/user/register", async (req, res) => {
 });
 
 
+// Check user permission
+userRouters.post("/user/capabilities", async (req, res) => {
+    
+    if( (req.body.token == undefined || req.body.token == "") && (req.body.page == undefined || req.body.page == "") ) {
+        return res.send({
+            data: [],
+            message: "Permission denied!",
+            is_error: true,
+            redirect_to: Config.dashboard.login,
+        });
+    };  
+
+    var page = req.body.page;
+    var token = req.body.token; 
+
+
+    // create post without publish -> in review
+    // permission of users subscriber:0, Contributer:1, Editor:2, Author:3, Admin:4
+    var permissions = [
+        {   
+            // Can read and comment on posts.
+            cap: 0,
+            name: 'subscriber',
+            rules: []
+        },
+        {
+            // Can write and submit posts for review.
+            cap: 1,
+            name: 'contributer',
+            rules: []
+        },
+        {
+            // Can publish and manage their own posts.
+            cap: 2,
+            name: 'author',
+            rules: []
+        },
+        {
+            // Can publish and manage posts, including others.
+            cap: 3,
+            name: 'editor',
+            rules: [
+                "settings",
+            ]
+        },
+        {
+            // Has full control over the blog, including managing users.
+            cap: 4,
+            name: 'admin',
+            rules: [
+                "settings",
+                "users",
+            ]
+        }
+    ]; 
+
+
+    jwt.verify(token, Config.jwt_screret, (err, decoded) => {
+        
+        // expired case - JsonWebTokenError - TokenExpiredError
+        if (err) {
+            
+            var errorObject = {
+                data: [], 
+                is_error: true, 
+                expired: false,
+                redirect_to: Config.dashboard.login,
+                message: ""
+            }
+
+            if(err.name != undefined && err.name != "TokenExpiredError" ) {
+                errorObject.message = "Your session is expired, please login again"; 
+                errorObject.expired = true; 
+            } else {
+                errorObject.message = "Permission Denied!"; 
+                errorObject.expired = false; 
+            }
+
+
+          return res.send(errorObject);
+        }  
+
+        var rule = decoded.user_data.idx; 
+
+        var index = permissions.findIndex(x => x.cap == rule );
+        if( index == -1 ) {
+            return res.send({
+                data: [], 
+                is_error: true, 
+                expired: false,
+                redirect_to: Config.dashboard.login,
+                message: "Permission Denied!"
+            })
+        }
+        
+        var user_permission = permissions[index];
+        var rules = user_permission.rules;
+
+        if( rules.includes(page) ) {
+            return res.send({
+                data: [], 
+                is_error: false, 
+                expired: false,
+                redirect_to: Config.dashboard.login,
+                message: "Permission is allowed"
+            })
+        } else {
+            return res.send({
+                data: [], 
+                is_error: true, 
+                expired: false,
+                redirect_to: Config.dashboard.login,
+                message: "Permission Denied!"
+            })
+        }
+
+    });
+       
+    
+
+ 
+
+}); 
 
 // Login 
 
