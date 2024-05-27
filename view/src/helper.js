@@ -9,6 +9,20 @@ class HelperData {
         return re.test(email);
     }
 
+    checkUserCapabilities(pageName) {
+      
+      // session data 
+      var session = localStorage.getItem("session");
+      
+      if( session == null || session.token == undefined || session.token == "" ) {
+        return false; 
+      }
+      
+      // passed check caps by request = settings
+      
+      // access to page name: settings
+    }
+
     async sendRequest ({api, method, data, headers} = null) {
 
         if( headers === undefined ) {

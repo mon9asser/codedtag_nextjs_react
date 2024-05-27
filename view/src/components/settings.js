@@ -1,9 +1,64 @@
 import { Component } from "react";
 import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
+import { Helper } from "../helper.js";
 
 
 class Settings extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            page_name: "settings",
+            banner_site_title: "",
+            banner_site_description: "",
+            site_address: "",
+            admin_email: "",
+            meta_title: "",
+            meta_description: "",
+            google_analytics: {
+                enable: false, 
+                analytics_id: "", 
+            },
+            google_ads_1: {
+                enable: false, 
+                url: ""
+            }, 
+            google_ads_2: {
+                enable: false, 
+                url: ""
+            }
+        };
+    }
+
+    componentDidMount(){
+        
+        // check user capabilities 
+        var isCaps = Helper.checkUserCapabilities(this.state.page_name);
+        console.log(isCaps);
+
+        // load data 
+        this.setState({
+            banner_site_title: "",
+            banner_site_description: "",
+            site_address: "",
+            admin_email: "",
+            meta_title: "",
+            meta_description: "",
+            google_analytics: {
+                enable: false, 
+                analytics_id: "", 
+            },
+            google_ads_1: {
+                enable: false, 
+                url: ""
+            }, 
+            google_ads_2: {
+                enable: false, 
+                url: ""
+            }
+        })
+    }
 
     render() {
         return (
@@ -12,7 +67,6 @@ class Settings extends Component {
                 <NavbarContainer/>
 
                 <SidebarContainer />
-
                    
                 <section className="section main-section"> 
                     <div>
@@ -24,31 +78,31 @@ class Settings extends Component {
                             <div className="md-6" style={{margin:"0 auto"}}>
                                 <div className="block-container"> 
                                     
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Banner Site Title</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="Banner Site Title" />
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Banner Site Title</label>
+                                        <div className="control">
+                                            <input className="input" type="text" placeholder="Banner Site Title" />
                                         </div> 
                                     </div>  
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Banner Description</label>
-                                        <div class="control">
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Banner Description</label>
+                                        <div className="control">
                                             <textarea placeholder="Banner Description" className="input" style={{minHeight:"100px"}}></textarea>
                                         </div> 
                                     </div> 
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Site Address (URL)</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="Site Address (URL)" />
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Site Address (URL)</label>
+                                        <div className="control">
+                                            <input className="input" type="text" placeholder="Site Address (URL)" />
                                         </div> 
                                     </div>
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Administration Email Address</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="Administration Email Address" />
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Administration Email Address</label>
+                                        <div className="control">
+                                            <input className="input" type="text" placeholder="Administration Email Address" />
                                         </div> 
                                     </div>
 
@@ -64,30 +118,52 @@ class Settings extends Component {
                             <div className="md-6" style={{margin:"0 auto"}}>
                                 <div className="block-container"> 
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Meta Title</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="Meta Title" />
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Meta Title</label>
+                                        <div className="control">
+                                            <input className="input" type="text" placeholder="Meta Title" />
                                         </div> 
                                     </div> 
 
                                     
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Meta Description</label>
-                                        <div class="control">
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Meta Description</label>
+                                        <div className="control">
                                             <textarea className="input" style={{minHeight:"100px"}} placeholder="Meta Description"></textarea>
                                         </div> 
                                     </div>
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Google Analytics</label>
-                                        <div class="control">
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Google Analytics</label>
+                                        <div className="control">
                                             <label>
                                                 <input type="checkbox" />
                                                 Enable
                                             </label>
-                                            <input class="input" type="text" placeholder="Google Analytics" />
+                                            <input className="input" type="text" placeholder="Google Analytics" />
+                                        </div> 
+                                    </div>
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Script Url 1</label>
+                                        <div className="control">
+                                            <label>
+                                                <input type="checkbox" />
+                                                Enable
+                                            </label>
+                                            <textarea className="input" style={{minHeight:"100px"}} placeholder="Example: Google AdSense"></textarea>
+                                        </div> 
+                                    </div>
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Script Url 2</label>
+                                        <div className="control">
+                                            <label>
+                                                <input type="checkbox" />
+                                                Enable
+                                            </label>
+                                            <textarea className="input" style={{minHeight:"100px"}} placeholder="Example: Google Adx"></textarea>
                                         </div> 
                                     </div>
 

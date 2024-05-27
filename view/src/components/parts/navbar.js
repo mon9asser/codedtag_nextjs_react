@@ -34,7 +34,7 @@ class NavbarContainer extends Component {
                                     </Link>
 
                                     <label style={{marginLeft: "50px"}}>
-                                        Current Site is: <b>{this.state.current_site}</b>
+                                        Current Site is: <b>CodedTag</b>
                                     </label>
                                 </div>
                         </div>
@@ -122,8 +122,8 @@ class NavbarContainer extends Component {
                                 <b>Site Name</b>
                             </label>
                             <select id="switcher-selector">
-                                <option value="0" selected={this.state.selected_site === 0? true: false}>Coded Tag</option>
-                                <option value="1" selected={true}>Free Acconting Tutorial</option>
+                                <option value="0">Coded Tag</option>
+                                <option value="1">Free Acconting Tutorial</option>
                             </select>
                         </section>
                         <footer className="modal-card-foot">
