@@ -14,7 +14,7 @@ class HelperData {
       // session data 
       var session = JSON.parse(localStorage.getItem("session"));
        
-      if( session == null || session.token == undefined || session.token == "" ) {
+      if( session === null || session.token === undefined || session.token === "" ) {
         return {
           redirect_to: "",
           is_accessed: false

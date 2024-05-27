@@ -23,11 +23,11 @@ var WrappApplication = () => (
   <BrowserRouter> 
       <Routes>
       
-        <Route path="/register" element={<Register/>} />
-        <Route path="/login" element={<Login/>} />
+        <Route name={"Register"} path="/register" element={<Register/>} />
+        <Route name={"Login"} path="/login" element={<Login/>} />
 
-        <Route path="/dashboard" element={<Dashboard/>} />
-        <Route path="/dashboard/settings" element={<Settings/>} />
+        <Route name={"Dashboard"} path="/dashboard" element={<Dashboard/>} />
+        <Route name={"Settings"} path="/dashboard/settings" element={<Settings/>} />
 
       </Routes>
   </BrowserRouter>

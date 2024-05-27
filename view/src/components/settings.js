@@ -32,14 +32,20 @@ class Settings extends Component {
         };
     }
 
-    async componentDidMount(){
-        
+    async componentDidUpdate() {
         // check user capabilities 
         var access = await Helper.checkUserCapabilities(this.state.page_name);
-         
+                
         if( !access.is_accessed ) {
-            window.location.href = access.redirect_to;
+            
+            this.props.history.push('/login'); 
+            // window.location.href = access.redirect_to;
         }
+    }
+    
+    async componentDidMount(){
+        
+        
 
         // load data 
         this.setState({
