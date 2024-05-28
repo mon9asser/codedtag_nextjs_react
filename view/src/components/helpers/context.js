@@ -28,6 +28,7 @@ class AuthWrapperContext extends Component {
     }
 
     componentDidMount() { 
+        
         const { navigate, location } = this.props;
         
         var page = "dashboard"

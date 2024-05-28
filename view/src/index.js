@@ -10,6 +10,7 @@ import {
 
 
 
+
 import reportWebVitals from './reportWebVitals';
 
 
@@ -17,7 +18,7 @@ import reportWebVitals from './reportWebVitals';
 import { Register } from './components/register';
 import { Login } from './components/login';
 import { Dashboard } from "./components/dashboard.js";
-import { Settings } from './components/settings.js';
+import { Settings } from './components/settings.js'; 
 
 import { AuthWrapper } from './components/helpers/context.js';
 
@@ -31,14 +32,12 @@ var WrappApplication = () => (
       </Routes>
       
       <AuthWrapper>
-        <Routes>
-         
+        <Routes> 
             <Route name={"Dashboard"} path="/dashboard" element={<Dashboard/>} />
-            <Route name={"Settings"} path="/dashboard/settings" element={<Settings/>} />
-        
-
+            <Route name={"Settings"} path="/dashboard/settings" element={<Settings/>} /> 
         </Routes>
       </AuthWrapper>
+      
   </BrowserRouter>
  
 );

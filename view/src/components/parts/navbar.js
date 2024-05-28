@@ -8,7 +8,7 @@ class NavbarContainer extends Component {
             <>
                 <nav id="navbar-main" className="navbar is-fixed-top">
                     <div className="navbar-brand">
-                        <a href="/test" className="navbar-item mobile-aside-button">
+                        <a href="#" className="navbar-item mobile-aside-button">
                             <span className="icon"><i className="mdi mdi-forwardburger mdi-24px"></i></span>
                         </a>
                     </div>
@@ -19,24 +19,21 @@ class NavbarContainer extends Component {
                     </div>
                     <div className="navbar-menu" id="navbar-menu">
                         <div className="navbar-start">
-                                <div className="navbar-item">
+                            <div className="navbar-item">
 
-                                    <Link target="_blank" to={"#"} className="button light">
-                                        <span>Visit Site</span>
-                                    </Link>
+                                <Link target="_blank" to={"#"} className="button light">
+                                    <span>Visit Site</span>
+                                </Link>
 
-                                    <Link target="_blank" to={"#"} data-target="manage-sites" style={{marginLeft: "10px"}} className="button tan --jb-modal">
-                                        <span>Manage Sites</span>
-                                    </Link> 
-                                    
-                                    <Link target="_blank" to={"#"} data-target="manage-sites" style={{marginLeft: "10px"}} className="button tan --jb-modal">
-                                        <span>Manage Sites</span>
-                                    </Link>
+                                <Link target="_blank" to={"#"} data-target="manage-sites" style={{marginLeft: "10px"}} className="button tan --jb-modal">
+                                    <span>Manage Sites</span>
+                                </Link>  
 
-                                    <label style={{marginLeft: "50px"}}>
-                                        Current Site is: <b>CodedTag</b>
-                                    </label>
-                                </div>
+                                <label style={{marginLeft: "50px"}}>
+                                    Current Site is: <b>CodedTag</b>
+                                </label>
+                                
+                            </div>
                         </div>
                         <div className="navbar-end">
                             <div className="navbar-item dropdown has-divider has-user-avatar">
@@ -77,21 +74,21 @@ class NavbarContainer extends Component {
 
 
                 <div id="sample-modal" className="modal">
-                        <div className="modal-background --jb-modal-close"></div>
-                        <div className="modal-card">
-                            <header className="modal-card-head">
-                                <p className="modal-card-title">Sample modal</p>
-                            </header>
-                            <section className="modal-card-body">
-                                <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-                                <p>This is sample modal</p>
-                            </section>
-                            <footer className="modal-card-foot">
-                                <button className="button --jb-modal-close">Cancel</button>
-                                <button className="button red --jb-modal-close">Confirm</button>
-                            </footer>
-                        </div>
+                    <div className="modal-background --jb-modal-close"></div>
+                    <div className="modal-card">
+                        <header className="modal-card-head">
+                            <p className="modal-card-title">Sample modal</p>
+                        </header>
+                        <section className="modal-card-body">
+                            <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
+                            <p>This is sample modal</p>
+                        </section>
+                        <footer className="modal-card-foot">
+                            <button className="button --jb-modal-close">Cancel</button>
+                            <button className="button red --jb-modal-close">Confirm</button>
+                        </footer>
                     </div>
+                </div>
 
 
                     <div id="sample-modal-2" className="modal">
