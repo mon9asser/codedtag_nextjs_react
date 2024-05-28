@@ -122,12 +122,7 @@ class Settings extends Component {
                                             <input className="input" type="text" placeholder="Administration Email Address" />
                                         </div> 
                                     </div>
-
-                                    
-                                    
-
-                                     
-                                        
+ 
                                 </div> 
             
                             </div>

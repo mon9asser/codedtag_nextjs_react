@@ -73,7 +73,7 @@ userRouters.post("/user/login", async (req, res) => {
                 is_user: (user_check.rule == 0 )? true: false 
             }
 
-            const token = await jwt.sign({ user_data }, Config.jwt_screret, { expiresIn: '1d' });
+            const token = await jwt.sign({ user_data }, Config.jwt_screret, { expiresIn: '3h' });
 
             var updated = await Usr.updateOne({ _id: user_check._id }, { $set: {
                 token: token
@@ -203,7 +203,7 @@ userRouters.post("/user/register", async (req, res) => {
                     email, 
                 }
 
-                const token = await jwt.sign({ token_object }, Config.jwt_screret, { expiresIn: '1d' });
+                const token = await jwt.sign({ token_object }, Config.jwt_screret, { expiresIn: '3h' });
 
                 var updated = await Usr.updateOne({ _id: usrx._id }, { $set: {
                     token: token
