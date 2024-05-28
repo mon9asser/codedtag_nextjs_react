@@ -281,9 +281,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
             // Can publish and manage posts, including others.
             cap: 3,
             name: 'editor',
-            rules: [
-                "settings",
-            ]
+            rules: []
         },
         {
             // Has full control over the blog, including managing users.
@@ -292,16 +290,17 @@ userRouters.post("/user/capabilities", async (req, res) => {
             rules: [
                 "settings",
                 "users",
+                "dashboard"
             ]
         }
     ]; 
-
+    
 
     jwt.verify(token, Config.jwt_screret, (err, decoded) => {
         
         // expired case - JsonWebTokenError - TokenExpiredError
         if (err) {
-            
+             
             var errorObject = {
                 data: [], 
                 is_error: true, 
@@ -321,10 +320,13 @@ userRouters.post("/user/capabilities", async (req, res) => {
 
           return res.send(errorObject);
         }  
-
+         
         var rule = decoded.user_data.idx; 
-
-        var index = permissions.findIndex(x => x.cap == rule );
+        
+        var index = permissions.findIndex(x => { 
+            return x.cap == rule;
+        });
+        
         if( index == -1 ) {
             return res.send({
                 data: [], 
@@ -337,7 +339,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
         
         var user_permission = permissions[index];
         var rules = user_permission.rules;
-
+        console.log(rules, page);
         if( rules.includes(page) ) {
             return res.send({
                 data: [], 

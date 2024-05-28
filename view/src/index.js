@@ -19,18 +19,28 @@ import { Login } from './components/login';
 import { Dashboard } from "./components/dashboard.js";
 import { Settings } from './components/settings.js';
 
+import { AuthWrapper } from './components/helpers/context.js';
+
 var WrappApplication = () => (
+  
   <BrowserRouter> 
+
       <Routes>
-      
-        <Route name={"Register"} path="/register" element={<Register/>} />
-        <Route name={"Login"} path="/login" element={<Login/>} />
-
-        <Route name={"Dashboard"} path="/dashboard" element={<Dashboard/>} />
-        <Route name={"Settings"} path="/dashboard/settings" element={<Settings/>} />
-
+          <Route name={"Register"} path="/register" element={<Register/>} />
+          <Route name={"Login"} path="/login" element={<Login/>} />
       </Routes>
+      
+      <AuthWrapper>
+        <Routes>
+         
+            <Route name={"Dashboard"} path="/dashboard" element={<Dashboard/>} />
+            <Route name={"Settings"} path="/dashboard/settings" element={<Settings/>} />
+        
+
+        </Routes>
+      </AuthWrapper>
   </BrowserRouter>
+ 
 );
 
 

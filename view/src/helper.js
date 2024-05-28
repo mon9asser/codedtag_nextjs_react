@@ -30,7 +30,7 @@ class HelperData {
             page: pageName
           }
       })
-
+      console.log(reqs);
       if( reqs.is_error ) { 
         return {
           redirect_to: reqs.redirect_to,

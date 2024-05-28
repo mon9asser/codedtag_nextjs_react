@@ -1,13 +1,14 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
-import { Helper } from "../helper.js";
+// import { Helper } from "../helper.js";
+import { Authentication } from "./helpers/context.js";
  
 class Settings extends Component {
-
+    static contextType = Authentication;
     constructor(props) {
         
-        super(props);
+        super(props); 
 
         this.state = {
             
@@ -36,16 +37,16 @@ class Settings extends Component {
     }
 
     async componentDidUpdate() {
-
+        console.log(this.context.value);
         // check user capabilities 
-        var access = await Helper.checkUserCapabilities(this.state.page_name);
+        //var access = await Helper.checkUserCapabilities(this.state.page_name);
                 
-        if( !access.is_accessed ) {
+        //if( !access.is_accessed ) {
             
-            this.props.history.push('/login'); 
+        //    this.props.history.push('/login'); 
             // window.location.href = access.redirect_to;
             
-        }
+        //}
 
     }
     
