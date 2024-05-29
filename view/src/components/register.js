@@ -176,11 +176,11 @@ class Register extends Component {
 
             // store  localstorage  
             localStorage.setItem("session", JSON.stringify(reqs.data) );
-
+            
             // redirect after moments 
             setTimeout(() => { 
                 window.location.href = reqs.data.dashboard
-            }, 1000);
+            }, 2000);
         }
 
 

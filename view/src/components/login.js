@@ -112,7 +112,7 @@ class Login extends Component {
 
             // redirect after moments 
             setTimeout(() => { 
-                window.location.href = reqs.data.dashboard
+                window.location.href = "/dashboard"
             }, 1000);
         }
 
@@ -135,6 +135,8 @@ class Login extends Component {
     };
 
     render(){
+         
+
         return (
             <section className="section main-section">
                 

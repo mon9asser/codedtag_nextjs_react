@@ -78,6 +78,14 @@ class NavbarContainer extends Component {
         })
     }
 
+    logout = async () => {
+        
+        var resp = await Helper.logut();
+        if( resp ) {
+            window.location.href = "/login"
+        }
+    }
+
     render() {
         return (
             <>
@@ -124,19 +132,19 @@ class NavbarContainer extends Component {
                                         <span className="icon"><i className="mdi mdi-account"></i></span>
                                         <span>My Profile</span>
                                     </a>
-                                    <a href="/test" className="navbar-item">
+                                    <Link to={"/dashboard/settings"} className="navbar-item">
                                         <span className="icon"><i className="mdi mdi-settings"></i></span>
                                         <span>Settings</span>
-                                    </a>
+                                    </Link>
                                     <a href="/test" className="navbar-item">
                                         <span className="icon"><i className="mdi mdi-email"></i></span>
                                         <span>Messages</span>
                                     </a>
                                     <hr className="navbar-divider" />
-                                    <a href="/test" className="navbar-item">
+                                    <span onClick={this.logout} className="navbar-item">
                                         <span className="icon"><i className="mdi mdi-logout"></i></span>
                                         <span>Log Out</span>
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
                             <a href="/test" title="Log out" className="navbar-item desktop-icon-only">

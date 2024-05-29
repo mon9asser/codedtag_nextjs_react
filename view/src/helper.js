@@ -9,6 +9,18 @@ class HelperData {
         return re.test(email);
     }
 
+    async logut () { 
+
+      await localStorage.clear();
+      var session = await localStorage.getItem("sesstion")
+      if( session == null ) {
+        return true; 
+      }
+
+      return false;
+
+    }
+
     async checkUserCapabilities(pageName) {
       
       // session data 
