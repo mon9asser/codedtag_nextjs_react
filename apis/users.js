@@ -318,9 +318,9 @@ userRouters.post("/user/capabilities", async (req, res) => {
 
 
           return res.send(errorObject);
-        }  
-         
-        var rule = decoded.user_data.idx; 
+        }   
+        
+        var rule = ( decoded.user_data != undefined )? decoded.user_data.idx: 0; 
         
         var index = permissions.findIndex(x => { 
             return x.cap == rule;

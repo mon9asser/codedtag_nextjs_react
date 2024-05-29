@@ -3,6 +3,7 @@ import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 // import { Helper } from "../helper.js";
 import { Authentication } from "./helpers/context.js";
+import { Helper } from "../helper.js";
  
 class Settings extends Component {
     static contextType = Authentication;
@@ -11,42 +12,36 @@ class Settings extends Component {
         super(props); 
 
         this.state = {
-            
+
             page_name: "settings",
 
             banner_site_title: "",
             banner_site_description: "",
             site_address: "",
-            admin_email: "",
-            meta_title: "",
-            meta_description: "",
+            admin_email_address: "",
+            site_meta_title: "",
+            site_meta_description: "",
             google_analytics: {
-                enable: false, 
-                analytics_id: "", 
+                enabled: false, 
+                field: "", 
             },
-            google_ads_1: {
-                enable: false, 
-                url: ""
+            script_url_1: {
+                enabled: false, 
+                url_field: ""
             }, 
-            google_ads_2: {
-                enable: false, 
-                url: ""
+            script_url_2: {
+                enabled: false, 
+                url_field: ""
             }
+
+
         };
 
     }
 
     async componentDidUpdate() {
-        console.log(this.context.value);
-        // check user capabilities 
-        //var access = await Helper.checkUserCapabilities(this.state.page_name);
-                
-        //if( !access.is_accessed ) {
-            
-        //    this.props.history.push('/login'); 
-            // window.location.href = access.redirect_to;
-            
-        //}
+        
+        
 
     }
     
@@ -55,25 +50,33 @@ class Settings extends Component {
         
 
         // load data 
+        var getter = await Helper.sendRequest({
+            api: "/settings/get",
+            data: {}, 
+            method: "get"
+        });
+
+        if( getter.is_error ) {
+            return; 
+        }
+         
+        // setup data 
+        if( ! getter.data.length ) {
+            return; 
+        }
+
+        var settings = getter.data[0]; 
+
         this.setState({
-            banner_site_title: "",
-            banner_site_description: "",
-            site_address: "",
-            admin_email: "",
-            meta_title: "",
-            meta_description: "",
-            google_analytics: {
-                enable: false, 
-                analytics_id: "", 
-            },
-            google_ads_1: {
-                enable: false, 
-                url: ""
-            }, 
-            google_ads_2: {
-                enable: false, 
-                url: ""
-            }
+            banner_site_title: settings.banner_site_title,
+            banner_site_description : settings.banner_site_description,
+            site_address: settings.site_address, 
+            admin_email_address: settings.admin_email_address,
+            site_meta_title: settings.site_meta_title,    
+            site_meta_description: settings.site_meta_description,
+            google_analytics: settings.google_analytics,
+            script_url_1: settings.script_url_1,
+            script_url_2: settings.script_url_2,
         })
     }
 
@@ -98,28 +101,28 @@ class Settings extends Component {
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Banner Site Title</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="Banner Site Title" />
+                                            <input onChange={e => this.setState({ banner_site_title: e.target.value })} value={this.state.banner_site_title} className="input" type="text" placeholder="Banner Site Title" />
                                         </div> 
                                     </div>  
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Banner Description</label>
                                         <div className="control">
-                                            <textarea placeholder="Banner Description" className="input" style={{minHeight:"100px"}}></textarea>
+                                            <textarea onChange={e => this.setState({ banner_site_description: e.target.value })} value={this.state.banner_site_description} placeholder="Banner Description" className="input" style={{minHeight:"100px"}}></textarea>
                                         </div> 
                                     </div> 
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Site Address (URL)</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="Site Address (URL)" />
+                                            <input onChange={e => this.setState({ site_address: e.target.value })} value={this.state.site_address} className="input" type="text" placeholder="Site Address (URL)" />
                                         </div> 
                                     </div>
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Administration Email Address</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="Administration Email Address" />
+                                            <input onChange={e => this.setState({ admin_email_address: e.target.value })} value={this.state.admin_email_address} className="input" type="text" placeholder="Administration Email Address" />
                                         </div> 
                                     </div>
  
@@ -133,7 +136,7 @@ class Settings extends Component {
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Meta Title</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="Meta Title" />
+                                            <input onChange={e => this.setState({ site_meta_title: e.target.value })} value={this.state.site_meta_title} className="input" type="text" placeholder="Meta Title" />
                                         </div> 
                                     </div> 
 
@@ -142,7 +145,7 @@ class Settings extends Component {
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Meta Description</label>
                                         <div className="control">
-                                            <textarea className="input" style={{minHeight:"100px"}} placeholder="Meta Description"></textarea>
+                                            <textarea onChange={e => this.setState({ site_meta_description: e.target.value })} value={this.state.site_meta_description} className="input" style={{minHeight:"100px"}} placeholder="Meta Description"></textarea>
                                         </div> 
                                     </div>
 
@@ -153,7 +156,7 @@ class Settings extends Component {
                                                 <input type="checkbox" />
                                                 Enable
                                             </label>
-                                            <input className="input" type="text" placeholder="Google Analytics" />
+                                            <input onChange={e => this.setState({ google_analytics: { ...this.state.google_analytics, field: e.target.value } })} value={this.state.google_analytics.field} className="input" type="text" placeholder="Google Analytics" />
                                         </div> 
                                     </div>
 

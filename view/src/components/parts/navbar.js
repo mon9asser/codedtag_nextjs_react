@@ -75,7 +75,9 @@ class NavbarContainer extends Component {
             index: reqs.data.index, 
             domain: reqs.data.domain, 
             name: reqs.data.name
-        })
+        });
+
+        await this.logout();
     }
 
     logout = async () => {

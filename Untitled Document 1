@@ -1,0 +1,22 @@
+banner_site_title 
+banner_site_description 
+site_address 
+admin_email_address
+site_meta_title    
+site_meta_description
+
+
+google_analytics: {
+	enabled:false
+        field: "", 
+},
+
+
+script_url_1: {
+	enabled: false,
+        url_field: "", 
+},
+script_url_2: {
+	enabled: false,
+	url_field: "",
+}

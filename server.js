@@ -20,14 +20,15 @@ app.use(function (req, res, next) {
 
 
 // Routers 
-const {userRouters} = require("./apis/users");
+const { userRouters } = require("./apis/users");
 const { switcherRouter } = require("./apis/switcher");
-
+const { settingsRouter } = require("./apis/settings");
 
 
 // middlewares 
 app.use( Config.server.api, userRouters );
 app.use( Config.server.api, switcherRouter );
+app.use( Config.server.api, settingsRouter );
 
 // serve statics of reactJS
 app.use(express.static(path.join(__dirname, 'view/build')));
