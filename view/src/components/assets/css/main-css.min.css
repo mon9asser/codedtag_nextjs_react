@@ -500,3 +500,12 @@ h1.ce-header {
     }
 
 } 
+
+.navbar {
+    height: 5rem;
+    align-items: center;
+}
+
+body {
+    padding-top: 125px;
+}

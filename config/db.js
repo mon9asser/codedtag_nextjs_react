@@ -1,1 +1,1 @@
-module.exports = {"db_name":"aaa_freeaccountingtutorial","domain":"FreeAccountingTutorial.com","name":"FreeAccountingTutorial"}
+module.exports = {"db_name":"aaa_freeaccountingtutorial","domain":"FreeAccountingTutorial.com","name":"FreeAccountingTutorial","index":1}

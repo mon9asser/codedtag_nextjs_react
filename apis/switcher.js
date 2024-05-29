@@ -2,23 +2,29 @@ const mongoose = require('mongoose');
 const express = require("express");
 const {name, domain} = require("./../config/db")
 var switcherRouter = express.Router(); 
+var path = require("path");
+var fs = require("fs");
+
+var sites = [
+    { 
+        db_name: "aaa_codedtag",
+        domain: "Codedtag.com",
+        name: "CodedTag",
+        index: 0
+    },
+    { 
+        db_name: "aaa_freeaccountingtutorial",
+        domain: "FreeAccountingTutorial.com",
+        name: "FreeAccountingTutorial",
+        index: 1
+    }
+];
 
 
+// switch 
 switcherRouter.post("/switcher", (req, res) => {
 
-    var sites = [
-        {
-            db_name: "aaa_codedtag",
-            domain: "Codedtag.com",
-            name: "CodedTag"
-        },
-        {
-            db_name: "aaa_freeaccountingtutorial",
-            domain: "FreeAccountingTutorial.com",
-            name: "FreeAccountingTutorial"
-        }
-    ];
-
+    
     var objx = {
         data: {},
         message: "Something went wrong",
@@ -39,12 +45,13 @@ switcherRouter.post("/switcher", (req, res) => {
         return res.send(objx);
     }
 
-    var file_name = path.join(__dirname, "../conf/db.js");
-
+    var file_name = path.join(__dirname, "../config/db.js");
+    
     var content = `module.exports = ${JSON.stringify(sites[arrayIndex])}`;
 
     fs.writeFile(file_name, content, (err) => {
         if (err) {
+            
             // Log an error message if writing fails
             return res.send(objx);
         } else {
@@ -62,5 +69,34 @@ switcherRouter.post("/switcher", (req, res) => {
     
 })
 
+
+// get current site
+switcherRouter.get("/current-site", (req, res) => {
+    try {
+
+        var index = -1;
+        // preparing index 
+        sites.forEach(el => {
+            var domain_element = el.domain.toLocaleLowerCase(); 
+            var current_domain = domain.toLocaleLowerCase();
+            if( domain_element == current_domain ) {
+                index = el.index;
+            }
+        })
+
+        return res.send({
+            is_error: false, 
+            data: {name, domain, index},
+            message: ""
+        })
+
+    } catch (error) {
+        return  res.send({
+            is_error: true, 
+            data: {},
+            message: "Connection error!" 
+        })
+    }
+})
 
 module.exports = { switcherRouter }
