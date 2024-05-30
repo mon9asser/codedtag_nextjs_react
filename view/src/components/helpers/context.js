@@ -32,36 +32,36 @@ class AuthWrapperContext extends Component {
         const { navigate, location } = this.props;
         
         var page = "dashboard"
-        if( location.pathname != undefined ) {
+        if( location.pathname !== undefined ) {
             
             var cutted = location.pathname;
-            if( cutted.indexOf("/") != -1 ) {
+            if( cutted.indexOf("/") !== -1 ) {
                 var lens = location.pathname.split("/");
                 cutted = lens[lens.length - 1];
             }
             
-            if( cutted == "/" || cutted == "" ) {
+            if( cutted === "/" || cutted === "" ) {
                 cutted = lens[lens.length - 2];
             } 
 
             page = cutted;
         }
 
-        if( page == "register" || page == "login" ) {
+        if( page === "register" || page === "login" ) {
             return;
         }
 
         
         var session = JSON.parse(localStorage.getItem("session"));
         
-        if( session == null || session.token == undefined ) {
+        if( session === null || session.token === undefined ) {
             setTimeout(() => {
                 navigate('/login');
             }, 0)
         } 
        
         Helper.checkUserCapabilities( page ).then(result => {
-            if( result.is_accessed == false || result.is_accessed == undefined ) {
+            if( result.is_accessed === false || result.is_accessed === undefined ) {
                 navigate('/login');
             }
         }); 

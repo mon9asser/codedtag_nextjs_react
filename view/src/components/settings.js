@@ -89,12 +89,12 @@ class Settings extends Component {
 
     updateSiteSetting = async () => {
 
-        /*this.setState({ 
-            is_pressed: false ,
-            show_message: "show_message",
-            request_status_class: "success",
-            request_message: "saved success"
-        }); */
+        this.setState({ 
+            is_pressed: true ,
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
+        }); 
 
         var data_object = {
             basic_id: this.state.basic_id, 
@@ -115,7 +115,24 @@ class Settings extends Component {
             method: "post"
         })
 
-        console.log(request);
+        if(request.is_error) {
+            this.setState({ 
+                is_pressed: false ,
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: request.message
+            }); 
+
+            return; 
+        }
+
+        this.setState({ 
+            is_pressed: false ,
+            show_message: "show_message",
+            request_status_class: "success",
+            request_message: request.message
+        }); 
+ 
     }
 
     render() {

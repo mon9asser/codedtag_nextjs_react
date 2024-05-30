@@ -23,16 +23,25 @@ settingsRouter.post("/settings/update", async (req, res) => {
     }
 
     // insert 
-    var document = new Sets(objx);
+    try {
 
-    await document.save();
+        var document = new Sets(objx);
 
-        
-    response.is_error = false; 
-    response.message = "Saved Success!";
-    response.data = []
+        await document.save();
 
-    return res.send(response);
+            
+        response.is_error = false; 
+        response.message = "Saved Success!";
+        response.data = []
+
+        return res.send(response);
+    } catch (error) {
+
+        response.is_error = true; 
+        response.message = "Something went wrong!";
+        response.data = []
+        return res.send(response);
+    }
 
 
 }) 

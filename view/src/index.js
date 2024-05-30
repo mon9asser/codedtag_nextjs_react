@@ -19,8 +19,10 @@ import { Register } from './components/register';
 import { Login } from './components/login';
 import { Dashboard } from "./components/dashboard.js";
 import { Settings } from './components/settings.js'; 
+import { CreatePost } from './components/create-posts.js';
 
 import { AuthWrapper } from './components/helpers/context.js';
+
 
 var WrappApplication = () => (
   
@@ -35,6 +37,7 @@ var WrappApplication = () => (
         <Routes> 
             <Route name={"Dashboard"} path="/dashboard" element={<Dashboard/>} />
             <Route name={"Settings"} path="/dashboard/settings" element={<Settings/>} /> 
+            <Route name={"Create-post"} path="/dashboard/create-post" element={<CreatePost/>} /> 
         </Routes>
       </AuthWrapper>
       
