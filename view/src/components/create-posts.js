@@ -23,15 +23,13 @@ import Delimiter from '@editorjs/delimiter'
 import InlineCode from '@editorjs/inline-code'
 import SimpleImage from '@editorjs/simple-image'  
 import Hyperlink from "editorjs-hyperlink";
- 
+
+
 import {CustomCodeBlok} from "./parts/codeblock.js"
 
 const ReactEditorJS = createReactEditorJS();
 
 var Tools = {
-
-
- 
     
     hyperlink: {
         class: Hyperlink
@@ -50,13 +48,14 @@ var Tools = {
         class: List,
         inlineToolbar: ["bold", "hyperlink", "italic", "marker", "inlineCode"]
     },
-    warning: Warning, 
+    // warning: Warning, 
     quote: Quote,
     marker: Marker,
     checklist: CheckList,
     delimiter: Delimiter,
     raw: Raw,
     inlineCode: InlineCode,
+    embed: Embed,
     paragraph: {
         class: Paragraph,
         inlineToolbar: ["bold", "hyperlink", "italic", "marker", "inlineCode"],
@@ -212,6 +211,37 @@ class CreatePost extends Component {
             paragraphBlock.holder.classList.add("placeholder-block-item")
         }  
  
+    }
+
+    setFocusedBlock = (id) => { 
+        
+    };
+
+    extractDomainAndSubdomain(url) {
+        const parsedUrl = new URL(url);
+        const hostname = parsedUrl.hostname;
+    
+        // Split the hostname into parts
+        const parts = hostname.split('.');
+    
+        // Prepare the return object
+        let result = {
+            domain: '',
+            subdomain: ''
+        };
+       
+        if (parts.length > 2) {
+            // Set the domain to the second-to-last part
+            result.domain = parts[parts.length - 2];
+    
+            // Join the remaining parts except the last two as the subdomain
+            result.subdomain = parts.slice(0, -2).join('.');
+        } else if (parts.length === 2) {
+            // Only the domain is present, no subdomain
+            result.domain = parts[0];
+        }
+    
+        return result;
     }
 
     attach_event_to_editor = ( blks = null ) => {
@@ -413,8 +443,16 @@ class CreatePost extends Component {
 
                 <SidebarContainer />
 
+                <section style={{maxWidth: "90%", margin: "0 auto", background: "#222", padding: "30px", justifyContent: "center", alignItems: "center"}}>
+                    <div style={{display: "flex", flexWrap: "wrap", gap: "10px"}}>
+                        {stats.map((stat, index) => (
+                            <this.StatsCard key={index} title={stat.title} value={stat.value} />
+                        ))}
+                    </div>
+                </section>
+
                 <section className="row direction-col">
-                    <div className="box-70 p-15">
+                    <div className="box-85 p-15">
                         <div className="post-container">
                             
                             <ReactEditorJS 
@@ -432,28 +470,28 @@ class CreatePost extends Component {
                                 <div style={{border: "1px solid #ddd", marginTop: "10px", backgroundColor: '#f9f9f9'}}>
                                     <b style={{padding: "20px", display: "block", borderBottom: "1px solid #dfdfdf", background: "#fff"}}>Seo Section</b>
 
-                                    <label style={{display:"flex", alignItems: "center", background:"#f6f6f6", padding: "20px", color:"#333"}}>
+                                    <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '80px'}}>
                                             Meta Title 
                                         </span>
                                         <input placeholder="Meta Title" style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} type="text" />
                                     </label> 
 
-                                    <label style={{display:"flex", alignItems: "center", background:"#f6f6f6", padding: "20px", color:"#333"}}>
+                                    <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '80px'}}>
                                             Slug
                                         </span>
                                         <input placeholder="Slug of url" style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} type="text" />
                                     </label> 
 
-                                    <label style={{display:"flex",  flexDirection: "column", background:"#f6f6f6", padding: "20px", color:"#333"}}>
+                                    <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Meta Description 
                                         </span>
                                         <textarea placeholder="Meta Description" style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}></textarea>
                                     </label> 
 
-                                    <label style={{display:"flex",  flexDirection: "column", background:"#f6f6f6", padding: "20px", color:"#333"}}>
+                                    <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Tutorial
                                         </span>
@@ -463,14 +501,14 @@ class CreatePost extends Component {
                                         </select>
                                     </label> 
 
-                                    <label style={{display:"flex", alignItems: "center", background:"#f6f6f6", padding: "20px", color:"#333"}}>
+                                    <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '120px'}}>
                                             Keyphrase
                                         </span>
                                         <input placeholder="Keyphrase" style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} type="text" />
                                     </label>
                                     
-                                    <label style={{display:"flex",  flexDirection: "column", background:"#f6f6f6", padding: "20px", color:"#333"}}>
+                                    <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Allow search engines to show this Article in search results?
                                         </span>
@@ -480,7 +518,7 @@ class CreatePost extends Component {
                                         </select>
                                     </label> 
 
-                                    <label style={{display:"flex", alignItems: "center", background:"#f6f6f6", padding: "20px", color:"#333"}}>
+                                    <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '120px'}}>
                                             Canonical URL
                                         </span>
@@ -489,27 +527,29 @@ class CreatePost extends Component {
 
                                 </div>
 
-                                <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
+                                
                             </div>
                             
                         </div>
-                    </div>
-                    <div className="box-30 p-15 h1500">
-                        <StickyBox className=" editor-sidebar" style={{backgroundColor: "#f9f9f9", padding:"10px"}} offsetTop={60} offsetBottom={20}>
-                            <div style={{border: "1px solid #dfdfdf", padding: "10px"}}>
-                            
-                                <div className="flex gap-5 text-right"><a className="button light">Visit Article</a><a className="button blue">Save</a><a className="button tan flex-grow">Publish</a></div>
-                            </div>
-                            <div style={{display: "flex", marginTop: "15px", flexWrap: "wrap", gap: "10px"}}>
-                                {stats.map((stat, index) => (
-                                    <this.StatsCard key={index} title={stat.title} value={stat.value} />
-                                ))}
-                            </div>
-                        </StickyBox>
-                    </div>
-                    
+                    </div> 
                 </section>
 
+                
+
+                <div style={{position: "sticky", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
+                    <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
+                    <div style={{display: "flex", gap: 10}}>
+                        <a className="button blue" style={{marginTop: "15px"}}>Save</a>
+                        <a className="button tan" style={{marginTop: "15px"}}>
+                            <span>
+                                Publish
+                            </span>
+
+                            <span>
+                                Unpublish
+                            </span>                                        </a>
+                    </div>
+                </div>
                 <footer className="footer">
                     <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
                         <div className="flex items-center justify-start space-x-3">

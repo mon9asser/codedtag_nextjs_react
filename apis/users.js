@@ -280,7 +280,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
             // Can publish and manage posts, including others.
             cap: 3,
             name: 'editor',
-            rules: []
+            rules: [],
         },
         {
             // Has full control over the blog, including managing users.
@@ -289,7 +289,8 @@ userRouters.post("/user/capabilities", async (req, res) => {
             rules: [
                 "settings",
                 "users",
-                "dashboard"
+                "dashboard",
+                "create-post"
             ]
         }
     ]; 
