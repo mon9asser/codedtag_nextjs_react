@@ -51,6 +51,7 @@ class AuthWrapperContext extends Component {
             return;
         }
 
+        
         var session = JSON.parse(localStorage.getItem("session"));
         
         if( session == null || session.token == undefined ) {
@@ -58,7 +59,7 @@ class AuthWrapperContext extends Component {
                 navigate('/login');
             }, 0)
         } 
-        
+       
         Helper.checkUserCapabilities( page ).then(result => {
             if( result.is_accessed == false || result.is_accessed == undefined ) {
                 navigate('/login');

@@ -250,7 +250,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
             redirect_to: Config.dashboard.login,
         });
     };  
-
+    
     var page = req.body.page;
     var token = req.body.token; 
 
@@ -299,7 +299,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
         
         // expired case - JsonWebTokenError - TokenExpiredError
         if (err) {
-             
+            
             var errorObject = {
                 data: [], 
                 is_error: true, 
@@ -320,8 +320,8 @@ userRouters.post("/user/capabilities", async (req, res) => {
           return res.send(errorObject);
         }   
         
-        var rule = ( decoded.user_data != undefined )? decoded.user_data.idx: 0; 
-        
+        var rule = ( decoded.user_data != undefined )? decoded.user_data.idx: decoded.token_object.idx; 
+         
         var index = permissions.findIndex(x => { 
             return x.cap == rule;
         });

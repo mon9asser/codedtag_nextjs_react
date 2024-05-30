@@ -6,8 +6,34 @@ var fs = require("fs");
  
 const {Sets} = require("./../models/settings-model");
  
-settingsRouter.post("/settings/update", (req, res) => {  
- 
+settingsRouter.post("/settings/update", async (req, res) => {  
+    
+    
+    var {basic_id, ...objx} = req.body; 
+
+    var finder = await Sets.find({});
+    var response = {};
+
+    // update 
+    if( finder.length ) {
+        response.is_error = false; 
+        response.message = "Saved Success!";
+        response.data = await Sets.updateOne({_id: finder[0]._id }, objx )
+        return res.send(response);
+    }
+
+    // insert 
+    var document = new Sets(objx);
+
+    await document.save();
+
+        
+    response.is_error = false; 
+    response.message = "Saved Success!";
+    response.data = []
+
+    return res.send(response);
+
 
 }) 
 

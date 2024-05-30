@@ -12,7 +12,7 @@ class HelperData {
     async logut () { 
 
       await localStorage.clear();
-      var session = await localStorage.getItem("sesstion")
+      var session = await localStorage.getItem("session")
       if( session == null ) {
         return true; 
       }
@@ -42,14 +42,14 @@ class HelperData {
             page: pageName
           }
       })
-      console.log(reqs);
+      
       if( reqs.is_error ) { 
         return {
           redirect_to: reqs.redirect_to,
           is_accessed: false
         }; 
       }
-
+      
       return {
         redirect_to: reqs.redirect_to,
         is_accessed: true

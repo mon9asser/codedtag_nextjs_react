@@ -10,11 +10,12 @@ class Settings extends Component {
     constructor(props) {
         
         super(props); 
-
+        this.request_result_ref = React.createRef();
         this.state = {
 
             page_name: "settings",
 
+            basic_id: -1,
             banner_site_title: "",
             banner_site_description: "",
             site_address: "",
@@ -32,8 +33,13 @@ class Settings extends Component {
             script_url_2: {
                 enabled: false, 
                 url_field: ""
-            }
+            },
 
+
+            is_pressed: false, 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
 
         };
 
@@ -68,6 +74,7 @@ class Settings extends Component {
         var settings = getter.data[0]; 
 
         this.setState({
+            basic_id: settings.id,
             banner_site_title: settings.banner_site_title,
             banner_site_description : settings.banner_site_description,
             site_address: settings.site_address, 
@@ -78,6 +85,37 @@ class Settings extends Component {
             script_url_1: settings.script_url_1,
             script_url_2: settings.script_url_2,
         })
+    }
+
+    updateSiteSetting = async () => {
+
+        /*this.setState({ 
+            is_pressed: false ,
+            show_message: "show_message",
+            request_status_class: "success",
+            request_message: "saved success"
+        }); */
+
+        var data_object = {
+            basic_id: this.state.basic_id, 
+            banner_site_title: this.state.banner_site_title,
+            banner_site_description : this.state.banner_site_description,
+            site_address: this.state.site_address, 
+            admin_email_address: this.state.admin_email_address,
+            site_meta_title: this.state.site_meta_title,    
+            site_meta_description: this.state.site_meta_description,
+            google_analytics: this.state.google_analytics,
+            script_url_1: this.state.script_url_1,
+            script_url_2: this.state.script_url_2,
+        };
+
+        var request = await Helper.sendRequest({
+            api: "/settings/update",
+            data: data_object,
+            method: "post"
+        })
+
+        console.log(request);
     }
 
     render() {
@@ -153,7 +191,7 @@ class Settings extends Component {
                                         <label className="label">Google Analytics</label>
                                         <div className="control">
                                             <label>
-                                                <input type="checkbox" />
+                                                <input checked={this.state.google_analytics.enabled} onChange={e => this.setState({ google_analytics: { ...this.state.google_analytics, enabled: e.target.checked} }) } type="checkbox" />
                                                 Enable
                                             </label>
                                             <input onChange={e => this.setState({ google_analytics: { ...this.state.google_analytics, field: e.target.value } })} value={this.state.google_analytics.field} className="input" type="text" placeholder="Google Analytics" />
@@ -164,10 +202,10 @@ class Settings extends Component {
                                         <label className="label">Script Url 1</label>
                                         <div className="control">
                                             <label>
-                                                <input type="checkbox" />
+                                                <input checked={this.state.script_url_1.enabled} onChange={e => this.setState({ script_url_1: { ...this.state.script_url_1, enabled: e.target.checked} }) } type="checkbox" />
                                                 Enable
-                                            </label>
-                                            <textarea className="input" style={{minHeight:"100px"}} placeholder="Example: Google AdSense"></textarea>
+                                            </label> 
+                                            <textarea onChange={e => this.setState({ script_url_1: { ...this.state.script_url_1, url_field: e.target.value } })} value={this.state.script_url_1.url_field} className="input" style={{minHeight:"100px"}} placeholder="Example: Google AdSense"></textarea>
                                         </div> 
                                     </div>
 
@@ -175,10 +213,10 @@ class Settings extends Component {
                                         <label className="label">Script Url 2</label>
                                         <div className="control">
                                             <label>
-                                                <input type="checkbox" />
+                                                <input checked={this.state.script_url_2.enabled} onChange={e => this.setState({ script_url_2: { ...this.state.script_url_2, enabled: e.target.checked } }) } type="checkbox" />
                                                 Enable
                                             </label>
-                                            <textarea className="input" style={{minHeight:"100px"}} placeholder="Example: Google Adx"></textarea>
+                                            <textarea onChange={e => this.setState({ script_url_2: { ...this.state.script_url_2, url_field: e.target.value } })} value={this.state.script_url_2.url_field} className="input" style={{minHeight:"100px"}} placeholder="Example: Google Adx"></textarea>
                                         </div> 
                                     </div>
 
@@ -188,14 +226,23 @@ class Settings extends Component {
                         </div>
                     </div>
                     
+                    {/* Results */}
+                    <div ref={this.request_result_ref} className={`${this.state.request_status_class} ${this.state.show_message} request-result-notifiction `}>
+                        {this.state.request_message}
+                    </div>
+
                     <div className="flex gap-5 sticky-btns space-between">
-                        <div className="flex gap-5"> 
-                            
-                            <a href="/test" className="button light">Visit site</a>
-                        </div>
+                         
                         <div className="flex gap-5">
-                        <a href="/test" className="button blue">Save</a> 
+                            <button onClick={this.updateSiteSetting} className="button blue">
+                                {
+                                    ( this.state.is_pressed ) ?
+                                    <span className="loader"></span> : 
+                                    "Save updates"
+                                }    
+                            </button> 
                         </div>
+                        
                     </div>
                 </section> 
 
