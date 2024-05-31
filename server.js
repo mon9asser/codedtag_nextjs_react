@@ -43,8 +43,22 @@ app.use( Config.server.api, postRouter);
 
 // serve statics of reactJS
 app.use(express.static(path.join(__dirname, 'view/build')));
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'view/build', 'index.html'));
+
+app.use('/admin', express.static(path.join(__dirname, 'public/admin')));
+app.use('/codedtag', express.static(path.join(__dirname, 'public/codedtag')));
+app.use('/accounting', express.static(path.join(__dirname, 'public/accounting')));
+
+app.get('/codedtag/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/codedtag', 'index.html'));
 });
+
+app.get('/accounting/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/accounting', 'index.html'));
+});
+
+app.get('/admin/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/accounting', 'index.html'));
+});
+
 
 app.listen(5000, () => console.log(`The server is running on port 5000`));
