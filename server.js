@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const path = require("path");
+const cors = require("cors");
 
 const {Config} = require("./config/options")
 
@@ -10,6 +11,8 @@ var app = express();
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
  
+
+/*
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE'); // => OPTIONS, PUT,
@@ -17,18 +20,26 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     next();
 });
+*/
 
+const corsOptions = {
+    origin: "*",
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+  };
+app.use(cors(corsOptions));
 
 // Routers 
 const { userRouters } = require("./apis/users");
 const { switcherRouter } = require("./apis/switcher");
 const { settingsRouter } = require("./apis/settings");
-
+const { postRouter } = require("./apis/posts");
 
 // middlewares 
 app.use( Config.server.api, userRouters );
 app.use( Config.server.api, switcherRouter );
 app.use( Config.server.api, settingsRouter );
+app.use( Config.server.api, postRouter);
 
 // serve statics of reactJS
 app.use(express.static(path.join(__dirname, 'view/build')));

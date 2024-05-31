@@ -3,6 +3,8 @@ const { db_name } = require("./db")
  
 const Config = {
 
+    image_dir: "uploads",
+    
     jwt_screret: "__Coded__Tag__",
     dashboard: {
         url: "http://localhost:3000/dashboard",

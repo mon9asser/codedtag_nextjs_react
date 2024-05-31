@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
+import {YouTubeEmbed} from "./parts/embed-iframe.js"
 import { createReactEditorJS } from 'react-editor-js';
 import StickyBox from "react-sticky-box";
 
 
-// tools.js
-import Embed from '@editorjs/embed'
+// tools.js 
+import Iframe from "@hammaadhrasheedh/editorjs-iframe";
 import Table from '@editorjs/table'
 import Paragraph from '@editorjs/paragraph'
 import List from '@editorjs/list'
@@ -24,13 +25,21 @@ import InlineCode from '@editorjs/inline-code'
 import SimpleImage from '@editorjs/simple-image'  
 import Hyperlink from "editorjs-hyperlink";
 
+import { Settings } from "../settings.js";
 
 import {CustomCodeBlok} from "./parts/codeblock.js"
 
 const ReactEditorJS = createReactEditorJS();
 
 var Tools = {
-    
+    youtubeEmbed: {
+        class: YouTubeEmbed,
+        inlineToolbar: true,
+        config: {
+          placeholder: 'Enter YouTube video URL'
+        }
+    },
+  
     hyperlink: {
         class: Hyperlink
     },
@@ -55,7 +64,7 @@ var Tools = {
     delimiter: Delimiter,
     raw: Raw,
     inlineCode: InlineCode,
-    embed: Embed,
+    
     paragraph: {
         class: Paragraph,
         inlineToolbar: ["bold", "hyperlink", "italic", "marker", "inlineCode"],
@@ -64,8 +73,28 @@ var Tools = {
         class: Image,
         config: {
             endpoints: {
-                byFile: 'http://yourdomain.com/upload-image', // URL for image uploads by file
+                byFile: `${Settings.server.api}/upload-image`,  
+                byUrl: `${Settings.server.api}/get-image`,
+            },
+            additionalRequestHeaders: {
+                // Any additional headers if needed
+            },
+            additionalRequestPayload: {
+                // Any additional payload data if needed
+            },
+            onUpload: (file) => {
+                console.log("Uploading file:", file);
+            },
+            onUploadComplete: (response) => {
+                console.log("Upload complete response:", response);
+            },
+            onUploadError: (error) => {
+                console.log("Upload error:", error);
+            },
+            onUploadStart: () => {
+                console.log("Upload started");
             }
+    
         }
     },
     code: CustomCodeBlok 
@@ -112,7 +141,26 @@ class CreatePost extends Component {
                         }
                     } 
                 ]
-            }
+            },
+
+            /*
+            total_words:0, 
+            total_chars: 0,
+            links: [],
+            _id: "",*/
+
+            post_id: "", 
+            meta_title: "",
+            slug: "",
+            meta_description: "",
+            tutorial: {
+                name: "",
+                id: ""
+            },
+            allow_search_engine: false, 
+            canonical_url: "",
+            is_published: false, 
+
         };
 
         this.editorInstance = null;
@@ -420,9 +468,12 @@ class CreatePost extends Component {
             </div>
           </div>
         );
-      }
+    }
       
-
+    save_post = () => {
+        console.log(this.state.initialState.blocks);
+    }
+      
     render() {
 
         const stats = [
@@ -434,8 +485,7 @@ class CreatePost extends Component {
             { title: 'Internal Links', value: this.state.initialState.links.filter( x => x.is_external != true).length }
         ];
         
-
-          
+        
         return (
             <div id="app">
                 
@@ -536,18 +586,16 @@ class CreatePost extends Component {
 
                 
 
-                <div style={{position: "sticky", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
+                <div style={{position: "sticky", zIndex: "200", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
                     <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
-                    <div style={{display: "flex", gap: 10}}>
-                        <a className="button blue" style={{marginTop: "15px"}}>Save</a>
-                        <a className="button tan" style={{marginTop: "15px"}}>
-                            <span>
-                                Publish
-                            </span>
-
-                            <span>
-                                Unpublish
-                            </span>                                        </a>
+                    <div style={{display: "flex", gap: 10, alignItems: "center"}}>
+                        
+                        <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
+                            <input type="checkbox" />
+                            Publish
+                        </label>
+                         
+                        <a onClick={this.save_post} className="button blue">Save</a>
                     </div>
                 </div>
                 <footer className="footer">
