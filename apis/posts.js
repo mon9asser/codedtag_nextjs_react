@@ -58,4 +58,10 @@ postRouter.post("/upload-image", upload.single('image'), (req, res) => {
 });
  
 
+postRouter.post("/post/create", (req, res) => {
+    
+    res.send(res.send(req.body));
+
+});
+
 module.exports = { postRouter };

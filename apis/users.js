@@ -4,7 +4,7 @@ var userRouters = express.Router();
 var sanitizer = require('sanitizer');
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
- 
+
 
 const {Helper} = require("./../config/helper")
 const { domain } = require("./../config/db");
@@ -79,15 +79,17 @@ userRouters.post("/user/login", async (req, res) => {
             }});
 
             if( updated ) {
+                console.log(user_check);
+
                 return res.send({
-                    data: {
+                    data: { 
                         id:user_check._id, 
                         name: user_check.firstname,  
                         email: user_check.email, 
-                        full_name: user_check.full_name, 
+                        full_name: `${user_check.firstname} ${user_check.secondname}`, 
                         token: user_check.token, 
                         site_name: domain,
-                        thumbnail: "",
+                        thumbnail: Helper.getGravatarUrl(user_check.email),
                         dashboard: Config.dashboard.url,
                         is_user: (user_check.rule == 0 )? true: false 
                     }, 
@@ -214,13 +216,14 @@ userRouters.post("/user/register", async (req, res) => {
                 }});
 
                 if( updated ) {
+
                     return res.send({
                         data: {
                             id:usrx._id, 
                             name:firstname,  
                             email: email, 
                             full_name: full_name, 
-                            thumbnail: "",
+                            thumbnail: Helper.getGravatarUrl(email),
                             token: token, 
                             site_name: domain,
                             dashboard: Config.dashboard.url,

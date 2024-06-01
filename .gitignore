@@ -2,9 +2,9 @@
 
 # dependencies
 /node_modules
-/admin/node_modules
-/accounting/node_modules
-/codedtag/node_modules 
+/public/admin/node_modules
+/public/accounting/node_modules
+/public/codedtag/node_modules 
 /.pnp
 .pnp.js
 

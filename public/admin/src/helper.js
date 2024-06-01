@@ -57,36 +57,46 @@ class HelperData {
 
     }
 
-    async sendRequest ({api, method, data, headers } = null) {
+    async sendRequest ({api, method, data, headers, is_create } = null) {
 
         if( headers === undefined ) {
             headers = {};
         }
-    
+        
+        if( is_create === undefined ) {
+          is_create = false; 
+        }
+
         data["Secret-codedtag-api-key"] = Settings.keys.secret ;
          
         try {
-          
-          /*
-            created_date
-            updated_by
-            updated_date
-            created_by
-          */
-
-          // updated data 
-          var additional = {
-            updated_date: Date.now(),
-          };
-
+           
+           
           var session = localStorage.getItem("session"); 
+           
+          var additional = {}; 
           if( session != null ) {
-            
-
+            session = JSON.parse(session)
+            // updated data 
+            additional = {
+              updated_date: Date.now(),
+              updated_by: {
+                id: session.id,
+                name: session.full_name,
+                email: session.email,
+                thumbnail: session.thumbnail,
+              }
+            };
             
             // created data 
-            if(api != "" && api.indexOf("update") == -1 ) {
-              additional.created_date= Date.now();
+            if(is_create) { 
+                additional.created_date= Date.now();
+                additional.created_by = {
+                  id: session.id,
+                  name: session.full_name,
+                  email: session.email,
+                  thumbnail: session.thumbnail,
+                }
             }
 
           }
@@ -112,6 +122,7 @@ class HelperData {
           }
     
         } catch (error) { 
+          console.log(error);
           return  {
               data: [],
               message: "Something went wrong, try later",

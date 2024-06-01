@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 class HelperData {
 
     defaultSchema = {
@@ -16,7 +18,13 @@ class HelperData {
             thumbnail: { type: String, default: ""}, 
         }    
     }
-    
+     
+    getGravatarUrl(email, size = 200) {
+        const trimmedEmail = email.trim().toLowerCase();
+        const hash = crypto.createHash('sha256').update(trimmedEmail).digest('hex');
+        return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=identicon`;
+    }
+
     validateEmail(email){
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);

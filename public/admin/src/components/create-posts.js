@@ -28,6 +28,7 @@ import Hyperlink from "editorjs-hyperlink";
 import { Settings } from "../settings.js";
 
 import {CustomCodeBlok} from "./parts/codeblock.js"
+import { Helper } from "../helper.js";
 
 const ReactEditorJS = createReactEditorJS();
 
@@ -448,7 +449,12 @@ class CreatePost extends Component {
      
     setCurrentSiteName = () => {
         setTimeout(() => {
-            var site = document.querySelector("#current-site-name").innerText.toLowerCase();
+            var site = document.querySelector("#current-site-name");
+
+            if(site) {
+                site = site.innerText.toLowerCase()
+            }
+
             this.setState({
                 settings: { site_name: site }
             });
@@ -458,14 +464,7 @@ class CreatePost extends Component {
 
         var session = localStorage.getItem("session"); 
         if( session != null ) {
-            session = JSON.parse( session );
-            console.log(session);
-            /*
-            session.id,
-            session.full_name,      xx
-            session.email,
-            session.thumbnail       xx
-            */
+            session = JSON.parse( session ); 
         }
 
         // store site name
@@ -491,7 +490,7 @@ class CreatePost extends Component {
         );
     }
       
-    save_post = () => {
+    save_post = async () => {
 
         // prepare post title 
         var post_title = "";
@@ -518,7 +517,16 @@ class CreatePost extends Component {
             is_published: this.state.is_published 
         }
 
-        console.log(this.state.initialState.blocks);
+        
+        var request = await Helper.sendRequest({
+            api: "post/create",
+            method: "post",
+            data: object_data,
+            is_create: true 
+        });
+
+        console.log(request);
+
     }
       
     render() {
