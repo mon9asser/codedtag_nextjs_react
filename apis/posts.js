@@ -5,7 +5,8 @@ const { name, domain } = require("./../config/db");
 var postRouter = express.Router();
 var path = require("path");
 var fs = require("fs");
-const {Config} = require("./../config/options")
+const {Config} = require("./../config/options");
+const {Helper} = require("./../config/helper")
 const multer = require('multer');
 
 // Function to ensure directory exists
@@ -22,15 +23,22 @@ const storage = multer.diskStorage({
         const year = now.getFullYear().toString();
         const month = (now.getMonth() + 1).toString().padStart(2, '0');
         const day = now.getDate().toString().padStart(2, '0');
-
-        const uploadPath = path.join(Config.image_dir, year, month, day);
+        var build_folder = `${Config.uploads.folder}/${Config.uploads.serve}`
+        const uploadPath = path.join(build_folder, year, month, day);
         ensureDirectoryExistence(uploadPath);
+        
+        req.upload_date = `${year}/${month}/${day}`;
 
         cb(null, uploadPath);
     },
     filename: (req, file, cb) => {
+
+        var file_name = Helper.removeLastExtension(file.originalname); 
+        var extension = Helper.getLastExtension(file.originalname);
+        
         var randomizer = Math.floor(1000 + Math.random() * 9000);
-        cb(null, `${randomizer}-${file.originalname}`);
+        var new_file_name = `${file_name}-${randomizer}${extension}`;
+        cb(null, new_file_name);
     }
 });
 
@@ -43,30 +51,11 @@ postRouter.post("/upload-image", upload.single('image'), (req, res) => {
         return res.status(400).json({ success: false, message: 'No file uploaded' });
     }
 
-    const fileUrl = path.join(`/${Config.image_dir}`, req.file.filename);
-    
-    res.json({ success: true, fileUrl: fileUrl });
+    var fileUrl = `${Config.uploads.ip}/${Config.uploads.serve}/${req.upload_date}/${req.file.filename}`
+     
+    res.json({ success: 1, file: {url: fileUrl }  });
 
 });
-
-postRouter.get("/get-image", (req, res) => {
-    
-    const imageUrl = req.body.url;
-    
-    if (!imageUrl) {
-        return res.status(400).json({ success: false, message: 'No URL provided' });
-    }
-
-    const imagePath = path.join(__dirname, "..", imageUrl);
-    
-    fs.access(imagePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            return res.status(404).json({ success: false, message: 'Image not found' });
-        }
-
-        res.sendFile(imagePath);
-    }); 
-
-});
+ 
 
 module.exports = { postRouter };

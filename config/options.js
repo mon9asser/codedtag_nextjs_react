@@ -2,8 +2,13 @@
 const { db_name } = require("./db")
  
 const Config = {
-
-    image_dir: "uploads",
+     
+    // serve image uploads on server
+    uploads: {
+        ip: "http://localhost:5000", // should be serve on subdomain in codedtag
+        serve: "uploads",   // https://example.com/uploads/... fetch image
+        folder: `public`, // public/uploads upload image to folder
+    },
     
     jwt_screret: "__Coded__Tag__",
     dashboard: {

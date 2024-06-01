@@ -87,6 +87,7 @@ userRouters.post("/user/login", async (req, res) => {
                         full_name: user_check.full_name, 
                         token: user_check.token, 
                         site_name: domain,
+                        thumbnail: "",
                         dashboard: Config.dashboard.url,
                         is_user: (user_check.rule == 0 )? true: false 
                     }, 
@@ -161,6 +162,10 @@ userRouters.post("/user/register", async (req, res) => {
         // Send response if either exists
         return res.send(objx);
     }
+
+    if( full_name == "" ) {
+        full_name = `${firstname} ${secondname}`;
+    }
       
     // prepare data 
     var userObject = {
@@ -215,6 +220,7 @@ userRouters.post("/user/register", async (req, res) => {
                             name:firstname,  
                             email: email, 
                             full_name: full_name, 
+                            thumbnail: "",
                             token: token, 
                             site_name: domain,
                             dashboard: Config.dashboard.url,

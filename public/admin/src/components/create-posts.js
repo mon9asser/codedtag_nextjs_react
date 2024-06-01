@@ -108,10 +108,10 @@ class CreatePost extends Component {
         super(props);
         
         this.state = { 
-
-            pos_type: 0, /* 1 => page --|-- 0 => post */
+            
+            post_type: 0, /* 1 => page --|-- 0 => post */
             settings: {
-                site_name: "https://codedtag.com"
+                site_name: ""
             },
             initialState: {
                 total_words:0, 
@@ -207,9 +207,7 @@ class CreatePost extends Component {
     }
 
     setChangedBlock = (e, id) => {
-        
-        
-
+         
         // placeholder actions 
         var target = document.querySelector(".ce-block[data-id='"+id+"']")
         if( target ) {
@@ -448,8 +446,31 @@ class CreatePost extends Component {
         
     }
      
+    setCurrentSiteName = () => {
+        setTimeout(() => {
+            var site = document.querySelector("#current-site-name").innerText.toLowerCase();
+            this.setState({
+                settings: { site_name: site }
+            });
+        }, 1000);
+    }
     componentDidMount = () => {
 
+        var session = localStorage.getItem("session"); 
+        if( session != null ) {
+            session = JSON.parse( session );
+            console.log(session);
+            /*
+            session.id,
+            session.full_name,      xx
+            session.email,
+            session.thumbnail       xx
+            */
+        }
+
+        // store site name
+        this.setCurrentSiteName();
+        
         // => Load Assets
         //this.loadDashboardAssets(); 
         
@@ -471,6 +492,32 @@ class CreatePost extends Component {
     }
       
     save_post = () => {
+
+        // prepare post title 
+        var post_title = "";
+        var post_title_index = this.state.initialState.blocks.findIndex( x => x.id == "header-level-1");
+        if(post_title_index != -1 ) {
+            post_title = this.state.initialState.blocks[post_title_index].data.text; 
+        }
+
+        var object_data = {
+            post_id: this.state.post_id,
+
+            post_type: this.state.post_type,
+            post_title: post_title,
+            total_words: this.state.initialState.total_words,
+            total_charachters: this.state.initialState.total_chars,
+            links: this.state.initialState.links,
+            blocks: this.state.initialState.blocks,
+            meta_title: this.state.meta_title,
+            slug: this.state.slug,
+            meta_description: this.state.meta_description,
+            tutorial: this.state.tutorial,
+            allow_search_engine: this.state.allow_search_engine,
+            canonical_url: this.state.canonical_url,
+            is_published: this.state.is_published 
+        }
+
         console.log(this.state.initialState.blocks);
     }
       

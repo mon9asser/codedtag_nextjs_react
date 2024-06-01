@@ -115,7 +115,7 @@ class NavbarContainer extends Component {
                                 </span>
 
                                 <label style={{marginLeft: "50px"}}>
-                                    Current Site is: <b>{this.state.name}</b>
+                                    Current Site is: <b id="current-site-name">{this.state.name}</b>
                                 </label>
                                 
                             </div>

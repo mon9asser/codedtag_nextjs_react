@@ -41,7 +41,12 @@ app.use( Config.server.api, switcherRouter );
 app.use( Config.server.api, settingsRouter );
 app.use( Config.server.api, postRouter);
 
+
+// server image uploads
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
 // serve statics of reactJS
+/*
 app.use(express.static(path.join(__dirname, 'view/build')));
 
 app.use('/admin', express.static(path.join(__dirname, 'public/admin')));
@@ -58,7 +63,7 @@ app.get('/accounting/*', (req, res) => {
 
 app.get('/admin/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/accounting', 'index.html'));
-});
+});*/
 
 
 app.listen(5000, () => console.log(`The server is running on port 5000`));

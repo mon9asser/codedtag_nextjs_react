@@ -57,7 +57,7 @@ class HelperData {
 
     }
 
-    async sendRequest ({api, method, data, headers} = null) {
+    async sendRequest ({api, method, data, headers } = null) {
 
         if( headers === undefined ) {
             headers = {};
@@ -67,10 +67,34 @@ class HelperData {
          
         try {
           
+          /*
+            created_date
+            updated_by
+            updated_date
+            created_by
+          */
+
+          // updated data 
+          var additional = {
+            updated_date: Date.now(),
+          };
+
+          var session = localStorage.getItem("session"); 
+          if( session != null ) {
+            
+
+            
+            // created data 
+            if(api != "" && api.indexOf("update") == -1 ) {
+              additional.created_date= Date.now();
+            }
+
+          }
+
           var reqs = await axios({
             method: method,
             url: `${Settings.server.api}/${api}`,
-            data: data,
+            data: {...data, ...additional},
             headers: {
               'CT-public-api-key': Settings.keys.public,
               ...headers
