@@ -153,6 +153,7 @@ class CreatePost extends Component {
             post_id: "", 
             meta_title: "",
             slug: "",
+            keyphrase: "",
             meta_description: "",
             tutorial: {
                 name: "",
@@ -579,28 +580,45 @@ class CreatePost extends Component {
                                         <span style={{flexBasis: '80px'}}>
                                             Meta Title 
                                         </span>
-                                        <input placeholder="Meta Title" style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} type="text" />
+                                        <input 
+                                            value={this.state.meta_title}
+                                            onChange={(e) => this.setState({ meta_title: e.target.value })}
+                                            placeholder="Meta Title" 
+                                            style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} 
+                                            type="text" 
+                                        />
                                     </label> 
 
                                     <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '80px'}}>
                                             Slug
                                         </span>
-                                        <input placeholder="Slug of url" style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} type="text" />
+                                        <input 
+                                            onChange={(e) => this.setState({ slug: e.target.value })}
+                                            value={this.state.slug}
+                                            placeholder="Slug of url" 
+                                            style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} 
+                                            type="text" 
+                                        />
                                     </label> 
 
                                     <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Meta Description 
                                         </span>
-                                        <textarea placeholder="Meta Description" style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}></textarea>
+                                        <textarea 
+                                            onChange={(e) => this.setState({ meta_description: e.target.value })}
+                                            value={this.state.meta_description}
+                                            placeholder="Meta Description" 
+                                            style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}
+                                        ></textarea>
                                     </label> 
 
                                     <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Tutorial
                                         </span>
-                                        <select style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                        <select value={this.state.tutorial_id} onChange={e => this.setState({ tutorial_id: e.target.value })} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
                                             <option defaultValue>PHP Tutorial</option>
                                             <option>Python Tutorial</option>
                                         </select>
@@ -610,16 +628,22 @@ class CreatePost extends Component {
                                         <span style={{flexBasis: '120px'}}>
                                             Keyphrase
                                         </span>
-                                        <input placeholder="Keyphrase" style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} type="text" />
+                                        <input 
+                                            placeholder="Keyphrase" 
+                                            style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} 
+                                            type="text" 
+                                            onChange={(e) => this.setState({ keyphrase: e.target.value })}
+                                            value={this.state.keyphrase}
+                                        />
                                     </label>
                                     
                                     <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Allow search engines to show this Article in search results?
                                         </span>
-                                        <select style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
-                                            <option defaultValue>Yes</option>
-                                            <option>No</option>
+                                        <select value={this.state.allow_search_engine} onChange={e => this.setState({ allow_search_engine: e.target.value })} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                            <option value={true}>Yes</option>
+                                            <option value={false}>No</option>
                                         </select>
                                     </label> 
 
@@ -627,7 +651,13 @@ class CreatePost extends Component {
                                         <span style={{flexBasis: '120px'}}>
                                             Canonical URL
                                         </span>
-                                        <input placeholder="Canonical URL" style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} type="text" />
+                                        <input 
+                                            onChange={(e) => this.setState({ canonical_url: e.target.value })}
+                                            value={this.state.canonical_url}
+                                            placeholder="Canonical URL" 
+                                            style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} 
+                                            type="text" 
+                                        />
                                     </label>  
 
                                 </div>
@@ -666,7 +696,7 @@ class CreatePost extends Component {
                          
                         </div> 
                     </div>
-                    </footer>
+                </footer>
 
                     
 
