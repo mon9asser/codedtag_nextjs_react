@@ -32,14 +32,17 @@ app.use(cors(corsOptions));
 // Routers 
 const { userRouters } = require("./apis/users");
 const { switcherRouter } = require("./apis/switcher");
+const { categoryRouter } = require("./apis/category");
 const { settingsRouter } = require("./apis/settings");
 const { postRouter } = require("./apis/posts");
 
 // middlewares 
 app.use( Config.server.api, userRouters );
 app.use( Config.server.api, switcherRouter );
+app.use( Config.server.api, categoryRouter);
 app.use( Config.server.api, settingsRouter );
 app.use( Config.server.api, postRouter);
+
 
 
 // server image uploads

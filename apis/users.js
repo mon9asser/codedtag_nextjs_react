@@ -299,7 +299,8 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 "settings",
                 "users",
                 "dashboard",
-                "create-post"
+                "create-post",
+                "create-tutorial"
             ]
         }
     ]; 

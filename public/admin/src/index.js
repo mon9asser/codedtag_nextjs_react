@@ -20,6 +20,7 @@ import { Login } from './components/login';
 import { Dashboard } from "./components/dashboard.js";
 import { Settings } from './components/settings.js'; 
 import { CreatePost } from './components/create-posts.js';
+import { CreateTutorial } from './components/create-tutorial.js';
 
 import { AuthWrapper } from './components/helpers/context.js';
 
@@ -35,9 +36,10 @@ var WrappApplication = () => (
       
       <AuthWrapper>
         <Routes> 
-            <Route name={"Dashboard"} path="/dashboard" element={<Dashboard/>} />
-            <Route name={"Settings"} path="/dashboard/settings" element={<Settings/>} /> 
-            <Route name={"Create-post"} path="/dashboard/create-post" element={<CreatePost/>} /> 
+            <Route path="/dashboard" element={<Dashboard/>} />
+            <Route path="/dashboard/settings" element={<Settings/>} /> 
+            <Route path="/dashboard/create-post" element={<CreatePost/>} /> 
+            <Route path="/dashboard/create-tutorial" element={<CreateTutorial/>} /> 
         </Routes>
       </AuthWrapper>
       

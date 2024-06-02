@@ -676,13 +676,14 @@ class CreatePost extends Component {
                     <div style={{display: "flex", gap: 10, alignItems: "center"}}>
                         
                         <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
-                            <input type="checkbox" />
+                            <input checked={this.state.is_published} onChange={e => this.setState({ is_published: e.target.value })} type="checkbox" />
                             Publish
                         </label>
                          
                         <a onClick={this.save_post} className="button blue">Save</a>
                     </div>
                 </div>
+                
                 <footer className="footer">
                     <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
                         <div className="flex items-center justify-start space-x-3">
