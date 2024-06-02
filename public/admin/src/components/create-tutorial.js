@@ -93,6 +93,33 @@ class CreateTutorial extends Component {
          * this.state.selected_category
          */
     }
+    
+    Categories_List_Modal = () => {
+        return (
+            <div id="categories-list-modal" className="modal">
+                    <div className="modal-background --jb-modal-close"></div>
+                    <div className="modal-card">
+                        <header className="modal-card-head" style={{display:"flex", justifyContent: "space-between"}}>
+                            <p className="modal-card-title">Categories</p>
+                            <a className="button blue">Add Category</a>
+                        </header>
+                        <section className="modal-card-body">
+                            
+                            <div style={{display: "flex", border: "1px solid #ddd", alignItems: "center", marginBottom: "10px", width: "100%", backgroundColor: "red"}}>
+                                <input style={{display: "block", width: "100%", padding: "10px", outline: "none"}} placeholder="Category name" />
+                                <a className="button red">Delete</a>
+                            </div> 
+                            
+                        </section>
+                        <footer className="modal-card-foot">
+                            <button className="button --jb-modal-close">Cancel</button>
+                            <button className="button blue --jb-modal-close">Confirm</button>
+                        </footer>
+                    </div>
+            </div>
+        )
+    }
+
 
     render() {
         return (
@@ -137,8 +164,9 @@ class CreateTutorial extends Component {
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <div style={{display: "flex", alignItems:"center", justifyContent:"space-between"}}>
                                             <label className="label">Category</label>
-                                            <a onClick={this.add_category} href="#" style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Add new</a>
+                                            <a data-target="categories-list-modal" className="--jb-modal" href="#" style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Add new</a>
                                         </div>
+                                        <this.Categories_List_Modal/> 
                                         <div className="control">
                                             <div className="select">
                                                 <select onChange={e => this.select_category(e.target.value)} value={this.state.selected_category != null ? this.state.selected_category._id: ""}>

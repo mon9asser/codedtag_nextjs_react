@@ -112,7 +112,7 @@ class NavbarContainer extends Component {
 
                                 <span data-target="manage-sites" style={{marginLeft: "10px"}} className="button tan --jb-modal">
                                     <span>Manage Sites</span>
-                                </span>
+                                </span> 
 
                                 <label style={{marginLeft: "50px"}}>
                                     Current Site is: <b id="current-site-name">{this.state.name}</b>
