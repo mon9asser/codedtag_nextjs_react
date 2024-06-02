@@ -11,6 +11,7 @@ class CreateTutorial extends Component {
 
         this.state = {
             categories: [],
+            selected_category: null
         };
 
     }
@@ -84,7 +85,20 @@ class CreateTutorial extends Component {
         
         e.preventDefault();
 
-        alert("add category");
+        this.setState((prevState) => {
+
+            var categories = prevState.categories;
+            
+            categories.push({
+                category_name: '',
+                _id: Helper.generateObjectId()
+            });
+
+            return {
+                categories: categories
+            }
+            
+        })
 
     }
     save_data = () => {
@@ -93,7 +107,83 @@ class CreateTutorial extends Component {
          * this.state.selected_category
          */
     }
+
+    save_categories_data = async () => {
+
+        // delete empt 
+        this.setState((prevState) => {
+            
+            var cats = prevState.categories.filter( x => x.category_name != '');
+
+            return {
+                categories: cats
+            };
+        });
+
+        var reqs = await Helper.sendRequest({
+            api: "category/blk-create-update",
+            method: "post",
+            data: { 
+                data_array: this.state.categories
+            },
+            is_create: true
+        });
+
+        if( ! reqs.is_error ) {
+            return; 
+        } 
+
+    }
+
+    add_to_category = (value, index) => {
+        
+        var cats = [...this.state.categories];
+        if( cats[index] == undefined ) {
+            var objx = {
+                _id: Helper.generateObjectId(),
+                category_name: value
+            };
+            cats.push(objx)
+        } else {
+            cats[index].category_name = value
+        }
+        
+        this.setState({
+            categories: cats
+        });
+
+    }
     
+    delete_category = async (id) => {
+        
+        var res = await Helper.sendRequest({
+            api: "category/blk-delete",
+            data: {
+                data_array: [{_id: id}]
+            },
+            method: "post"
+        });
+        
+        if(! res.is_error ) {
+
+            var reqs = await Helper.sendRequest({
+                api: "categories",
+                data: {},
+                method: "get"
+            })
+
+            if(reqs.is_error) {
+                return; 
+            }
+
+            this.setState({
+                categories: reqs.data
+            })
+
+        }
+
+    }
+
     Categories_List_Modal = () => {
         return (
             <div id="categories-list-modal" className="modal">
@@ -101,26 +191,34 @@ class CreateTutorial extends Component {
                     <div className="modal-card">
                         <header className="modal-card-head" style={{display:"flex", justifyContent: "space-between"}}>
                             <p className="modal-card-title">Categories</p>
-                            <a className="button blue">Add Category</a>
+                            <a className="button blue" onClick={this.add_category}>Add Category</a>
                         </header>
                         <section className="modal-card-body">
                             
-                            <div style={{display: "flex", border: "1px solid #ddd", alignItems: "center", marginBottom: "10px", width: "100%", backgroundColor: "red"}}>
-                                <input style={{display: "block", width: "100%", padding: "10px", outline: "none"}} placeholder="Category name" />
-                                <a className="button red">Delete</a>
-                            </div> 
-                            
+                            {
+                                ( ! this.state.categories.length ) ?
+                                    <span>
+                                        No Categories Found!
+                                    </span>
+                                :
+                                this.state.categories.map((category, index) => (
+                                    <div key={index} style={{display: "flex", border: "1px solid #ddd", alignItems: "center", marginBottom: "10px", width: "100%", backgroundColor: "red"}}>
+                                        <input onChange={e => this.add_to_category(e.target.value, index)} value={category.category_name} style={{display: "block", width: "100%", padding: "10px", outline: "none"}} placeholder="Category name" />
+                                        <a className="button red" onClick={() => this.delete_category(category._id)}>Delete</a>
+                                    </div> 
+                                ))                                
+                            } 
+
                         </section>
                         <footer className="modal-card-foot">
                             <button className="button --jb-modal-close">Cancel</button>
-                            <button className="button blue --jb-modal-close">Confirm</button>
+                            <button onClick={this.save_categories_data} className="button blue --jb-modal-close">Confirm</button>
                         </footer>
                     </div>
             </div>
         )
     }
-
-
+    
     render() {
         return (
             <div id="app">

@@ -9,6 +9,15 @@ class HelperData {
         return re.test(email);
     }
 
+    generateObjectId() {
+        var timestamp = (Math.floor(new Date().getTime() / 1000)).toString(16);
+        var randomPart = 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+            return (Math.random() * 16 | 0).toString(16);
+        });
+        return timestamp + randomPart;
+    }
+
+  
     async logut () { 
 
       await localStorage.clear();
@@ -76,7 +85,9 @@ class HelperData {
            
           var additional = {}; 
           if( session != null ) {
+
             session = JSON.parse(session)
+
             // updated data 
             additional = {
               updated_date: Date.now(),
@@ -100,11 +111,21 @@ class HelperData {
             }
 
           }
+          
+          if(data.data_array != undefined ) {
+            data.data_array = data.data_array.map( x => {
+              return {
+                ...x, ...additional
+              }
+            })
+          } else {
+            data = {...data, ...additional}
+          }
 
           var reqs = await axios({
             method: method,
             url: `${Settings.server.api}/${api}`,
-            data: {...data, ...additional},
+            data: data,
             headers: {
               'CT-public-api-key': Settings.keys.public,
               ...headers

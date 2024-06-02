@@ -8,7 +8,7 @@ var fs = require("fs");
 
 categoryRouter.post("/category/blk-create-update", async (req, res) => {
     
-    if (!req.body.categories) {
+    if (!req.body.data_array) {
         return res.send({
           data: [],
           is_error: true,
@@ -18,7 +18,7 @@ categoryRouter.post("/category/blk-create-update", async (req, res) => {
         });
       }
     
-      const categories = req.body.categories;
+      const categories = req.body.data_array;
     
       const operations = categories.map(category => {
         const dataObject = { ...category };
@@ -58,7 +58,7 @@ categoryRouter.post("/category/blk-create-update", async (req, res) => {
 
  
 categoryRouter.post("/category/blk-delete", async (req, res) => {
-    if (!req.body.categories) {
+    if (!req.body.data_array) {
       return res.send({
         data: [],
         is_error: true,
@@ -68,7 +68,7 @@ categoryRouter.post("/category/blk-delete", async (req, res) => {
       });
     }
   
-    const categories = req.body.categories;
+    const categories = req.body.data_array;
 
      // Validate the _id fields
     if (!Array.isArray(categories) || !categories.every(category => category._id)) {
