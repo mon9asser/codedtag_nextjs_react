@@ -33,9 +33,10 @@ class Login extends Component {
     }
     
     async componentDidMount() {
-         
-        var session = JSON.parse(localStorage.getItem("session"));
-        console.log(session == null ? "" : session.token);
+        
+        var session = JSON.parse(localStorage.getItem("session")); 
+        
+
     }
 
     changedCapcha = (value) => { 
@@ -111,7 +112,7 @@ class Login extends Component {
                 request_status_class: "success",
                 request_message: reqs.message
             }); 
-            
+             
             // store  localstorage  
             localStorage.setItem("session", JSON.stringify(reqs.data) );
 

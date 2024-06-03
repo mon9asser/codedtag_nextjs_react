@@ -5,6 +5,7 @@ console.log(Config.database.link());
 mongoose.connect(Config.database.link());
  
 mongoose.Promise = global.Promise;
+ 
 
 
 module.exports = {mongoose};

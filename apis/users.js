@@ -71,15 +71,14 @@ userRouters.post("/user/login", async (req, res) => {
                 dashboard: Config.dashboard.url,
                 is_user: (user_check.rule == 0 )? true: false 
             }
-
+            
             const token = await jwt.sign({ user_data }, Config.jwt_screret, { expiresIn: '3h' });
 
             var updated = await Usr.updateOne({ _id: user_check._id }, { $set: {
                 token: token
             }});
 
-            if( updated ) {
-                console.log(user_check);
+            if( updated ) { 
 
                 return res.send({
                     data: { 
@@ -96,7 +95,8 @@ userRouters.post("/user/login", async (req, res) => {
                     is_error: false, 
                     message: "You logged in successfully, The system will redirect you to your dashboard shortly!"
                 })
-            } 
+            }
+             
           // Proceed with login
         } else {
             return res.send({
