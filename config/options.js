@@ -10,7 +10,7 @@ const Config = {
         folder: `public`, // public/uploads upload image to folder
     },
     
-    jwt_screret: "__Coded__Tag__",
+    jwt_secret: "__Coded__Tag__",
     dashboard: {
         url: "http://localhost:3000/dashboard",
         login: "http://localhost:3000/login",

@@ -33,9 +33,6 @@ class Login extends Component {
     }
     
     async componentDidMount() {
-        
-        var session = JSON.parse(localStorage.getItem("session")); 
-        
 
     }
 
@@ -111,8 +108,8 @@ class Login extends Component {
                 show_message: "show_message",
                 request_status_class: "success",
                 request_message: reqs.message
-            }); 
-             
+            });  
+            
             // store  localstorage  
             localStorage.setItem("session", JSON.stringify(reqs.data) );
 

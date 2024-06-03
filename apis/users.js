@@ -17,98 +17,86 @@ const {Config} = require('./../config/options');
 
 
 // Login 
-userRouters.post("/user/login", async (req, res) => { 
-    
-    var {
-        password, 
-        email_username 
-    } = req.body;
+userRouters.post("/user/login", async (req, res) => {
+    try {
+        const { password, email_username } = req.body;
 
-    if( password == undefined || password == "" || email_username == undefined || email_username == "" ) {
-        return res.send({
-            message: "User fields are required!",
-            data: [],
-            is_error: true 
-        });
-    }
-
-    // check email or username exists in our database 
-    var user_check = await Usr.findOne({
-        $or: [
-            { email: email_username },
-            { username: email_username }
-        ]
-    });
-      
-    if( user_check == null ) {
-        return res.send({
-            is_error: true, 
-            data: [],
-            message: "Incorrect login details. Please check your username and password and try again."
-        });
-    } 
- 
-    // verify password
-    bcrypt.compare(password, user_check.password, async (err, result) => {
-        if (err) {
-            return res.send({
-                is_error: true, 
+        if (!password || !email_username) {
+            return res.status(400).send({
+                message: "User fields are required!",
                 data: [],
-                message: "Incorrect login details. Please check your username and password and try again."
-            }); 
+                is_error: true
+            });
         }
-      
-        if (result) {
 
-            var user_data = {
-                id:user_check._id, 
-                name:user_check.firstname,  
-                email: user_check.email, 
-                full_name: user_check.full_name, 
-                token: user_check.token, 
-                idx: user_check.rule,
-                site_name: user_check.domain,
-                dashboard: Config.dashboard.url,
-                is_user: (user_check.rule == 0 )? true: false 
-            }
-            
-            const token = await jwt.sign({ user_data }, Config.jwt_screret, { expiresIn: '3h' });
+        // Check if the email or username exists in the database
+        const user_check = await Usr.findOne({
+            $or: [
+                { email: email_username },
+                { username: email_username }
+            ]
+        });
 
-            var updated = await Usr.updateOne({ _id: user_check._id }, { $set: {
-                token: token
-            }});
-
-            if( updated ) { 
-
-                return res.send({
-                    data: { 
-                        id:user_check._id, 
-                        name: user_check.firstname,  
-                        email: user_check.email, 
-                        full_name: `${user_check.firstname} ${user_check.secondname}`, 
-                        token: user_check.token, 
-                        site_name: domain,
-                        thumbnail: Helper.getGravatarUrl(user_check.email),
-                        dashboard: Config.dashboard.url,
-                        is_user: (user_check.rule == 0 )? true: false 
-                    }, 
-                    is_error: false, 
-                    message: "You logged in successfully, The system will redirect you to your dashboard shortly!"
-                })
-            }
-             
-          // Proceed with login
-        } else {
-            return res.send({
-                is_error: true, 
+        if (!user_check) {
+            return res.status(400).send({
+                is_error: true,
                 data: [],
                 message: "Incorrect login details. Please check your username and password and try again."
             });
-          // Handle incorrect password
         }
-    }); 
 
+        // Verify password
+        var verify_password = await bcrypt.compare(password, user_check.password);
+        if( ! verify_password ) {
+            return res.status(400).send({
+                is_error: true,
+                data: [],
+                message: "Incorrect login details. Please check your username and password and try again."
+            });
+        }
+
+        // generate token 
+        const token = await jwt.sign({ 
+            user_data: {
+                id: user_check._id,
+                name: user_check.firstname,
+                email: user_check.email,
+                full_name: user_check.full_name, 
+                idx: user_check.rule,
+                site_name: user_check.domain,
+                dashboard: Config.dashboard.url,
+                is_user: user_check.rule === 0 
+            }
+        }, Config.jwt_secret, { expiresIn: '3h' }); 
+
+        // update token directly   
+        const user_data = {
+            id: user_check._id,
+            name: user_check.firstname,
+            email: user_check.email,
+            full_name: `${user_check.firstname} ${user_check.secondname}`,
+            token,
+            site_name: user_check.domain,
+            thumbnail: Helper.getGravatarUrl(user_check.email),
+            dashboard: Config.dashboard.url,
+            is_user: user_check.rule === 0
+        };
+
+        return res.send({
+            data: user_data, 
+            is_error: false, 
+            message: "You logged in successfully. The system will redirect you to your dashboard shortly!"
+        });
+
+    } catch (error) { 
+        res.status(500).send({
+            is_error: true,
+            data: [],
+            message: "An error occurred during the login process. Please try again later."
+        });
+    }
 });
+
 
 // Register
 userRouters.post("/user/register", async (req, res) => {
@@ -209,7 +197,7 @@ userRouters.post("/user/register", async (req, res) => {
                     email, 
                 }
 
-                const token = await jwt.sign({ token_object }, Config.jwt_screret, { expiresIn: '3h' });
+                const token = await jwt.sign({ token_object }, Config.jwt_secret, { expiresIn: '3h' });
 
                 var updated = await Usr.updateOne({ _id: usrx._id }, { $set: {
                     token: token
@@ -306,7 +294,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
     ]; 
     
 
-    jwt.verify(token, Config.jwt_screret, (err, decoded) => {
+    jwt.verify(token, Config.jwt_secret, (err, decoded) => {
         
         // expired case - JsonWebTokenError - TokenExpiredError
         if (err) {
