@@ -75,7 +75,7 @@ let tutorialSchema = new Schema({
             keyphrase:{ type: String , trim : true, default: "" },
             meta_title:{ type: String , trim : true, default: "" },
             meta_description:{ type: String , trim : true, default: "" },
-            hide_from_search_engines: { type: Boolean , trim : true,  default: false },
+            hide_from_search_engines: { type: Boolean,  default: false },
         }
     ]
 });

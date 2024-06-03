@@ -11,7 +11,20 @@ class CreateTutorial extends Component {
 
         this.state = {
             categories: [],
-            selected_category: null
+            selected_category: null,
+
+
+            tabs: [
+                {
+                    title: "",
+                    description: "",
+                    slug: "",
+                    keyphrase: "",
+                    meta_title: "",
+                    meta_description: "",
+                    hide_from_search_engines: false,
+                }
+            ]
         };
 
     }
@@ -103,6 +116,7 @@ class CreateTutorial extends Component {
     }
     save_data = () => {
         
+        console.log(this.state.tabs);
         /** PROPS to save 
          * this.state.selected_category
          */
@@ -182,6 +196,18 @@ class CreateTutorial extends Component {
 
         }
 
+    }
+
+    change_tap = (e, key, index) => {
+        this.setState((prevState) => {
+                                                                            
+            prevState.tabs[index][key] = e.target.value;
+            
+            return {
+                tabs: prevState.tabs
+            }
+
+        });
     }
 
     Categories_List_Modal = () => {
@@ -307,15 +333,8 @@ class CreateTutorial extends Component {
                                         <div className="control">
                                             <textarea className="input" style={{minHeight:"100px"}}></textarea>
                                         </div> 
-                                    </div>    
+                                    </div>     
 
-                                    <div className="field" style={{marginTop: "25px"}}>
-                                        <label className="label">Redirect Options</label>
-                                        <div className="control">
-                                            <input className="input" type="text" placeholder="Redirect From eg: /php/" />
-                                            <input className="input mt-10" type="text" placeholder="Redirect To eg: /tutorial/php-programming/" />
-                                        </div> 
-                                    </div> 
                                 </div> 
                             </div>
 
@@ -343,67 +362,106 @@ class CreateTutorial extends Component {
                                         <a href="#" style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Add new</a>
                                     </div>
                                     <div className="tab-wrap">
-                                        <div className="tutorial-tab-container">
-                                            <div className="tutorial-tab-header">
-                                                Tab 1
-                                            </div> 
-                                            <div className="tutorial-tab-block">
-                                                <div className="field" style={{marginTop: "25px"}}>
-                                                    <label className="label">Title</label>
-                                                    <div className="control">
-                                                        <input className="input" type="text" placeholder="e.g. Leran to code with python " />
+                                        
+                                        {
+                                            this.state.tabs.map((x, index) => (
+                                                <div key={index} className="tutorial-tab-container">
+                                                    <div className="tutorial-tab-header">
+                                                        Tab {index + 1}
                                                     </div> 
-                                                </div> 
+                                                    <div className="tutorial-tab-block">
+                                                        <div className="field" style={{marginTop: "25px"}}>
+                                                            <label className="label">Title</label>
+                                                            <div className="control">
+                                                                <input 
+                                                                    value={x.title} 
+                                                                    onChange={(e) => this.change_tap = (e, "title", index) } 
+                                                                    className="input" 
+                                                                    type="text" 
+                                                                    placeholder="e.g. Leran to code with python " 
+                                                                />
+                                                            </div> 
+                                                        </div> 
 
-                                                <div className="field" style={{marginTop: "25px"}}>
-                                                    <label className="label">Description</label>
-                                                    <div className="control">
-                                                        <textarea className="input" style={{minHeight:"100px"}}></textarea>
-                                                    </div> 
-                                                </div>     
+                                                        <div className="field" style={{marginTop: "25px"}}>
+                                                            <label className="label">Description</label>
+                                                            <div className="control">
+                                                                <textarea 
+                                                                    value={x.description} 
+                                                                    onChange={(e) => this.change_tap = (e, "description", index) } 
+                                                                    className="input" 
+                                                                    style={{minHeight:"100px"}}></textarea>
+                                                            </div> 
+                                                        </div>     
 
-                                                <div className="field" style={{marginTop: "25px"}}>
-                                                    <label className="label">Slug Name</label>
-                                                    <div className="control">
-                                                        <input className="input" type="text" placeholder="Slug name" />
-                                                    </div> 
-                                                </div>
+                                                        <div className="field" style={{marginTop: "25px"}}>
+                                                            <label className="label">Slug Name</label>
+                                                            <div className="control">
+                                                                <input 
+                                                                    value={x.slug} 
+                                                                    onChange={(e) => this.change_tap = (e, "slug", index) } 
+                                                                    className="input" 
+                                                                    type="text" 
+                                                                    placeholder="Slug name" 
+                                                                />
+                                                            </div> 
+                                                        </div>
 
-                                                <div className="field" style={{marginTop: "25px"}}>
-                                                    <label className="label">Keyphrase</label>
-                                                    <div className="control">
-                                                        <input className="input" type="text" placeholder="Keyphrase if two more than one use comma(,)" />
-                                                    </div> 
-                                                </div> 
+                                                        <div className="field" style={{marginTop: "25px"}}>
+                                                            <label className="label">Keyphrase</label>
+                                                            <div className="control">
+                                                                <input 
+                                                                    value={x.keyphrase} 
+                                                                    onChange={(e) => this.change_tap = (e, "keyphrase", index) } 
+                                                                    className="input" 
+                                                                    type="text" 
+                                                                    placeholder="Keyphrase if two more than one use comma(,)" 
+                                                                />
+                                                            </div> 
+                                                        </div> 
 
-                                                <div className="field" style={{marginTop: "25px"}}>
-                                                    <label className="label">Meta Title</label>
-                                                    <div className="control">
-                                                        <input className="input" type="text" placeholder="Meta Title" />
-                                                    </div> 
-                                                </div> 
+                                                        <div className="field" style={{marginTop: "25px"}}>
+                                                            <label className="label">Meta Title</label>
+                                                            <div className="control">
+                                                                <input 
+                                                                    value={x.meta_title} 
+                                                                    onChange={(e) => this.change_tap = (e, "meta_title", index) }
+                                                                    className="input" 
+                                                                    type="text" 
+                                                                    placeholder="Meta Title" 
+                                                                />
+                                                            </div> 
+                                                        </div> 
 
-                                                <div className="field" style={{marginTop: "25px"}}>
-                                                    <label className="label">Meta Description</label>
-                                                    <div className="control">
-                                                        <textarea className="input" style={{minHeight:"100px"}}></textarea>
-                                                    </div> 
-                                                </div>   
+                                                        <div className="field" style={{marginTop: "25px"}}>
+                                                            <label className="label">Meta Description</label>
+                                                            <div className="control">
+                                                                <textarea 
+                                                                    value={x.meta_description} 
+                                                                    onChange={(e) => this.change_tap = (e, "meta_description", index) }
+                                                                    className="input" 
+                                                                    style={{minHeight:"100px"}}
+                                                                ></textarea>
+                                                            </div>  
+                                                        </div>   
+                                                            
 
-                                                <div className="field" style={{marginTop: "25px"}}>
-                                                    <label className="label">Redirect Options</label>
-                                                    <div className="control">
-                                                        <input className="input" type="text" placeholder="Redirect From eg: /php-reference/" />
-                                                        <input className="input mt-10" type="text" placeholder="Redirect To eg: /php-programming/php-reference/" />
-                                                    </div> 
-                                                </div>
+                                                        <div className="field" style={{marginTop: "25px", display:"flex", flexDirection: "column"}}>
+                                                            <label className="flexbox items-center"> 
+                                                                <input 
+                                                                    onChange={(e) => this.change_tap = (e, "hide_from_search_engines", index) }
+                                                                    checked={x.hide_from_search_engines} 
+                                                                    className="mr-8" 
+                                                                    type="checkbox" 
+                                                                />
+                                                                <span style={{marginLeft: 5, fontSize: "14px"}}>Hide from search engine </span> 
+                                                            </label>
+                                                        </div>   
+                                                    </div>
+                                                </div>    
+                                            ))
+                                        } 
 
-                                                <div className="field" style={{marginTop: "25px", display:"flex", flexDirection: "column"}}>
-                                                    <label className="flexbox items-center mr-15"> <input className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Enable for artcile editor</span> </label>
-                                                    <label className="flexbox items-center"> <input className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Hide from search engine </span> </label>
-                                                </div>   
-                                            </div>
-                                        </div>    
                                     </div>
                                 </div> 
 
