@@ -13,18 +13,17 @@ class CreateTutorial extends Component {
             categories: [],
             selected_category: null,
 
-
-            tabs: [
-                {
-                    title: "",
-                    description: "",
-                    slug: "",
-                    keyphrase: "",
-                    meta_title: "",
-                    meta_description: "",
-                    hide_from_search_engines: false,
-                }
-            ]
+            tab_copy: {
+                title: "",
+                description: "",
+                slug: "",
+                keyphrase: "",
+                meta_title: "",
+                meta_description: "",
+                hide_from_search_engines: false,
+                is_open: false
+            },
+            tabs: []
         };
 
     }
@@ -75,9 +74,7 @@ class CreateTutorial extends Component {
 
         // => Load Categoris
         await this.loadCategories();
-
-        // => tabs work 
-        this.tutorial_tabs();
+ 
     }
     
     select_category = (id) => {
@@ -245,6 +242,34 @@ class CreateTutorial extends Component {
         )
     }
     
+    add_new_tab = (e) => {
+        
+        e.preventDefault();
+
+        this.setState((prevState) => {
+
+            var tabs = prevState.tabs;
+            var new_tab = this.state.tab_copy;
+
+            tabs.push(new_tab);
+
+            return {
+                tabs: tabs
+            };
+
+        })
+    };
+
+    expand_collapse_element = ( index ) => {
+        
+        var tabs = [...this.state.tabs];
+        var objx = {...tabs[index]};
+            objx.is_open = !this.state.tabs[index].is_open;
+            tabs[index] = objx;
+
+        this.setState({tabs: tabs});
+    }
+
     render() {
         return (
             <div id="app">
@@ -359,23 +384,36 @@ class CreateTutorial extends Component {
                                 <div className="block-container">
                                     <div style={{display:"flex", justifyContent: "space-between"}}>
                                         <h1>Tutorial Tabs</h1>
-                                        <a href="#" style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Add new</a>
+                                        <a href="#" onClick={this.add_new_tab} style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Add new</a>
                                     </div>
                                     <div className="tab-wrap">
                                         
                                         {
+                                            this.state.tabs.length ?
                                             this.state.tabs.map((x, index) => (
                                                 <div key={index} className="tutorial-tab-container">
-                                                    <div className="tutorial-tab-header">
-                                                        Tab {index + 1}
-                                                    </div> 
-                                                    <div className="tutorial-tab-block">
+                                                    <div style={{display: "flex", gap: 10}}>
+                                                        <button>X</button>
+                                                        <div style={{flexGrow: 1}} onClick={() => this.expand_collapse_element(index)} className="tutorial-tab-header">
+                                                            Tab {index + 1}
+                                                        </div> 
+                                                    </div>
+                                                    <div className={`tutorial-tab-block ${x.is_open? "block": ""}`}>
                                                         <div className="field" style={{marginTop: "25px"}}>
                                                             <label className="label">Title</label>
                                                             <div className="control">
                                                                 <input 
                                                                     value={x.title} 
-                                                                    onChange={(e) => this.change_tap = (e, "title", index) } 
+                                                                    onChange={(e) => {
+                                                                        var value = e.target.value;
+                                                                        this.setState((prevState) => {
+                                                                            
+                                                                            prevState.tabs[index].title = value;
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
                                                                     className="input" 
                                                                     type="text" 
                                                                     placeholder="e.g. Leran to code with python " 
@@ -388,7 +426,16 @@ class CreateTutorial extends Component {
                                                             <div className="control">
                                                                 <textarea 
                                                                     value={x.description} 
-                                                                    onChange={(e) => this.change_tap = (e, "description", index) } 
+                                                                    onChange={(e) => {
+                                                                        var value = e.target.value;
+                                                                        this.setState((prevState) => {
+                                                                            
+                                                                            prevState.tabs[index].description = value;
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
                                                                     className="input" 
                                                                     style={{minHeight:"100px"}}></textarea>
                                                             </div> 
@@ -399,7 +446,16 @@ class CreateTutorial extends Component {
                                                             <div className="control">
                                                                 <input 
                                                                     value={x.slug} 
-                                                                    onChange={(e) => this.change_tap = (e, "slug", index) } 
+                                                                    onChange={(e) => {
+                                                                        var value = e.target.value;
+                                                                        this.setState((prevState) => {
+                                                                            
+                                                                            prevState.tabs[index].slug = value;
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
                                                                     className="input" 
                                                                     type="text" 
                                                                     placeholder="Slug name" 
@@ -412,7 +468,16 @@ class CreateTutorial extends Component {
                                                             <div className="control">
                                                                 <input 
                                                                     value={x.keyphrase} 
-                                                                    onChange={(e) => this.change_tap = (e, "keyphrase", index) } 
+                                                                    onChange={(e) => {
+                                                                        var value = e.target.value;
+                                                                        this.setState((prevState) => {
+                                                                            
+                                                                            prevState.tabs[index].keyphrase = value;
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
                                                                     className="input" 
                                                                     type="text" 
                                                                     placeholder="Keyphrase if two more than one use comma(,)" 
@@ -425,7 +490,16 @@ class CreateTutorial extends Component {
                                                             <div className="control">
                                                                 <input 
                                                                     value={x.meta_title} 
-                                                                    onChange={(e) => this.change_tap = (e, "meta_title", index) }
+                                                                    onChange={(e) => {
+                                                                        var value = e.target.value;
+                                                                        this.setState((prevState) => {
+                                                                            
+                                                                            prevState.tabs[index].meta_title = value;
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
                                                                     className="input" 
                                                                     type="text" 
                                                                     placeholder="Meta Title" 
@@ -438,7 +512,16 @@ class CreateTutorial extends Component {
                                                             <div className="control">
                                                                 <textarea 
                                                                     value={x.meta_description} 
-                                                                    onChange={(e) => this.change_tap = (e, "meta_description", index) }
+                                                                    onChange={(e) => {
+                                                                        var value = e.target.value;
+                                                                        this.setState((prevState) => {
+                                                                            
+                                                                            prevState.tabs[index].meta_description = value;
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
                                                                     className="input" 
                                                                     style={{minHeight:"100px"}}
                                                                 ></textarea>
@@ -449,7 +532,16 @@ class CreateTutorial extends Component {
                                                         <div className="field" style={{marginTop: "25px", display:"flex", flexDirection: "column"}}>
                                                             <label className="flexbox items-center"> 
                                                                 <input 
-                                                                    onChange={(e) => this.change_tap = (e, "hide_from_search_engines", index) }
+                                                                    onChange={(e) => {
+                                                                        var value = e.target.value;
+                                                                        this.setState((prevState) => {
+                                                                            
+                                                                            prevState.tabs[index].hide_from_search_engines = !this.state.tabs[index].hide_from_search_engines;
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
                                                                     checked={x.hide_from_search_engines} 
                                                                     className="mr-8" 
                                                                     type="checkbox" 
@@ -459,7 +551,8 @@ class CreateTutorial extends Component {
                                                         </div>   
                                                     </div>
                                                 </div>    
-                                            ))
+                                            )):
+                                            <span>No Tabs here, click to add new</span>
                                         } 
 
                                     </div>

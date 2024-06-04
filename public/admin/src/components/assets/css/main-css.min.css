@@ -526,3 +526,7 @@ h1.ce-header {
 body {
     padding-top: 125px;
 }
+
+.block {
+    display: block !important;
+}
