@@ -8,6 +8,7 @@ var fs = require("fs");
 const {Config} = require("./../config/options");
 const {Helper} = require("./../config/helper")
 const multer = require('multer');
+const {Posts} = require("./../models/posts-model");
 
 // Function to ensure directory exists
 const ensureDirectoryExistence = (dirPath) => {
@@ -58,10 +59,42 @@ postRouter.post("/upload-image", upload.single('image'), (req, res) => {
 });
  
 
-postRouter.post("/post/create", (req, res) => {
-    
-    res.send(res.send(req.body));
+postRouter.post("/post/create-update", async (req, res) => {
+    try {
+        const body = req.body; 
+        
+        // Validate the request body
+        if (!body || Object.keys(body).length === 0) {
+            throw new Error("Invalid request body");
+        }
 
+        let savedPost;
+        if (body.post_id !== undefined && body.post_id !== "") {
+            // Update the existing post data
+            savedPost = await Posts.findByIdAndUpdate(body.post_id, body, { new: true });
+        } else {
+            // Create a new post
+            savedPost = await new Posts(body).save();
+        }
+
+        if (savedPost) {
+            res.status(200).send({
+                is_error: false,
+                data: savedPost,
+                message: "Post saved successfully"
+            });
+        } else {
+            throw new Error("An error occurred, please try later");
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while creating or updating the post"
+        });
+    }
 });
 
 module.exports = { postRouter };

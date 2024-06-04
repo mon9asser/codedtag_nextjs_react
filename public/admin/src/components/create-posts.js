@@ -143,18 +143,13 @@ class CreatePost extends Component {
                     } 
                 ]
             },
-
-            /*
-            total_words:0, 
-            total_chars: 0,
-            links: [],
-            _id: "",*/
-
+             
             post_id: "", 
             meta_title: "",
             slug: "",
             keyphrase: "",
             meta_description: "",
+            tutorials: [],
             tutorial: {
                 name: "",
                 id: ""
@@ -162,6 +157,11 @@ class CreatePost extends Component {
             allow_search_engine: false, 
             canonical_url: "",
             is_published: false, 
+
+            is_pressed: false, 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
 
         };
 
@@ -461,12 +461,34 @@ class CreatePost extends Component {
             });
         }, 1000);
     }
-    componentDidMount = () => {
 
-        var session = localStorage.getItem("session"); 
-        if( session != null ) {
-            session = JSON.parse( session ); 
+    loadAllTutorials = async () => {
+        
+        /* tutorial: {
+            name: "",
+            id: ""
+        },*/
+
+        var request = await Helper.sendRequest({
+            api: "tutorials",
+            method: "get",
+            data: {} 
+        });
+
+        if(request.is_error || ! request.data.length) {
+            return; 
         }
+
+        this.setState({
+            tutorials: request.data
+        })
+
+    }
+
+    componentDidMount = async () => {
+        
+        // load all tutorials 
+        await this.loadAllTutorials();
 
         // store site name
         this.setCurrentSiteName();
@@ -491,7 +513,20 @@ class CreatePost extends Component {
         );
     }
       
-    save_post = async () => {
+    save_post = async (e) => {
+
+        e.preventDefault(); 
+
+        this.setState({ 
+            is_pressed: true, 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
+        }); 
+
+        if( this.state.is_pressed ) {
+            return; 
+        }
 
         // prepare post title 
         var post_title = "";
@@ -500,8 +535,7 @@ class CreatePost extends Component {
             post_title = this.state.initialState.blocks[post_title_index].data.text; 
         }
 
-        var object_data = {
-            post_id: this.state.post_id,
+        var object_data = { 
 
             post_type: this.state.post_type,
             post_title: post_title,
@@ -517,19 +551,54 @@ class CreatePost extends Component {
             canonical_url: this.state.canonical_url,
             is_published: this.state.is_published 
         }
-
         
+        if( this.state.post_id != "" ) {
+            object_data.post_id = this.state.post_id;
+        }
         var request = await Helper.sendRequest({
-            api: "post/create",
+            api: "post/create-update",
             method: "post",
-            data: object_data,
-            is_create: true 
+            data: {...object_data},
+            is_create: object_data.post_id != undefined ? false: true 
         });
 
-        console.log(request);
+        if(request.is_error) {
+            // NotificationManager.error(reqs.message, "Error"); 
+            this.setState({
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: request.message
+            })
+            return;
+        }
+
+        this.setState({ 
+            is_pressed: false ,
+            show_message: "show_message",
+            request_status_class: "success",
+            request_message: request.message
+        });  
 
     }
-      
+
+    assign_tutorial_data = (e) => {
+
+        // tutorial_title
+
+        var index = this.state.tutorials.findIndex( x => x._id == e.target.value);
+        if( index == -1 ) {
+            return; 
+        }
+
+        this.setState({
+            tutorial: {
+                id: this.state.tutorials[index]._id, 
+                name: this.state.tutorials[index].tutorial_title  
+            }
+        }) 
+       
+    }
+
     render() {
 
         const stats = [
@@ -541,7 +610,8 @@ class CreatePost extends Component {
             { title: 'Internal Links', value: this.state.initialState.links.filter( x => x.is_external != true).length }
         ];
         
-        
+       
+
         return (
             <div id="app">
                 
@@ -618,9 +688,8 @@ class CreatePost extends Component {
                                         <span>
                                             Tutorial
                                         </span>
-                                        <select value={this.state.tutorial_id} onChange={e => this.setState({ tutorial_id: e.target.value })} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
-                                            <option defaultValue>PHP Tutorial</option>
-                                            <option>Python Tutorial</option>
+                                        <select value={this.state.tutorial.id} onChange={e => this.assign_tutorial_data(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                            {this.state.tutorials.map((x, key) => (<option key={key} value={x._id}>{x.tutorial_title}</option>))} 
                                         </select>
                                     </label> 
 
@@ -670,17 +739,27 @@ class CreatePost extends Component {
                 </section>
 
                 
+                <div ref={this.request_result_ref} className={`${this.state.request_status_class} ${this.state.show_message} request-result-notifiction `}>
+                    {this.state.request_message}
+                </div>
+
 
                 <div style={{position: "sticky", zIndex: "200", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
                     <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
                     <div style={{display: "flex", gap: 10, alignItems: "center"}}>
                         
                         <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
-                            <input checked={this.state.is_published} onChange={e => this.setState({ is_published: e.target.value })} type="checkbox" />
+                            <input checked={this.state.is_published} onChange={e => this.setState({ is_published: !this.state.is_published })} type="checkbox" />
                             Publish
                         </label>
                          
-                        <a onClick={this.save_post} className="button blue">Save</a>
+                        <a onClick={this.save_post} className="button blue">
+                            {
+                                ( this.state.is_pressed ) ?
+                                <span className="loader"></span> : 
+                                "Save"
+                            }
+                        </a>
                     </div>
                 </div>
                 

@@ -44,6 +44,44 @@ tutorialRouter.post("/tutorial/create-update", async (req, res) => {
 });
 
 
-  
+/**
+ * Example:-
+ * localhost:5000/api/tutorials => for all 
+ * localhost:5000/api/tutorials?tutorial_id=665f7ac49d84a1b651c0fae2 => for spesific id
+ */
+tutorialRouter.get("/tutorials", async (req, res) => {
+    try {
+        const { tutorial_id } = req.query;
 
+        if (tutorial_id) {
+            // Fetch the specific tutorial by ID
+            const tutorial = await Tutorial.findById(tutorial_id);
+            if (tutorial) {
+                res.status(200).send({
+                    is_error: false,
+                    data: tutorial,
+                    message: "Tutorial fetched successfully"
+                });
+            } else {
+                throw new Error("Tutorial not found");
+            }
+        } else {
+            // Fetch all tutorials
+            const tutorials = await Tutorial.find({});
+            res.status(200).send({
+                is_error: false,
+                data: tutorials,
+                message: "All tutorials fetched successfully"
+            });
+        }
+    } catch (error) {
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while fetching tutorials"
+        });
+    }
+});
+
+ 
 module.exports = { tutorialRouter }
