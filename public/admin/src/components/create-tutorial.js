@@ -8,10 +8,30 @@ class CreateTutorial extends Component {
     constructor(props) {
         
         super(props);
-
+        this.request_result_ref = React.createRef();
         this.state = {
+            
+            tutorial_id: "",
+
             categories: [],
             selected_category: null,
+
+            tutorial_title: "",
+            duration: "",
+            description: "", 
+            meta_title: "",
+            slug: "",
+            keyphrase: "",
+            meta_description: "",
+
+            options: {
+                show_total_of_tutorial: false,
+                show_duration_time: false,
+                enable_reviews: false,
+                show_views: false,
+                publish: false,
+                hide_from_search_engines: false
+            },
 
             tab_copy: {
                 title: "",
@@ -23,7 +43,13 @@ class CreateTutorial extends Component {
                 hide_from_search_engines: false,
                 is_open: false
             },
-            tabs: []
+            tabs: [],
+
+            is_pressed: false,
+
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
         };
 
     }
@@ -111,9 +137,76 @@ class CreateTutorial extends Component {
         })
 
     }
-    save_data = () => {
+
+    delete_tab = (e, index) => {
         
-        console.log(this.state.tabs);
+        e.preventDefault();
+
+        var tabs = [...this.state.tabs];
+
+        var deleted_tabs = tabs.filter((el, key) => key != index ); 
+        
+        this.setState({
+            tabs: deleted_tabs
+        })
+    }
+
+    save_data = async (e) => {
+        
+        e.preventDefault(); 
+
+        this.setState({ 
+            is_pressed: true, 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
+        }); 
+
+        if( this.state.is_pressed ) {
+            return; 
+        }
+
+        var data_to_send = {
+            tutorial_title: this.state.tutorial_title,
+            duration: this.state.duration,
+            description: this.state.description,
+            meta_title: this.state.meta_title,
+            slug: this.state.slug,
+            keyphrase: this.state.keyphrase,
+            meta_description: this.state.meta_description, 
+            options: this.state.options, 
+            tabs: this.state.tabs
+        };
+
+        if(this.state.tutorial_id != "") {
+            data_to_send.tutorial_id = this.state.tutorial_id;
+        }
+
+        var request = await Helper.sendRequest({
+            api: "tutorial/create", 
+            method: "post", 
+            data: {...data_to_send},
+            is_create: true
+        })
+
+        console.log(request);
+        if( request.is_error ) {
+            this.setState({ 
+                is_pressed: false, 
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: request.message
+            }); 
+
+            return;
+        }
+
+        this.setState({ 
+            is_pressed: false, 
+            show_message: "show_message",
+            request_status_class: "success",
+            request_message: request.message
+        }); 
         /** PROPS to save 
          * this.state.selected_category
          */
@@ -292,21 +385,44 @@ class CreateTutorial extends Component {
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Tutorial Title</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="e.g. Python Tutorial" />
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    tutorial_title: e.target.value
+                                                })}
+                                                value={this.state.tutorial_title}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="e.g. Python Tutorial" 
+                                            />
                                         </div> 
                                     </div> 
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Duration</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="The duration required for completion" />
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    duration: e.target.value
+                                                })}
+                                                value={this.state.duration}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="The duration required for completion" 
+                                            />
                                         </div> 
                                     </div> 
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Description</label>
                                         <div className="control">
-                                            <textarea className="input" style={{minHeight:"100px"}}></textarea>
+                                            <textarea 
+                                                onChange={e => this.setState({
+                                                    description: e.target.value
+                                                })}
+                                                value={this.state.description}
+                                                className="input" 
+                                                style={{minHeight:"100px"}}
+                                            ></textarea>
                                         </div> 
                                     </div> 
 
@@ -335,28 +451,59 @@ class CreateTutorial extends Component {
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Meta Title</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="e.g. Leran to code with python " />
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    meta_title: e.target.value
+                                                })}
+                                                value={this.state.meta_title}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="e.g. Leran to code with python" 
+                                            />
                                         </div> 
                                     </div> 
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Slug Name</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="Slug name" />
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    slug: e.target.value
+                                                })}
+                                                value={this.state.slug}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="Slug name" 
+                                            />
                                         </div> 
                                     </div>
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Keyphrase</label>
                                         <div className="control">
-                                            <input className="input" type="text" placeholder="Keyphrase if two more than one use comma(,)" />
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    keyphrase: e.target.value
+                                                })}
+                                                value={this.state.keyphrase}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="Keyphrase if two more than one use comma(,)" 
+                                            />
                                         </div> 
                                     </div> 
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Meta Description</label>
                                         <div className="control">
-                                            <textarea className="input" style={{minHeight:"100px"}}></textarea>
+                                            <textarea 
+                                                onChange={e => this.setState({
+                                                    meta_description: e.target.value
+                                                })}
+                                                value={this.state.meta_description}
+                                                className="input" 
+                                                style={{minHeight:"100px"}}
+                                            ></textarea>
                                         </div> 
                                     </div>     
 
@@ -371,12 +518,14 @@ class CreateTutorial extends Component {
                                     </div>
                                     <div className="tab-wrap">
                                         <div className="field" style={{marginTop: "5px", display:"flex", flexDirection: "column"}}>
-                                            <label className="flexbox items-center mr-15"> <input className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show total of tutorial</span> </label>
-                                            <label className="flexbox items-center"> <input className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show duration time </span> </label>
-                                            <label className="flexbox items-center"> <input className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Enable reviews </span> </label>
-                                            <label className="flexbox items-center"> <input className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show views</span> </label>
-                                            <label className="flexbox items-center"> <input className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish</span> </label>
-                                            <label className="flexbox items-center"> <input className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Hide from Search Engines</span> </label>
+                                            <label className="flexbox items-center mr-15"> 
+                                                <input checked={this.state.options.show_total_of_tutorial} onChange={(e) => this.setState({options: { ...this.state.options, show_total_of_tutorial: !this.state.options.show_total_of_tutorial }})} className="mr-8" type="checkbox" />
+                                            <span style={{marginLeft: 5, fontSize: "14px"}}>Show total of tutorial</span> </label>
+                                            <label className="flexbox items-center"> <input checked={this.state.options.show_duration_time} onChange={(e) => this.setState({options: { ...this.state.options, show_duration_time: !this.state.options.show_duration_time }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show duration time </span> </label>
+                                            <label className="flexbox items-center"> <input checked={this.state.options.enable_reviews} onChange={(e) => this.setState({options: { ...this.state.options, enable_reviews: !this.state.options.enable_reviews }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Enable reviews </span> </label>
+                                            <label className="flexbox items-center"> <input checked={this.state.options.show_views} onChange={(e) => this.setState({options: { ...this.state.options, show_views: !this.state.options.show_views }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show views</span> </label>
+                                            <label className="flexbox items-center"> <input checked={this.state.options.publish} onChange={(e) => this.setState({options: { ...this.state.options, publish: !this.state.options.publish }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish</span> </label>
+                                            <label className="flexbox items-center"> <input checked={this.state.options.hide_from_search_engines} onChange={(e) => this.setState({options: { ...this.state.options, hide_from_search_engines: !this.state.options.hide_from_search_engines }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Hide from Search Engines</span> </label>
                                         </div> 
                                     </div>
                                 </div>
@@ -392,8 +541,10 @@ class CreateTutorial extends Component {
                                             this.state.tabs.length ?
                                             this.state.tabs.map((x, index) => (
                                                 <div key={index} className="tutorial-tab-container">
-                                                    <div style={{display: "flex", gap: 10}}>
-                                                        <button>X</button>
+                                                    <div style={{display: "flex", gap: 10, alignItems: "center"}}>
+                                                        <a href="#" onClick={(e) => this.delete_tab(e, index)} style={{background: "tomato", color: "#fff", padding: "2px 10px", borderRadius: "2px"}}>
+                                                            <span className="mdi mdi-delete"></span>
+                                                        </a>
                                                         <div style={{flexGrow: 1}} onClick={() => this.expand_collapse_element(index)} className="tutorial-tab-header">
                                                             Tab {index + 1}
                                                         </div> 
@@ -564,6 +715,10 @@ class CreateTutorial extends Component {
                             </div>
                         </div>
                     </div>
+
+                    <div ref={this.request_result_ref} className={`${this.state.request_status_class} ${this.state.show_message} request-result-notifiction `}>
+                        {this.state.request_message}
+                    </div>
                     
                     <div className="flex gap-5 sticky-btns space-between">
                         <div className="flex gap-5">
@@ -573,10 +728,16 @@ class CreateTutorial extends Component {
                         </div>
                         <div className="flex gap-5" style={{alignItems: "center"}}>
                             <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
-                                <input type="checkbox" />
+                                <input checked={this.state.options.publish} onChange={(e) => this.setState({options: { ...this.state.options, publish: !this.state.options.publish }})} type="checkbox" />
                                 Publish
                             </label>
-                            <a className="button blue" onClick={this.save_data}>Save</a>
+                            <a className="button blue" onClick={this.save_data}>
+                                {
+                                    ( this.state.is_pressed ) ?
+                                    <span className="loader"></span> : 
+                                    "Save"
+                                }
+                            </a>
                         </div>
                     </div>
                 </section> 

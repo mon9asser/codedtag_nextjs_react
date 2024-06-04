@@ -35,6 +35,7 @@ const { switcherRouter } = require("./apis/switcher");
 const { categoryRouter } = require("./apis/category");
 const { settingsRouter } = require("./apis/settings");
 const { postRouter } = require("./apis/posts");
+const { tutorialRouter } = require("./apis/tutorials");
 
 // middlewares 
 app.use( Config.server.api, userRouters );
@@ -42,6 +43,7 @@ app.use( Config.server.api, switcherRouter );
 app.use( Config.server.api, categoryRouter);
 app.use( Config.server.api, settingsRouter );
 app.use( Config.server.api, postRouter);
+app.use( Config.server.api, tutorialRouter);
 
 
 

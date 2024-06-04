@@ -21,7 +21,7 @@ let tutorialSchema = new Schema({
         trim : true,
         default: "" 
     },
-    category_object: {
+    selected_category: {
         type: {
             id:  {
                 type: String ,
