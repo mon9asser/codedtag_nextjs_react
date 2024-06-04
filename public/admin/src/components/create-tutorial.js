@@ -183,13 +183,12 @@ class CreateTutorial extends Component {
         }
 
         var request = await Helper.sendRequest({
-            api: "tutorial/create", 
+            api: "tutorial/create-update", 
             method: "post", 
             data: {...data_to_send},
-            is_create: true
+            is_create: (data_to_send.tutorial_id != undefined && data_to_send.tutorial_id == true ) ? true: false
         })
-
-        console.log(request);
+        
         if( request.is_error ) {
             this.setState({ 
                 is_pressed: false, 
@@ -200,7 +199,7 @@ class CreateTutorial extends Component {
 
             return;
         }
-
+        console.log(request);
         this.setState({ 
             is_pressed: false, 
             show_message: "show_message",
