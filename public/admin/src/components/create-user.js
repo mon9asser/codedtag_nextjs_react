@@ -12,7 +12,7 @@ class CreateUser extends Component {
 
         this.state = {
             
-
+            user_id: "",
             firstname: "",
             secondname: "",
             password: "",
@@ -36,7 +36,7 @@ class CreateUser extends Component {
     }
 
     componentDidMount = () => {
-        
+        // get data by user id
     }
     
     add_media_link = () => {
@@ -87,8 +87,86 @@ class CreateUser extends Component {
         
     }
 
-    save_user = () => {
-        console.log(this.state.social_links);
+    save_user = async (e) => {
+        
+        e.preventDefault(); 
+
+        this.setState({ 
+            is_pressed: true, 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
+        }); 
+
+
+        if( this.state.is_pressed ) {
+            return; 
+        }
+
+        if( this.state.email == "" || ! Helper.validateEmail(this.state.email) ) {
+
+            this.setState({ 
+                is_pressed: false, 
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "Please fill with valid email"
+            }); 
+
+            return;
+        }
+
+        if(this.state.confirm_password != this.state.password) {
+            this.setState({ 
+                is_pressed: false, 
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "Passwords don't match!"
+            }); 
+
+            return;
+        }
+
+        var data_object = {
+            username: this.state.username, 
+            email: this.state.email,
+            firstname: this.state.firstname,
+            secondname: this.state.secondname,
+            password: this.state.password,
+            confirm_password: this.state.confirm_password, 
+            about: this.state.about,
+            rule: this.state.rule, 
+            thumbnail_url: this.state.thumbnail_url, 
+            social_links: this.state.social_links
+        };
+
+        if( this.state.user_id != "" ) {
+            data_object.user_id = this.state.user_id;
+        }
+
+        var request = await Helper.sendRequest({
+            api: "user/create-update",
+            method: "post",
+            data: {...data_object}, 
+            is_create: this.state.user_id != ""? false: true
+        });
+
+        if(request.is_error) {
+            this.setState({ 
+                is_pressed: false, 
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: request.message
+            }); 
+
+            return;
+        }
+
+        this.setState({ 
+            is_pressed: false, 
+            show_message: "show_message",
+            request_status_class: "success",
+            request_message: request.message
+        }); 
     }
 
     setEmailValue = (e) => {
@@ -286,7 +364,11 @@ class CreateUser extends Component {
                             </div>
                         </div>
                     </div>
-                    
+
+                    <div ref={this.request_result_ref} className={`${this.state.request_status_class} ${this.state.show_message} request-result-notifiction `}>
+                        {this.state.request_message}
+                    </div>
+
                     <div className="flex gap-5 sticky-btns space-between">
                         <div className="flex gap-5">
                             <a className="button red">Delete</a>

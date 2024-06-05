@@ -99,6 +99,61 @@ userRouters.post("/user/login", async (req, res) => {
 });
 
 
+// create user 
+userRouters.post("/user/create-update", async (req, res) => {
+    try {
+        const body = req.body;
+
+        // Validate the request body
+        if (!body || Object.keys(body).length === 0) {
+            throw new Error("Invalid request body");
+        }
+
+        // Hash the password if it exists in the body
+        if (body.password) {
+            const salt = await bcrypt.genSalt(10);
+            body.password = await bcrypt.hash(body.password, salt);
+        }
+
+        let savedUser;
+        if (body.user_id !== undefined && body.user_id !== "") {
+            // Update the existing user data by user_id
+            savedUser = await Usr.findByIdAndUpdate(body.user_id, body, { new: true });
+        } else if (body.username !== undefined || body.email !== undefined) {
+            // Check for existing user by username or email
+            let existingUser = await Usr.findOne({ $or: [{ username: body.username }, { email: body.email }] });
+
+            if (existingUser) {
+                // Update the existing user data
+                savedUser = await Usr.findByIdAndUpdate(existingUser._id, body, { new: true });
+            } else {
+                // Create a new user
+                savedUser = await new Usr(body).save();
+            }
+        } else {
+            // Create a new user
+            savedUser = await new Usr(body).save();
+        }
+
+        if (savedUser) {
+            res.status(200).send({
+                is_error: false,
+                data: savedUser,
+                message: "User saved successfully"
+            });
+        } else {
+            throw new Error("An error occurred, please try later");
+        }
+
+    } catch (error) {
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while creating or updating the user"
+        });
+    }
+});
+
 // Register
 userRouters.post("/user/register", async (req, res) => {
     
