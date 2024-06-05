@@ -1,5 +1,7 @@
 import {Settings} from "./settings"; 
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
+
 
 class HelperData {
 
@@ -151,6 +153,12 @@ class HelperData {
           }
         } 
          
+    }
+
+    getGravatarUrl(email, size = 200) {
+      const trimmedEmail = email.trim().toLowerCase();
+      const hash = CryptoJS.SHA256(trimmedEmail).toString();
+      return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=identicon`;
     }
 
 }

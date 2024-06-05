@@ -25,6 +25,11 @@ let usersSchema = new Schema({
           trim: true,
           default: "" 
     },
+    thumbnail_url:{
+            type : String ,
+            trim: true,
+            default: "" 
+      },
     password: {
           type: String ,
           trim : true

@@ -1,7 +1,8 @@
 import { Component } from "react";
 import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
-
+import { Helper } from "../helper.js";
+ 
 
 class CreateUser extends Component {
     
@@ -20,7 +21,7 @@ class CreateUser extends Component {
             email: "", 
             about: "",
             rule: 0,
-
+            thumbnail_url: "https://www.gravatar.com/avatar/e1c8bd8b3ba85dc596abba84e0fdbc7ccc2da71d3d5f336020acdaca86ee2c9a?s=200&d=identicon",
             social_links: [],
             
             allow_appears_in_search_engine:false,
@@ -38,6 +39,76 @@ class CreateUser extends Component {
         
     }
     
+    add_media_link = () => {
+        
+        var link = {
+            social_name: "",
+            social_link: "#"
+        };
+
+        var links = [...this.state.social_links];
+        
+        links.push(link);
+
+        this.setState({
+            social_links: links
+        })
+
+    }
+
+    add_social_name = (text, key ) => {
+        
+        var links = [...this.state.social_links];
+            links[key].social_name = text;
+
+        this.setState({
+            social_links: links
+        })
+        
+    }
+
+    remove_social_link = (key) => { 
+
+        var links = this.state.social_links.filter((el, index) => key != index )
+
+        this.setState({
+            social_links: links
+        })
+    }
+
+    add_social_link = (text, key ) => {
+        
+        var links = [...this.state.social_links];
+            links[key].social_link = text;
+
+        this.setState({
+            social_links: links
+        })
+        
+    }
+
+    save_user = () => {
+        console.log(this.state.social_links);
+    }
+
+    setEmailValue = (e) => {
+
+        
+        (async() => {
+            var url = await Helper.getGravatarUrl(e.target.value);
+            this.setState({
+                thumbnail_url: url
+            })
+        })();
+        
+        // thumbnail_url
+        this.setState({
+            email: e.target.value
+        });
+
+    }
+
+
     render() {
         return (
             <div id="app">
@@ -56,67 +127,108 @@ class CreateUser extends Component {
                             
                             <div className="md-6" style={{margin:"0 auto"}}>
                                 <div className="block-container"> 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">First Name</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="First Name" />
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Email (required)</label>
+                                        <div className="control">
+                                            <input 
+                                                value={this.state.email} 
+                                                onChange={e => this.setEmailValue(e)} 
+                                            className="input" type="text" placeholder="example@gmail.com" />
                                         </div> 
                                     </div> 
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Second Name</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="Second Name" />
-                                        </div> 
-                                    </div>
-
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Password</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="Password" />
-                                        </div> 
-                                    </div>
-
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Confirm Password</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="Confirm Password" />
-                                        </div> 
-                                    </div>
-
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Username</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="Username" />
-                                        </div> 
-                                    </div>
-
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Email (required)</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="example@gmail.com" />
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">First Name</label>
+                                        <div className="control">
+                                            <input 
+                                                value={this.state.firstname} 
+                                                onChange={e => this.setState({
+                                                    firstname: e.target.value
+                                                })} 
+                                            className="input" type="text" placeholder="First Name" />
                                         </div> 
                                     </div> 
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Description</label>
-                                        <div class="control">
-                                            <textarea className="input" style={{minHeight:"100px"}}></textarea>
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Second Name</label>
+                                        <div className="control">
+                                            <input 
+                                                value={this.state.secondname} 
+                                                onChange={e => this.setState({
+                                                    secondname: e.target.value
+                                                })} 
+                                            className="input" type="text" placeholder="Second Name" />
+                                        </div> 
+                                    </div>
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Password</label>
+                                        <div className="control">
+                                            <input 
+                                                value={this.state.password} 
+                                                onChange={e => this.setState({
+                                                    password: e.target.value
+                                                })} 
+                                            className="input" type="text" placeholder="Password" />
+                                        </div> 
+                                    </div>
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Confirm Password</label>
+                                        <div className="control">
+                                            <input 
+                                            value={this.state.confirm_password} 
+                                            onChange={e => this.setState({
+                                                confirm_password: e.target.value
+                                            })} 
+                                            className="input" type="text" placeholder="Confirm Password" />
+                                        </div> 
+                                    </div>
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Username</label>
+                                        <div className="control">
+                                            <input 
+                                                value={this.state.username} 
+                                                onChange={e => this.setState({
+                                                    username: e.target.value
+                                                })} 
+                                            className="input" type="text" placeholder="Username" />
+                                        </div> 
+                                    </div>
+
+                                    
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Description</label>
+                                        <div className="control">
+                                            <textarea
+                                                value={this.state.about} 
+                                                onChange={e => this.setState({
+                                                    about: e.target.value
+                                                })} 
+                                            className="input" style={{minHeight:"100px"}}></textarea>
                                         </div> 
                                     </div> 
 
-                                    <div class="field" style={{marginTop: "25px"}}>
+                                    <div className="field" style={{marginTop: "25px"}}>
                                         <div style={{display: "flex", alignItems:"center", justifyContent:"space-between"}}>
-                                            <label class="label">Rule</label>
+                                            <label className="label">Rule</label>
                                         </div>
-                                        <div class="control">
-                                            <div class="select">
-                                                <select>
-                                                    <option>Author</option>
-                                                    <option>Administrator</option>
-                                                    <option>Contributer</option>
-                                                    <option>Editor</option>
-                                                    <option>Subscriber</option>
+                                        <div className="control">
+                                            <div className="select">
+                                                <select
+                                                    value={this.state.rule} 
+                                                    onChange={e => this.setState({
+                                                        rule: e.target.value
+                                                    })} 
+                                                >
+                                                    <option value={4}>Author</option>
+                                                    <option value={3}>Administrator</option>
+                                                    <option value={2}>Contributer</option>
+                                                    <option value={1}>Editor</option>
+                                                    <option value={0}>Subscriber</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -130,24 +242,42 @@ class CreateUser extends Component {
                                 <div className="block-container"> 
 
                                  
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Thumbnail</label>
-                                        <div class="control">
-                                            <div class="flexbox items-center gap-20" style={{display: "flex", gap: "20px", marginTop: "12px"}}>
-                                                <img src="https://secure.gravatar.com/avatar/dd70045993d177d305a8fe9f8025c702?s=64&amp;d=mm&amp;r=g" alt="" width="64" height="64" />
-                                                <input class="full-border grey-border" type="text" placeholder="Write email here" style={{border: "1px solid #ddd", padding: '15px'}}/>
-                                                <button className="button tan">Generate Thumbnail</button>
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Thumbnail</label>
+                                        <div className="control">
+                                            <div className="flexbox items-center gap-20" style={{display: "flex", gap: "20px", marginTop: "12px"}}>
+                                                <img src={this.state.thumbnail_url} alt="" width="64" height="64" />
+                                                <input 
+                                                    value={this.state.thumbnail_url} 
+                                                    onChange={e => this.setState({
+                                                        thumbnail_url: e.target.value
+                                                    })} 
+                                                className="full-border grey-border" type="text" placeholder="Image Url" style={{border: "1px solid #ddd", padding: '15px'}}/>
+                                               
                                             </div>
                                         </div> 
                                     </div> 
 
-                                    <div class="field" style={{marginTop: "25px"}}>
-                                        <label class="label">Social Media</label>
-                                        <div class="control" style={{display:"flex", gap: "15px"}}>
-                                            <input class="input" style={{flexBasis: "230px"}} type="text" placeholder="Social Name" />
-                                            <input class="input" type="text" placeholder="Social Page Link" />
-                                        </div> 
-                                        <button class="button tan" style={{marginTop: "15px", marginLeft: "auto"}}>Add New Media</button>
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Social Media</label>
+                                        
+                                        {
+                                            ! this.state.social_links.length ?
+                                                <div className="control">There are no links, click to add social link</div>
+                                            :
+                                            this.state.social_links.map( (x, index) => (
+                                                <div key={index} className="control" style={{display:"flex", gap: "15px", marginTop: "15px"}}>
+                                                    <input value={x.social_name} onChange={e => this.add_social_name(e.target.value, index)} className="input" style={{flexBasis: "230px"}} type="text" placeholder="Social Name" />
+                                                    <input value={x.social_link} onChange={e => this.add_social_link(e.target.value, index)} className="input" type="text" placeholder="Social Page Link" />
+                                                    <button onClick={() => this.remove_social_link(index)} className="button red">
+                                                        Remove
+                                                    </button>
+                                                </div> 
+                                            ))
+                                        }
+                                        
+
+                                        <button onClick={this.add_media_link} className="button tan" style={{marginTop: "15px", marginLeft: "auto"}}>Add New Media</button>
                                     </div> 
 
                                      
@@ -164,7 +294,7 @@ class CreateUser extends Component {
                             <a className="button light">Visit page</a>
                         </div>
                         <div className="flex gap-5">
-                        <a className="button blue">Save</a> 
+                        <a onClick={this.save_user} className="button blue">Save</a> 
                         </div>
                     </div>
                 </section> 
