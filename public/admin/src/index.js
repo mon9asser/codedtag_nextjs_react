@@ -23,7 +23,7 @@ import { CreatePost } from './components/create-posts.js';
 import { CreatePage } from './components/create-pages.js';
 import { CreateTutorial } from './components/create-tutorial.js';
 import { CreateUser } from './components/create-user.js';
-
+import { Chapters } from './components/chapters.js';
 import { AuthWrapper } from './components/helpers/context.js';
 
 
@@ -43,7 +43,9 @@ var WrappApplication = () => (
             <Route path="/dashboard/create-post" element={<CreatePost/>} />
             <Route path="/dashboard/create-page" element={<CreatePage/>} />
             <Route path="/dashboard/create-tutorial" element={<CreateTutorial/>} />
-            <Route path="/dashboard/create-user" element={<CreateUser/>} />             
+            <Route path="/dashboard/create-user" element={<CreateUser/>} /> 
+            <Route path="/dashboard/chapters" element={<Chapters/>} /> 
+                        
         </Routes>
       </AuthWrapper>
       

@@ -97,4 +97,41 @@ postRouter.post("/post/create-update", async (req, res) => {
     }
 });
 
+
+postRouter.get("/post/get", async (req, res) => {
+    try {
+        const { post_type } = req.query;
+        console.log(post_type);
+        // Validate the request query parameter
+        if (!post_type) {
+            throw new Error("post_type parameter is required");
+        }
+
+        // Fetch posts based on the post_type
+        const posts = await Posts.find({ post_type: post_type });
+
+        if (posts.length > 0) {
+            res.status(200).send({
+                is_error: false,
+                data: posts,
+                message: "Posts retrieved successfully"
+            });
+        } else {
+            res.status(404).send({
+                is_error: true,
+                data: null,
+                message: "No posts found for the given post_type"
+            });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while retrieving posts"
+        });
+    }
+})
+
 module.exports = { postRouter };

@@ -38,7 +38,8 @@ var Permissions = [
             "create-post",
             "create-tutorial",
             "create-page",
-            "create-user"
+            "create-user",
+            "chapters"
 
 
 

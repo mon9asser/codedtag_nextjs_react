@@ -376,7 +376,13 @@ class CreateUser extends Component {
                             <a className="button light">Visit page</a>
                         </div>
                         <div className="flex gap-5">
-                        <a onClick={this.save_user} className="button blue">Save</a> 
+                            <a onClick={this.save_user} className="button blue">
+                                {
+                                    ( this.state.is_pressed ) ?
+                                    <span className="loader"></span> : 
+                                    "Save"
+                                }
+                            </a> 
                         </div>
                     </div>
                 </section> 
