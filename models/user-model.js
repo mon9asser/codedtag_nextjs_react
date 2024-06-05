@@ -50,10 +50,9 @@ let usersSchema = new Schema({
     about: { type : String , trim :true, default: "" },
     social_links:{
           type: [
-                {
-                      _id:  { type : ObjectId },
-                      social_name: { type : String , trim :true },
-                      social_link: { type : String , trim :true },
+                { 
+                  social_name: { type : String , trim :true },
+                  social_link: { type : String , trim :true },
                 }
           ]
     },

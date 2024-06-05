@@ -22,7 +22,7 @@ let settingsSchema = new Schema({
         trim : true,
         default: ""
     },
-    admin_email_address: {
+    beside_post_title: {
         type: String ,
         trim : true,
         default: ""

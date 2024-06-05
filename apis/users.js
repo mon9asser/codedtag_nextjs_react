@@ -15,6 +15,7 @@ const {Usr} = require("./../models/user-model");
 // configuration
 const {Config} = require('./../config/options');
 
+const { Permissions} =   require('./permissions.js');
 
 // Login 
 userRouters.post("/user/login", async (req, res) => {
@@ -252,46 +253,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
     var token = req.body.token; 
 
 
-    // create post without publish -> in review
-    // permission of users subscriber:0, Contributer:1, Editor:2, Author:3, Admin:4
-    var permissions = [
-        {   
-            // Can read and comment on posts.
-            cap: 0,
-            name: 'subscriber',
-            rules: []
-        },
-        {
-            // Can write and submit posts for review.
-            cap: 1,
-            name: 'contributer',
-            rules: []
-        },
-        {
-            // Can publish and manage their own posts.
-            cap: 2,
-            name: 'author',
-            rules: []
-        },
-        {
-            // Can publish and manage posts, including others.
-            cap: 3,
-            name: 'editor',
-            rules: [],
-        },
-        {
-            // Has full control over the blog, including managing users.
-            cap: 4,
-            name: 'admin',
-            rules: [
-                "settings",
-                "users",
-                "dashboard",
-                "create-post",
-                "create-tutorial"
-            ]
-        }
-    ]; 
+    
     
 
     jwt.verify(token, Config.jwt_secret, (err, decoded) => {
@@ -321,7 +283,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
         
         var rule = ( decoded.user_data != undefined )? decoded.user_data.idx: decoded.token_object.idx; 
          
-        var index = permissions.findIndex(x => { 
+        var index = Permissions.findIndex(x => { 
             return x.cap == rule;
         });
         
@@ -335,7 +297,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
             })
         }
         
-        var user_permission = permissions[index];
+        var user_permission = Permissions[index];
         var rules = user_permission.rules;
         console.log(rules, page);
         if( rules.includes(page) ) {

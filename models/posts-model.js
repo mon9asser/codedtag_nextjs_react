@@ -7,7 +7,7 @@ const ObjectId = Schema.ObjectId;
 
 let postsSchema = new Schema({
     post_type: {
-        type: Boolean, 
+        type: Number, 
         default: 0
     },
     post_title: {

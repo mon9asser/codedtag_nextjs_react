@@ -22,61 +22,61 @@ class SidebarContainer extends Component {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/tutorials"> 
+                                <Link to="/dashboard/tutorials"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Tutorials</span>
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/create-tutorial"> 
+                                <Link to="/dashboard/create-tutorial"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Create Tutorial</span>
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/chapters"> 
+                                <Link to="/dashboard/chapters"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Chapters</span>
                                 </Link>
                             </li>
 
                             <li>
-                                <Link to="/posts"> 
+                                <Link to="/dashboard/posts"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Posts</span>
                                 </Link>
                             </li>
 
                             <li>
-                                <Link to="/create-post"> 
+                                <Link to="/dashboard/create-post"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Create Post</span>
                                 </Link>
                             </li>
 
                             <li>
-                                <Link to="/pages"> 
+                                <Link to="/dashboard/pages"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Pages</span>
                                 </Link>
                             </li>
 
                             <li>
-                                <Link to="/create-page"> 
+                                <Link to="/dashboard/create-page"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Create Page</span>
                                 </Link>
                             </li>
 
                             <li>
-                                <Link to="/users"> 
+                                <Link to="/dashboard/users"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Users</span>
                                 </Link>
                             </li>
 
                             <li>
-                                <Link to="/create-user"> 
+                                <Link to="/dashboard/create-user"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Create User</span>
                                 </Link>
@@ -86,25 +86,25 @@ class SidebarContainer extends Component {
                         <p className="menu-label">Utils</p>
                         <ul className="menu-list">
                             <li>
-                                <Link to="/menus"> 
+                                <Link to="/dashboard/menus"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Menus</span>
                                 </Link>
                             </li> 
                             <li>
-                                <Link to="/widgets"> 
+                                <Link to="/dashboard/widgets"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Widgets</span>
                                 </Link>
                             </li> 
                             <li>
-                                <Link to="/advertisements"> 
+                                <Link to="/dashboard/advertisements"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Advertisement</span>
                                 </Link>
                             </li> 
                             <li>
-                                <Link to="/messages"> 
+                                <Link to="/dashboard/messages"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Messages</span>
                                 </Link>

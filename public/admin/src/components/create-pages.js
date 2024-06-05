@@ -102,7 +102,7 @@ var Tools = {
  
 };
 
-class CreatePost extends Component {
+class CreatePage extends Component {
     
     constructor(props) {
     
@@ -110,7 +110,7 @@ class CreatePost extends Component {
         
         this.state = { 
             
-            post_type: 0, /* 1 => page --|-- 0 => post */
+            post_type: 1, /* 1 => page --|-- 0 => post */
             settings: {
                 site_name: ""
             },
@@ -127,8 +127,8 @@ class CreatePost extends Component {
                         id: "header-level-1",
                         type: "header",
                         data: {
-                            placeholder: "Post Title",
-                            text: "Post Title",
+                            placeholder: "Page Title",
+                            text: "Page Title",
                             level: 1
                         }
                     },
@@ -215,8 +215,8 @@ class CreatePost extends Component {
         var target = document.querySelector(".ce-block[data-id='"+id+"']")
         if( target ) {
             var text = target.innerText.trim();
-            if( text.indexOf("Post Title") != -1 &&  text.length >= "Post Title".length) {
-                var new_text = text.replace("Post Title", "")
+            if( text.indexOf("Page Title") != -1 &&  text.length >= "Page Title".length) {
+                var new_text = text.replace("Page Title", "")
                 target.querySelector(".ce-header").innerText = new_text;
                 target.classList.remove("placeholder-block-item");
             }   
@@ -245,7 +245,7 @@ class CreatePost extends Component {
             return;
         }
         const title = titleBlock.holder.innerText.trim();
-        if( title == "Post Title") {
+        if( title == "Page Title") {
             titleBlock.holder.classList.add("placeholder-block-item")
         }  
         
@@ -546,7 +546,7 @@ class CreatePost extends Component {
             return; 
         }
 
-        // prepare post title 
+        // prepare Page Title 
         var post_title = "";
         var post_title_index = this.state.initialState.blocks.findIndex( x => x.id == "header-level-1");
         if(post_title_index != -1 ) {
@@ -839,4 +839,4 @@ class CreatePost extends Component {
 
 }
 
-export { CreatePost };
+export { CreatePage };

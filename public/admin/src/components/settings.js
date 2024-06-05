@@ -19,7 +19,7 @@ class Settings extends Component {
             banner_site_title: "",
             banner_site_description: "",
             site_address: "",
-            admin_email_address: "",
+            beside_post_title: "",
             site_meta_title: "",
             site_meta_description: "",
             google_analytics: {
@@ -78,7 +78,7 @@ class Settings extends Component {
             banner_site_title: settings.banner_site_title,
             banner_site_description : settings.banner_site_description,
             site_address: settings.site_address, 
-            admin_email_address: settings.admin_email_address,
+            beside_post_title: settings.beside_post_title,
             site_meta_title: settings.site_meta_title,    
             site_meta_description: settings.site_meta_description,
             google_analytics: settings.google_analytics,
@@ -101,7 +101,7 @@ class Settings extends Component {
             banner_site_title: this.state.banner_site_title,
             banner_site_description : this.state.banner_site_description,
             site_address: this.state.site_address, 
-            admin_email_address: this.state.admin_email_address,
+            beside_post_title: this.state.beside_post_title,
             site_meta_title: this.state.site_meta_title,    
             site_meta_description: this.state.site_meta_description,
             google_analytics: this.state.google_analytics,
@@ -175,9 +175,9 @@ class Settings extends Component {
                                     </div>
 
                                     <div className="field" style={{marginTop: "25px"}}>
-                                        <label className="label">Administration Email Address</label>
+                                        <label className="label">Beside Post Title</label>
                                         <div className="control">
-                                            <input onChange={e => this.setState({ admin_email_address: e.target.value })} value={this.state.admin_email_address} className="input" type="text" placeholder="Administration Email Address" />
+                                            <input onChange={e => this.setState({ beside_post_title: e.target.value })} value={this.state.beside_post_title} className="input" type="text" placeholder="- CodedTag" />
                                         </div> 
                                     </div>
  
