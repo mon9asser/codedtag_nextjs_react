@@ -55,7 +55,7 @@ class Chapters extends Component {
         }
         
         this.setState({
-            posts: request.data
+            posts: request.data.filter( x => x.is_published == true)
         }); 
 
         
@@ -85,9 +85,12 @@ class Chapters extends Component {
         var selected_tutorial = this.state.tutorials.filter( x => x._id == tutorial_id);
         var selected_chapters = this.state.chapters == null ? []: this.state.chapters.filter( x => x.tutorial.id == tutorial_id);
         
+        /*
+        console.log(selected_chapters);
+
         if(! selected_posts.length) {
             return; 
-        }
+        }*/ 
 
         if(selected_tutorial.length){
             selected_tutorial = selected_tutorial[0];
@@ -100,6 +103,8 @@ class Chapters extends Component {
             selected_tutorial: selected_tutorial,
             selected_chapters: selected_chapters,
         });
+
+        
 
     }
 
@@ -129,6 +134,49 @@ class Chapters extends Component {
             // insert them also to chapters 
             chapters: all_chapters
         }); 
+    }
+
+    post_added_to_list = () => {
+        console.log("data +++")
+    }
+
+
+    removed_post = (id) => {}
+
+    add_post = (id, obx) => {
+        
+        // Delete Post from Posts
+        var posts = [...this.state.posts];
+        var post_index = posts.findIndex( x => x._id == id);
+        var post_object = posts[post_index];
+        var new_posts = posts.filter( x => x._id != id );
+         
+
+        this.setState({
+            posts: new_posts
+        });
+    }
+
+    save_chapters = () => {
+        console.log(this.state.chapters);
+    }
+
+    insert_chapter_title = (value, id) => {
+
+        var chapters = [...this.state.chapters]
+        var selected_chapters = [...this.state.selected_chapters];
+
+        var index = chapters.findIndex(x => x._id == id );
+        var indexx = selected_chapters.findIndex(x => x._id == id );
+
+        chapters[index].chapter_title = value;
+        selected_chapters[indexx].chapter_title = value;
+
+        this.setState({
+            chapters,
+            selected_chapters
+        })
+        
     }
 
     render() {
@@ -173,24 +221,50 @@ class Chapters extends Component {
                                     {
                                         this.state.selected_chapters == null || ! this.state.selected_chapters.length ?
                                         <span>No chapters here !</span>:
-                                        this.state.selected_chapters.map( x => {
+                                        this.state.selected_chapters.map(( x, k_) => {
                                             return (
-                                                <div key={x._id} className="block-list-items">
-                                                    <input className="chapter-title-block" placeholder="Chapter title" type="text" />
+                                                <div key={x._id + k_} className="block-list-items">
+                                                    <input value={x.chapter_title} onChange={(e) => this.insert_chapter_title(e.target.value, x._id)} className="chapter-title-block" placeholder="Chapter title" type="text" />
                                                     <ReactSortable
                                                             className="box-to-drag-drop"
                                                             list={x.posts}
-                                                            setList={(newState) => this.setState({ items: newState })}
+                                                            setList={(newState) => {
+                                                                
+                                                                var psts = newState.map(x => ({
+                                                                    id: x._id, 
+                                                                    post_title: x.post_title,
+                                                                    slug: x.slug
+                                                                }));
+
+                                                                const updatedChapters = this.state.selected_chapters.map((chapter) => {
+                                                                  if (chapter._id === x._id) {
+                                                                    return { ...chapter, posts: psts };
+                                                                  }
+                                                                  return chapter;
+                                                                });
+
+                                                                const all_chapters = this.state.chapters.map((chapter) => {
+                                                                    if (chapter._id === x._id) {
+                                                                      return { ...chapter, posts: psts };
+                                                                    }
+                                                                    return chapter;
+                                                                });
+
+                                                                this.setState({ 
+                                                                    selected_chapters: updatedChapters,
+                                                                    chapters: all_chapters
+                                                                });
+                                                            }}                                                  
                                                             group={{ name: 'shared', pull: true, put: true }}
                                                             animation={200}
-                                                            onAdd={(evt) => console.log('Added item:', evt.item)}
+                                                            onAdd={(evt) => this.add_post(evt.item.getAttribute("data-id"), evt)}
                                                             onRemove={(evt) => console.log('Removed item:', evt.item)}
                                                         >
                                                             {x.posts.length ? x.posts.map((item, index) => (
-                                                                <div key={item.id}>
+                                                                <div key={item._id + index}>
                                                                     {item.post_title}
                                                                 </div>
-                                                            )): <span>No posts in this chapter</span>}
+                                                            )): <span key={k_ + "_new"}>No posts in this chapter</span>}
                                                     </ReactSortable>
                                                 </div>
                                             );
@@ -204,27 +278,46 @@ class Chapters extends Component {
                                     Posts
                                 </h2>
 
-
                                 {
-                                    this.state.selected_posts == null ?
-                                        <span>No posts found in this tutorial</span>:
-                                    <ReactSortable
+                                    this.state.selected_posts == null ? (
+                                        <span>No posts found in this tutorial</span>
+                                    ) : (
+                                        <ReactSortable
                                         className="box-to-drag-drop"
                                         list={this.state.selected_posts}
                                         setList={(newState) => this.setState({ selected_posts: newState })}
                                         group={{ name: 'shared', pull: true, put: true }}
-                                        animation={200}
-                                        onAdd={this.handleAddOnAllPosts}
-                                        onRemove={(evt) => console.log('Removed item:', evt.item)}
-                                    >
+                                        animation={200} 
+                                        onRemove={(evt) => this.removed_post(evt.item.getAttribute("data-id"))}
+                                        >
                                         {this.state.selected_posts.map((item, index) => (
-                                            <div key={item.id} data-id={JSON.stringify(item)}>
-                                                {item.post_title}
+                                            <div key={item._id || index} data-id={JSON.stringify(item)}>
+                                            {item.post_title}
                                             </div>
                                         ))}
-                                    </ReactSortable>
+                                        </ReactSortable>
+                                    )
                                 }
                                 
+                            </div>
+                        </div>
+
+                        <div style={{position: "sticky", zIndex: "200", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
+                            <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
+                            <div style={{display: "flex", gap: 10, alignItems: "center"}}>
+                                
+                                <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
+                                    <input checked={this.state.is_published} onChange={e => this.setState({ is_published: !this.state.is_published })} type="checkbox" />
+                                    Publish
+                                </label>
+                                
+                                <a onClick={this.save_chapters} className="button blue">
+                                    {
+                                        ( this.state.is_pressed ) ?
+                                        <span className="loader"></span> : 
+                                        "Save"
+                                    }
+                                </a>
                             </div>
                         </div>
 
