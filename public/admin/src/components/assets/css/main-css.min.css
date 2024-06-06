@@ -132,7 +132,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
     margin-left: -10px;
     margin-right: -10px;
     border: 1px dashed #ddd; 
-    background-color: #3b82f617;
+    background-color: #f9f9f9;
     cursor: grab;
 }
  
@@ -529,4 +529,26 @@ body {
 
 .block {
     display: block !important;
+}
+
+
+.block-list-items {
+    background-color: #f9f9f9;
+    border: 3px solid rgb(209, 209, 224);
+    flex-basis: calc(100% / 3 - 15px);
+    padding: 10px;
+}
+.block-list-items input {
+    border: 1px solid rgb(209, 209, 224);
+}
+@media only screen and (max-width: 500px ){
+    .block-list-items {
+        flex-basis: 100%;
+    }
+}
+
+.chapter-title-block {
+    width: 100%;
+    padding: 15px;
+    outline: none;
 }

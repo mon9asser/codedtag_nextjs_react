@@ -5,67 +5,131 @@ import { ReactSortable } from "react-sortablejs";
 import { Helper } from "../helper.js";
 
 class Chapters extends Component {
+   
     constructor(props) {
-        super(props);
-
+        super(props)
         this.state = {
-            tutorials: [],
-            selectedTutorial: '',
-            items: [],
-            list: [],
-            newChapterName: '',
+            
+            // load all when load page 
+            tutorials: null,
+
+            posts: null, // delete post object from when dropped into list of shapter
+            chapters: null, 
+
+            // select a spesific posts and chapters when change tutorials 
+            selected_tutorial: null,
+            selected_posts: null,  // delete post object from when dropped into list of shapter
+            selected_chapters: null 
+
         };
     }
 
-    async componentDidMount() {
-        const tutorial_reqs = await Helper.sendRequest({
+    get_all_tutorials = async () => {
+        
+        var request = await Helper.sendRequest({
             method: "get",
             api: "tutorials",
             data: {},
         });
-        if (!tutorial_reqs.is_error) {
-            this.setState({ tutorials: tutorial_reqs.data });
+
+        if(request.is_error || ! request.data.length ) {
+            return; 
         }
+        
+        this.setState({
+            tutorials: request.data
+        }); 
+
     }
 
-    handleTutorialChange = async (event) => {
-        const selectedTutorial = event.target.value;
-        this.setState({ selectedTutorial });
-
-        const articles_reqs = await Helper.sendRequest({
+    get_all_posts = async () => {
+        
+        var request = await Helper.sendRequest({
             method: "get",
-            api: `post/get?post_type=0&tutorial=${selectedTutorial}`,
+            api: `post/get?post_type=0`,
             data: {},
         });
-        if (!articles_reqs.is_error) {
-            this.setState({ list: articles_reqs.data });
+
+        if(request.is_error || ! request.data.length ) {
+            return; 
         }
-    };
+        
+        this.setState({
+            posts: request.data
+        }); 
 
-    handleAddOnAllPosts = (evt) => {
-        const newItem = evt.item;
-        const newItemData = JSON.parse(newItem.dataset.id);
+        
 
-        if (!this.state.list.some(item => item.id === newItemData.id)) {
-            const newState = [...this.state.list, newItemData];
-            this.setState({ list: newState });
+    }
+
+    async componentDidMount(){
+
+        // load tutorials 
+        await this.get_all_tutorials();
+
+        // load all post 
+        await this.get_all_posts();
+
+        
+    }
+
+    change_tutorial_block = (e) => {
+
+        // selected_posts
+        var tutorial_id = e.target.value;
+        if( this.state.posts == null ) {
+            return;
+        } 
+
+        var selected_posts = this.state.posts.filter( x => x.tutorial.id == tutorial_id)
+        var selected_tutorial = this.state.tutorials.filter( x => x._id == tutorial_id);
+        var selected_chapters = this.state.chapters == null ? []: this.state.chapters.filter( x => x.tutorial.id == tutorial_id);
+        
+        if(! selected_posts.length) {
+            return; 
+        }
+
+        if(selected_tutorial.length){
+            selected_tutorial = selected_tutorial[0];
         } else {
-            console.log("Item already exists!");
-        }
-    };
+            selected_tutorial = null; 
+        } 
+        
+        this.setState({
+            selected_posts: selected_posts,
+            selected_tutorial: selected_tutorial,
+            selected_chapters: selected_chapters,
+        });
 
-    handleNewChapterChange = (event) => {
-        this.setState({ newChapterName: event.target.value });
-    };
+    }
 
-    addNewChapter = () => {
-        if (this.state.newChapterName.trim() !== '') {
-            this.setState(prevState => ({
-                items: [...prevState.items, { id: Date.now().toString(), name: this.state.newChapterName }],
-                newChapterName: ''
-            }));
+    add_new_chapter = () => {
+        
+        if(this.state.selected_tutorial == null ) {
+            alert("Please select tutorial first")
+            return;
         }
-    };
+
+        var chapter_object = {
+            _id: Helper.generateObjectId(), 
+            chapter_title: "",
+            tutorial: {id: this.state.selected_tutorial._id},
+            posts: []
+        };
+
+        var chapters = this.state.selected_chapters != null ? [...this.state.selected_chapters]: []
+        chapters.push(chapter_object);
+
+        var all_chapters = this.state.chapters == null ? []: [...this.state.chapters];
+        all_chapters.push(chapter_object);
+
+        this.setState({
+            selected_chapters: chapters,
+
+            // insert them also to chapters 
+            chapters: all_chapters
+        }); 
+    }
 
     render() {
         return (
@@ -75,124 +139,102 @@ class Chapters extends Component {
                 <section className="section main-section">
                     <div className="card has-table">
                         <header className="card-header">
-                            <div className="card-header-title">
+                            {
+                                this.state.tutorials == null? 
+                                    <span style={{padding: '15px', textAlign: "center", margin: "0 auto"}}>No tutorials found!</span>:
+                                    <div className="card-header-title">
                                 <span className="icon"><i className="mdi mdi-table"></i></span>
-                                Chapters of 
-                                <div className="select card-header-icon">
-                                    <select onChange={this.handleTutorialChange}>
-                                        <option value="">Select a Tutorial</option>
-                                        {this.state.tutorials.map(tutorial => (
-                                            <option key={tutorial.id} value={tutorial.id}>{tutorial.tutorial_title}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="select card-header-icon">
-                                <input
-                                    type="text"
-                                    placeholder="New Chapter Name"
-                                    value={this.state.newChapterName}
-                                    onChange={this.handleNewChapterChange}
-                                />
-                                <button className="button blue" onClick={this.addNewChapter}>Add Chapter</button>
-                            </div>
-                        </header>
-                        <div className="tutorial-conainers">
-                            <div className="box-75">
-                                <div className="tutorial-conainers">
-                                    <div className="box-50">
-                                        <div className="blx">
-                                            <div className="line-bottom">
-                                                <input placeholder="Chapter title" type="text" />
-                                            </div>
-                                            <ReactSortable
-                                                className="box-to-drag-drop"
-                                                list={this.state.items}
-                                                setList={(newState) => this.setState({ items: newState })}
-                                                group={{ name: 'shared', pull: true, put: true }}
-                                                animation={200}
-                                                onAdd={(evt) => console.log('Added item:', evt.item)}
-                                                onRemove={(evt) => console.log('Removed item:', evt.item)}
-                                            >
-                                                {this.state.items.map((item, index) => (
-                                                    <div key={item.id}>
-                                                        {item.name}
-                                                    </div>
-                                                ))}
-                                            </ReactSortable>
-                                            <a href="#" className="chapter-deletion">
-                                                <span className="icon"><i className="mdi mdi-trash-can"></i></span>
-                                            </a>
-                                        </div>
+                                    Chapters of
+                                    <div className="select card-header-icon">
+                                        <select onChange={this.change_tutorial_block}>
+                                            <option value="">Select a Tutorial</option>
+                                            {this.state.tutorials.map(tutorial => {
+                                                if( tutorial.tutorial_title != "" ) {
+                                                    return (<option key={tutorial._id} value={tutorial._id}>{tutorial.tutorial_title}</option>) 
+                                                }
+                                            })}
+                                        </select>
+                                    </div>
+                                    <div className="select card-header-icon" style={{marginLeft: "auto"}}>
+                                        <button onClick={this.add_new_chapter} className="button blue">Add New Chapter</button>
                                     </div>
                                 </div>
+                            }  
+                        </header>
+
+                        <div className="tutorial-conainers">
+                            <div style={{ width: "75%"}}>
+                                
+                                <h2 style={{fontSize: "20px", fontWeight: "bold", marginBottom: "15px"}}>
+                                    Chapters
+                                </h2>
+
+                                <div style={{gap: "15px", display: "flex", flexWrap: "wrap", width: "100%"}}>
+                                    {
+                                        this.state.selected_chapters == null || ! this.state.selected_chapters.length ?
+                                        <span>No chapters here !</span>:
+                                        this.state.selected_chapters.map( x => {
+                                            return (
+                                                <div key={x._id} className="block-list-items">
+                                                    <input className="chapter-title-block" placeholder="Chapter title" type="text" />
+                                                    <ReactSortable
+                                                            className="box-to-drag-drop"
+                                                            list={x.posts}
+                                                            setList={(newState) => this.setState({ items: newState })}
+                                                            group={{ name: 'shared', pull: true, put: true }}
+                                                            animation={200}
+                                                            onAdd={(evt) => console.log('Added item:', evt.item)}
+                                                            onRemove={(evt) => console.log('Removed item:', evt.item)}
+                                                        >
+                                                            {x.posts.length ? x.posts.map((item, index) => (
+                                                                <div key={item.id}>
+                                                                    {item.post_title}
+                                                                </div>
+                                                            )): <span>No posts in this chapter</span>}
+                                                    </ReactSortable>
+                                                </div>
+                                            );
+                                        })
+                                    }
+                                </div>
                             </div>
-                            <div className="box-25">
-                                <b>Posts</b>
-                                <ReactSortable
-                                    className="box-to-drag-drop"
-                                    list={this.state.list}
-                                    setList={(newState) => this.setState({ list: newState })}
-                                    group={{ name: 'shared', pull: true, put: true }}
-                                    animation={200}
-                                    onAdd={this.handleAddOnAllPosts}
-                                    onRemove={(evt) => console.log('Removed item:', evt.item)}
-                                >
-                                    {this.state.list.map((item, index) => (
-                                        <div key={item.id} data-id={JSON.stringify(item)}>
-                                            {item.post_title}
-                                        </div>
-                                    ))}
-                                </ReactSortable>
+
+                            <div style={{width: "25%"}}>
+                                <h2 style={{fontSize: "20px", fontWeight: "bold", marginBottom: "15px"}}>
+                                    Posts
+                                </h2>
+
+
+                                {
+                                    this.state.selected_posts == null ?
+                                        <span>No posts found in this tutorial</span>:
+                                    <ReactSortable
+                                        className="box-to-drag-drop"
+                                        list={this.state.selected_posts}
+                                        setList={(newState) => this.setState({ selected_posts: newState })}
+                                        group={{ name: 'shared', pull: true, put: true }}
+                                        animation={200}
+                                        onAdd={this.handleAddOnAllPosts}
+                                        onRemove={(evt) => console.log('Removed item:', evt.item)}
+                                    >
+                                        {this.state.selected_posts.map((item, index) => (
+                                            <div key={item.id} data-id={JSON.stringify(item)}>
+                                                {item.post_title}
+                                            </div>
+                                        ))}
+                                    </ReactSortable>
+                                }
+                                
                             </div>
                         </div>
+
+
                     </div>
                 </section>
-                <footer className="footer">
-                    <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
-                        <div className="flex items-center justify-start space-x-3">
-                            <div>© 2021, CodedTag.com</div>
-                            <div>
-                                <p>Developed By: <a href="https://codedtag.com/" target="_blank">Montasser Mossallem</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-                <div id="sample-modal" className="modal">
-                    <div className="modal-background --jb-modal-close"></div>
-                    <div className="modal-card">
-                        <header className="modal-card-head">
-                            <p className="modal-card-title">Sample modal</p>
-                        </header>
-                        <section className="modal-card-body">
-                            <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-                            <p>This is sample modal</p>
-                        </section>
-                        <footer className="modal-card-foot">
-                            <button className="button --jb-modal-close">Cancel</button>
-                            <button className="button red --jb-modal-close">Confirm</button>
-                        </footer>
-                    </div>
-                </div>
-                <div id="sample-modal-2" className="modal">
-                    <div className="modal-background --jb-modal-close"></div>
-                    <div className="modal-card">
-                        <header className="modal-card-head">
-                            <p className="modal-card-title">Sample modal</p>
-                        </header>
-                        <section className="modal-card-body">
-                            <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-                            <p>This is sample modal</p>
-                        </section>
-                        <footer className="modal-card-foot">
-                            <button className="button --jb-modal-close">Cancel</button>
-                            <button className="button blue --jb-modal-close">Confirm</button>
-                        </footer>
-                    </div>
-                </div>
             </div>
         );
     }
+
 }
 
 export { Chapters };
