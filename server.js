@@ -36,6 +36,7 @@ const { categoryRouter } = require("./apis/category");
 const { settingsRouter } = require("./apis/settings");
 const { postRouter } = require("./apis/posts");
 const { tutorialRouter } = require("./apis/tutorials");
+const { chapterRouter } = require("./apis/chapters");
 
 // middlewares 
 app.use( Config.server.api, userRouters );
@@ -44,6 +45,7 @@ app.use( Config.server.api, categoryRouter);
 app.use( Config.server.api, settingsRouter );
 app.use( Config.server.api, postRouter);
 app.use( Config.server.api, tutorialRouter);
+app.use( Config.server.api, chapterRouter);
 
 
 

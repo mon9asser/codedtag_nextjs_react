@@ -62,6 +62,22 @@ class Chapters extends Component {
 
     }
 
+    get_all_chapters = async() => {
+        var request = await Helper.sendRequest({
+            method: "get",
+            api: `chapters`,
+            data: {},
+        });
+
+        if(request.is_error || ! request.data.length ) {
+            return; 
+        }
+        console.log(request.data);
+        this.setState({
+            chapters: request.data
+        }); 
+    }
+
     async componentDidMount(){
 
         // load tutorials 
@@ -70,6 +86,8 @@ class Chapters extends Component {
         // load all post 
         await this.get_all_posts();
 
+        // get all chapters 
+        await this.get_all_chapters();
         
     }
 
@@ -157,8 +175,17 @@ class Chapters extends Component {
         });
     }
 
-    save_chapters = () => {
-        console.log(this.state.chapters);
+    save_chapters = async () => {
+         
+
+        var reqs = await Helper.sendRequest({
+            api: "chapters/bulk_insert_update",
+            data: {data_array: this.state.chapters}, 
+            method: "post"
+        });
+
+        console.log(reqs);
+
     }
 
     insert_chapter_title = (value, id) => {
@@ -218,58 +245,88 @@ class Chapters extends Component {
                                 </h2>
 
                                 <div style={{gap: "15px", display: "flex", flexWrap: "wrap", width: "100%"}}>
-                                    {
-                                        this.state.selected_chapters == null || ! this.state.selected_chapters.length ?
-                                        <span>No chapters here !</span>:
-                                        this.state.selected_chapters.map(( x, k_) => {
-                                            return (
-                                                <div key={x._id + k_} className="block-list-items">
-                                                    <input value={x.chapter_title} onChange={(e) => this.insert_chapter_title(e.target.value, x._id)} className="chapter-title-block" placeholder="Chapter title" type="text" />
-                                                    <ReactSortable
-                                                            className="box-to-drag-drop"
-                                                            list={x.posts}
-                                                            setList={(newState) => {
-                                                                
-                                                                var psts = newState.map(x => ({
-                                                                    id: x._id, 
-                                                                    post_title: x.post_title,
-                                                                    slug: x.slug
-                                                                }));
+                                {
+                                    this.state.selected_chapters == null || !this.state.selected_chapters.length ? (
+                                        <span>No chapters here!</span>
+                                    ) : (
+                                        this.state.selected_chapters.map((x, k_) => (
+                                            <div key={x._id + k_} className="block-list-items">
+                                                <input
+                                                    value={x.chapter_title}
+                                                    onChange={(e) => this.insert_chapter_title(e.target.value, x._id)}
+                                                    className="chapter-title-block"
+                                                    placeholder="Chapter title"
+                                                    type="text"
+                                                />
+                                                <ReactSortable
+                                                    className={`box-to-drag-drop`}
+                                                    list={x.posts}
+                                                    setList={(newState) => {
+                                                        
+                                                        // Create a map of existing posts for quick lookup
+                                                        const existingPostsMap = new Map(x.posts.map(post => [post.id, post]));
 
-                                                                const updatedChapters = this.state.selected_chapters.map((chapter) => {
-                                                                  if (chapter._id === x._id) {
-                                                                    return { ...chapter, posts: psts };
-                                                                  }
-                                                                  return chapter;
+                                                        // Merge newState with existing posts
+                                                        newState.forEach(post => {
+                                                            if (post._id !== undefined) {
+                                                                existingPostsMap.set(post._id, {
+                                                                    id: post._id,
+                                                                    post_title: post.post_title,
+                                                                    slug: post.slug
                                                                 });
+                                                            }
+                                                        });
 
-                                                                const all_chapters = this.state.chapters.map((chapter) => {
-                                                                    if (chapter._id === x._id) {
-                                                                      return { ...chapter, posts: psts };
-                                                                    }
-                                                                    return chapter;
-                                                                });
+                                                        // Convert the map back to an array
+                                                        const updatedPosts = Array.from(existingPostsMap.values());
 
-                                                                this.setState({ 
-                                                                    selected_chapters: updatedChapters,
-                                                                    chapters: all_chapters
-                                                                });
-                                                            }}                                                  
-                                                            group={{ name: 'shared', pull: true, put: true }}
-                                                            animation={200}
-                                                            onAdd={(evt) => this.add_post(evt.item.getAttribute("data-id"), evt)}
-                                                            onRemove={(evt) => console.log('Removed item:', evt.item)}
-                                                        >
-                                                            {x.posts.length ? x.posts.map((item, index) => (
-                                                                <div key={item._id + index}>
-                                                                    {item.post_title}
-                                                                </div>
-                                                            )): <span key={k_ + "_new"}>No posts in this chapter</span>}
-                                                    </ReactSortable>
-                                                </div>
-                                            );
-                                        })
-                                    }
+                                                        // Update selected chapters
+                                                        const updatedChapters = this.state.selected_chapters.map((chapter) => {
+                                                            if (chapter._id === x._id) {
+                                                                return { ...chapter, posts: updatedPosts };
+                                                            }
+                                                            return chapter;
+                                                        });
+
+                                                        // Update all chapters
+                                                        const all_chapters = this.state.chapters.map((chapter) => {
+                                                            if (chapter._id === x._id) {
+                                                                return { ...chapter, posts: updatedPosts };
+                                                            }
+                                                            return chapter;
+                                                        });
+
+                                                        // Set the updated state
+                                                        this.setState({
+                                                            selected_chapters: updatedChapters,
+                                                            chapters: all_chapters
+                                                        });
+                                                        
+                                                    }}
+                                                    sortId={k_}
+                                                    group={{ name: `shared`, pull: true, put: true }}
+                                                    animation={200}
+                                                    onAdd={(evt) => {
+                                                        console.log(evt)
+                                                    }}
+                                                    //onAdd={(evt) => this.add_post(evt.item.getAttribute("data-id"), evt)}
+                                                    // onRemove={(evt) => console.log('Removed item:', evt.item)}
+                                                >
+                                                    {x.posts.length ? x.posts.map((item, index) => {
+                                                        
+                                                        return (
+                                                            <div key={item.id} data-id={item.id}>
+                                                                {item.post_title}
+                                                            </div>
+                                                        )
+                                                    }) : (
+                                                        <span key={k_ + "_new"}>No posts in this chapter</span>
+                                                    )}
+                                                </ReactSortable>
+                                            </div>
+                                        ))
+                                    )
+                                }
                                 </div>
                             </div>
 

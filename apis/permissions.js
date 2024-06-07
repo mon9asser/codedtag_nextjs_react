@@ -40,9 +40,6 @@ var Permissions = [
             "create-page",
             "create-user",
             "chapters"
-
-
-
         ]
     }
 ]; 
