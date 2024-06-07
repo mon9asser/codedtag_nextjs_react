@@ -12,7 +12,7 @@ class Chapters extends Component {
             
             // load all when load page 
             tutorials: null,
-
+            all_posts: null, 
             posts: null, // delete post object from when dropped into list of shapter
             chapters: null, 
 
@@ -50,11 +50,17 @@ class Chapters extends Component {
             data: {},
         });
 
-        if(request.is_error || ! request.data.length ) {
-            return; 
+        if(request.is_error ) {
+            return null; 
         }
         
+        if(! request.data.length) {
+            return [];
+        }
+
+        return request.data.filter( x => x.is_published == true);
         this.setState({
+            all_posts: request.data.filter( x => x.is_published == true),
             posts: request.data.filter( x => x.is_published == true)
         }); 
 
@@ -63,31 +69,67 @@ class Chapters extends Component {
     }
 
     get_all_chapters = async() => {
+
         var request = await Helper.sendRequest({
             method: "get",
             api: `chapters`,
             data: {},
         });
 
-        if(request.is_error || ! request.data.length ) {
-            return; 
+        if(request.is_error ) {
+            return null; 
         }
-        console.log(request.data);
+
+        if( ! request.data.length ) {
+            return [];
+        }
+        
+        return request.data;
         this.setState({
             chapters: request.data
         }); 
     }
 
+    get_chapters_and_posts = async() => {
+        
+        // load all post 
+        var posts = await this.get_all_posts(); 
+
+        // get all chapters 
+        var chapters = await this.get_all_chapters(); 
+        
+        if(chapters == null || !chapters.length) {
+            
+            this.setState({
+                all_posts: posts == null || ! posts.length ? []: posts.filter( x => x.is_published == true),
+                posts: posts == null || ! posts.length ? []: posts.filter( x => x.is_published == true)
+            });
+
+            return; 
+        }
+
+        // delete posts that appear inside the chapters 
+        var chapter_posts = chapters.map(x => x.posts).flat();
+        var filtered_posts = posts.filter( x => {
+            var ky = chapter_posts.findIndex( y => y._id == x._id);
+            if( ky == -1 ) return x;
+        })
+        
+        this.setState({
+            chapters: chapters,
+            all_posts: posts == null || ! posts.length ? []: posts.filter( x => x.is_published == true),
+            posts: filtered_posts == null || ! filtered_posts.length ? []: filtered_posts.filter( x => x.is_published == true)
+        });
+
+    }
+
     async componentDidMount(){
 
         // load tutorials 
-        await this.get_all_tutorials();
+        await this.get_all_tutorials(); 
 
-        // load all post 
-        await this.get_all_posts();
-
-        // get all chapters 
-        await this.get_all_chapters();
+        // delete posts according to chapters 
+        await this.get_chapters_and_posts()
         
     }
 
@@ -177,7 +219,7 @@ class Chapters extends Component {
 
     save_chapters = async () => {
          
-
+         
         var reqs = await Helper.sendRequest({
             api: "chapters/bulk_insert_update",
             data: {data_array: this.state.chapters}, 
@@ -204,6 +246,29 @@ class Chapters extends Component {
             selected_chapters
         })
         
+    }
+
+    delete_post_from_chapter = (post_id, chapter_id) => {
+        console.log(post_id, chapter_id);
+        alert("stopped here")
+        // => add to posts and selected posts 
+        var post_index = this.state.all_posts.findIndex( x => x._id == post_id );
+        var post_object = this.state.all_posts[post_index];
+        var _pst = [...this.state.posts];
+        var _selected_pst = [...this.state.selected_posts];
+        _pst.push(post_object);
+        _selected_pst.push(post_object);
+
+        // delete from chapters and selected chapters
+        var chapters = [...this.state.chapters];
+        var selected_chapters = [...this.state.selected_chapters];
+ 
+        // reselect post in selected_posts !
+        this.setState({
+            posts: _pst,
+            selected_posts: _selected_pst, 
+        });
+
     }
 
     render() {
@@ -262,22 +327,21 @@ class Chapters extends Component {
                                                     className={`box-to-drag-drop`}
                                                     list={x.posts}
                                                     setList={(newState) => {
-                                                        
                                                         // Create a map of existing posts for quick lookup
-                                                        const existingPostsMap = new Map(x.posts.map(post => [post.id, post]));
+                                                        const existingPostsMap = new Map(x.posts.map(post => [post._id, post]));
 
                                                         // Merge newState with existing posts
                                                         newState.forEach(post => {
                                                             if (post._id !== undefined) {
                                                                 existingPostsMap.set(post._id, {
-                                                                    id: post._id,
+                                                                    _id: post._id,
                                                                     post_title: post.post_title,
                                                                     slug: post.slug
                                                                 });
                                                             }
                                                         });
 
-                                                        // Convert the map back to an array
+                                                        // Convert the map back to an array, ensuring uniqueness
                                                         const updatedPosts = Array.from(existingPostsMap.values());
 
                                                         // Update selected chapters
@@ -301,7 +365,6 @@ class Chapters extends Component {
                                                             selected_chapters: updatedChapters,
                                                             chapters: all_chapters
                                                         });
-                                                        
                                                     }}
                                                     sortId={k_}
                                                     group={{ name: `shared`, pull: true, put: true }}
@@ -313,12 +376,15 @@ class Chapters extends Component {
                                                     // onRemove={(evt) => console.log('Removed item:', evt.item)}
                                                 >
                                                     {x.posts.length ? x.posts.map((item, index) => {
-                                                        
+                                                        var random = Helper.randomizer();
                                                         return (
-                                                            <div key={item.id} data-id={item.id}>
-                                                                {item.post_title}
+                                                            <div style={{position:"relative"}}>
+                                                                <button onClick={(e)=>this.delete_post_from_chapter(item._id, x._id)} className="button tomato" style={{position: "absolute", right: "0px", width: "20px", top: "7px", height: "20px", cursor: "pointer", background: "red", color: "#fff",  textAlign: "center"}}></button>
+                                                                <div key={item._id} data-id={item._id}>
+                                                                    {item.post_title}
+                                                                </div>
                                                             </div>
-                                                        )
+                                                        );
                                                     }) : (
                                                         <span key={k_ + "_new"}>No posts in this chapter</span>
                                                     )}

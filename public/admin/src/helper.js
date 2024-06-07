@@ -161,6 +161,18 @@ class HelperData {
       return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=identicon`;
     }
 
+    randomizer = () => {
+      
+      // Generate a random number between 0 and 999999
+      const randomNumber = Math.floor(Math.random() * 1000000);
+      
+      // Convert the number to a string and pad with leading zeros if necessary
+      const paddedNumber = randomNumber.toString().padStart(6, '0');
+      
+      return paddedNumber;
+
+    }
+
 }
 
 var Helper = new HelperData(); 
