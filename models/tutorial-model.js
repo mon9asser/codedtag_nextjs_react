@@ -65,6 +65,10 @@ let tutorialSchema = new Schema({
             show_views: { type: Boolean , trim : true,  default: false },
             publish: { type: Boolean , trim : true,  default: false },
             hide_from_search_engines: { type: Boolean , trim : true,  default: false },
+            
+            // not completed !
+            publish_chapters: { type: Boolean ,  default: false },
+            
         }  
     },
     tabs: [

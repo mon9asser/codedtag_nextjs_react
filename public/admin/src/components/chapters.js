@@ -3,7 +3,7 @@ import { NavbarContainer } from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { ReactSortable } from "react-sortablejs";
 import { Helper } from "../helper.js";
-
+alert("publish_chapters didn't completed!")
 class Chapters extends Component {
    
     constructor(props) {
@@ -14,12 +14,14 @@ class Chapters extends Component {
             tutorials: null,
             all_posts: null, 
             posts: null, // delete post object from when dropped into list of shapter
-            chapters: null, 
+            chapters: props.chapters, 
 
             // select a spesific posts and chapters when change tutorials 
             selected_tutorial: null,
             selected_posts: null,  // delete post object from when dropped into list of shapter
-            selected_chapters: null 
+            selected_chapters: props.selected_chapters,
+
+            publish_chapters: false
 
         };
     }
@@ -218,8 +220,7 @@ class Chapters extends Component {
     }
 
     save_chapters = async () => {
-         
-         
+       
         var reqs = await Helper.sendRequest({
             api: "chapters/bulk_insert_update",
             data: {data_array: this.state.chapters}, 
@@ -250,24 +251,44 @@ class Chapters extends Component {
 
     delete_post_from_chapter = (post_id, chapter_id) => {
         console.log(post_id, chapter_id);
-        alert("stopped here")
-        // => add to posts and selected posts 
-        var post_index = this.state.all_posts.findIndex( x => x._id == post_id );
-        var post_object = this.state.all_posts[post_index];
-        var _pst = [...this.state.posts];
-        var _selected_pst = [...this.state.selected_posts];
-        _pst.push(post_object);
-        _selected_pst.push(post_object);
+        
 
-        // delete from chapters and selected chapters
-        var chapters = [...this.state.chapters];
-        var selected_chapters = [...this.state.selected_chapters];
- 
-        // reselect post in selected_posts !
-        this.setState({
-            posts: _pst,
-            selected_posts: _selected_pst, 
-        });
+        // get post object 
+        var all_posts_index = this.state.all_posts.findIndex(x => x._id == post_id);
+        var post_object = this.state.all_posts[all_posts_index];
+
+
+        var posts_update = [...this.state.posts]
+        posts_update.push(post_object);
+
+        var selected_posts_update = [...this.state.selected_posts]
+        selected_posts_update.push(post_object);
+
+        
+
+        this.setState((prevState) => {
+            
+            var selected_chapters = prevState.selected_chapters;
+            var idxn = selected_chapters.findIndex(x => x._id == chapter_id )
+            var chs_posts = [...selected_chapters[idxn].posts];
+                chs_posts = chs_posts.filter(x => x._id != post_id );
+            selected_chapters[idxn].posts = chs_posts;
+
+
+            var uchapters = [...this.state.chapters];
+            var idxnx = uchapters.findIndex(x => x._id == chapter_id )
+            var chs_posts_update = [...uchapters[idxnx].posts];
+                chs_posts_update = chs_posts_update.filter(x => x._id != post_id );
+            uchapters[idxnx].posts = chs_posts_update;
+
+            return {
+                posts: posts_update,
+                selected_posts: selected_posts_update,
+                selected_chapters,
+                chapters: uchapters
+            };
+        })
+
 
     }
 
@@ -275,30 +296,31 @@ class Chapters extends Component {
 
     changeElementPosition(e){  
         
-        if(e.from !== e.to) {
+        if (e.from !== e.to) {
             return; 
         }
-
-        var chapter_id = e.from.classList[1];
-        var old_index = e.oldIndex;
-        var new_index = e.newIndex;
-        
-
-        var chapters = [...this.state.chapters];
-        var get_index_chapter = chapters.findIndex(x => x._id == chapter_id );
-        var psts = [...chapters[get_index_chapter].posts];
-
-        var selected_chapters = [...this.state.selected_chapters];
-        var get_index_chapter_1 = selected_chapters.findIndex(x => x._id == chapter_id );
-         
-
-        psts.splice(new_index, 0, psts.splice(old_index, 1)[0]);
-        selected_chapters[get_index_chapter_1].posts = psts;
-
-        this.setState({
-            selected_chapters: selected_chapters, 
-            chapters: chapters
-        })
+    
+        const chapter_id = e.from.classList[1];
+        const old_index = e.oldIndex;
+        const new_index = e.newIndex;
+    
+        const chapters = [...this.state.chapters];
+        const chapterIndex = chapters.findIndex(chapter => chapter._id === chapter_id);
+        if (chapterIndex === -1) return;
+    
+        const posts = [...chapters[chapterIndex].posts];
+        const [movedPost] = posts.splice(old_index, 1);
+        posts.splice(new_index, 0, movedPost);
+    
+        chapters[chapterIndex].posts = posts;
+    
+        const selected_chapters = [...this.state.selected_chapters];
+        selected_chapters[chapterIndex].posts = posts;
+    
+        this.setState({ chapters, selected_chapters, updateKey: Math.random() }, () => {
+            console.log("State updated:", this.state); // Debugging
+        });
+    
 
     }
 
@@ -347,7 +369,7 @@ class Chapters extends Component {
                                     ) : (
                                         this.state.selected_chapters.map((x, k_) => {
 
- 
+                                             
                                             return (
                                                 <div key={x._id + k_} className="block-list-items">
                                                     <input
@@ -357,13 +379,10 @@ class Chapters extends Component {
                                                         placeholder="Chapter title"
                                                         type="text"
                                                     />
-                                                    <ReactSortable
-                                                        swap ={true}
-                                                        delayOnTouchStart={true}
-                                                        delay={2} 
+                                                    <ReactSortable 
                                                         className={`box-to-drag-drop ${x._id}`}
                                                         list={x.posts}
-                                                        onChange={e => this.changeElementPosition(e)}
+                                                        // onChange={this.changeElementPosition.bind(this)}
                                                         setList={(newState) => {
                                                             // Create a map of existing posts for quick lookup
                                                             const existingPostsMap = new Map(x.posts.map(post => [post._id, post]));
@@ -413,8 +432,8 @@ class Chapters extends Component {
                                                         //onAdd={(evt) => this.add_post(evt.item.getAttribute("data-id"), evt)}
                                                         // onRemove={(evt) => console.log('Removed item:', evt.item)}
                                                     >
-                                                        {x.posts.length ? x.posts.map((item, index) => {
-                                                            var random = Helper.randomizer();
+                                                        {this.state.selected_chapters[k_].posts.length ?this.state.selected_chapters[k_].posts.map((item, index) => {
+                                                            
                                                             return (
                                                                 <div key={item._id} data-id={item._id} style={{position:"relative"}}>
                                                                     <button onClick={(e)=>this.delete_post_from_chapter(item._id, x._id)} className="button tomato" style={{position: "absolute", right: "0px", width: "20px", top: "7px", height: "20px", cursor: "pointer", background: "red", color: "#fff",  textAlign: "center"}}></button>
@@ -423,6 +442,7 @@ class Chapters extends Component {
                                                                     </div>
                                                                 </div>
                                                             );
+
                                                         }) : (
                                                             <span key={k_ + "_new"}>No posts in this chapter</span>
                                                         )}

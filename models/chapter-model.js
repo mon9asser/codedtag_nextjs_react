@@ -11,11 +11,14 @@ let chapterSchema = new Schema({
     tutorial: {
         id: mongoose.Schema.Types.ObjectId
     },
-    posts: [{
+    posts: [],
+    /*
+    {
         id: mongoose.Schema.Types.ObjectId,
         post_title: String,
         slug: String
-    }],
+    }
+    */
     
     ...Helper.defaultSchema
 });

@@ -18,39 +18,13 @@ chapterRouter.post("/chapters/bulk_insert_update", async (req, res) => {
             throw new Error("Invalid request body");
         }
 
-        const bulkOps = await Promise.all(dataArray.map(async item => {
-            if (item._id) {
-                const exists = await Chapters.findById(item._id);
-                if (exists) {
-                    // Update existing document
-                    return {
-                        updateOne: {
-                            filter: { _id: item._id },
-                            update: { $set: item }
-                        }
-                    };
-                } else {
-                    // Insert new document if _id is generated client-side and does not exist in DB
-                    return {
-                        insertOne: {
-                            document: item
-                        }
-                    };
-                }
-            } else if (item.delete) {
-                // Delete document
-                return {
-                    deleteOne: {
-                        filter: { _id: item.delete }
-                    }
-                };
-            } else {
-                // Insert new document
-                return {
-                    insertOne: {
-                        document: item
-                    }
-                };
+        // Delete all existing documents in the collection
+        await Chapters.deleteMany({});
+
+        // Prepare bulk operations for inserting new documents
+        const bulkOps = dataArray.map(item => ({
+            insertOne: {
+                document: item
             }
         }));
 
@@ -69,9 +43,6 @@ chapterRouter.post("/chapters/bulk_insert_update", async (req, res) => {
             message: error.message || "An error occurred during the bulk operation"
         });
     }
-
-
-
 });
 
 
