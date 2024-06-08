@@ -271,6 +271,37 @@ class Chapters extends Component {
 
     }
 
+     
+
+    changeElementPosition(e){  
+        
+        if(e.from !== e.to) {
+            return; 
+        }
+
+        var chapter_id = e.from.classList[1];
+        var old_index = e.oldIndex;
+        var new_index = e.newIndex;
+        
+
+        var chapters = [...this.state.chapters];
+        var get_index_chapter = chapters.findIndex(x => x._id == chapter_id );
+        var psts = [...chapters[get_index_chapter].posts];
+
+        var selected_chapters = [...this.state.selected_chapters];
+        var get_index_chapter_1 = selected_chapters.findIndex(x => x._id == chapter_id );
+         
+
+        psts.splice(new_index, 0, psts.splice(old_index, 1)[0]);
+        selected_chapters[get_index_chapter_1].posts = psts;
+
+        this.setState({
+            selected_chapters: selected_chapters, 
+            chapters: chapters
+        })
+
+    }
+
     render() {
         return (
             <div id="app">
@@ -314,83 +345,91 @@ class Chapters extends Component {
                                     this.state.selected_chapters == null || !this.state.selected_chapters.length ? (
                                         <span>No chapters here!</span>
                                     ) : (
-                                        this.state.selected_chapters.map((x, k_) => (
-                                            <div key={x._id + k_} className="block-list-items">
-                                                <input
-                                                    value={x.chapter_title}
-                                                    onChange={(e) => this.insert_chapter_title(e.target.value, x._id)}
-                                                    className="chapter-title-block"
-                                                    placeholder="Chapter title"
-                                                    type="text"
-                                                />
-                                                <ReactSortable
-                                                    className={`box-to-drag-drop`}
-                                                    list={x.posts}
-                                                    setList={(newState) => {
-                                                        // Create a map of existing posts for quick lookup
-                                                        const existingPostsMap = new Map(x.posts.map(post => [post._id, post]));
+                                        this.state.selected_chapters.map((x, k_) => {
 
-                                                        // Merge newState with existing posts
-                                                        newState.forEach(post => {
-                                                            if (post._id !== undefined) {
-                                                                existingPostsMap.set(post._id, {
-                                                                    _id: post._id,
-                                                                    post_title: post.post_title,
-                                                                    slug: post.slug
-                                                                });
-                                                            }
-                                                        });
-
-                                                        // Convert the map back to an array, ensuring uniqueness
-                                                        const updatedPosts = Array.from(existingPostsMap.values());
-
-                                                        // Update selected chapters
-                                                        const updatedChapters = this.state.selected_chapters.map((chapter) => {
-                                                            if (chapter._id === x._id) {
-                                                                return { ...chapter, posts: updatedPosts };
-                                                            }
-                                                            return chapter;
-                                                        });
-
-                                                        // Update all chapters
-                                                        const all_chapters = this.state.chapters.map((chapter) => {
-                                                            if (chapter._id === x._id) {
-                                                                return { ...chapter, posts: updatedPosts };
-                                                            }
-                                                            return chapter;
-                                                        });
-
-                                                        // Set the updated state
-                                                        this.setState({
-                                                            selected_chapters: updatedChapters,
-                                                            chapters: all_chapters
-                                                        });
-                                                    }}
-                                                    sortId={k_}
-                                                    group={{ name: `shared`, pull: true, put: true }}
-                                                    animation={200}
-                                                    onAdd={(evt) => {
-                                                        console.log(evt)
-                                                    }}
-                                                    //onAdd={(evt) => this.add_post(evt.item.getAttribute("data-id"), evt)}
-                                                    // onRemove={(evt) => console.log('Removed item:', evt.item)}
-                                                >
-                                                    {x.posts.length ? x.posts.map((item, index) => {
-                                                        var random = Helper.randomizer();
-                                                        return (
-                                                            <div style={{position:"relative"}}>
-                                                                <button onClick={(e)=>this.delete_post_from_chapter(item._id, x._id)} className="button tomato" style={{position: "absolute", right: "0px", width: "20px", top: "7px", height: "20px", cursor: "pointer", background: "red", color: "#fff",  textAlign: "center"}}></button>
-                                                                <div key={item._id} data-id={item._id}>
-                                                                    {item.post_title}
+ 
+                                            return (
+                                                <div key={x._id + k_} className="block-list-items">
+                                                    <input
+                                                        value={x.chapter_title}
+                                                        onChange={(e) => this.insert_chapter_title(e.target.value, x._id)}
+                                                        className="chapter-title-block"
+                                                        placeholder="Chapter title"
+                                                        type="text"
+                                                    />
+                                                    <ReactSortable
+                                                        swap ={true}
+                                                        delayOnTouchStart={true}
+                                                        delay={2} 
+                                                        className={`box-to-drag-drop ${x._id}`}
+                                                        list={x.posts}
+                                                        onChange={e => this.changeElementPosition(e)}
+                                                        setList={(newState) => {
+                                                            // Create a map of existing posts for quick lookup
+                                                            const existingPostsMap = new Map(x.posts.map(post => [post._id, post]));
+    
+                                                            // Merge newState with existing posts
+                                                            newState.forEach(post => {
+                                                                if (post._id !== undefined) {
+                                                                    existingPostsMap.set(post._id, {
+                                                                        _id: post._id,
+                                                                        post_title: post.post_title,
+                                                                        slug: post.slug
+                                                                    });
+                                                                }
+                                                            });
+    
+                                                            // Convert the map back to an array, ensuring uniqueness
+                                                            const updatedPosts = Array.from(existingPostsMap.values());
+    
+                                                            // Update selected chapters
+                                                            const updatedChapters = this.state.selected_chapters.map((chapter) => {
+                                                                if (chapter._id === x._id) {
+                                                                    return { ...chapter, posts: updatedPosts };
+                                                                }
+                                                                return chapter;
+                                                            });
+    
+                                                            // Update all chapters
+                                                            const all_chapters = this.state.chapters.map((chapter) => {
+                                                                if (chapter._id === x._id) {
+                                                                    return { ...chapter, posts: updatedPosts };
+                                                                }
+                                                                return chapter;
+                                                            });
+    
+                                                            // Set the updated state
+                                                            this.setState({
+                                                                selected_chapters: updatedChapters,
+                                                                chapters: all_chapters
+                                                            });
+                                                        }}
+                                                        sortId={k_}
+                                                        group={{ name: `shared`, pull: true, put: true }}
+                                                        animation={200}
+                                                        onAdd={(evt) => {
+                                                            console.log(evt)
+                                                        }}
+                                                        //onAdd={(evt) => this.add_post(evt.item.getAttribute("data-id"), evt)}
+                                                        // onRemove={(evt) => console.log('Removed item:', evt.item)}
+                                                    >
+                                                        {x.posts.length ? x.posts.map((item, index) => {
+                                                            var random = Helper.randomizer();
+                                                            return (
+                                                                <div key={item._id} data-id={item._id} style={{position:"relative"}}>
+                                                                    <button onClick={(e)=>this.delete_post_from_chapter(item._id, x._id)} className="button tomato" style={{position: "absolute", right: "0px", width: "20px", top: "7px", height: "20px", cursor: "pointer", background: "red", color: "#fff",  textAlign: "center"}}></button>
+                                                                    <div>
+                                                                        {item.post_title}
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        );
-                                                    }) : (
-                                                        <span key={k_ + "_new"}>No posts in this chapter</span>
-                                                    )}
-                                                </ReactSortable>
-                                            </div>
-                                        ))
+                                                            );
+                                                        }) : (
+                                                            <span key={k_ + "_new"}>No posts in this chapter</span>
+                                                        )}
+                                                    </ReactSortable>
+                                                </div>
+                                            );
+                                        })
                                     )
                                 }
                                 </div>
