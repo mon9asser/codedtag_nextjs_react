@@ -65,6 +65,23 @@ let postsSchema = new Schema({
         type: Boolean, 
         default: false
     },
+    selected_tab: {
+        title: {
+            type: String, 
+            trim: true,
+            default: "/Root"
+        },
+        slug: {
+            type: String, 
+            trim: true,
+            default: ""
+        },
+        _id: {
+            type: String, 
+            trim: true,
+            default: "root"
+        }
+    },
     ...Helper.defaultSchema
 });
 
