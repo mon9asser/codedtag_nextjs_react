@@ -3,7 +3,7 @@ import { NavbarContainer } from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { ReactSortable } from "react-sortablejs";
 import { Helper } from "../helper.js";
-alert("publish_chapters didn't completed!")
+
 class Chapters extends Component {
    
     constructor(props) {
@@ -37,7 +37,7 @@ class Chapters extends Component {
         if(request.is_error || ! request.data.length ) {
             return; 
         }
-        
+        console.log(request.data);
         this.setState({
             tutorials: request.data
         }); 
@@ -159,11 +159,12 @@ class Chapters extends Component {
         } else {
             selected_tutorial = null; 
         } 
-        
+         
         this.setState({
             selected_posts: selected_posts,
             selected_tutorial: selected_tutorial,
             selected_chapters: selected_chapters,
+            publish_chapters: selected_tutorial.options.publish_chapters
         });
 
         
@@ -221,9 +222,18 @@ class Chapters extends Component {
 
     save_chapters = async () => {
        
+        var tutorials = this.state.tutorials.map( x => {
+
+            return {
+                _id: x._id, 
+                publish_chapters: x.options.publish_chapters
+            };
+
+        });
+
         var reqs = await Helper.sendRequest({
             api: "chapters/bulk_insert_update",
-            data: {data_array: this.state.chapters}, 
+            data: {data_array: this.state.chapters, chapter_status: tutorials}, 
             method: "post"
         });
 
@@ -322,6 +332,33 @@ class Chapters extends Component {
         });
     
 
+    }
+
+    publish_tutorials = () => {
+        
+        if(this.state.selected_tutorial == null ) {
+            alert("You have to select tutorial first")
+            return;
+        }
+        
+        var tutorial = {...this.state.selected_tutorial};
+        var checkbox_value = !this.state.publish_chapters;
+        var tutorials = [...this.state.tutorials]; 
+
+        tutorial.options.publish_chapters = checkbox_value;
+
+        var index = tutorials.findIndex( x => x._id == tutorial._id );
+        if( index == -1 ) {
+            return; 
+        }
+
+        tutorials[index].publish_chapters = checkbox_value;
+                 
+        this.setState({ 
+            tutorials: tutorials,
+            selected_tutorial: tutorial,
+            publish_chapters: checkbox_value
+        });
     }
 
     render() {
@@ -489,7 +526,7 @@ class Chapters extends Component {
                             <div style={{display: "flex", gap: 10, alignItems: "center"}}>
                                 
                                 <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
-                                    <input checked={this.state.is_published} onChange={e => this.setState({ is_published: !this.state.is_published })} type="checkbox" />
+                                    <input checked={this.state.publish_chapters} onChange={ this.publish_tutorials} type="checkbox" />
                                     Publish
                                 </label>
                                 

@@ -80,6 +80,7 @@ let tutorialSchema = new Schema({
             meta_title:{ type: String , trim : true, default: "" },
             meta_description:{ type: String , trim : true, default: "" },
             hide_from_search_engines: { type: Boolean,  default: false },
+            publish_chapters: { type: Boolean,  default: false },
         }
     ]
 });

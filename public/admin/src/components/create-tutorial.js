@@ -30,7 +30,8 @@ class CreateTutorial extends Component {
                 enable_reviews: false,
                 show_views: false,
                 publish: false,
-                hide_from_search_engines: false
+                hide_from_search_engines: false,
+                publish_chapters: false
             },
 
             tab_copy: {

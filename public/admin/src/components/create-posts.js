@@ -144,7 +144,9 @@ class CreatePost extends Component {
                     } 
                 ]
             },
-             
+            
+            selected_tab: {_id: "root", title: "/Root", slug: ""}, // object
+            selected_tabs: null, // array  
             post_id: "", 
             meta_title: "",
             slug: "",
@@ -533,6 +535,7 @@ class CreatePost extends Component {
       
     save_post = async (e) => {
 
+        
         e.preventDefault(); 
 
         this.setState({ 
@@ -554,7 +557,7 @@ class CreatePost extends Component {
         }
 
         var object_data = { 
-
+            selected_tab: this.state.selected_tab,
             post_type: this.state.post_type,
             post_title: post_title,
             total_words: this.state.initialState.total_words,
@@ -611,6 +614,37 @@ class CreatePost extends Component {
 
     }
 
+    selected_tabs_order = (e) => {
+
+        if(this.state.tutorial == null ) {
+            return; 
+        }
+
+       
+        var index = this.state.tutorials.findIndex( x => x._id == this.state.tutorial.id);
+        var objx = this.state.tutorials[index];
+        
+        var tabs = objx.tabs;
+        var tab_index = tabs.findIndex(x => x._id == e.target.value );
+
+        if( tab_index == -1 ) {
+            
+            this.setState({
+                selected_tab: {
+                    _id: "root",
+                    title: "/Root",
+                    slug: ""
+                }
+            });
+
+            return; 
+        }
+
+        var selected_tab = tabs[tab_index]; 
+        this.setState({selected_tab});
+
+    }
+
     assign_tutorial_data = (e) => {
 
         // tutorial_title
@@ -621,6 +655,7 @@ class CreatePost extends Component {
         }
 
         this.setState({
+            selected_tabs: this.state.tutorials[index].tabs, 
             tutorial: {
                 id: this.state.tutorials[index]._id, 
                 name: this.state.tutorials[index].tutorial_title  
@@ -735,6 +770,8 @@ class CreatePost extends Component {
                                             style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}
                                         ></textarea>
                                     </label> 
+                                    
+                                    
 
                                     <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
@@ -742,6 +779,21 @@ class CreatePost extends Component {
                                         </span>
                                         <select value={this.state.tutorial.id} onChange={e => this.assign_tutorial_data(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
                                             {this.state.tutorials.map((x, key) => (<option key={key} value={x._id}>{x.tutorial_title}</option>))} 
+                                        </select>
+                                    </label> 
+
+                                    <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <span>
+                                            Sub Folder
+                                        </span>
+                                        <select value={this.state.selected_tab != null ? this.state.selected_tab._id: "root"} onChange={e => this.selected_tabs_order(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                            <option value={"root"}>/Root</option>
+                                            {
+                                                this.state.selected_tabs != null ? 
+                                                this.state.selected_tabs.map( x => {
+                                                    return (<option key={x._id} value={x._id}>{x.title}</option>)
+                                                }): ""
+                                            }
                                         </select>
                                     </label> 
 
