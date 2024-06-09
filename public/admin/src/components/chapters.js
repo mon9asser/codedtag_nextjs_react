@@ -462,6 +462,8 @@ class Chapters extends Component {
                                                         }}
                                                         sortId={k_}
                                                         group={{ name: `shared`, pull: true, put: true }}
+                                                        // group="chapters"
+
                                                         animation={200}
                                                         onAdd={(evt) => {
                                                             console.log(evt)
