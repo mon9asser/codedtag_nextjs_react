@@ -528,6 +528,7 @@ class CreateTutorial extends Component {
                                             <label className="flexbox items-center"> <input checked={this.state.options.show_views} onChange={(e) => this.setState({options: { ...this.state.options, show_views: !this.state.options.show_views }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show views</span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.publish} onChange={(e) => this.setState({options: { ...this.state.options, publish: !this.state.options.publish }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish</span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.hide_from_search_engines} onChange={(e) => this.setState({options: { ...this.state.options, hide_from_search_engines: !this.state.options.hide_from_search_engines }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Hide from Search Engines</span> </label>
+                                            <label className="flexbox items-center"> <input checked={this.state.options.publish_chapters} onChange={(e) => this.setState({options: { ...this.state.options, publish_chapters: !this.state.options.publish_chapters }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish Chapters</span> </label>
                                         </div> 
                                     </div>
                                 </div>
@@ -681,7 +682,7 @@ class CreateTutorial extends Component {
                                                             </div>  
                                                         </div>   
                                                             
-
+                                                        
                                                         <div className="field" style={{marginTop: "25px", display:"flex", flexDirection: "column"}}>
                                                             <label className="flexbox items-center"> 
                                                                 <input 
@@ -701,7 +702,28 @@ class CreateTutorial extends Component {
                                                                 />
                                                                 <span style={{marginLeft: 5, fontSize: "14px"}}>Hide from search engine </span> 
                                                             </label>
-                                                        </div>   
+                                                        </div>  
+
+                                                        <div className="field" style={{marginTop: "10px", display:"flex", flexDirection: "column"}}>
+                                                            <label className="flexbox items-center"> 
+                                                                <input 
+                                                                    onChange={(e) => {
+                                                                        var value = e.target.value;
+                                                                        this.setState((prevState) => {
+                                                                            
+                                                                            prevState.tabs[index].publish_chapters = !this.state.tabs[index].publish_chapters;
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
+                                                                    checked={x.publish_chapters} 
+                                                                    className="mr-8" 
+                                                                    type="checkbox" 
+                                                                />
+                                                                <span style={{marginLeft: 5, fontSize: "14px"}}>Publish Chapters</span> 
+                                                            </label>
+                                                        </div> 
                                                     </div>
                                                 </div>    
                                             )):

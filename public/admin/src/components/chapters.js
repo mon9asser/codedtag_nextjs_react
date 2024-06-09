@@ -14,12 +14,12 @@ class Chapters extends Component {
             tutorials: null,
             all_posts: null, 
             posts: null, // delete post object from when dropped into list of shapter
-            chapters: props.chapters, 
+            chapters: null, 
 
             // select a spesific posts and chapters when change tutorials 
             selected_tutorial: null,
             selected_posts: null,  // delete post object from when dropped into list of shapter
-            selected_chapters: props.selected_chapters,
+            selected_chapters: null,
 
             publish_chapters: false
 
@@ -164,7 +164,7 @@ class Chapters extends Component {
             selected_posts: selected_posts,
             selected_tutorial: selected_tutorial,
             selected_chapters: selected_chapters,
-            publish_chapters: selected_tutorial.options.publish_chapters
+            publish_chapters: selected_tutorial == null ? false: selected_tutorial.options.publish_chapters
         });
 
         

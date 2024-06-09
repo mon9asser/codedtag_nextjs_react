@@ -778,6 +778,7 @@ class CreatePost extends Component {
                                             Tutorial
                                         </span>
                                         <select value={this.state.tutorial.id} onChange={e => this.assign_tutorial_data(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                            <option value="">Select a Tutorial</option>
                                             {this.state.tutorials.map((x, key) => (<option key={key} value={x._id}>{x.tutorial_title}</option>))} 
                                         </select>
                                     </label> 
