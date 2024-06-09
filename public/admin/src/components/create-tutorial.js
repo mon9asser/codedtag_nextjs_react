@@ -42,7 +42,9 @@ class CreateTutorial extends Component {
                 meta_title: "",
                 meta_description: "",
                 hide_from_search_engines: false,
-                is_open: false
+                publish_chapters: false,
+                is_open: false,
+                
             },
             tabs: [],
 
