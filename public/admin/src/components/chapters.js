@@ -1,13 +1,14 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import { NavbarContainer } from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { ReactSortable } from "react-sortablejs";
 import { Helper } from "../helper.js";
-
+ 
 class Chapters extends Component {
    
     constructor(props) {
-        super(props)
+        super(props);
+        this.request_result_ref = React.createRef("");
         this.state = {
             
             // load all when load page 
@@ -18,10 +19,16 @@ class Chapters extends Component {
 
             // select a spesific posts and chapters when change tutorials 
             selected_tutorial: null,
+            selected_tab: { _id: "root", title: "/Root", slug: "" },
             selected_posts: null,  // delete post object from when dropped into list of shapter
             selected_chapters: null,
 
-            publish_chapters: false
+            publish_chapters: false,
+
+            is_pressed: false, 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
 
         };
     }
@@ -139,13 +146,13 @@ class Chapters extends Component {
 
         // selected_posts
         var tutorial_id = e.target.value;
-        if( this.state.posts == null ) {
+        if( this.state.posts == null || tutorial_id == "" ) {
             return;
         } 
 
         var selected_posts = this.state.posts.filter( x => x.tutorial.id == tutorial_id)
         var selected_tutorial = this.state.tutorials.filter( x => x._id == tutorial_id);
-        var selected_chapters = this.state.chapters == null ? []: this.state.chapters.filter( x => x.tutorial.id == tutorial_id);
+        var selected_chapters = this.state.chapters == null ? []: this.state.chapters.filter( x => x.tutorial.id == tutorial_id && x.tab._id == this.state.selected_tab._id);
         
         /*
         console.log(selected_chapters);
@@ -159,7 +166,16 @@ class Chapters extends Component {
         } else {
             selected_tutorial = null; 
         } 
-         
+          
+        
+        if( ! selected_tutorial.tabs.length ) {
+            selected_tutorial.tabs = [];
+        }
+
+        //  { _id: "root", title: "/Root", slug: "" }
+        if(selected_tutorial.tabs.findIndex( x => x._id == "root") == -1 )
+            selected_tutorial.tabs = [{ _id: "root", title: "/Root", slug: "" }, ...selected_tutorial.tabs]
+
         this.setState({
             selected_posts: selected_posts,
             selected_tutorial: selected_tutorial,
@@ -181,6 +197,7 @@ class Chapters extends Component {
         var chapter_object = {
             _id: Helper.generateObjectId(), 
             chapter_title: "",
+            tab: this.state.selected_tab,
             tutorial: {id: this.state.selected_tutorial._id},
             posts: []
         };
@@ -221,7 +238,20 @@ class Chapters extends Component {
     }
 
     save_chapters = async () => {
-       
+        
+
+        this.setState({ 
+            is_pressed: true, 
+            show_message: "",
+            request_status_class: "",
+            request_message: ""
+        }); 
+
+        if( this.state.is_pressed ) {
+            return; 
+        }
+
+
         var tutorials = this.state.tutorials.map( x => {
 
             return {
@@ -237,7 +267,21 @@ class Chapters extends Component {
             method: "post"
         });
 
-        console.log(reqs);
+        if( reqs.is_error ) {
+            this.setState({ 
+                is_pressed: false, 
+                show_message: "show_message",
+                request_status_class: "error", 
+                request_message: reqs.message
+            }); 
+        }
+
+        this.setState({ 
+            is_pressed: false, 
+            show_message: "show_message",
+            request_status_class: "success", 
+            request_message: reqs.message
+        }); 
 
     }
 
@@ -361,6 +405,77 @@ class Chapters extends Component {
         });
     }
 
+    change_tab_block = (e) => {
+         
+        var tab_id = e.target.value;
+        
+        var state_object = {
+            selected_tab: {
+                slug: "",
+                _id: "root",
+                title: "/Root"
+            },
+        }
+
+        // all chapters 
+        var chaptex = [...this.state.chapters];
+
+        if(tab_id == "") {
+             
+            var chpx = chaptex.filter( x => x.tutorial.id == this.state.selected_tutorial._id && x.tab._id == "root");
+
+            this.setState({state_object, selected_chapters: chpx});
+            return; 
+        }
+
+        if( !this.state.selected_tutorial.tabs.length ) {
+            return; 
+        }
+        
+        var index = this.state.selected_tutorial.tabs.findIndex( x => x._id == tab_id );
+        var tab_object = this.state.selected_tutorial.tabs[index];
+
+        var chpx = chaptex.filter( x => x.tutorial.id == this.state.selected_tutorial._id && x.tab._id == tab_id);
+        state_object = {...state_object,  selected_tab: tab_object, selected_chapters: chpx };
+
+        this.setState(state_object);
+
+    }
+
+    delete_chapter = (chapter_id) => {
+        
+        var chptrs = [...this.state.selected_chapters];
+        var index = chptrs.findIndex( x => x._id == chapter_id);
+        var state_objx = {};
+
+        if( index != -1 ) {
+            var posts = [...chptrs[index].posts].length?[...chptrs[index].posts]: [];
+            if( posts.length ) {
+                var all_posts = [...this.state.all_posts];
+                var old_posts = [...this.state.posts];
+                var selposts = [...this.state.selected_posts];
+
+                posts.map( x => {
+                    var _id = x._id;
+                    var idx = all_posts.findIndex( x => x._id == _id);
+                    old_posts.push( all_posts[idx] );
+                    selposts.push( all_posts[idx] );
+                });
+ 
+                state_objx = {...state_objx, posts: old_posts, selected_posts: selposts }
+            }
+        }
+        
+        var chapters = [...this.state.chapters].filter( x => x._id != chapter_id );
+        var selected_chapters = [...this.state.selected_chapters].filter( x => x._id != chapter_id );
+        
+        state_objx = { ...state_objx, selected_chapters, chapters}
+         
+        
+        this.setState(state_objx)
+
+    }
+
     render() {
         return (
             <div id="app">
@@ -372,23 +487,48 @@ class Chapters extends Component {
                             {
                                 this.state.tutorials == null? 
                                     <span style={{padding: '15px', textAlign: "center", margin: "0 auto"}}>No tutorials found!</span>:
+                                <>
                                     <div className="card-header-title">
-                                <span className="icon"><i className="mdi mdi-table"></i></span>
-                                    Chapters of
-                                    <div className="select card-header-icon">
-                                        <select onChange={this.change_tutorial_block}>
-                                            <option value="">Select a Tutorial</option>
-                                            {this.state.tutorials.map(tutorial => {
-                                                if( tutorial.tutorial_title != "" ) {
-                                                    return (<option key={tutorial._id} value={tutorial._id}>{tutorial.tutorial_title}</option>) 
-                                                }
-                                            })}
-                                        </select>
+                                    <span className="icon"><i className="mdi mdi-table"></i></span>
+                                        Chapters of
+                                        <div className="select card-header-icon">
+                                            <select onChange={this.change_tutorial_block}>
+                                                <option value="">Select a Tutorial</option>
+                                                {this.state.tutorials.map(tutorial => {
+                                                    if( tutorial.tutorial_title != "" ) {
+                                                        return (<option key={tutorial._id} value={tutorial._id}>{tutorial.tutorial_title}</option>) 
+                                                    }
+                                                })}
+                                            </select>
+                                        </div> 
+
+                                        Tabs:
+                                        <div className="select card-header-icon">
+                                            <select value={this.state.selected_tab._id} onChange={this.change_tab_block}>
+                                                <option value="">Select Tab</option> 
+                                                {
+                                                    this.state.selected_tutorial != null ?
+                                                        this.state.selected_tutorial.tabs.length ?
+                                                            this.state.selected_tutorial.tabs.map(tab => {
+                                                                if( tab.title != "" )
+                                                                return (<option key={tab._id} value={tab._id}>{tab.title}</option>)
+                                                            })
+                                                        : ""
+                                                    : ""
+                                                } 
+                                            </select>
+                                        </div> 
                                     </div>
-                                    <div className="select card-header-icon" style={{marginLeft: "auto"}}>
-                                        <button onClick={this.add_new_chapter} className="button blue">Add New Chapter</button>
+                                    <div className="card-header-title">
+                                        <div className="select card-header-icon" style={{marginLeft: "auto"}}>
+                                            <button onClick={this.add_new_chapter} className="button blue">Add New Chapter</button>
+                                        </div>
                                     </div>
-                                </div>
+                                </>
+
+                                
+
+                                
                             }  
                         </header>
 
@@ -396,7 +536,7 @@ class Chapters extends Component {
                             <div style={{ width: "75%"}}>
                                 
                                 <h2 style={{fontSize: "20px", fontWeight: "bold", marginBottom: "15px"}}>
-                                    Chapters
+                                    Chapters of {this.state.selected_tab.title}
                                 </h2>
 
                                 <div style={{gap: "15px", display: "flex", flexWrap: "wrap", width: "100%"}}>
@@ -408,7 +548,8 @@ class Chapters extends Component {
 
                                              
                                             return (
-                                                <div key={x._id + k_} className="block-list-items">
+                                                <div key={x._id + k_} className="block-list-items" style={{position: "relative"}}>
+                                                    <button onClick={() => this.delete_chapter(x._id)} className="button tomato" style={{position: "absolute", right: "-4px", width: "20px", top: "-2px", height: "20px", cursor: "pointer", background: "red", color: "#fff",  textAlign: "center"}}></button>
                                                     <input
                                                         value={x.chapter_title}
                                                         onChange={(e) => this.insert_chapter_title(e.target.value, x._id)}
@@ -521,6 +662,10 @@ class Chapters extends Component {
                                 }
                                 
                             </div>
+                        </div>
+                        
+                        <div ref={this.request_result_ref} className={`${this.state.request_status_class} ${this.state.show_message} request-result-notifiction `}>
+                            {this.state.request_message}
                         </div>
 
                         <div style={{position: "sticky", zIndex: "200", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>

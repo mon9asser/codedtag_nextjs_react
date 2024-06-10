@@ -11,6 +11,20 @@ let chapterSchema = new Schema({
     tutorial: {
         id: mongoose.Schema.Types.ObjectId
     },
+    tab: {
+        _id: {
+            type: String,
+            default: "root"
+        },
+        title: {
+            type: String,
+            default: "/Root"
+        },
+        slug: {
+            type: String,
+            default: ""
+        }
+    },
     posts: [],
     /*
     {

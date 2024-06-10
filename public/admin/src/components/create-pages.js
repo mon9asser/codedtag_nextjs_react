@@ -107,7 +107,7 @@ class CreatePage extends Component {
     constructor(props) {
     
         super(props);
-        
+        this.request_result_ref = React.createRef("");
         this.state = { 
             
             post_type: 1, /* 1 => page --|-- 0 => post */
