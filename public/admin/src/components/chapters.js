@@ -418,7 +418,7 @@ class Chapters extends Component {
         }
 
         // all chapters 
-        var chaptex = [...this.state.chapters];
+        var chaptex =  this.state.chapters == null ? []: [...this.state.chapters];
 
         if(tab_id == "") {
              
@@ -672,11 +672,13 @@ class Chapters extends Component {
                             <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
                             <div style={{display: "flex", gap: 10, alignItems: "center"}}>
                                 
-                                <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
-                                    <input checked={this.state.publish_chapters} onChange={ this.publish_tutorials} type="checkbox" />
-                                    Publish
-                                </label>
-                                
+                                {
+                                    ( this.state.selected_tab._id == "root" ) ?
+                                    <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
+                                        <input checked={this.state.publish_chapters} onChange={ this.publish_tutorials} type="checkbox" />
+                                        Publish
+                                    </label>: ""
+                                }
                                 <a onClick={this.save_chapters} className="button blue">
                                     {
                                         ( this.state.is_pressed ) ?
