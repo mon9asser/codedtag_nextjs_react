@@ -123,7 +123,7 @@ class SidebarContainer extends Component {
                                 </a>
                             </li> 
                             <li>
-                                <Link to="/settings"> 
+                                <Link to="/dashboard/settings"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Settings</span>
                                 </Link>
