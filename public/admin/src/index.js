@@ -14,6 +14,7 @@ import {
 import reportWebVitals from './reportWebVitals';
 
 
+import { AuthWrapper } from './components/helpers/context.js';
 // import components 
 import { Register } from './components/register';
 import { Login } from './components/login';
@@ -24,7 +25,8 @@ import { CreatePage } from './components/create-pages.js';
 import { CreateTutorial } from './components/create-tutorial.js';
 import { CreateUser } from './components/create-user.js';
 import { Chapters } from './components/chapters.js';
-import { AuthWrapper } from './components/helpers/context.js';
+import { Menus } from './components/menus.js';
+
 
 
 var WrappApplication = () => (
@@ -45,7 +47,8 @@ var WrappApplication = () => (
             <Route path="/dashboard/create-tutorial" element={<CreateTutorial/>} />
             <Route path="/dashboard/create-user" element={<CreateUser/>} /> 
             <Route path="/dashboard/chapters" element={<Chapters/>} /> 
-                        
+            <Route path="/dashboard/menus" element={<Menus/>} /> 
+            
         </Routes>
       </AuthWrapper>
       

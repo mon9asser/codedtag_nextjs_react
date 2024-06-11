@@ -39,7 +39,8 @@ var Permissions = [
             "create-tutorial",
             "create-page",
             "create-user",
-            "chapters"
+            "chapters",
+            "menus",
         ]
     }
 ]; 

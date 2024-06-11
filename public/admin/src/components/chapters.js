@@ -669,7 +669,7 @@ class Chapters extends Component {
                         </div>
 
                         <div style={{position: "sticky", zIndex: "200", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
-                            <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
+                            
                             <div style={{display: "flex", gap: 10, alignItems: "center"}}>
                                 
                                 {
