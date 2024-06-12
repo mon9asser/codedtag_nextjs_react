@@ -6,7 +6,16 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 let settingsSchema = new Schema({
-     
+    subscribe_title: { 
+        type: String ,
+        trim : true,
+        default: "" 
+    },
+    subscribe_description: { 
+        type: String ,
+        trim : true,
+        default: "" 
+    },
     banner_site_title: { 
         type: String ,
         trim : true,

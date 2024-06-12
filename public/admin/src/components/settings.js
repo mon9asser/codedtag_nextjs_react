@@ -15,6 +15,9 @@ class Settings extends Component {
 
             page_name: "settings",
 
+            subscribe_title: "",
+            subscribe_description: "",
+
             basic_id: -1,
             banner_site_title: "",
             banner_site_description: "",
@@ -84,6 +87,8 @@ class Settings extends Component {
             google_analytics: settings.google_analytics,
             script_url_1: settings.script_url_1,
             script_url_2: settings.script_url_2,
+            subscribe_description: settings.subscribe_description,
+            subscribe_title: settings.subscribe_title,
         })
     }
 
@@ -107,6 +112,8 @@ class Settings extends Component {
             google_analytics: this.state.google_analytics,
             script_url_1: this.state.script_url_1,
             script_url_2: this.state.script_url_2,
+            subscribe_title: this.state.subscribe_title,
+            subscribe_description: this.state.subscribe_description
         };
 
         var request = await Helper.sendRequest({
@@ -180,6 +187,21 @@ class Settings extends Component {
                                             <input onChange={e => this.setState({ beside_post_title: e.target.value })} value={this.state.beside_post_title} className="input" type="text" placeholder="- CodedTag" />
                                         </div> 
                                     </div>
+
+                                    
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Subscribe Title</label>
+                                        <div className="control">
+                                            <input onChange={e => this.setState({ subscribe_title: e.target.value })} value={this.state.subscribe_title} className="input" type="text" placeholder="Subscribe Title" />
+                                        </div> 
+                                    </div>
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Subscribe Description</label>
+                                        <div className="control">
+                                            <textarea onChange={e => this.setState({ subscribe_description: e.target.value })} value={this.state.subscribe_description} placeholder="Subscribe Description" className="input" style={{minHeight:"100px"}}></textarea>
+                                        </div> 
+                                    </div> 
  
                                 </div> 
             

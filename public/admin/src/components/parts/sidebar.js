@@ -90,13 +90,7 @@ class SidebarContainer extends Component {
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Menus</span>
                                 </Link>
-                            </li> 
-                            <li>
-                                <Link to="/dashboard/widgets"> 
-                                    <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
-                                    <span className="menu-item-label">Widgets</span>
-                                </Link>
-                            </li> 
+                            </li>  
                             <li>
                                 <Link to="/dashboard/advertisements"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>

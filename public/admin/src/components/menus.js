@@ -144,8 +144,17 @@ class Menus extends Component {
         <SidebarContainer />
         <section className="section main-section">
           <div style={{ margin: "20px" }}>
-            <button onClick={this.addMainMenu} style={styles.addButton}>Add Items to</button>
-            <input style={{border: "1px solid #999", marginLeft: "10px", padding: "5px", outline: "none"}} type="text" value={this.state.menu_name} onChange={e => this.setState({menu_name: e.target.value})} />
+            
+            <button onClick={this.addMainMenu} style={styles.addButton}>Add Item to</button>
+            
+            <select style={{border: "1px solid #999", marginLeft: "10px", padding: "5px", outline: "none"}} value={this.state.menu_name} onChange={e => this.setState({menu_name: e.target.value})}>
+              <option value="main_nav_left">Main Header ( Left )</option>
+              <option value="main_nav_right">Main Header ( Right )</option>
+              <option value="company_nav_links">Company Links</option>
+              <option value="follow_nav_links">Follow Links</option>
+              <option value="tags_nav_links">Tags Links</option>
+            </select>
+
             {this.state.menus.map((menu, menuIndex) => (
               <div key={menu._id} style={styles.menuItem}>
                 <label>{menu.menu_name}</label>
