@@ -92,9 +92,9 @@ class SidebarContainer extends Component {
                                 </Link>
                             </li>  
                             <li>
-                                <Link to="/dashboard/advertisements"> 
+                                <Link to="/dashboard/campaigns"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
-                                    <span className="menu-item-label">Advertisement</span>
+                                    <span className="menu-item-label">Ad Campaigns</span>
                                 </Link>
                             </li> 
                             <li>

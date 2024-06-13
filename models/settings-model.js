@@ -46,6 +46,11 @@ let settingsSchema = new Schema({
         trim : true,
         default: ""
     },
+    contact_email: {
+        type: String ,
+        trim : true,
+        default: ""
+    },
     google_analytics: {
         enabled: {
             type: Boolean ,

@@ -75,9 +75,26 @@ class AdCampaigns extends Component {
                 { text: "After Section of Title 6", value: "after_section_title_6" },  
                 { text: "End of Category Section 6", value: "end_of_category_section_6" },
             ]
-        }
+          },
+          { 
+            text: "Homepage", 
+            value: "homepage", 
+            positions: [
+                { text: "Before Title", value: "before_title" },
+                { text: "Before Subscribe Box", value: "before_subscribe" },
+                { text: "After Subscribe Box", value: "after_subscribe" },
+                { text: "Before Section 2", value: "before_section_2" },
+                { text: "After Section 2", value: "after_section_2" },
+                { text: "Before Section 3", value: "before_section_3" },
+                { text: "After Section 3", value: "after_section_3" },
+            ]
+          }
         ],    
 
+        filtered_campaign_pages: [],
+        filter_ad_campaign: "",
+        on_filter_mode: false, 
+        
         is_pressed: false,
         show_message: "",
         request_status_class: "",
@@ -104,12 +121,17 @@ class AdCampaigns extends Component {
   };
 
   addCampaign = () => {
-    this.setState((prevState) => ({
-      campaigns: [
-        ...prevState.campaigns,
-        { _id: Helper.generateObjectId(), code: "", page: "", is_enabled: false, position: "", all_positions: []}
-      ]
-    }));
+    this.setState((prevState) => {
+
+
+
+      return {
+        campaigns: [
+          ...prevState.campaigns,
+          { _id: Helper.generateObjectId(), code: "", page: "", is_enabled: false, position: "", all_positions: []}
+        ] 
+      };
+    });
   };
 
   handleChange = (e, campaignIndex) => {
@@ -187,6 +209,18 @@ class AdCampaigns extends Component {
     }
   };
 
+  filter_ad_camp = (e) => {
+    
+    var value = e.target.value;
+    
+    this.setState({
+      on_filter_mode: value == "" ? false: true, 
+      filtered_campaign_pages: this.state.campaigns.filter( x => x.page == value),
+      filter_ad_campaign: value
+    });
+
+  }
+
   render() { 
     const positions = ["Header", "Footer", "Sidebar", "Body"];
 
@@ -197,9 +231,25 @@ class AdCampaigns extends Component {
         <section className="section main-section">
           <div style={{ margin: "20px" }}>
             
-            <button onClick={this.addCampaign} style={styles.addButton}>Add Campaign</button>
+            <div style={{display: "flex"}}>
+              <button onClick={this.addCampaign} style={styles.addButton}>Add Campaign</button>
+              <div style={{marginLeft: "15px", marginLeft: "auto"}}>
+                <label style={{marginRight: "15px"}}>Filter :</label>
+                <select value={this.state.filter_ad_campaign} onChange={this.filter_ad_camp} style={{...styles.select}}>
+                  <option value="">Select Page</option> 
+                  { 
+                    this.state.campaign_pages.map(page => {
+                      return (
+                        <option key={page.value} value={page.value}>{page.text}</option>
+                      );
+                    })
+                  }
+                </select>
+              </div>
+            </div>
+            {
             
-            {this.state.campaigns.map((campaign, campaignIndex) => {
+            (this.state.on_filter_mode? this.state.filtered_campaign_pages: this.state.campaigns).map((campaign, campaignIndex) => {
                 
                 if( campaign.all_positions == undefined ) {
                     var pages_data = this.state.campaign_pages.find( x => x.value == campaign.page);

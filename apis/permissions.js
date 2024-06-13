@@ -41,7 +41,8 @@ var Permissions = [
             "create-user",
             "chapters",
             "menus",
-            "campaigns"
+            "campaigns",
+            "messages"
         ]
     }
 ]; 

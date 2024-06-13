@@ -16,6 +16,7 @@ class Settings extends Component {
             page_name: "settings",
 
             subscribe_title: "",
+            contact_email: "",
             subscribe_description: "",
 
             basic_id: -1,
@@ -89,6 +90,7 @@ class Settings extends Component {
             script_url_2: settings.script_url_2,
             subscribe_description: settings.subscribe_description,
             subscribe_title: settings.subscribe_title,
+            contact_email: settings.contact_email
         })
     }
 
@@ -113,6 +115,7 @@ class Settings extends Component {
             script_url_1: this.state.script_url_1,
             script_url_2: this.state.script_url_2,
             subscribe_title: this.state.subscribe_title,
+            contact_email: this.state.contact_email,
             subscribe_description: this.state.subscribe_description
         };
 
@@ -188,13 +191,19 @@ class Settings extends Component {
                                         </div> 
                                     </div>
 
-                                    
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Contact Email</label>
+                                        <div className="control">
+                                            <input onChange={e => this.setState({ contact_email: e.target.value })} value={this.state.contact_email} className="input" type="text" placeholder="Contact Email" />
+                                        </div> 
+                                    </div>
+
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Subscribe Title</label>
                                         <div className="control">
                                             <input onChange={e => this.setState({ subscribe_title: e.target.value })} value={this.state.subscribe_title} className="input" type="text" placeholder="Subscribe Title" />
                                         </div> 
-                                    </div>
+                                    </div> 
 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Subscribe Description</label>
