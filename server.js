@@ -38,6 +38,7 @@ const { postRouter } = require("./apis/posts");
 const { tutorialRouter } = require("./apis/tutorials");
 const { chapterRouter } = require("./apis/chapters");
 const { menuRouter } = require("./apis/menus")
+const {adCampaignRouter} = require("./apis/campaigns");
 
 // middlewares 
 app.use( Config.server.api, userRouters );
@@ -48,6 +49,9 @@ app.use( Config.server.api, postRouter);
 app.use( Config.server.api, tutorialRouter);
 app.use( Config.server.api, chapterRouter);
 app.use( Config.server.api, menuRouter);
+app.use( Config.server.api, adCampaignRouter);
+
+
 
 
 
