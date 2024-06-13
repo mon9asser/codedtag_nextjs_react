@@ -28,7 +28,54 @@ class AdCampaigns extends Component {
                     { text: "In Sidebar 3", value: "in_sidebar_3" },
                     { text: "In Sidebar 4", value: "in_sidebar_4" }
                 ]
-            }
+            },
+            { 
+              text: "Tutorial Page", 
+              value: "tutorial_page", 
+              positions: [
+                  { text: "Before Title", value: "before_title" }, 
+                  { text: "After Title", value: "after_title" }, 
+                  { text: "After Tutorial Tab", value: "after_tutorial_tab" }, 
+                  { text: "After Tutorial Description", value: "after_tutorial_description" }, 
+                  { text: "Inside Chapter Ad# 1", value: "inside_chapter_ad_1" }, 
+                  { text: "Inside Chapter Ad# 2", value: "inside_chapter_ad_2" }, 
+                  { text: "Inside Chapter Ad# 3", value: "inside_chapter_ad_3" }, 
+                  { text: "Between Rows Ad# 1", value: "between_row_ad_1" }, 
+                  { text: "Between Rows Ad# 2", value: "ibetween_row_ad_2" }, 
+                  { text: "Between Rows Ad# 3", value: "between_row_ad_3" }, 
+                  { text: "Between Rows Ad# 4", value: "between_row_ad_4" }, 
+                  { text: "After All Chapters", value: "after_all_chapters" }, 
+              ]
+          },
+          { 
+            text: "All Tutorials Page", 
+            value: "all_tutorials_page", 
+            positions: [
+                { text: "Before Section of Title 1", value: "before_section_title_1" }, 
+                { text: "After Section of Title 1", value: "after_section_title_1" },  
+                { text: "End of Category Section 1", value: "end_of_category_section_1" },
+                
+                { text: "Before Section of Title 2", value: "before_section_title_2" }, 
+                { text: "After Section of Title 2", value: "after_section_title_2" },  
+                { text: "End of Category Section 2", value: "end_of_category_section_2" },
+
+                { text: "Before Section of Title 3", value: "before_section_title_3" }, 
+                { text: "After Section of Title 3", value: "after_section_title_3" },  
+                { text: "End of Category Section 3", value: "end_of_category_section_3" },
+
+                { text: "Before Section of Title 4", value: "before_section_title_4" }, 
+                { text: "After Section of Title 4", value: "after_section_title_4" },  
+                { text: "End of Category Section 4", value: "end_of_category_section_4" },
+
+                { text: "Before Section of Title 5", value: "before_section_title_5" }, 
+                { text: "After Section of Title 5", value: "after_section_title_5" },  
+                { text: "End of Category Section 5", value: "end_of_category_section_5" },
+
+                { text: "Before Section of Title 6", value: "before_section_title_6" }, 
+                { text: "After Section of Title 6", value: "after_section_title_6" },  
+                { text: "End of Category Section 6", value: "end_of_category_section_6" },
+            ]
+        }
         ],    
 
         is_pressed: false,
