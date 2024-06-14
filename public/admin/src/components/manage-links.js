@@ -10,11 +10,23 @@ class ManageLinks extends Component {
 
     constructor(props) {
         super(props);
-
+        this.request_result_ref = React.createRef("");
         this.state = {
             links: [],
             currentPage: 1,
             totalPages: 1,
+
+            selected_link: null,
+            link_to_update: {
+                url:"",
+                keyword: "",
+                target: ""
+            },
+            show_modal: "none",
+            is_pressed: false,
+            show_message: "",
+            request_status_class: "",
+            request_message: "",
         };
     }
 
@@ -25,7 +37,7 @@ class ManageLinks extends Component {
     fetchLinks = async () => {
         try {
             const response = await Helper.sendRequest({
-                api: "/post/get",
+                api: "/post-links/get",
                 method: "get",
                 data: {}
             });
@@ -34,55 +46,14 @@ class ManageLinks extends Component {
                 return;
             }
 
-            const posts = response.data;
-            const links = posts.reduce((acc, post) => acc.concat(post.links.map(link => ({
-                ...link,
-                post_id: post._id,
-                post_title: post.post_title,
-            }))), []);
-            this.setState({ links, totalPages: Math.ceil(links.length / 10) }, this.checkRedirects);
+            const links = response.data; 
+            console.log(links[0])
+            this.setState({ links, totalPages: Math.ceil(links.length / 10) });
         } catch (error) {
             console.error("Failed to fetch links:", error);
         }
     };
-
-    checkRedirects = () => {
-        const { links } = this.state;
-        links.forEach(link => {
-            this.checkIfRedirects(link.url).then(isRedirect => {
-               
-                this.setState(prevState => ({
-                    links: prevState.links.map(l =>
-                        l.url === link.url ? { ...l, is_redirect: isRedirect } : l
-                    )
-                }));
-            });
-        });
-    };
-
-    checkIfRedirects = async (url) => {
-       
-        const encodedUrl = encodeURIComponent(url);
-        console.log(encodedUrl);
-
-        alert("We're here !! /api/proxy")
-        /* response with
-            is_error: false, 
-            data: {
-               status: status,
-                type: statusText,
-                is_redirect: is_redirect,
-                url: url 
-            }, 
-            message:
-        */
-    };
-
-    handleView = (link) => {
-        // Handle view logic here
-        console.log("View link:", link);
-    };
-
+ 
     handleDelete = async (linkId) => {
         try {
             // Assuming you have an endpoint to delete a link by its ID
@@ -97,15 +68,147 @@ class ManageLinks extends Component {
         this.setState({ currentPage: page });
     };
 
+    show_edit_link = (link) => { 
+        this.setState({
+            selected_link: {
+                post_id: link.post_id,
+                paragraph_id: link.paragraph_id,
+                url: link.url,
+                keyword: link.keyword,
+                target: link.target
+            },
+            link_to_update: {
+                url: link.url,
+                keyword: link.keyword,
+                target: link.target
+            },
+            show_modal: "block"
+        });
+    } 
+
+    change_link_data = async () => { 
+
+        this.setState({
+            request_status_class: '',
+            request_message: '',
+            show_message: '',
+            is_pressed: true
+        });
+
+        if(this.state.is_pressed) {
+            return; 
+        } 
+
+        try {
+            
+            const response = await Helper.sendRequest({
+              api: 'post/update-link',
+              method: 'POST',
+              data: {  
+                update: this.state.link_to_update,
+                old: this.state.selected_link
+              } // Include deleted IDs
+            });
+            console.log(response);
+            if (response.is_error) {
+              throw new Error(response.message);
+            }
+            this.setState({
+              request_status_class: 'success',
+              request_message: 'Menus saved successfully!',
+              show_message: 'show_message',
+              is_pressed: false,
+              deletedIds: [] // Clear deleted IDs after successful save
+            });
+          } catch (error) {
+            this.setState({
+              request_status_class: 'error',
+              request_message: error.message || 'An error occurred while saving the menus.',
+              show_message: 'show_message',
+              is_pressed: false,
+            });
+          }
+    }
+
     render() {
         const { links, currentPage, totalPages } = this.state;
         const linksPerPage = 10;
         const displayedLinks = links.slice((currentPage - 1) * linksPerPage, currentPage * linksPerPage);
 
         return (
+             
             <div id="app">
                 <NavbarContainer />
                 <SidebarContainer />
+                
+                <div ref={this.request_result_ref} className={`${this.state.request_status_class} ${this.state.show_message} request-result-notifiction `}>
+                    {this.state.request_message}
+                </div>
+
+                <div id="modal-link-data" className="modal" style={{display: this.state.show_modal}}>
+                    <div className="modal-background --jb-modal-close"></div>
+                    <div className="modal-card" style={{marginTop: "150px"}}>
+                        <header className="modal-card-head">
+                            <p className="modal-card-title">
+                                {this.state.link_to_update.keyword}
+                            </p>
+                        </header>
+                        <section className="modal-card-body">
+                            <div className="field" style={{marginTop: "25px"}}>
+                                <label className="label">Link or URL</label>
+                                <div className="control">
+                                    <input className="input" type="text" placeholder="URL" value={this.state.link_to_update.url} onChange={(e) => {
+                                        this.setState({
+                                            link_to_update: {
+                                                ...this.state.link_to_update,
+                                                url: e.target.value // Update with the new value
+                                            }
+                                        })
+                                    }}/>
+                                </div>
+                            </div>
+
+                            <div className="field" style={{marginTop: "25px"}}>
+                                <label className="label">Keyword</label>
+                                <div className="control">
+                                    <input className="input" type="text" placeholder="Keyword" value={this.state.link_to_update.keyword} onChange={(e) => {
+                                        this.setState({
+                                            link_to_update: {
+                                                ...this.state.link_to_update,
+                                                keyword: e.target.value // Update with the new value
+                                            }
+                                        })
+                                    }}/>
+                                </div>
+                            </div>
+
+                            <div className="field" style={{marginTop: "25px"}}>
+                                <label className="label">Backlink Type</label>
+                                <div className="control">
+                                    <input className="input" type="text" placeholder="Target Attributes" value={this.state.link_to_update.target} onChange={(e) => {
+                                        this.setState({
+                                            link_to_update: {
+                                                ...this.state.link_to_update,
+                                                target: e.target.value // Update with the new value
+                                            }
+                                        })
+                                    }}/>
+                                </div>
+                            </div> 
+                        </section>
+                        <footer className="modal-card-foot">
+                            <button className="button --jb-modal-close" onClick={e => this.setState({show_modal: "none"})}>Cancel</button>
+                            <button className="button red --jb-modal-close" onClick={this.change_link_data}>
+                            {
+                                (this.state.is_pressed) ?
+                                <span className="loader"></span> :
+                                "Save Changes"
+                            }
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+
                 <section className="section main-section">
                     <div className="card has-table mt-30">
                         <header className="card-header">
@@ -126,7 +229,9 @@ class ManageLinks extends Component {
                                         <th>Link Type</th>
                                         <th>Is External</th>
                                         <th>Keyword</th>
-                                        <th>Redirects</th>
+                                        <th>Redirect</th>
+                                        <th>Redirect Type</th>
+                                        <th>Status</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
@@ -141,12 +246,15 @@ class ManageLinks extends Component {
                                             <td data-label="Keyword">
                                                 <div style={{ color: "red", textDecoration: "underline" }} dangerouslySetInnerHTML={{ __html: link.element }} />
                                             </td>
-                                            <td data-label="Redirects">{link.is_redirect ? "Yes" : "No"}</td>
+                                            <td data-label="Redirect">{link.is_redirect ? "Yes" : "No"}</td>
+                                            <td data-label="Redirect Type">{link.type}</td>
+                                            <td data-label="Status">{link.status}</td>
                                             <td className="actions-cell">
                                                 <button
                                                     className="button small blue --jb-modal"
                                                     type="button"
-                                                    onClick={() => this.handleView(link)}
+                                                    data-target="modal-link-data"
+                                                    onClick={() => this.show_edit_link(link)}
                                                 >
                                                     <span className="icon"><i className="mdi mdi-pencil"></i></span>
                                                 </button>
@@ -184,7 +292,8 @@ class ManageLinks extends Component {
                         </div>
                     </div>
                 </section>
-            </div>
+            </div>   
+            
         );
     }
 }

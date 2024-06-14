@@ -122,7 +122,7 @@ class Menus extends Component {
       }
       this.setState({
         request_status_class: 'success',
-        request_message: 'Menus saved successfully!',
+        request_message: 'Link saved successfully!',
         show_message: 'show_message',
         is_pressed: false,
         deletedIds: [] // Clear deleted IDs after successful save

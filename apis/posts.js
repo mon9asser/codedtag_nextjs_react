@@ -87,8 +87,7 @@ postRouter.post("/post/create-update", async (req, res) => {
             throw new Error("An error occurred, please try later");
         }
 
-    } catch (error) {
-        console.log(error.message);
+    } catch (error) { 
         res.status(400).send({
             is_error: true,
             data: null,
@@ -97,6 +96,154 @@ postRouter.post("/post/create-update", async (req, res) => {
     }
 });
 
+
+
+postRouter.post("/post/update-link", async (req, res) => {
+
+    try {
+
+        var {post_id, paragraph_id, keyword, target, url } = req.body.old;
+        var updated_url = req.body.update.url;
+        var updated_target = req.body.update.target;
+        var updated_keyword = req.body.update.keyword;
+
+        var post = await Posts.findOne({_id: post_id });
+        if( post == null ) {
+            throw new Error("No posts created before for this link");
+        }
+        
+        var pp;
+        // update blocks 
+        var updated_blocks = post.blocks.map( x => {
+            if( x.id == paragraph_id ) {
+                // list
+                if( x.type == 'list' ) {
+
+                }
+                ///////// consider if empty url change it with hash #
+                // paragraph
+                // table
+                if( x.type == 'table' ) {
+                    
+                    var up_list = Helper.replaceURLsInArray(x.data.content, url, updated_url);
+                    console.log(up_list);
+                }
+                // header 
+                // warning
+                // quote
+                // checklist
+            
+            }
+
+            return x; 
+        })
+        // update links
+
+        res.send(updated_blocks);
+        
+    } catch (error) {
+        res.send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while creating or updating the post"
+        });
+    }
+
+    //res.send({post_id, paragraph_id, keyword, target, url, updated_url, updated_target, updated_keyword})
+});
+
+postRouter.get("/post-links/get", async (req, res) => {
+    
+    try {
+        const post_type = req.query.post_type;
+         
+        var query_object = {};
+        if( post_type != undefined ) {
+            query_object = { post_type: post_type };
+        }
+
+        // Fetch posts based on the post_type
+        const posts = await Posts.find(query_object);
+
+       
+        
+        if( ! posts.length ) {
+            return res.status(404).send({
+                is_error: true,
+                data: null,
+                message: "No links found!"
+            });
+        }
+
+        const links = await Promise.all(posts.map(async post => {
+            if (!post.links || !Array.isArray(post.links)) {
+                return [];
+            }
+
+            return Promise.all(post.links.map(async link => {
+                let objx = {
+                    ...link,
+                    post_id: post._id,
+                    post_title: post.post_title,
+                    slug: post.slug
+                };
+
+                try {
+                    var link_data = await Helper.link_validator(link.url);
+                    if (link_data.is_error) {
+                        objx = {
+                            ...objx,
+                            status: 'Error',
+                            type: '',
+                            is_redirect: false,
+                            url: ''
+                        };
+                    } else {
+                        objx = {
+                            ...objx,
+                            ...link_data.data
+                        };
+                    }
+                } catch (err) {
+                    objx = {
+                        ...objx,
+                        status: 'Error',
+                        type: '',
+                        is_redirect: false,
+                        url: ''
+                    };
+                }
+
+                return objx;
+            }));
+        }));
+
+        // Flatten the array of links
+        const flattenedLinks = [].concat(...links); 
+
+        if (flattenedLinks.length > 0) {
+            res.status(200).send({
+                is_error: false,
+                data: flattenedLinks,
+                message: "Posts retrieved successfully"
+            });
+        } else {
+            res.status(404).send({
+                is_error: true,
+                data: null,
+                message: "No posts found for the given post_type"
+            });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while retrieving posts"
+        });
+    }
+})
 
 postRouter.get("/post/get", async (req, res) => {
     

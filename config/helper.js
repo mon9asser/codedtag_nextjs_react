@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const axios = require("axios");
 
 class HelperData {
 
@@ -18,7 +19,20 @@ class HelperData {
             thumbnail: { type: String, default: ""}, 
         }    
     }
-     
+    
+    replaceURLsInArray = (arr, findURL, replaceWith) => {
+        return arr.map(subArray => {
+          return subArray.map(item => {
+            // Check if the item contains the URL
+            if (item.includes(findURL)) {
+              // Replace the URL
+              return item.replace(findURL, replaceWith);
+            }
+            return item;
+          });
+        });
+    }
+
     getGravatarUrl(email, size = 200) {
         const trimmedEmail = email.trim().toLowerCase();
         const hash = crypto.createHash('sha256').update(trimmedEmail).digest('hex');
@@ -42,6 +56,46 @@ class HelperData {
         const lastDotIndex = imageName.lastIndexOf('.');
         if (lastDotIndex === -1) return ''; // No dot found
         return imageName.substring(lastDotIndex);
+    }
+
+    link_validator = async (link) => {
+        try {
+            const url = decodeURIComponent(link); 
+             
+            const response = await axios.get(url, {
+                maxRedirects: 0,
+                validateStatus: function (status) {
+                    return status >= 200 && status < 400; // default
+                }
+            });
+            
+            // Extract only the necessary data
+            const { data, status, statusText, headers } = response;
+            
+            const is_redirect = status >= 300 && status < 400;
+    
+            const objex = {
+                status: status,
+                type: statusText,
+                is_redirect: is_redirect,
+                url: url
+            };
+    
+            return {
+                is_error: false, 
+                data: objex, 
+                message: "Fetched Successfully!"
+            }
+    
+        } catch (error) { 
+            
+            // Handle the error properly 
+            return {
+                is_error: true, 
+                data: null, 
+                message: "Something went wrong"
+            }
+        }
     }
     
 
