@@ -28,6 +28,7 @@ import { Chapters } from './components/chapters.js';
 import { Menus } from './components/menus.js';
 import { AdCampaigns } from './components/campaigns.js';
 import { Contacts } from './components/contacts.js';
+import { ManageLinks } from './components/manage-links.js'; 
 
 var WrappApplication = () => (
   
@@ -50,6 +51,7 @@ var WrappApplication = () => (
             <Route path="/dashboard/menus" element={<Menus/>} /> 
             <Route path="/dashboard/campaigns" element={<AdCampaigns/>} /> 
             <Route path="/dashboard/messages" element={<Contacts/>} /> 
+            <Route path="/dashboard/links" element={<ManageLinks/>} /> 
             
         </Routes>
       </AuthWrapper>

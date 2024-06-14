@@ -99,16 +99,17 @@ postRouter.post("/post/create-update", async (req, res) => {
 
 
 postRouter.get("/post/get", async (req, res) => {
+    
     try {
-        const { post_type } = req.query;
-        console.log(post_type);
-        // Validate the request query parameter
-        if (!post_type) {
-            throw new Error("post_type parameter is required");
+        const post_type = req.query.post_type;
+         
+        var query_object = {};
+        if( post_type != undefined ) {
+            query_object = { post_type: post_type };
         }
 
         // Fetch posts based on the post_type
-        const posts = await Posts.find({ post_type: post_type });
+        const posts = await Posts.find(query_object);
 
         if (posts.length > 0) {
             res.status(200).send({

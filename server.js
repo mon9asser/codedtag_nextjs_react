@@ -4,6 +4,7 @@ const path = require("path");
 const cors = require("cors");
 
 const {Config} = require("./config/options")
+const axios = require("axios");
 
 var app = express();
 
@@ -40,6 +41,7 @@ const { chapterRouter } = require("./apis/chapters");
 const { menuRouter } = require("./apis/menus")
 const {adCampaignRouter} = require("./apis/campaigns");
 const {contactRouter} = require("./apis/contact");
+const { required } = require("yargs");
 
 // middlewares 
 app.use( Config.server.api, userRouters );
@@ -55,6 +57,46 @@ app.use( Config.server.api, contactRouter);
 
 
 
+
+app.get(Config.server.api + '/proxy', async (req, res) => {
+    try {
+        const url = decodeURIComponent(req.query.url); 
+        console.log(url);
+        const response = await axios.get(url, {
+            maxRedirects: 0,
+            validateStatus: function (status) {
+                return status >= 200 && status < 400; // default
+            }
+        });
+        
+        // Extract only the necessary data
+        const { data, status, statusText, headers } = response;
+        
+        const is_redirect = status >= 300 && status < 400;
+
+        const objex = {
+            status: status,
+            type: statusText,
+            is_redirect: is_redirect,
+            url: url
+        };
+
+        res.json({
+            is_error: false, 
+            data: objex, 
+            message: "Fetched Successfully!"
+        });
+
+    } catch (error) { 
+        
+        // Handle the error properly 
+        res.json({
+            is_error: true, 
+            data: null, 
+            message: "Something went wrong"
+        });
+    }
+});
 
 
 

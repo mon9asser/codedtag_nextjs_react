@@ -42,7 +42,8 @@ var Permissions = [
             "chapters",
             "menus",
             "campaigns",
-            "messages"
+            "messages",
+            "links"
         ]
     }
 ]; 

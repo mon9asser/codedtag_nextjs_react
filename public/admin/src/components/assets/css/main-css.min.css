@@ -487,19 +487,26 @@ h1.ce-header {
     display: none;
 }
 .error {
-    background-color: #ff000029;
+    background-color: #fac1c1;
     border: 1px solid #dd9595;
     color: red;
 }
 
 .success {
-    background-color: #00ff3429;
+    background-color: #9fffb2;
     border: 1px solid #167f22;
     color: #1c6142;
 }
 
 .show_message {
-    display: block;
+    display: block; 
+    /**/
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: auto; 
+    z-index: 2012;
+    border-radius: 5px;
 }
 
 .loader {
