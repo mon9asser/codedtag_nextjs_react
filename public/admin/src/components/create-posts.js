@@ -359,7 +359,7 @@ class CreatePost extends Component {
                 text_value =  x.data.items.map(x => x.text == undefined? "":  x.text).join( " ");
             }
 
-
+            
             var wordsCounts = this.wordCounters(text_value)
             var charsCounts = this.charachtersLength(text_value);
             
@@ -379,7 +379,7 @@ class CreatePost extends Component {
         
        
         const parser = new DOMParser();
-
+        
         var links = save.blocks.map( x => {
             var text_value = "";
             if( x.type == "paragraph") {
@@ -398,8 +398,11 @@ class CreatePost extends Component {
                 text_value =  x.data.items.map(x => x.text == undefined? "":  x.text).join( " ");
             }
 
+            
+
             const doc = parser.parseFromString(text_value, "text/html");
             const _link = doc.querySelectorAll('a');
+ 
             
             var all_links = [];
 
@@ -407,11 +410,13 @@ class CreatePost extends Component {
 
                 var is_external = link_item.getAttribute("href").toString().indexOf( this.state.settings.site_name ) == -1 ? true: false;
                 var site_names = this.extractDomainAndSubdomain(link_item.getAttribute("href"));
+                
                 var object_link = { 
                     paragraph_id: x.id,
                     element: link_item.outerHTML,
                     link_type: link_item.getAttribute("rel") == undefined ? "": link_item.getAttribute("rel"),
                     target: link_item.getAttribute("target") == undefined ? "": link_item.getAttribute("target"),
+                    rel: link_item.getAttribute("rel") == undefined ? "": link_item.getAttribute("rel"),
                     keyword: link_item.innerText,
                     url: link_item.getAttribute("href"),
                     domain_name: site_names.domain,
@@ -420,7 +425,8 @@ class CreatePost extends Component {
                 }
 
                 all_links.push(object_link);
-            });          
+            });         
+             
  
             if(all_links.length) {
                 return all_links;
@@ -695,8 +701,7 @@ class CreatePost extends Component {
         return (
             <div id="app">
                 
-                <NavbarContainer/>
-
+                <NavbarContainer/> 
                 <SidebarContainer />
 
                 <section style={{maxWidth: "90%", margin: "0 auto", background: "#222", padding: "30px", justifyContent: "center", alignItems: "center"}}>

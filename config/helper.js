@@ -20,6 +20,33 @@ class HelperData {
         }    
     }
     
+    extractDomainAndSubdomain = (url) => {
+        const parsedUrl = new URL(url);
+        const hostname = parsedUrl.hostname;
+    
+        // Split the hostname into parts
+        const parts = hostname.split('.');
+    
+        // Prepare the return object
+        let result = {
+            domain: '',
+            subdomain: ''
+        };
+       
+        if (parts.length > 2) {
+            // Set the domain to the second-to-last part
+            result.domain = parts[parts.length - 2];
+    
+            // Join the remaining parts except the last two as the subdomain
+            result.subdomain = parts.slice(0, -2).join('.');
+        } else if (parts.length === 2) {
+            // Only the domain is present, no subdomain
+            result.domain = parts[0];
+        }
+    
+        return result;
+    }
+
     replaceURLsInArray = (arr, findURL, replaceWith) => {
         return arr.map(subArray => {
           return subArray.map(item => {

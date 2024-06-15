@@ -15,23 +15,44 @@ class ManageLinks extends Component {
             links: [],
             currentPage: 1,
             totalPages: 1,
-
             selected_link: null,
             link_to_update: {
-                url:"",
+                url: "",
                 keyword: "",
-                target: ""
+                target: "",
+                rel: ""
             },
+            site_name: "",
             show_modal: "none",
             is_pressed: false,
             show_message: "",
             request_status_class: "",
             request_message: "",
+            postsPerPage: 10,
+            statusCodeFilter: "all",
+            externalFilter: "all"
         };
     }
 
-    componentDidMount() {
-        this.fetchLinks();
+    fetchCurrentSite = async () => {
+        var request = await Helper.sendRequest({
+            api: "current-site",
+            method: "get",
+            data: {}
+        });
+
+        if (request.is_error) {
+            return;
+        }
+
+        var { name } = request.data;
+
+        this.setState({ site_name: name.toLowerCase() })
+    }
+
+    async componentDidMount() {
+        await this.fetchCurrentSite();
+        await this.fetchLinks();
     }
 
     fetchLinks = async () => {
@@ -46,17 +67,16 @@ class ManageLinks extends Component {
                 return;
             }
 
-            const links = response.data; 
-            console.log(links[0])
-            this.setState({ links, totalPages: Math.ceil(links.length / 10) });
+            const links = response.data;
+
+            this.setState({ links, totalPages: Math.ceil(links.length / this.state.postsPerPage) });
         } catch (error) {
             console.error("Failed to fetch links:", error);
         }
     };
- 
+
     handleDelete = async (linkId) => {
         try {
-            // Assuming you have an endpoint to delete a link by its ID
             await Helper.delete(`/link/delete/${linkId}`);
             this.fetchLinks();
         } catch (error) {
@@ -68,26 +88,57 @@ class ManageLinks extends Component {
         this.setState({ currentPage: page });
     };
 
-    show_edit_link = (link) => { 
+    handlePostsPerPageChange = (event) => {
+        const postsPerPage = parseInt(event.target.value);
+        this.setState({
+            postsPerPage,
+            totalPages: Math.ceil(this.state.links.length / postsPerPage),
+            currentPage: 1
+        });
+    };
+
+    handleStatusCodeFilterChange = (event) => {
+        this.setState({ statusCodeFilter: event.target.value, currentPage: 1 }, () => {
+            console.log("Status Code Filter Changed:", this.state.statusCodeFilter);
+        });
+    };
+
+    handleExternalFilterChange = (event) => {
+        this.setState({ externalFilter: event.target.value, currentPage: 1 }, () => {
+            console.log("External Filter Changed:", this.state.externalFilter);
+        });
+    };
+
+    show_edit_link = (link) => {
+        if (link.url === "") {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(link.element, 'text/html');
+            const anchorElement = doc.querySelector('a');
+            const href = anchorElement.getAttribute('href');
+            link.url = href;
+        }
+
         this.setState({
             selected_link: {
                 post_id: link.post_id,
                 paragraph_id: link.paragraph_id,
                 url: link.url,
                 keyword: link.keyword,
-                target: link.target
+                target: link.target,
+                rel: link.rel === undefined ? "" : link.rel
             },
             link_to_update: {
                 url: link.url,
                 keyword: link.keyword,
-                target: link.target
+                rel: link.rel,
+                target: link.target,
+                site_name: this.state.site_name
             },
             show_modal: "block"
         });
-    } 
+    }
 
-    change_link_data = async () => { 
-
+    change_link_data = async () => {
         this.setState({
             request_status_class: '',
             request_message: '',
@@ -95,115 +146,195 @@ class ManageLinks extends Component {
             is_pressed: true
         });
 
-        if(this.state.is_pressed) {
-            return; 
-        } 
+        if (this.state.is_pressed) {
+            return;
+        }
 
         try {
-            
             const response = await Helper.sendRequest({
-              api: 'post/update-link',
-              method: 'POST',
-              data: {  
-                update: this.state.link_to_update,
-                old: this.state.selected_link
-              } // Include deleted IDs
+                api: 'post/update-link',
+                method: 'POST',
+                data: {
+                    update: this.state.link_to_update,
+                    old: this.state.selected_link
+                }
             });
-            console.log(response);
+
             if (response.is_error) {
-              throw new Error(response.message);
+                throw new Error(response.message);
             }
+
             this.setState({
-              request_status_class: 'success',
-              request_message: 'Menus saved successfully!',
-              show_message: 'show_message',
-              is_pressed: false,
-              deletedIds: [] // Clear deleted IDs after successful save
+                request_status_class: 'success',
+                request_message: 'Link saved successfully!',
+                show_message: 'show_message',
+                is_pressed: false,
+                deletedIds: []
             });
-          } catch (error) {
+
+            await this.fetchLinks();
+
+            setTimeout(() => {
+                this.setState({
+                    show_modal: "none"
+                })
+            }, 2000);
+
+        } catch (error) {
             this.setState({
-              request_status_class: 'error',
-              request_message: error.message || 'An error occurred while saving the menus.',
-              show_message: 'show_message',
-              is_pressed: false,
+                request_status_class: 'error',
+                request_message: error.message || 'An error occurred while saving the menus.',
+                show_message: 'show_message',
+                is_pressed: false,
             });
-          }
+        }
+    }
+
+    countStatuses = () => {
+        const { links } = this.state;
+        const statusCounts = {};
+
+        links.forEach(link => {
+            const status = link.status;
+            if (!statusCounts[status]) {
+                statusCounts[status] = 0;
+            }
+            statusCounts[status]++;
+        });
+
+        return statusCounts;
+    }
+
+    renderStatusCounts = () => {
+        const statusCounts = this.countStatuses();
+        const statusNames = {
+            "200": "OK",
+            "204": "No Content",
+            "300": "Multiple Choices",
+            "301": "Moved Permanently",
+            "302": "Found",
+            "400": "Bad Request",
+            "404": "Not Found",
+            "500": "Internal Server Error",
+            "Error": "Error"
+        };
+
+        return Object.keys(statusCounts).map(status => (
+            <div key={status} style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                backgroundColor: '#f9f9f9',
+                padding: '15px',
+                borderRadius: '5px',
+                border: '1px solid #ddd',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                margin: '10px',
+                minWidth: "150px"
+            }}>
+                <span style={{ fontSize: '18px', color: '#333', fontWeight: "bold" }}>{status}</span>
+                <span style={{ fontSize: '14px', color: '#666' }}>{statusNames[status] || "Unknown Status"}</span>
+                <span style={{ fontSize: '14px', color: '#333' }}>{statusCounts[status]} links</span>
+            </div>
+        ));
     }
 
     render() {
-        const { links, currentPage, totalPages } = this.state;
-        const linksPerPage = 10;
-        const displayedLinks = links.slice((currentPage - 1) * linksPerPage, currentPage * linksPerPage);
+        const { links, currentPage, totalPages, postsPerPage, statusCodeFilter, externalFilter } = this.state;
+        let filteredLinks = links;
+
+        if (statusCodeFilter !== "all") {
+            filteredLinks = filteredLinks.filter(link => link.status.toString() === statusCodeFilter);
+        }
+
+        if (externalFilter !== "all") {
+            filteredLinks = filteredLinks.filter(link => externalFilter === "true" ? link.is_external : !link.is_external);
+        }
+
+        const displayedLinks = filteredLinks.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
         return (
-             
             <div id="app">
                 <NavbarContainer />
                 <SidebarContainer />
-                
+
                 <div ref={this.request_result_ref} className={`${this.state.request_status_class} ${this.state.show_message} request-result-notifiction `}>
                     {this.state.request_message}
                 </div>
 
-                <div id="modal-link-data" className="modal" style={{display: this.state.show_modal}}>
+                <div id="modal-link-data" className="modal" style={{ display: this.state.show_modal }}>
                     <div className="modal-background --jb-modal-close"></div>
-                    <div className="modal-card" style={{marginTop: "150px"}}>
+                    <div className="modal-card" style={{ marginTop: "25px" }}>
                         <header className="modal-card-head">
                             <p className="modal-card-title">
                                 {this.state.link_to_update.keyword}
                             </p>
                         </header>
                         <section className="modal-card-body">
-                            <div className="field" style={{marginTop: "25px"}}>
+                            <div className="field" style={{ marginTop: "25px" }}>
                                 <label className="label">Link or URL</label>
                                 <div className="control">
                                     <input className="input" type="text" placeholder="URL" value={this.state.link_to_update.url} onChange={(e) => {
                                         this.setState({
                                             link_to_update: {
                                                 ...this.state.link_to_update,
-                                                url: e.target.value // Update with the new value
+                                                url: e.target.value
                                             }
                                         })
-                                    }}/>
+                                    }} />
                                 </div>
                             </div>
 
-                            <div className="field" style={{marginTop: "25px"}}>
+                            <div className="field" style={{ marginTop: "25px" }}>
                                 <label className="label">Keyword</label>
                                 <div className="control">
                                     <input className="input" type="text" placeholder="Keyword" value={this.state.link_to_update.keyword} onChange={(e) => {
                                         this.setState({
                                             link_to_update: {
                                                 ...this.state.link_to_update,
-                                                keyword: e.target.value // Update with the new value
+                                                keyword: e.target.value
                                             }
                                         })
-                                    }}/>
+                                    }} />
                                 </div>
                             </div>
 
-                            <div className="field" style={{marginTop: "25px"}}>
-                                <label className="label">Backlink Type</label>
+                            <div className="field" style={{ marginTop: "25px" }}>
+                                <label className="label">Rel Attribute</label>
+                                <div className="control">
+                                    <input className="input" type="text" placeholder="Rel Attributes" value={this.state.link_to_update.rel} onChange={(e) => {
+                                        this.setState({
+                                            link_to_update: {
+                                                ...this.state.link_to_update,
+                                                rel: e.target.value
+                                            }
+                                        })
+                                    }} />
+                                </div>
+                            </div>
+
+                            <div className="field" style={{ marginTop: "25px" }}>
+                                <label className="label">Target Attribute</label>
                                 <div className="control">
                                     <input className="input" type="text" placeholder="Target Attributes" value={this.state.link_to_update.target} onChange={(e) => {
                                         this.setState({
                                             link_to_update: {
                                                 ...this.state.link_to_update,
-                                                target: e.target.value // Update with the new value
+                                                target: e.target.value
                                             }
                                         })
-                                    }}/>
+                                    }} />
                                 </div>
-                            </div> 
+                            </div>
                         </section>
                         <footer className="modal-card-foot">
-                            <button className="button --jb-modal-close" onClick={e => this.setState({show_modal: "none"})}>Cancel</button>
+                            <button className="button --jb-modal-close" onClick={e => this.setState({ show_modal: "none" })}>Cancel</button>
                             <button className="button red --jb-modal-close" onClick={this.change_link_data}>
-                            {
-                                (this.state.is_pressed) ?
-                                <span className="loader"></span> :
-                                "Save Changes"
-                            }
+                                {
+                                    (this.state.is_pressed) ?
+                                        <span className="loader"></span> :
+                                        "Save Changes"
+                                }
                             </button>
                         </footer>
                     </div>
@@ -211,6 +342,7 @@ class ManageLinks extends Component {
 
                 <section className="section main-section">
                     <div className="card has-table mt-30">
+                        
                         <header className="card-header">
                             <p className="card-header-title">
                                 <span className="icon"><i className="mdi mdi-table"></i></span>
@@ -220,6 +352,68 @@ class ManageLinks extends Component {
                                 <span className="icon"><i className="mdi mdi-filter-outline"></i></span>
                             </a>
                         </header>
+
+                        <div style={{ display: 'flex', justifyContent: "center", flexWrap: 'wrap', gap: '20px', marginBottom: '20px' }}>
+                            {this.renderStatusCounts()}
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '20px', marginBottom: '50px', justifyContent: "center" }}>
+                            <select
+                                onChange={this.handlePostsPerPageChange}
+                                value={postsPerPage}
+                                style={{
+                                    padding: '10px',
+                                    borderRadius: '5px',
+                                    border: '1px solid #ccc',
+                                    fontSize: '14px',
+                                    width: '200px'
+                                }}
+                            >
+                                <option value="10">10 per page</option>
+                                <option value="20">20 per page</option>
+                                <option value="30">30 per page</option>
+                                <option value="100">100 per page</option>
+                                <option value={links.length}>All per page</option>
+                            </select>
+                            <select
+                                onChange={this.handleStatusCodeFilterChange}
+                                value={statusCodeFilter}
+                                style={{
+                                    padding: '10px',
+                                    borderRadius: '5px',
+                                    border: '1px solid #ccc',
+                                    fontSize: '14px',
+                                    width: '200px'
+                                }}
+                            >
+                                <option value="all">All statuses</option>
+                                <option value="200">200</option>
+                                <option value="204">204</option>
+                                <option value="300">300</option>
+                                <option value="301">301</option>
+                                <option value="302">302</option>
+                                <option value="400">400</option>
+                                <option value="404">404</option>
+                                <option value="500">500</option>
+                                <option value="Error">Error</option>
+                            </select>
+                            <select
+                                onChange={this.handleExternalFilterChange}
+                                value={externalFilter}
+                                style={{
+                                    padding: '10px',
+                                    borderRadius: '5px',
+                                    border: '1px solid #ccc',
+                                    fontSize: '14px',
+                                    width: '200px'
+                                }}
+                            >
+                                <option value="all">All links</option>
+                                <option value="true">External Links</option>
+                                <option value="false">Internal Links</option>
+                            </select>
+                        </div> 
+
                         <div className="card-content tble">
                             <table>
                                 <thead>
@@ -234,10 +428,11 @@ class ManageLinks extends Component {
                                         <th>Status</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
+                                        <th>visit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {displayedLinks.map( ( link, index) => (
+                                    {displayedLinks.map((link, index) => (
                                         <tr key={index}>
                                             <td data-label="Post Title" style={{ maxWidth: "200px" }}>{link.post_title}</td>
                                             <td data-label="Paragraph ID">{link.paragraph_id}</td>
@@ -259,13 +454,21 @@ class ManageLinks extends Component {
                                                     <span className="icon"><i className="mdi mdi-pencil"></i></span>
                                                 </button>
                                             </td>
-                                            <td className="actions-cell">
+                                            <td className="actions-cell" style={{textAlign: "center"}}>
                                                 <button
                                                     className="button small red"
                                                     type="button"
                                                     onClick={() => this.handleDelete(link._id)}
                                                 >
                                                     <span className="icon"><i className="mdi mdi-trash-can"></i></span>
+                                                </button>
+                                            </td>
+                                            <td className="actions-cell">
+                                                <button
+                                                    className="button small green"
+                                                    type="button" 
+                                                >
+                                                    <span className="icon"><i className="mdi mdi-eye"></i></span>
                                                 </button>
                                             </td>
                                         </tr>
@@ -292,8 +495,7 @@ class ManageLinks extends Component {
                         </div>
                     </div>
                 </section>
-            </div>   
-            
+            </div>
         );
     }
 }

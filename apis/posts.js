@@ -9,6 +9,8 @@ const {Config} = require("./../config/options");
 const {Helper} = require("./../config/helper")
 const multer = require('multer');
 const {Posts} = require("./../models/posts-model");
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 
 // Function to ensure directory exists
 const ensureDirectoryExistence = (dirPath) => {
@@ -99,47 +101,157 @@ postRouter.post("/post/create-update", async (req, res) => {
 
 
 postRouter.post("/post/update-link", async (req, res) => {
-
+     
     try {
-
-        var {post_id, paragraph_id, keyword, target, url } = req.body.old;
+         
+        var {post_id, paragraph_id, keyword, target, url, rel } = req.body.old;
         var updated_url = req.body.update.url;
+        var site_name = req.body.update.site_name;
         var updated_target = req.body.update.target;
+        var updated_rel = req.body.update.rel;
         var updated_keyword = req.body.update.keyword;
 
         var post = await Posts.findOne({_id: post_id });
         if( post == null ) {
             throw new Error("No posts created before for this link");
-        }
-        
-        var pp;
-        // update blocks 
-        var updated_blocks = post.blocks.map( x => {
-            if( x.id == paragraph_id ) {
-                // list
-                if( x.type == 'list' ) {
+        } 
 
-                }
-                ///////// consider if empty url change it with hash #
-                // paragraph
+        // update blocks 
+        var new_blocks = post.blocks.map( x => {
+
+            if( x.id == paragraph_id ) {
+
+                // paragraph.
+                if( x.type == 'paragraph' ) {
+ 
+                    const dom = new JSDOM(x.data.text);
+                    const document = dom.window.document;
+                    const anchors = document.querySelectorAll('a');
+                    anchors.forEach(anchor => {
+                        
+                        var get_url = anchor.getAttribute("href")
+                        if( get_url == url ) {
+                            anchor.setAttribute("rel", updated_rel)
+                            anchor.setAttribute("target", updated_target )
+                            anchor.setAttribute("href", updated_url )
+                            anchor.innerHTML = updated_keyword;
+                        }
+                        
+                    }); 
+
+                    const modifiedHtmlString = document.body.innerHTML;  
+                    x.data.text = modifiedHtmlString
+                } 
+
+                // list
+                if( x.type == 'list' ) { 
+                    var marked_string = "***********";
+                    var itemList = x.data.items.join(marked_string);
+
+                    const dom = new JSDOM(itemList);
+                    const document = dom.window.document;
+                    const anchors = document.querySelectorAll('a');
+                    anchors.forEach(anchor => {
+                        
+                        var get_url = anchor.getAttribute("href")
+                        if( get_url == url ) {
+                            anchor.setAttribute("rel", updated_rel)
+                            anchor.setAttribute("target", updated_target )
+                            anchor.setAttribute("href", updated_url )
+                            anchor.innerHTML = updated_keyword;
+                        }
+                        
+                    }); 
+
+                    const joined = document.body.innerHTML;  
+                    var converted = [joined]
+                    if( joined.indexOf(marked_string) != -1 ) {
+                        converted = joined.split(marked_string)
+                    }  
+
+                    x.data.items = converted;
+
+                } 
+
                 // table
-                if( x.type == 'table' ) {
-                    
-                    var up_list = Helper.replaceURLsInArray(x.data.content, url, updated_url);
-                    console.log(up_list);
-                }
-                // header 
-                // warning
-                // quote
-                // checklist
+                if( x.type == 'table' ) { 
+                    console.log(x.data.content);
+
+                    const processedData = x.data.content.map(array => {
+                        return array.map(htmlString => {
+
+                            const dom = new JSDOM(htmlString);
+                            const document = dom.window.document;
+                            
+                            const anchor = document.querySelector('a');
+                            
+                            if( anchor.getAttribute("href") != url || anchor.innerHTML != keyword ) {
+                                return htmlString;
+                            }
+
+                            anchor.setAttribute("href", updated_url );
+                            anchor.setAttribute("rel", updated_rel );
+                            anchor.setAttribute("target", updated_target );
+                            anchor.innerHTML = updated_keyword;
+
+                            return document.body.innerHTML;
+
+                        });
+                    });
+                     
+                    x.data.content = processedData   
+                }   
+                 
             
             }
 
             return x; 
-        })
-        // update links
 
-        res.send(updated_blocks);
+        });
+
+        // update links
+        var new_links = post.links.map( x => {
+            
+            if(x.paragraph_id == paragraph_id) {
+                var long_site = Helper.extractDomainAndSubdomain(updated_url);
+                 
+
+                // working with dom element 
+                const dom = new JSDOM(x.element);
+                const document = dom.window.document;
+                const _anchor_el = document.querySelector('a');
+                
+                if( _anchor_el.getAttribute("href") == url && _anchor_el.innerHTML == keyword ) {
+                    _anchor_el.setAttribute("href", updated_url );
+                    _anchor_el.setAttribute("rel", updated_rel );
+                    _anchor_el.setAttribute("target", updated_target );
+                    _anchor_el.innerHTML = updated_keyword;
+                    x.element = document.body.innerHTML;
+                    x.url = updated_url; 
+                    x.is_external = updated_url.toString().indexOf( site_name ) == -1 ? true: false;
+                    x.is_redirect = false;
+                    x.keyword = updated_keyword;
+                    x.status = 200; 
+                    x.domain_name= long_site.domain;
+                    x.subdomain= long_site.subdomain;
+                    x.target = updated_target;
+                    x.type = "OK";
+                } 
+            }
+
+            return x;
+        }); 
+
+        var pst = await Posts.updateOne(
+            { _id: post_id },
+            { $set: { blocks: new_blocks, links: new_links } }
+        );
+       
+        return res.send({
+            is_error: false, 
+            data: pst, 
+            message: ""
+        });
         
     } catch (error) {
         res.send({
@@ -193,7 +305,7 @@ postRouter.get("/post-links/get", async (req, res) => {
                     if (link_data.is_error) {
                         objx = {
                             ...objx,
-                            status: 'Error',
+                            status: 404,
                             type: '',
                             is_redirect: false,
                             url: ''
@@ -207,7 +319,7 @@ postRouter.get("/post-links/get", async (req, res) => {
                 } catch (err) {
                     objx = {
                         ...objx,
-                        status: 'Error',
+                        status: 404,
                         type: '',
                         is_redirect: false,
                         url: ''
