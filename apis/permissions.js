@@ -30,7 +30,6 @@ var Permissions = [
         cap: 4,
         name: 'admin',
         rules: [
-
             // => Access Pages 
             "settings",
             "users",
@@ -43,7 +42,9 @@ var Permissions = [
             "menus",
             "campaigns",
             "messages",
-            "links"
+            "links",
+            "reviews",
+            "comments"
         ]
     }
 ]; 
