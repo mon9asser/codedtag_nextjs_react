@@ -49,8 +49,7 @@ contactRouter.get('/contacts', async (req, res) => {
             page: parseInt(page),
             limit: parseInt(limit),
             sort: { date: -1 }
-        };
-        console.log(page);
+        }; 
         const contacts = await Contact.paginate({}, options);
         
         res.status(200).send({
