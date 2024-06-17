@@ -29,7 +29,9 @@ import { Menus } from './components/menus.js';
 import { AdCampaigns } from './components/campaigns.js';
 import { Contacts } from './components/contacts.js';
 import { ManageLinks } from './components/manage-links.js'; 
-import { Reviews} from './components/review.js';
+import { Comments} from './components/comments.js';
+import { Posts} from './components/posts.js';
+
 var WrappApplication = () => (
   
   <BrowserRouter> 
@@ -52,7 +54,8 @@ var WrappApplication = () => (
             <Route path="/dashboard/campaigns" element={<AdCampaigns/>} /> 
             <Route path="/dashboard/messages" element={<Contacts/>} /> 
             <Route path="/dashboard/links" element={<ManageLinks/>} /> 
-            <Route path="/dashboard/reviews" element={<Reviews/>} /> 
+            <Route path="/dashboard/comments" element={<Comments/>} /> 
+            <Route path="/dashboard/posts" element={<Posts/>} /> 
             
         </Routes>
       </AuthWrapper>

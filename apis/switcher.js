@@ -10,13 +10,15 @@ var sites = [
         db_name: "aaa_codedtag",
         domain: "Codedtag.com",
         name: "CodedTag",
-        index: 0
+        index: 0,
+        property_id: "317812519"
     },
     { 
         db_name: "aaa_freeaccountingtutorial",
         domain: "FreeAccountingTutorial.com",
         name: "FreeAccountingTutorial",
-        index: 1
+        index: 1, 
+        property_id: "446426355"
     }
 ];
 

@@ -6,6 +6,9 @@ const cors = require("cors");
 const {Config} = require("./config/options")
 const axios = require("axios");
 
+// cron jobs => google analytics 
+require("./apis/anlytics");
+
 var app = express();
 
 
@@ -41,6 +44,9 @@ const { chapterRouter } = require("./apis/chapters");
 const { menuRouter } = require("./apis/menus")
 const {adCampaignRouter} = require("./apis/campaigns");
 const {contactRouter} = require("./apis/contact");
+const {commentsRouter} = require("./apis/comments");
+const {analyticsRouter} = require("./apis/google-analytics");
+
 const { required } = require("yargs");
 
 // middlewares 
@@ -54,6 +60,8 @@ app.use( Config.server.api, chapterRouter);
 app.use( Config.server.api, menuRouter);
 app.use( Config.server.api, adCampaignRouter);
 app.use( Config.server.api, contactRouter);
+app.use( Config.server.api, commentsRouter);
+app.use( Config.server.api, analyticsRouter);
 
 
 

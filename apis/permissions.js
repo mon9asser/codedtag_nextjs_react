@@ -42,9 +42,9 @@ var Permissions = [
             "menus",
             "campaigns",
             "messages",
-            "links",
-            "reviews",
-            "comments"
+            "links", 
+            "comments",
+            "posts",
         ]
     }
 ]; 

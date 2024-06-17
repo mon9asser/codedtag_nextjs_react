@@ -23,11 +23,16 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google-analytics/data": "^4.7.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
+    "google-auth-library": "^9.11.0",
+    "google-gax": "^3.3.0",
     "jsdom": "^24.1.0",
     "mongoose-paginate-v2": "^1.8.2",
     "multer": "^1.4.5-lts.1",
-    "react-notifications": "^1.7.4"
+    "node-cron": "^3.0.3",
+    "react-notifications": "^1.7.4",
+    "redis": "^4.6.14"
   }
 }

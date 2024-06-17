@@ -1,17 +1,18 @@
 const express = require('express');
-const { Reviews } = require('./../models/reviews-model');
-var reviewRouter = express.Router();
+const { Comments } = require('../models/comments-model');
+var commentsRouter = express.Router();
 
 // Create or Update Review
-reviewRouter.post('/reviews/create-update', async (req, res) => {
+commentsRouter.post('/comments/create-update', async (req, res) => {
     try {
+
         const body = req.body;
 
         if (!body || Object.keys(body).length === 0) {
             throw new Error('Invalid request body');
         }
 
-        let savedReview = await new Reviews(body).save();
+        let savedReview = await new comments(body).save();
 
         if (savedReview) {
             res.status(200).send({
@@ -24,69 +25,73 @@ reviewRouter.post('/reviews/create-update', async (req, res) => {
         }
 
     } catch (error) {
+
         res.status(400).send({
             is_error: true,
-            data: null,
+            data: error,
             message: error.message || 'An error occurred while creating the review'
         });
+
     }
 });
 
 
-reviewRouter.get('/reviews', async (req, res) => {
+commentsRouter.get('/comments', async (req, res) => {
     try {
+        
         const { page = 1, limit = 10 } = req.query;
 
         const options = {
             page: parseInt(page),
             limit: parseInt(limit),
-            sort: { date: -1 }
+            populate: { path: 'post_id', select: 'post_title' }
         }; 
-        const reviews = await Reviews.paginate({}, options);
+        
+        const comments = await Comments.paginate({}, options);
         
         res.status(200).send({
             is_error: false,
             data: {
-                reviews: reviews.docs,
-                currentPage: reviews.page,
-                totalPages: reviews.totalPages
+                comments: comments.docs,
+                currentPage: comments.page,
+                totalPages: comments.totalPages
             },
-            message: 'Reviews fetched successfully'
+            message: 'comments fetched successfully'
         });
     } catch (error) {
         res.status(400).send({
             is_error: true,
             data: null,
-            message: error.message || 'An error occurred while fetching reviews'
+            message: error.message || 'An error occurred while fetching comments'
         });
     }
 });
 
-// Get All Reviews without Pagination
-reviewRouter.get('/reviews/all', async (req, res) => {
+// Get All comments without Pagination
+commentsRouter.get('/comments/all', async (req, res) => {
     try {
-        const reviews = await Reviews.find({});
+        const comments = await Comments.find({});
         res.status(200).send({
             is_error: false,
-            data: reviews,
-            message: 'All reviews fetched successfully'
+            data: comments,
+            message: 'All comments fetched successfully'
         });
     } catch (error) {
         res.status(400).send({
             is_error: true,
             data: null,
-            message: error.message || 'An error occurred while fetching all reviews'
+            message: error.message || 'An error occurred while fetching all comments'
         });
     }
 });
 
 // Delete Review
-reviewRouter.delete('/reviews', async (req, res) => {
+commentsRouter.delete('/comments', async (req, res) => {
     try {
         const { _id } = req.body;
         if (!_id) throw new Error('Review ID is required');
 
-        await Reviews.findByIdAndDelete(_id);
+        await Comments.findByIdAndDelete(_id);
         res.status(200).send({
             is_error: false,
             message: 'Review deleted successfully'
@@ -100,4 +105,4 @@ reviewRouter.delete('/reviews', async (req, res) => {
     }
 });
 
-module.exports = { reviewRouter };
+module.exports = { commentsRouter };

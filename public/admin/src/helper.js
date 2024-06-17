@@ -11,6 +11,21 @@ class HelperData {
         return re.test(email);
     }
 
+    formatNumber(num) {
+        if (num >= 1000000000000) {
+            return (num / 1000000000000).toFixed(1).replace(/\.0$/, '') + 'T';
+        } else if (num >= 1000000000) {
+            return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'B';
+        } else if (num >= 1000000) {
+            return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        } else if (num >= 100) {
+            return num + 'h';
+        } else {
+            return num.toString();
+        }
+    }
     generateObjectId() {
         var timestamp = (Math.floor(new Date().getTime() / 1000)).toString(16);
         var randomPart = 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {

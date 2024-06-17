@@ -102,14 +102,7 @@ class SidebarContainer extends Component {
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Messages</span>
                                 </Link>
-                            </li> 
-                            
-                            <li className="--set-active-forms-html">
-                                <Link to="/dashboard/reviews">
-                                    <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
-                                    <span className="menu-item-label">Reviews</span>
-                                </Link>
-                            </li>
+                            </li>  
                             <li className="--set-active-forms-html">
                                 <Link to="/dashboard/comments">
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>

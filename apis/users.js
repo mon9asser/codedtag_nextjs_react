@@ -354,7 +354,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
         
         var user_permission = Permissions[index];
         var rules = user_permission.rules;
-        console.log(rules, page);
+        
         if( rules.includes(page) ) {
             return res.send({
                 data: [], 
