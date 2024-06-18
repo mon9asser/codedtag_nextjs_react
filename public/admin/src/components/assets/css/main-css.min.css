@@ -566,3 +566,31 @@ body {
     padding: 15px;
     outline: none;
 }
+
+
+.open_this_modal {
+    display: block;
+}
+
+.open_this_modal .modal-card {
+    margin-top: 65px;
+}
+
+.flexform {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 15px;
+    align-items: center; 
+}
+.flexform span {
+    color: #999; 
+    font-size: 16px;
+    flex: 1;
+}
+.flexform select {
+    border: 1px solid #ddd;
+    padding: 10px 10px;
+    outline: none;
+    flex: 1;
+}

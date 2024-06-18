@@ -44,6 +44,8 @@ var Permissions = [
             "messages",
             "links", 
             "comments",
+
+            "pages",
             "posts",
         ]
     }

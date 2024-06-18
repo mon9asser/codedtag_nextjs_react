@@ -472,4 +472,45 @@ postRouter.get("/post/get", async (req, res) => {
     }
 })
 
+
+// Delete a post by its post_id
+postRouter.post("/post/delete", async (req, res) => {
+    try {
+        const postId = req.body.object_data.post_id;
+
+        // Validate the post_id
+        if (!mongoose.Types.ObjectId.isValid(postId)) {
+            return res.status(400).send({
+                is_error: true,
+                data: null,
+                message: "Invalid post_id"
+            });
+        }
+
+        // Find and delete the post by its ID
+        const deletedPost = await Posts.findByIdAndDelete(postId);
+
+        if (deletedPost) {
+            res.status(200).send({
+                is_error: false,
+                data: deletedPost,
+                message: "Post deleted successfully"
+            });
+        } else {
+            res.status(404).send({
+                is_error: true,
+                data: null,
+                message: "Post not found"
+            });
+        }
+    } catch (error) {
+        res.status(500).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while deleting the post"
+        });
+    }
+});
+
+
 module.exports = { postRouter };
