@@ -26,6 +26,7 @@ class Posts extends Component {
 
     async componentDidMount() {
         try {
+            
             const [postsResponse, reportsResponse, commentsResponse] = await Promise.all([
                 Helper.sendRequest({
                     api: 'post/get?post_type=0',
@@ -44,6 +45,7 @@ class Posts extends Component {
                 })
             ]);
 
+             
             if (postsResponse.is_error) {
                 this.setState({ isError: true, message: postsResponse.message });
             } else {
