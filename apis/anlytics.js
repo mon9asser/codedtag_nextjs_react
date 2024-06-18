@@ -121,4 +121,3 @@ async function saveReportData() {
 cron.schedule('*/25 * * * *', async () => { 
     await saveReportData();
 });
-

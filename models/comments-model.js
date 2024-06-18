@@ -17,11 +17,11 @@ let reviewsSchema = new Schema({
     dis_like_counts: {
         type: Number,
         default: 0
-    },
+    },/*
     views: {
         type: Number,
         default: 0
-    },
+    },*/
     comments: [{
         text: {
             type: String,
