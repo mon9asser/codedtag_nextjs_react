@@ -29,7 +29,7 @@ class Posts extends Component {
       filterTutorial: '',
       filterStatus: '',
       sortColumn: '',
-      sortDirection: 'asc', 
+      sortDirection: 'asc',
       commentsModal: {
         isOpen: false,
         postTitle: '',
@@ -53,6 +53,7 @@ class Posts extends Component {
       }
     }));
   }
+
   CommentsModal = () => {
     const { commentsModal } = this.state;
     return (
@@ -66,8 +67,8 @@ class Posts extends Component {
             {commentsModal.comments.length ? (
               commentsModal.comments.map((comment, index) => (
                 <div key={index} className="comment">
-                  <p><strong>{comment.text}</strong></p>
-                  <p>Counts: {comment.counts}</p>
+                  <p>{comment.text}</p>
+                  <p>Counts: <strong>{comment.counts}</strong></p>
                 </div>
               ))
             ) : (
@@ -81,9 +82,7 @@ class Posts extends Component {
       </div>
     );
   }
-     
 
-  
   toggleDeletionConfirmation = (post_id, post_title) => {
     this.setState({
       delete_post: {
@@ -174,7 +173,7 @@ class Posts extends Component {
     let totalComments = 0;
     let totalReviews = 0;
     let reviewCount = 0;
-  
+
     data.forEach(item => {
       const postId = item.post_id;
       const commentsCount = item.comments.length;
@@ -185,22 +184,22 @@ class Posts extends Component {
         text: comment.text,
         counts: comment.counts
       }));
-  
+
       commentsData[postId] = {
         commentsCount,
         review,
         comments
       };
-  
+
       totalComments += commentsCount;
       if (review !== 'N/A') {
         totalReviews += parseFloat(review);
         reviewCount++;
       }
     });
-  
+
     totalReviews = reviewCount > 0 ? (totalReviews / reviewCount).toFixed(1) : 'N/A';
-  
+
     return { commentsData, totalComments, totalReviews };
   }
 
@@ -309,15 +308,18 @@ class Posts extends Component {
   sortPosts = (column) => {
     const { filteredPosts, sortColumn, sortDirection, bounceRates, commentsData, pageViews, averageSessionDurations } = this.state;
     let newSortDirection = 'asc';
-
+  
     if (sortColumn === column && sortDirection === 'asc') {
       newSortDirection = 'desc';
     }
-
+  
     const sortedPosts = [...filteredPosts].sort((a, b) => {
       let aValue, bValue;
-
-      if (column === 'review') {
+  
+      if (column === 'title') {
+        aValue = a.totalWords;
+        bValue = b.totalWords;
+      } else if (column === 'review') {
         aValue = parseFloat(commentsData[a.id]?.review) || 0;
         bValue = parseFloat(commentsData[b.id]?.review) || 0;
       } else if (column === 'bounceRate') {
@@ -339,14 +341,14 @@ class Posts extends Component {
         aValue = a[column];
         bValue = b[column];
       }
-
+  
       if (newSortDirection === 'asc') {
         return aValue - bValue;
       } else {
         return bValue - aValue;
       }
     });
-
+  
     this.setState({ filteredPosts: sortedPosts, sortColumn: column, sortDirection: newSortDirection });
   }
 
@@ -380,7 +382,7 @@ class Posts extends Component {
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-
+  
     return (
       <table>
         <thead>
@@ -406,13 +408,10 @@ class Posts extends Component {
               <td data-label="Bounce Rate"><small className="text-gray-500" title="Programming">{bounceRates[post.slug] !== undefined ? bounceRates[post.slug] + '%' : 'N/A'}</small></td>
               <td data-label="Avg. Session Duration"><small className="text-gray-500" title="Programming">{averageSessionDurations[post.slug] !== undefined ? averageSessionDurations[post.slug].toFixed(2) + ' min' : 'N/A'}</small></td>
               <td data-label="Comments">
-                {
-                    console.log(commentsData)
-                }
                 <a onClick={() => this.toggleCommentsModal(post.title, commentsData[post.id]?.comments || [])}>
-                    <small className="text-gray-500" title="Programming">{commentsData[post.id] ? commentsData[post.id].commentsCount : 'N/A'}</small>
+                  <small className="text-gray-500" title="Programming">{commentsData[post.id] ? commentsData[post.id].commentsCount : 'N/A'}</small>
                 </a>
-            </td>
+              </td>
               <td data-label="Views"><small className="text-gray-500" title="Programming">{pageViews[post.slug] !== undefined ? Helper.formatNumber(pageViews[post.slug]) : 'N/A'}</small></td>
               <td className="actions-cell">
                 <div className="buttons right nowrap">
@@ -433,6 +432,7 @@ class Posts extends Component {
       </table>
     );
   }
+  
 
   delete_this_post = async () => {
     const { delete_post } = this.state;
@@ -677,9 +677,6 @@ class Posts extends Component {
                   </div>
                 </div>
               </div>
-
-              
-
             </div>
           </div>
           <div className="card has-table mt-30">

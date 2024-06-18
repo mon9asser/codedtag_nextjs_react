@@ -28,6 +28,9 @@ class Pages extends Component {
             filterStatus: '',
             sortColumn: '',
             sortDirection: 'asc',
+            averageSessionDuration: 0,
+            screenPageViewsPerSession: 0,
+            sessions: 0,
 
             delete_post: {
                 post_id: null,
@@ -39,9 +42,6 @@ class Pages extends Component {
     }
 
     toggleDeletionConfirmation = (post_id, post_title) => {
-
-      
-
         this.setState({
             delete_post: {
                 post_id: post_id,
@@ -49,9 +49,7 @@ class Pages extends Component {
             },
             post_confirmation_deletion: !this.state.post_confirmation_deletion
         });
-
     }
-    
 
     async componentDidMount() {
         try {
@@ -82,10 +80,10 @@ class Pages extends Component {
                 this.setState({ isError: true, message: postsResponse.message });
             } else {
                 const posts = this.parsePosts(postsResponse.data);
-                const { bounceRates, pageViews } = this.parseReports(reportsResponse.data);
+                const { bounceRates, pageViews, averageSessionDuration, screenPageViewsPerSession, sessions } = this.parseReports(reportsResponse.data);
                 const { commentsData, totalComments, totalReviews } = this.parseComments(commentsResponse.data);
                 const tutorials = tutorialsResponse.data;
-                this.setState({ posts, filteredPosts: posts, bounceRates, pageViews, commentsData, totalComments, totalReviews, totalPosts: posts.length, tutorials }, this.calculateMetrics);
+                this.setState({ posts, filteredPosts: posts, bounceRates, pageViews, averageSessionDuration, screenPageViewsPerSession, sessions, commentsData, totalComments, totalReviews, totalPosts: posts.length, tutorials }, this.calculateMetrics);
             }
         } catch (error) {
             this.setState({ isError: true, message: error.message });
@@ -106,13 +104,21 @@ class Pages extends Component {
     parseReports(data) {
         const bounceRates = {};
         const pageViews = {};
+        let averageSessionDuration = 0;
+        let screenPageViewsPerSession = 0;
+        let sessions = 0;
+
         data.forEach(item => {
             const parts = item.landingPage.split('/').filter(part => part !== '');
             const normalizedLandingPage = parts.pop();
             bounceRates[normalizedLandingPage] = parseFloat(item.averageBounceRate);
             pageViews[normalizedLandingPage] = item.pageViews;
+            averageSessionDuration = item.averageSessionDuration;
+            screenPageViewsPerSession = item.screenPageViewsPerSession;
+            sessions = item.sessions;
         });
-        return { bounceRates, pageViews };
+
+        return { bounceRates, pageViews, averageSessionDuration, screenPageViewsPerSession, sessions };
     }
 
     parseComments(data) {
@@ -217,7 +223,6 @@ class Pages extends Component {
     handleFilterChange = (event) => {
         this.setState({ [event.target.name]: event.target.value });
     }
-    
 
     apply_filters = () => {
         const { posts, filterTutorial, filterStatus } = this.state;
@@ -297,7 +302,6 @@ class Pages extends Component {
         );
     }
 
-    
     renderPostsTable() {
         const { filteredPosts, bounceRates, pageViews, commentsData, currentPage, postsPerPage } = this.state;
         const indexOfLastPost = currentPage * postsPerPage;
@@ -309,12 +313,10 @@ class Pages extends Component {
                 <thead>
                     <tr>
                         <th onClick={() => this.sortPosts('totalWords')}>Page Name</th>
-                        {/*<th>Tutorial</th>*/}
-                        {/*<th onClick={() => this.sortPosts('review')}>Review</th>*/}
                         <th onClick={() => this.sortPosts('status')}>Status</th>
                         <th onClick={() => this.sortPosts('bounceRate')}>Bounce Rate</th>
-                        {/*<th onClick={() => this.sortPosts('comments')}>Comments</th>*/}
                         <th onClick={() => this.sortPosts('views')}>Views</th>
+                         
                         <th></th>
                     </tr>
                 </thead>
@@ -322,11 +324,8 @@ class Pages extends Component {
                     {currentPosts.map(post => (
                         <tr key={post.id}>
                             <td data-label="Name">{post.title} <small className="number-of-posts">{post.totalWords} Words</small></td>
-                            {/*<td data-label="Tutorial"><small className="text-gray-500" title="Programming">{post.tutorial}</small></td>*/}
-                            {/*<td data-label="Review">{commentsData[post.id] ? commentsData[post.id].review : 'N/A'}</td>*/}
                             <td data-label="Status"><small className="text-gray-500" title="Programming">{post.status}</small></td>
                             <td data-label="Bounce Rate"><small className="text-gray-500" title="Programming">{bounceRates[post.slug] !== undefined ? bounceRates[post.slug] + '%' : 'N/A'}</small></td>
-                            {/*<td data-label="Comments"><a href="#"><small className="text-gray-500" title="Programming">{commentsData[post.id] ? commentsData[post.id].commentsCount : 'N/A'}</small></a></td>*/}
                             <td data-label="Views"><small className="text-gray-500" title="Programming">{pageViews[post.slug] !== undefined ? Helper.formatNumber(pageViews[post.slug]) : 'N/A'}</small></td>
                             <td className="actions-cell">
                                 <div className="buttons right nowrap">
@@ -350,14 +349,14 @@ class Pages extends Component {
 
     delete_this_post = async () => {
         const { delete_post } = this.state;
-    
+
         this.setState({
             delete_post: {
                 ...delete_post,
                 is_deleting: true
             }
         });
-    
+
         try {
             const response = await Helper.sendRequest({
                 api: `post/delete`,
@@ -368,7 +367,7 @@ class Pages extends Component {
                     }
                 }
             });
-    
+
             if (response.is_error) {
                 this.setState({
                     isError: true,
@@ -380,10 +379,9 @@ class Pages extends Component {
                     post_confirmation_deletion: false
                 });
             } else {
-                // Remove the deleted post from the state
                 const updatedPosts = this.state.posts.filter(post => post.id !== delete_post.post_id);
                 const updatedFilteredPosts = this.state.filteredPosts.filter(post => post.id !== delete_post.post_id);
-    
+
                 this.setState({
                     posts: updatedPosts,
                     filteredPosts: updatedFilteredPosts,
@@ -408,16 +406,17 @@ class Pages extends Component {
             });
         }
     }
+
     DeleteModalConfirmation = () => {
         return (
             <div className={`modal ${this.state.post_confirmation_deletion ? "open_this_modal" : ""}`}>
                 <div className="modal-background --jb-modal-close"></div>
                 <div className="modal-card">
                     <header className="modal-card-head">
-                        <p className="modal-card-title">Confirm Deletion Proccess</p>
+                        <p className="modal-card-title">Confirm Deletion Process</p>
                     </header>
                     <section className="modal-card-body">
-                         <p>Are you sure to delete page of <b>{this.state.delete_post.post_title}</b></p>
+                         <p>Are you sure to delete page of <b>{this.state.delete_post.post_title}</b>?</p>
                     </section>
                     <footer className="modal-card-foot">
                         <button onClick={() => this.setState({post_confirmation_deletion: false})} className="button --jb-modal-close">Cancel</button>
@@ -443,15 +442,6 @@ class Pages extends Component {
                         <p className="modal-card-title">Filter Articles by:</p>
                     </header>
                     <section className="modal-card-body">
-                        {/*<div className="flexform">
-                            <span>Tutorial</span>
-                            <select name="filterTutorial" value={filterTutorial} onChange={this.handleFilterChange}>
-                                <option value="">All</option>
-                                {tutorials.map(tutorial => (
-                                    <option key={tutorial._id} value={tutorial.tutorial_title}>{tutorial.tutorial_title}</option>
-                                ))}
-                            </select>
-                        </div>*/}
                         <div className="flexform">
                             <span>Post Status</span>
                             <select name="filterStatus" value={filterStatus} onChange={this.handleFilterChange}>
@@ -477,7 +467,7 @@ class Pages extends Component {
     }
 
     render() {
-        const { isError, message, totalAverageBounceRate, totalViews, totalPublishedPosts, totalPosts, totalComments, totalReviews } = this.state;
+        const { isError, message, totalAverageBounceRate, totalViews, totalPublishedPosts, totalPosts, totalComments, totalReviews, averageSessionDuration, screenPageViewsPerSession, sessions } = this.state;
 
         return (
             <div id="app">
@@ -486,7 +476,7 @@ class Pages extends Component {
                 <section className="section main-section">
                     <div className="h-full row-container static-cols">
                         <div className="container-tribble" style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-                            <div className="card">
+                            <div className="card" style={{flexBasis: "23%"}}>
                                 <div className="card-content">
                                     <div className="flex items-center justify-between">
                                         <div className="widget-label">
@@ -501,10 +491,7 @@ class Pages extends Component {
                                 </div>
                             </div>
 
-                            
- 
-
-                            <div className="card">
+                            <div className="card" style={{flexBasis: "23%"}}>
                                 <div className="card-content">
                                     <div className="flex items-center justify-between">
                                         <div className="widget-label">
@@ -519,7 +506,7 @@ class Pages extends Component {
                                 </div>
                             </div>
 
-                            <div className="card">
+                            <div className="card" style={{flexBasis: "23%"}}>
                                 <div className="card-content">
                                     <div className="flex items-center justify-between">
                                         <div className="widget-label">
@@ -534,7 +521,7 @@ class Pages extends Component {
                                 </div>
                             </div>
 
-                            <div className="card">
+                            <div className="card" style={{flexBasis: "23%"}}>
                                 <div className="card-content">
                                     <div className="flex items-center justify-between">
                                         <div className="widget-label">
@@ -543,6 +530,51 @@ class Pages extends Component {
                                             </h3>
                                             <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>
                                                 {Helper.formatNumber(totalPublishedPosts)}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="card">
+                                <div className="card-content">
+                                    <div className="flex items-center justify-between">
+                                        <div className="widget-label">
+                                            <h3 style={{ color: "#6c726e", fontSize: "14px" }}>
+                                                Average Session Duration
+                                            </h3>
+                                            <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>
+                                                {Helper.formatNumber(averageSessionDuration)}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="card">
+                                <div className="card-content">
+                                    <div className="flex items-center justify-between">
+                                        <div className="widget-label">
+                                            <h3 style={{ color: "#6c726e", fontSize: "14px" }}>
+                                                Page Views per Session
+                                            </h3>
+                                            <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>
+                                                {Helper.formatNumber(screenPageViewsPerSession)}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="card">
+                                <div className="card-content">
+                                    <div className="flex items-center justify-between">
+                                        <div className="widget-label">
+                                            <h3 style={{ color: "#6c726e", fontSize: "14px" }}>
+                                                Sessions
+                                            </h3>
+                                            <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>
+                                                {Helper.formatNumber(sessions)}
                                             </h1>
                                         </div>
                                     </div>
@@ -585,7 +617,6 @@ class Pages extends Component {
 
                 <this.FilterPostsModal />
                 <this.DeleteModalConfirmation />
- 
             </div>
         );
     }

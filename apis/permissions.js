@@ -47,6 +47,7 @@ var Permissions = [
 
             "pages",
             "posts",
+            "tutorials",
         ]
     }
 ]; 
