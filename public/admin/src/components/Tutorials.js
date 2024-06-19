@@ -128,6 +128,41 @@ class Tutorials extends Component {
             : 'N/A';
     }
 
+    getViews = (tutorialSlug) => {
+        return this.state.analytics.reduce((totalViews, report) => {
+            const landingPageSlug = report.landingPage.split('/').filter(Boolean).pop();
+            if (landingPageSlug === tutorialSlug) {
+                totalViews += report.pageViews;
+            }
+            return totalViews;
+        }, 0);
+    }
+
+    getBounceRate = (tutorialSlug) => {
+        let totalBounceRate = 0;
+        let matchingReportsCount = 0;
+    
+        this.state.analytics.forEach((report) => {
+            const landingPageSlug = report.landingPage.split('/').filter(Boolean).pop();
+            if (landingPageSlug === tutorialSlug) {
+                const numericBounceRate = parseFloat(report.averageBounceRate.replace('%', ''));
+                if (!isNaN(numericBounceRate)) {
+                    totalBounceRate += numericBounceRate;
+                    matchingReportsCount++;
+                }
+            }
+        });
+    
+        if (matchingReportsCount === 0) {
+            return 'N/A';
+        }
+    
+        const averageBounceRate = (totalBounceRate / matchingReportsCount).toFixed(2) + '%';
+        return averageBounceRate;
+    }
+    
+    
+
     renderPagination = () => {
         const { currentPage, tutorialsPerPage, tutorials } = this.state;
         const totalPages = Math.ceil(tutorials.length / tutorialsPerPage);
@@ -280,8 +315,8 @@ class Tutorials extends Component {
                                                 <td data-label="Review">{this.calculateRating(tutorial._id)}</td>
                                                 <td data-label="Status"><small className="text-gray-500" title="Programming">{tutorial.options?.publish ? "Published" : "Draft"}</small></td>
                                                 <td data-label="Category"><small className="text-gray-500" title="Category">{this.getCategoryName(tutorial)}</small></td>
-                                                <td data-label="Views"><small className="text-gray-500" title="Views">xxxxxx</small></td>
-                                                <td data-label="Bounce Rate"><small className="text-gray-500" title="Bounce Rate">xxxxxx</small></td>
+                                                <td data-label="Views"><small className="text-gray-500" title="Views">{this.getViews(tutorial.slug)}</small></td>
+                                                <td data-label="Bounce Rate"><small className="text-gray-500" title="Bounce Rate">{this.getBounceRate(tutorial.slug)}</small></td>
                                                 <td className="actions-cell">
                                                     <div className="buttons right nowrap">
                                                         <button className="button small blue --jb-modal" type="button" onClick={() => this.toggleStatisticsModal()}>
