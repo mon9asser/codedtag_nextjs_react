@@ -23,7 +23,7 @@ const Config = {
 
     database: {
         name: db_name,
-        host: "mongodb://localhost",
+        host: "mongodb://127.0.0.1",
         port: "27017",
         options: {
             useMongoClient : true 

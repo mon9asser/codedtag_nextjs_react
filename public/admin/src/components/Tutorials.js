@@ -173,6 +173,9 @@ class Tutorials extends Component {
                                                 <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
                                                     <span className="icon"><i className="mdi mdi-pencil"></i></span>
                                                 </button>
+                                                <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
+                                                    <span className="icon"><i className="mdi mdi-pencil"></i></span>
+                                                </button>
                                                 <button className="button small green --jb-modal" data-target="sample-modal-2" type="button">
                                                     <span className="icon"><i className="mdi mdi-eye"></i></span>
                                                 </button>

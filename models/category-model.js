@@ -23,4 +23,6 @@ var Categories = mongoose.model("categories" , CategoriesSchema );
 
 
 
+console.log(mongoose.model.name);
+
 module.exports = {Categories};
