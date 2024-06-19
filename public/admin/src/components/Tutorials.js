@@ -171,7 +171,7 @@ class Tutorials extends Component {
                                         <td className="actions-cell">
                                             <div className="buttons right nowrap">
                                                 <button className="button small blue" data-target="sample-modal-2" type="button">
-                                                    <span className="icon"><i className="mdi mdi-chart"></i></span>
+                                                    <span className="icon"><i className="mdi mdi-chart-arc"></i></span>
                                                 </button>
                                                 <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
                                                     <span className="icon"><i className="mdi mdi-pencil"></i></span>
