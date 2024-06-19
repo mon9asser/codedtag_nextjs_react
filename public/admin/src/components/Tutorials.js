@@ -170,8 +170,8 @@ class Tutorials extends Component {
                                         </td>
                                         <td className="actions-cell">
                                             <div className="buttons right nowrap">
-                                                <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
-                                                    <span className="icon"><i className="mdi mdi-pencil"></i></span>
+                                                <button className="button small blue" data-target="sample-modal-2" type="button">
+                                                    <span className="icon"><i className="mdi mdi-chart"></i></span>
                                                 </button>
                                                 <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
                                                     <span className="icon"><i className="mdi mdi-pencil"></i></span>
@@ -186,92 +186,8 @@ class Tutorials extends Component {
                                         </td>
                                     </tr> 
     
-                                    <tr>
-                                        <td className="image-cell">
-                                            <input type="checkbox" />
-                                        </td>
-                                        <td data-label="Name">PHP Tutorials <small className="number-of-posts">111 posts</small></td>
-                                        <td data-label="Company">190</td>
-                                        <td data-label="City">4.2</td>
-                                        <td data-label="City"><small className="text-gray-500" title="Programming">Published</small></td>
-                                        <td data-label="Created">
-                                            <small className="text-gray-500" title="Programming">Programming</small>
-                                        </td>
-                                        <td data-label="Created">
-                                            <small className="text-gray-500" title="Programming">11K</small>
-                                        </td>
-                                        <td className="actions-cell">
-                                            <div className="buttons right nowrap">
-                                                <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
-                                                    <span className="icon"><i className="mdi mdi-pencil"></i></span>
-                                                </button>
-                                                <button className="button small green --jb-modal" data-target="sample-modal-2" type="button">
-                                                    <span className="icon"><i className="mdi mdi-eye"></i></span>
-                                                </button>
-                                                <button className="button small red --jb-modal" data-target="sample-modal" type="button">
-                                                    <span className="icon"><i className="mdi mdi-trash-can"></i></span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr> 
-    
-                                    <tr>
-                                        <td className="image-cell">
-                                            <input type="checkbox" />
-                                        </td>
-                                        <td data-label="Name">PHP Tutorials <small className="number-of-posts">111 posts</small></td>
-                                        <td data-label="Company">190</td>
-                                        <td data-label="City">4.2</td>
-                                        <td data-label="City"><small className="text-gray-500" title="Programming">Published</small></td>
-                                        <td data-label="Created">
-                                            <small className="text-gray-500" title="Programming">Programming</small>
-                                        </td>
-                                        <td data-label="Created">
-                                            <small className="text-gray-500" title="Programming">11K</small>
-                                        </td>
-                                        <td className="actions-cell">
-                                            <div className="buttons right nowrap">
-                                                <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
-                                                    <span className="icon"><i className="mdi mdi-pencil"></i></span>
-                                                </button>
-                                                <button className="button small green --jb-modal" data-target="sample-modal-2" type="button">
-                                                    <span className="icon"><i className="mdi mdi-eye"></i></span>
-                                                </button>
-                                                <button className="button small red --jb-modal" data-target="sample-modal" type="button">
-                                                    <span className="icon"><i className="mdi mdi-trash-can"></i></span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr> 
-    
-                                    <tr>
-                                        <td className="image-cell">
-                                            <input type="checkbox" />
-                                        </td>
-                                        <td data-label="Name">PHP Tutorials <small className="number-of-posts">111 posts</small></td>
-                                        <td data-label="Company">190</td>
-                                        <td data-label="City">4.2</td>
-                                        <td data-label="City"><small className="text-gray-500" title="Programming">Published</small></td>
-                                        <td data-label="Created">
-                                            <small className="text-gray-500" title="Programming">Programming</small>
-                                        </td>
-                                        <td data-label="Created">
-                                            <small className="text-gray-500" title="Programming">11K</small>
-                                        </td>
-                                        <td className="actions-cell">
-                                            <div className="buttons right nowrap">
-                                                <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
-                                                    <span className="icon"><i className="mdi mdi-pencil"></i></span>
-                                                </button>
-                                                <button className="button small green --jb-modal" data-target="sample-modal-2" type="button">
-                                                    <span className="icon"><i className="mdi mdi-eye"></i></span>
-                                                </button>
-                                                <button className="button small red --jb-modal" data-target="sample-modal" type="button">
-                                                    <span className="icon"><i className="mdi mdi-trash-can"></i></span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr> 
+                                    
+                                     
                                 </tbody>
                             </table>
                             <div className="table-pagination">
