@@ -11,6 +11,9 @@ class Pages extends Component {
             filteredPosts: [],
             bounceRates: {},
             pageViews: {},
+            pageSessions: {},
+            pageViewsPerSession: {},
+            pageAverageSessionDuration: {},
             commentsData: {},
             tutorials: [],
             totalComments: 0,
@@ -23,15 +26,14 @@ class Pages extends Component {
             totalViews: 0,
             totalPublishedPosts: 0,
             totalPosts: 0,
+            averageSessionDuration: 0,
+            screenPageViewsPerSession: 0,
+            sessions: 0,
             posts_filter_modal_open: false,
             filterTutorial: '',
             filterStatus: '',
             sortColumn: '',
             sortDirection: 'asc',
-            averageSessionDuration: 0,
-            screenPageViewsPerSession: 0,
-            sessions: 0,
-
             delete_post: {
                 post_id: null,
                 post_title: "",
@@ -80,10 +82,23 @@ class Pages extends Component {
                 this.setState({ isError: true, message: postsResponse.message });
             } else {
                 const posts = this.parsePosts(postsResponse.data);
-                const { bounceRates, pageViews, averageSessionDuration, screenPageViewsPerSession, sessions } = this.parseReports(reportsResponse.data);
+                const { bounceRates, pageViews, pageSessions, pageViewsPerSession, pageAverageSessionDuration } = this.parseReports(reportsResponse.data);
                 const { commentsData, totalComments, totalReviews } = this.parseComments(commentsResponse.data);
                 const tutorials = tutorialsResponse.data;
-                this.setState({ posts, filteredPosts: posts, bounceRates, pageViews, averageSessionDuration, screenPageViewsPerSession, sessions, commentsData, totalComments, totalReviews, totalPosts: posts.length, tutorials }, this.calculateMetrics);
+                this.setState({
+                    posts,
+                    filteredPosts: posts,
+                    bounceRates,
+                    pageViews,
+                    pageSessions,
+                    pageViewsPerSession,
+                    pageAverageSessionDuration,
+                    commentsData,
+                    totalComments,
+                    totalReviews,
+                    totalPosts: posts.length,
+                    tutorials
+                }, this.calculateMetrics);
             }
         } catch (error) {
             this.setState({ isError: true, message: error.message });
@@ -104,21 +119,21 @@ class Pages extends Component {
     parseReports(data) {
         const bounceRates = {};
         const pageViews = {};
-        let averageSessionDuration = 0;
-        let screenPageViewsPerSession = 0;
-        let sessions = 0;
+        const pageSessions = {};
+        const pageViewsPerSession = {};
+        const pageAverageSessionDuration = {};
 
         data.forEach(item => {
             const parts = item.landingPage.split('/').filter(part => part !== '');
             const normalizedLandingPage = parts.pop();
             bounceRates[normalizedLandingPage] = parseFloat(item.averageBounceRate);
             pageViews[normalizedLandingPage] = item.pageViews;
-            averageSessionDuration = item.averageSessionDuration;
-            screenPageViewsPerSession = item.screenPageViewsPerSession;
-            sessions = item.sessions;
+            pageSessions[normalizedLandingPage] = item.sessions;
+            pageViewsPerSession[normalizedLandingPage] = item.screenPageViewsPerSession;
+            pageAverageSessionDuration[normalizedLandingPage] = item.averageSessionDuration;
         });
 
-        return { bounceRates, pageViews, averageSessionDuration, screenPageViewsPerSession, sessions };
+        return { bounceRates, pageViews, pageSessions, pageViewsPerSession, pageAverageSessionDuration };
     }
 
     parseComments(data) {
@@ -152,12 +167,15 @@ class Pages extends Component {
     }
 
     calculateMetrics() {
-        const { filteredPosts, bounceRates, pageViews, commentsData } = this.state;
+        const { filteredPosts, bounceRates, pageViews, commentsData, pageSessions, pageViewsPerSession, pageAverageSessionDuration } = this.state;
 
         this.calculateTotalAverageBounceRate(filteredPosts, bounceRates);
         this.calculateTotalViews(filteredPosts, pageViews);
         this.calculateTotalPublishedPosts(filteredPosts);
         this.calculateTotalCommentsAndReviews(filteredPosts, commentsData);
+        this.calculateAverageSessionDuration(filteredPosts, pageAverageSessionDuration);
+        this.calculatePageViewsPerSession(filteredPosts, pageViewsPerSession);
+        this.calculateSessions(filteredPosts, pageSessions);
     }
 
     calculateTotalAverageBounceRate(posts, bounceRates) {
@@ -216,6 +234,51 @@ class Pages extends Component {
         this.setState({ totalComments, totalReviews });
     }
 
+    calculateAverageSessionDuration(posts, pageAverageSessionDuration) {
+        let totalSessionDuration = 0;
+        let count = 0;
+
+        posts.forEach(post => {
+            const sessionDuration = pageAverageSessionDuration[post.slug];
+            if (sessionDuration !== undefined) {
+                totalSessionDuration += sessionDuration;
+                count++;
+            }
+        });
+
+        const averageSessionDuration = count > 0 ? (totalSessionDuration / count).toFixed(2) : 'N/A';
+        this.setState({ averageSessionDuration });
+    }
+
+    calculatePageViewsPerSession(posts, pageViewsPerSession) {
+        let totalPageViewsPerSession = 0;
+        let count = 0;
+
+        posts.forEach(post => {
+            const viewsPerSession = pageViewsPerSession[post.slug];
+            if (viewsPerSession !== undefined) {
+                totalPageViewsPerSession += viewsPerSession;
+                count++;
+            }
+        });
+
+        const screenPageViewsPerSession = count > 0 ? (totalPageViewsPerSession / count).toFixed(2) : 'N/A';
+        this.setState({ screenPageViewsPerSession });
+    }
+
+    calculateSessions(posts, pageSessions) {
+        let totalSessions = 0;
+
+        posts.forEach(post => {
+            const sessions = pageSessions[post.slug];
+            if (sessions !== undefined) {
+                totalSessions += sessions;
+            }
+        });
+
+        this.setState({ sessions: totalSessions });
+    }
+
     handlePageChange = (pageNumber) => {
         this.setState({ currentPage: pageNumber }, this.calculateMetrics);
     };
@@ -237,7 +300,7 @@ class Pages extends Component {
     }
 
     sortPosts = (column) => {
-        const { filteredPosts, sortColumn, sortDirection, bounceRates, commentsData, pageViews } = this.state;
+        const { filteredPosts, sortColumn, sortDirection, bounceRates, commentsData, pageViews, pageSessions, pageViewsPerSession, pageAverageSessionDuration } = this.state;
         let newSortDirection = 'asc';
 
         if (sortColumn === column && sortDirection === 'asc') {
@@ -259,6 +322,15 @@ class Pages extends Component {
             } else if (column === 'views') {
                 aValue = pageViews[a.slug] || 0;
                 bValue = pageViews[b.slug] || 0;
+            } else if (column === 'sessions') {
+                aValue = pageSessions[a.slug] || 0;
+                bValue = pageSessions[b.slug] || 0;
+            } else if (column === 'viewsPerSession') {
+                aValue = pageViewsPerSession[a.slug] || 0;
+                bValue = pageViewsPerSession[b.slug] || 0;
+            } else if (column === 'averageSessionDuration') {
+                aValue = pageAverageSessionDuration[a.slug] || 0;
+                bValue = pageAverageSessionDuration[b.slug] || 0;
             } else if (column === 'totalWords') {
                 aValue = a.totalWords;
                 bValue = b.totalWords;
@@ -303,7 +375,7 @@ class Pages extends Component {
     }
 
     renderPostsTable() {
-        const { filteredPosts, bounceRates, pageViews, commentsData, currentPage, postsPerPage } = this.state;
+        const { filteredPosts, bounceRates, pageViews, commentsData, pageSessions, pageViewsPerSession, pageAverageSessionDuration, currentPage, postsPerPage } = this.state;
         const indexOfLastPost = currentPage * postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
         const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
@@ -316,7 +388,9 @@ class Pages extends Component {
                         <th onClick={() => this.sortPosts('status')}>Status</th>
                         <th onClick={() => this.sortPosts('bounceRate')}>Bounce Rate</th>
                         <th onClick={() => this.sortPosts('views')}>Views</th>
-                         
+                        <th onClick={() => this.sortPosts('sessions')}>Sessions</th>
+                        <th onClick={() => this.sortPosts('viewsPerSession')}>Views per Session</th>
+                        <th onClick={() => this.sortPosts('averageSessionDuration')}>Avg. Session Duration</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -327,6 +401,9 @@ class Pages extends Component {
                             <td data-label="Status"><small className="text-gray-500" title="Programming">{post.status}</small></td>
                             <td data-label="Bounce Rate"><small className="text-gray-500" title="Programming">{bounceRates[post.slug] !== undefined ? bounceRates[post.slug] + '%' : 'N/A'}</small></td>
                             <td data-label="Views"><small className="text-gray-500" title="Programming">{pageViews[post.slug] !== undefined ? Helper.formatNumber(pageViews[post.slug]) : 'N/A'}</small></td>
+                            <td data-label="Sessions"><small className="text-gray-500" title="Programming">{pageSessions[post.slug] !== undefined ? Helper.formatNumber(pageSessions[post.slug]) : 'N/A'}</small></td>
+                            <td data-label="Views per Session"><small className="text-gray-500" title="Programming">{pageViewsPerSession[post.slug] !== undefined ? pageViewsPerSession[post.slug] : 'N/A'}</small></td>
+                            <td data-label="Avg. Session Duration"><small className="text-gray-500" title="Programming">{pageAverageSessionDuration[post.slug] !== undefined ? pageAverageSessionDuration[post.slug] : 'N/A'}</small></td>
                             <td className="actions-cell">
                                 <div className="buttons right nowrap">
                                     <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
@@ -416,15 +493,15 @@ class Pages extends Component {
                         <p className="modal-card-title">Confirm Deletion Process</p>
                     </header>
                     <section className="modal-card-body">
-                         <p>Are you sure to delete page of <b>{this.state.delete_post.post_title}</b>?</p>
+                        <p>Are you sure to delete page of <b>{this.state.delete_post.post_title}</b>?</p>
                     </section>
                     <footer className="modal-card-foot">
-                        <button onClick={() => this.setState({post_confirmation_deletion: false})} className="button --jb-modal-close">Cancel</button>
+                        <button onClick={() => this.setState({ post_confirmation_deletion: false })} className="button --jb-modal-close">Cancel</button>
                         <button onClick={this.delete_this_post} className="button red --jb-modal-close">
                             {
                                 this.state.delete_post.is_deleting ?
-                                <span className="loader"></span> : "Confirm"
-                            } 
+                                    <span className="loader"></span> : "Confirm"
+                            }
                         </button>
                     </footer>
                 </div>
@@ -476,7 +553,7 @@ class Pages extends Component {
                 <section className="section main-section">
                     <div className="h-full row-container static-cols">
                         <div className="container-tribble" style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-                            <div className="card" style={{flexBasis: "23%"}}>
+                            <div className="card" style={{ flexBasis: "23%" }}>
                                 <div className="card-content">
                                     <div className="flex items-center justify-between">
                                         <div className="widget-label">
@@ -491,7 +568,7 @@ class Pages extends Component {
                                 </div>
                             </div>
 
-                            <div className="card" style={{flexBasis: "23%"}}>
+                            <div className="card" style={{ flexBasis: "23%" }}>
                                 <div className="card-content">
                                     <div className="flex items-center justify-between">
                                         <div className="widget-label">
@@ -506,7 +583,7 @@ class Pages extends Component {
                                 </div>
                             </div>
 
-                            <div className="card" style={{flexBasis: "23%"}}>
+                            <div className="card" style={{ flexBasis: "23%" }}>
                                 <div className="card-content">
                                     <div className="flex items-center justify-between">
                                         <div className="widget-label">
@@ -521,7 +598,7 @@ class Pages extends Component {
                                 </div>
                             </div>
 
-                            <div className="card" style={{flexBasis: "23%"}}>
+                            <div className="card" style={{ flexBasis: "23%" }}>
                                 <div className="card-content">
                                     <div className="flex items-center justify-between">
                                         <div className="widget-label">

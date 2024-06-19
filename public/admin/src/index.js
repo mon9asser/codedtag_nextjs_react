@@ -32,7 +32,7 @@ import { ManageLinks } from './components/manage-links.js';
 import { Comments} from './components/comments.js';
 import { Posts} from './components/posts.js';
 import { Pages} from './components/pages.js';
-import { Tutorials} from './components/Tutorials.js';
+import { Tutorials} from './components/tutorials.js';
 
 var WrappApplication = () => (
   

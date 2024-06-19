@@ -1,4 +1,4 @@
-const {mongoose} = require("./../config/connection");
+const {mongoose, connection} = require("./../config/connection");
 const { Helper } = require("./../config/helper")
 
 // Create Schema 

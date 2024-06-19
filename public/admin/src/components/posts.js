@@ -118,6 +118,8 @@ class Posts extends Component {
         })
       ]);
 
+      console.log(postsResponse, reportsResponse, commentsResponse, tutorialsResponse);
+
       if (postsResponse.is_error) {
         this.setState({ isError: true, message: postsResponse.message });
       } else {
