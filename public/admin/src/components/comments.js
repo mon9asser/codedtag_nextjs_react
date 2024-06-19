@@ -92,30 +92,34 @@ class Comments extends Component {
     }
 
     renderComments = () => {
-        return this.state.comments.map(comment => (
-            <tr key={comment._id}>
-                <td>{comment.post_id.post_title}</td>
-                <td>{comment.like_counts}</td>
-                <td>{comment.dis_like_counts}</td>
-                <td>{comment.views}</td>
-                <td>
-                    <button
-                        className="button small blue"
-                        onClick={() => this.handleCommentDetailsClick(comment.comments)}
-                    >
-                        {comment.comments.length}
-                    </button>
-                </td>
-                <td>
-                    <button
-                        className="button small red"
-                        onClick={() => this.handleDelete(comment._id)}
-                    >
-                        Delete
-                    </button>
-                </td>
-            </tr>
-        ));
+        
+        return (
+                this.state.comments.map(comment => (
+                <tr key={comment._id}>
+                    <td>{comment.post_id == undefined ? "": comment.post_id.post_title}</td>
+                    <td>{comment.like_counts}</td>
+                    <td>{comment.dis_like_counts}</td>
+                    <td>{comment.views}</td>
+                    <td>
+                        <button
+                            className="button small blue"
+                            onClick={() => this.handleCommentDetailsClick(comment.comments)}
+                        >
+                            {comment.comments.length}
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                            className="button small red"
+                            onClick={() => this.handleDelete(comment._id)}
+                        >
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            ))
+    
+        );
     }
 
     renderCommentDetails = () => {
@@ -160,7 +164,8 @@ class Comments extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.renderComments()}
+
+                                    {this.state.comments.length && this.state.comments != null ? this.renderComments(): ""}
                                 </tbody>
                             </table>
                             <div className="table-pagination">

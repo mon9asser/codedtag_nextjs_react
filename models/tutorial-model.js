@@ -34,6 +34,7 @@ let tutorialSchema = new Schema({
                 default: "" 
             }
         },
+        default: null
     },
 
 

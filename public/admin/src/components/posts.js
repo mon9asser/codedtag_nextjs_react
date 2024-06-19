@@ -117,9 +117,7 @@ class Posts extends Component {
           data: {}
         })
       ]);
-
-      console.log(postsResponse, reportsResponse, commentsResponse, tutorialsResponse);
-
+ 
       if (postsResponse.is_error) {
         this.setState({ isError: true, message: postsResponse.message });
       } else {
@@ -127,6 +125,7 @@ class Posts extends Component {
         const { bounceRates, pageViews, averageSessionDurations } = this.parseReports(reportsResponse.data);
         const { commentsData, totalComments, totalReviews } = this.parseComments(commentsResponse.data);
         const tutorials = tutorialsResponse.data;
+         
         this.setState({
           posts,
           filteredPosts: posts,

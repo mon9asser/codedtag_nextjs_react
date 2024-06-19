@@ -594,3 +594,10 @@ body {
     outline: none;
     flex: 1;
 }
+.list-items-data {
+    display: "block"
+}
+
+.list-items-data li:not(:last-child) {
+    margin-bottom: 8px;
+}
