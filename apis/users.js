@@ -405,4 +405,28 @@ userRouters.get("/user/get", async (req, res) => {
 });
 
 
+userRouters.post("/user/delete", async (req, res) => { 
+    
+    var user_id = req.body.user_id;
+
+    try {
+       
+       // check email or username exists in our database 
+       var deleted = await Usr.deleteOne({_id: user_id})
+
+       return res.send({
+           data: deleted, 
+           is_error: false, 
+           message: "Users Fetched successfully!"
+       })
+
+    } catch (error) {
+       return res.send({
+           data: [], 
+           is_error: true, 
+           message: "Something went wrong!"
+       })
+   }
+});
+
 module.exports = { userRouters }

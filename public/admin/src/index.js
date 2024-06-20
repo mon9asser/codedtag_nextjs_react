@@ -24,6 +24,7 @@ import { CreatePost } from './components/create-posts.js';
 import { CreatePage } from './components/create-pages.js';
 import { CreateTutorial } from './components/create-tutorial.js';
 import { CreateUser } from './components/create-user.js';
+import { EditUser } from './components/edit-user.js';
 import { Chapters } from './components/chapters.js';
 import { Menus } from './components/menus.js';
 import { AdCampaigns } from './components/campaigns.js';
@@ -33,7 +34,9 @@ import { Comments} from './components/comments.js';
 import { Posts} from './components/posts.js';
 import { Pages} from './components/pages.js';
 import { Tutorials} from './components/tutorials.js';
-import { Users} from './components/users.js';
+
+
+import {Users} from './components/users.js';
 
 var WrappApplication = () => (
   
@@ -61,7 +64,9 @@ var WrappApplication = () => (
             <Route path="/dashboard/posts" element={<Posts/>} /> 
             <Route path="/dashboard/pages" element={<Pages/>} /> 
             <Route path="/dashboard/tutorials" element={<Tutorials/>} /> 
+            
             <Route path="/dashboard/users" element={<Users/>} /> 
+            <Route path="/dashboard/edit-user" element={<EditUser/>} />  
             
         </Routes>
       </AuthWrapper>

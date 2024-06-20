@@ -1,21 +1,4 @@
-module.exports = {
-    db_name:"aaa_codedtag",
-    domain:"Codedtag.com",
-    name:"CodedTag",
-    index:0,
-    property_id:"317812519",
-
-    site_url: "localhost:3001/",
-    admin_url: "localhost:3000/",
-    api_url: "localhost:5000/",
-    media_url: "localhost:3002/",
-}
-
-
-
-/*
-
-module.exports = {
+var db2 =  {
     db_name:"aaa_codedtag",
     domain:"Codedtag.com",
     name:"CodedTag",
@@ -27,7 +10,6 @@ module.exports = {
     api_url: "https://api.codedtag.com/",
     media_url: "https://media.codedtag.com/",
 }
-
 
 
 var db1 = {
@@ -42,6 +24,3 @@ var db1 = {
     api_url: "https://api.freeaccountingtutorial.com/",
     media_url: "https://media.freeaccountingtutorial.com/",
 }
-
-*/
-
