@@ -83,5 +83,35 @@ tutorialRouter.get("/tutorials", async (req, res) => {
     }
 });
 
+
+tutorialRouter.post("/tutorial/delete", async (req, res) => {
+    try {
+        const { tutorial_id } = req.body;
+
+        if (!tutorial_id) {
+            throw new Error("Tutorial ID is required");
+        }
+
+        const deletedTutorial = await Tutorial.findByIdAndDelete(tutorial_id);
+
+        if (deletedTutorial) {
+            res.status(200).send({
+                is_error: false,
+                data: deletedTutorial,
+                message: "Tutorial deleted successfully"
+            });
+        } else {
+            throw new Error("Tutorial not found or already deleted");
+        }
+
+    } catch (error) {
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while deleting the tutorial"
+        });
+    }
+});
+
  
 module.exports = { tutorialRouter }

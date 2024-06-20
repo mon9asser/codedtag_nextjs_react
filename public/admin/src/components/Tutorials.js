@@ -16,8 +16,15 @@ class Tutorials extends Component {
                 isOpen: false,
                 data: null
             },
+            object_to_delete: null,
+            delete_pressed: false, 
+            deletion_confirm_modal_open: false, 
             currentPage: 1,
-            tutorialsPerPage: 10
+            tutorialsPerPage: 10,
+            sortConfig: {
+                key: null,
+                direction: 'asc'
+            }
         };
     }
 
@@ -43,13 +50,127 @@ class Tutorials extends Component {
         });
     }
 
-    toggleStatisticsModal = (data) => {
+    toggleStatisticsModal = (tutorialSlug) => {
+        const data = this.getAnalyticsData(tutorialSlug);
+
         this.setState(prevState => ({
             statisticsModal: {
                 isOpen: !prevState.statisticsModal.isOpen,
                 data: data || null
             }
         }));
+    }
+
+    confirmDeletion = async (id, title) => {
+        this.setState({
+            object_to_delete: {
+                id,
+                title 
+            },
+            deletion_confirm_modal_open: true
+        });
+    } 
+
+    deleteTutorial = async () => {
+        try {
+            if( this.state.object_to_delete == null ) {
+                return; 
+            }
+
+            this.setState({
+                delete_pressed: true 
+            });
+
+            var tutorialId = this.state.object_to_delete.id;
+
+            const response = await Helper.sendRequest({
+                api: 'tutorial/delete',
+                method: 'POST',
+                data: { tutorial_id: tutorialId }
+            });
+
+            if (!response.is_error) {
+                this.setState(prevState => ({
+                    tutorials: prevState.tutorials.filter(tutorial => tutorial._id !== tutorialId),
+                    deletion_confirm_modal_open: false,
+                    delete_pressed: false
+                }));
+            } else {
+                console.error(response.message);
+            }
+        } catch (error) {
+            console.error("An error occurred while deleting the tutorial:", error);
+        }
+    }
+
+    getAnalyticsData = (tutorialSlug) => {
+        let totalSessions = 0;
+        let totalPageViews = 0;
+        let totalSessionDuration = 0;
+        let totalPageViewsPerSession = 0;
+        let totalActiveUsers = 0;
+        let totalNewUsers = 0;
+        let totalEventCount = 0;
+        let totalBounceRate = 0;
+        let reportCount = 0;
+
+        this.state.analytics.forEach((report) => {
+            const landingPageSlug = report.landingPage.split('/').filter(Boolean).pop();
+            if (landingPageSlug === tutorialSlug) {
+                totalSessions += report.sessions;
+                totalPageViews += report.pageViews;
+                totalSessionDuration += report.averageSessionDuration;
+                totalPageViewsPerSession += report.screenPageViewsPerSession;
+                totalActiveUsers += report.activeUsers;
+                totalNewUsers += report.newUsers;
+                totalEventCount += report.eventCount;
+                const numericBounceRate = parseFloat(report.averageBounceRate.replace('%', ''));
+                if (!isNaN(numericBounceRate)) {
+                    totalBounceRate += numericBounceRate;
+                }
+                reportCount++;
+            }
+        });
+
+        if (reportCount === 0) {
+            return null;
+        }
+
+        return {
+            slug: tutorialSlug,
+            totalSessions,
+            totalPageViews,
+            averageSessionDuration: (totalSessionDuration / reportCount / 60).toFixed(2) + " mins",
+            pageViewsPerSession: (totalPageViewsPerSession / reportCount).toFixed(2),
+            activeUsers: totalActiveUsers,
+            newUsers: totalNewUsers,
+            eventCount: totalEventCount,
+            averageBounceRate: (totalBounceRate / reportCount).toFixed(2) + '%'
+        };
+    }
+
+    DeletionModal = () => {
+        const { deletion_confirm_modal_open } = this.state;
+ 
+        return (
+            <div className={`modal ${deletion_confirm_modal_open ? "open_this_modal" : ""}`}>
+                <div className="modal-background --jb-modal-close"></div>
+                <div className="modal-card">
+                    <header className="modal-card-head">
+                        <p className="modal-card-title">Confirm Deletion</p>
+                    </header>
+                    <section className="modal-card-body">
+                        <p>Are you sure to delete <b>{this.state.object_to_delete?.title}</b></p>
+                    </section>
+                    <footer className="modal-card-foot">
+                        <button onClick={() => this.setState({ deletion_confirm_modal_open: false })} className="button">Cancel</button>
+                        <button onClick={this.deleteTutorial} className="button blue">
+                            {this.state.delete_pressed ? <span className="loader"></span> : "Confirm"}
+                        </button>
+                    </footer>
+                </div>
+            </div>
+        );
     }
 
     StatisticsModal = () => {
@@ -59,23 +180,35 @@ class Tutorials extends Component {
                 <div className="modal-background --jb-modal-close" onClick={() => this.toggleStatisticsModal()}></div>
                 <div className="modal-card">
                     <header className="modal-card-head">
-                        <p className="modal-card-title">Statistics</p>
+                        <p className="modal-card-title">Statistics {statisticsModal.data ? "of " : ""}<b>{statisticsModal.data ? statisticsModal.data.slug : ""}</b></p>
                     </header>
                     <section className="modal-card-body">
                         {statisticsModal.data ? (
                             <div>
-                                <ul className="list-items-data">
+                                <ul className="list-items-data"> 
                                     <li>
-                                        Total of articles: <b>xxxxxx</b>
+                                        <span>Views:</span> <b>{Helper.formatNumber(statisticsModal.data.totalPageViews)}</b>
                                     </li>
                                     <li>
-                                        Session Duration: <b>xxxxxx</b>
+                                        <span>Bounce Rate:</span> <b>{statisticsModal.data.averageBounceRate}</b>
+                                    </li> 
+                                    <li>
+                                        <span>Page Views per Session:</span> <b>{statisticsModal.data.pageViewsPerSession}</b>
                                     </li>
                                     <li>
-                                        Page Views per Session: <b>xxxxxx</b>
+                                        <span>Sessions:</span> <b>{Helper.formatNumber(statisticsModal.data.totalSessions)}</b>
                                     </li>
                                     <li>
-                                        Sessions: <b>xxxxxx</b>
+                                        <span>Average Session Duration:</span> <b>{statisticsModal.data.averageSessionDuration}</b>
+                                    </li>
+                                    <li>
+                                        <span>Active Users:</span> <b>{Helper.formatNumber(statisticsModal.data.activeUsers)}</b>
+                                    </li>
+                                    <li>
+                                        <span>New Users:</span> <b>{Helper.formatNumber(statisticsModal.data.newUsers)}</b>
+                                    </li>
+                                    <li>
+                                        <span>Event Counts:</span> <b>{Helper.formatNumber(statisticsModal.data.eventCount)}</b>
                                     </li>
                                 </ul>
                             </div>
@@ -160,8 +293,108 @@ class Tutorials extends Component {
         const averageBounceRate = (totalBounceRate / matchingReportsCount).toFixed(2) + '%';
         return averageBounceRate;
     }
-    
-    
+
+    getTotalAnalyticsForCurrentTutorials = () => {
+        const { currentPage, tutorialsPerPage, tutorials } = this.state;
+        const indexOfLastTutorial = currentPage * tutorialsPerPage;
+        const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
+        const currentTutorials = tutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
+
+        let totalViews = 0;
+        let totalPublishedPages = 0;
+        let totalSessionDuration = 0;
+        let totalPageViewsPerSession = 0;
+        let totalSessions = 0;
+        let totalBounceRate = 0;
+        let reportCount = 0;
+
+        currentTutorials.forEach((tutorial) => {
+            const tutorialSlug = tutorial.slug;
+            this.state.analytics.forEach((report) => {
+                const landingPageSlug = report.landingPage.split('/').filter(Boolean).pop();
+                if (landingPageSlug === tutorialSlug) {
+                    totalViews += report.pageViews;
+                    totalSessions += report.sessions;
+                    totalSessionDuration += report.averageSessionDuration;
+                    totalPageViewsPerSession += report.screenPageViewsPerSession;
+                    const numericBounceRate = parseFloat(report.averageBounceRate.replace('%', ''));
+                    if (!isNaN(numericBounceRate)) {
+                        totalBounceRate += numericBounceRate;
+                    }
+                    reportCount++;
+                }
+            });
+            
+            if (tutorial.options?.publish) totalPublishedPages += this.getChapterCount(tutorial._id);
+        });
+
+        const averageBounceRate = (totalBounceRate / reportCount).toFixed(2) + '%';
+        const averageSessionDuration = (totalSessionDuration / reportCount / 60).toFixed(2) + ' mins';
+        const averagePageViewsPerSession = (totalPageViewsPerSession / reportCount).toFixed(2);
+
+        return {
+            totalViews,
+            totalPublishedPages,
+            totalSessionDuration: averageSessionDuration,
+            totalPageViewsPerSession: averagePageViewsPerSession,
+            totalSessions,
+            totalBounceRate: averageBounceRate
+        };
+    }
+
+    handleSort = (key) => {
+        let direction = 'asc';
+        if (this.state.sortConfig.key === key && this.state.sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        this.setState({
+            sortConfig: {
+                key,
+                direction
+            }
+        });
+    }
+
+    sortTutorials = (tutorials) => {
+        const { sortConfig } = this.state;
+        if (sortConfig.key) {
+            tutorials.sort((a, b) => {
+                let aValue, bValue;
+                switch (sortConfig.key) {
+                    case 'Chapters':
+                        aValue = this.getChapterCount(a._id);
+                        bValue = this.getChapterCount(b._id);
+                        break;
+                    case 'Review':
+                        aValue = parseFloat(this.calculateRating(a._id));
+                        bValue = parseFloat(this.calculateRating(b._id));
+                        break;
+                    case 'Status':
+                        aValue = a.options?.publish ? "Published" : "Draft";
+                        bValue = b.options?.publish ? "Published" : "Draft";
+                        break;
+                    case 'Views':
+                        aValue = this.getViews(a.slug);
+                        bValue = this.getViews(b.slug);
+                        break;
+                    case 'Bounce Rate':
+                        aValue = parseFloat(this.getBounceRate(a.slug));
+                        bValue = parseFloat(this.getBounceRate(b.slug));
+                        break;
+                    default:
+                        return 0;
+                }
+                if (aValue < bValue) {
+                    return sortConfig.direction === 'asc' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return sortConfig.direction === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        return tutorials;
+    }
 
     renderPagination = () => {
         const { currentPage, tutorialsPerPage, tutorials } = this.state;
@@ -192,7 +425,16 @@ class Tutorials extends Component {
         const { tutorials, isError, message, currentPage, tutorialsPerPage } = this.state;
         const indexOfLastTutorial = currentPage * tutorialsPerPage;
         const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
-        const currentTutorials = tutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
+        const currentTutorials = this.sortTutorials(tutorials.slice(indexOfFirstTutorial, indexOfLastTutorial));
+
+        const {
+            totalViews,
+            totalPublishedPages,
+            totalSessionDuration,
+            totalPageViewsPerSession,
+            totalSessions,
+            totalBounceRate
+        } = this.getTotalAnalyticsForCurrentTutorials();
 
         return (
             <div id="app">
@@ -205,7 +447,7 @@ class Tutorials extends Component {
                                 <div className="flex items-center justify-between">
                                     <div className="widget-label">
                                         <h3 style={{ color: "#6c726e", fontSize: "14px" }}>Total Tutorials</h3>
-                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>xxxxxx</h1>
+                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>{tutorials.length}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -216,7 +458,7 @@ class Tutorials extends Component {
                                 <div className="flex items-center justify-between">
                                     <div className="widget-label">
                                         <h3 style={{ color: "#6c726e", fontSize: "14px" }}>Bounce Rate</h3>
-                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>xxxxxx</h1>
+                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>{totalBounceRate}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +469,7 @@ class Tutorials extends Component {
                                 <div className="flex items-center justify-between">
                                     <div className="widget-label">
                                         <h3 style={{ color: "#6c726e", fontSize: "14px" }}>Total Views</h3>
-                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>xxxxxx</h1>
+                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>{totalViews}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -238,7 +480,7 @@ class Tutorials extends Component {
                                 <div className="flex items-center justify-between">
                                     <div className="widget-label">
                                         <h3 style={{ color: "#6c726e", fontSize: "14px" }}>Total Published Pages</h3>
-                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>xxxxxx</h1>
+                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>{totalPublishedPages}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -249,7 +491,7 @@ class Tutorials extends Component {
                                 <div className="flex items-center justify-between">
                                     <div className="widget-label">
                                         <h3 style={{ color: "#6c726e", fontSize: "14px" }}>Average Session Duration</h3>
-                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>xxxxxx</h1>
+                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>{totalSessionDuration}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -260,7 +502,7 @@ class Tutorials extends Component {
                                 <div className="flex items-center justify-between">
                                     <div className="widget-label">
                                         <h3 style={{ color: "#6c726e", fontSize: "14px" }}>Page Views per Session</h3>
-                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>xxxxxx</h1>
+                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>{totalPageViewsPerSession}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -271,7 +513,7 @@ class Tutorials extends Component {
                                 <div className="flex items-center justify-between">
                                     <div className="widget-label">
                                         <h3 style={{ color: "#6c726e", fontSize: "14px" }}>Sessions</h3>
-                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>xxxxxx</h1>
+                                        <h1 style={{ fontSize: "32px", marginTop: "5px", color: "#161b18" }}>{totalSessions}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -296,13 +538,13 @@ class Tutorials extends Component {
                                     <thead>
                                         <tr>
                                             <th><input type="checkbox" /></th>
-                                            <th>Tutorial Name</th>
-                                            <th>Chapters</th>
-                                            <th>Review</th>
-                                            <th>Status</th>
-                                            <th>Category</th>
-                                            <th>Views</th>
-                                            <th>Bounce Rate</th>
+                                            <th onClick={() => this.handleSort('tutorial_title')}>Tutorial Name</th>
+                                            <th onClick={() => this.handleSort('Chapters')}>Chapters</th>
+                                            <th onClick={() => this.handleSort('Review')}>Review</th>
+                                            <th onClick={() => this.handleSort('Status')}>Status</th>
+                                            <th onClick={() => this.handleSort('Category')}>Category</th>
+                                            <th onClick={() => this.handleSort('Views')}>Views</th>
+                                            <th onClick={() => this.handleSort('Bounce Rate')}>Bounce Rate</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -319,16 +561,16 @@ class Tutorials extends Component {
                                                 <td data-label="Bounce Rate"><small className="text-gray-500" title="Bounce Rate">{this.getBounceRate(tutorial.slug)}</small></td>
                                                 <td className="actions-cell">
                                                     <div className="buttons right nowrap">
-                                                        <button className="button small blue --jb-modal" type="button" onClick={() => this.toggleStatisticsModal()}>
+                                                        <button className="button small blue" type="button" onClick={() => this.toggleStatisticsModal(tutorial.slug)}>
                                                             <span className="icon"><i className="mdi mdi-chart-arc"></i></span>
                                                         </button>
-                                                        <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
+                                                        <button className="button small grey" data-target="sample-modal-2" type="button">
                                                             <span className="icon"><i className="mdi mdi-pencil"></i></span>
                                                         </button>
-                                                        <button className="button small green --jb-modal" data-target="sample-modal-2" type="button">
+                                                        <button className="button small green" data-target="sample-modal-2" type="button">
                                                             <span className="icon"><i className="mdi mdi-eye"></i></span>
                                                         </button>
-                                                        <button className="button small red --jb-modal" data-target="sample-modal" type="button">
+                                                        <button className="button small red" data-target="sample-modal" type="button" onClick={() => this.confirmDeletion(tutorial._id, tutorial.tutorial_title)}>
                                                             <span className="icon"><i className="mdi mdi-trash-can"></i></span>
                                                         </button>
                                                     </div>
@@ -370,24 +612,8 @@ class Tutorials extends Component {
                         </footer>
                     </div>
                 </div>
-
-                <div id="sample-modal-2" className="modal">
-                    <div className="modal-background --jb-modal-close"></div>
-                    <div className="modal-card">
-                        <header className="modal-card-head">
-                            <p className="modal-card-title">Sample modal</p>
-                        </header>
-                        <section className="modal-card-body">
-                            <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-                            <p>This is sample modal</p>
-                        </section>
-                        <footer className="modal-card-foot">
-                            <button className="button --jb-modal-close">Cancel</button>
-                            <button className="button blue --jb-modal-close">Confirm</button>
-                        </footer>
-                    </div>
-                </div>
-
+ 
+                <this.DeletionModal />
                 <this.StatisticsModal />
             </div>
         );

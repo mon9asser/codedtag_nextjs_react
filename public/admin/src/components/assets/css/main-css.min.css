@@ -598,6 +598,19 @@ body {
     display: "block"
 }
 
+.list-items-data li {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center; 
+}
+.list-items-data li:hover {
+    background-color: #f9f9f9;
+}
+
 .list-items-data li:not(:last-child) {
-    margin-bottom: 8px;
+   
+    border-bottom: 1px dashed #999;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
