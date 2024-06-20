@@ -9,6 +9,7 @@ class Posts extends Component {
     this.state = {
       posts: [],
       filteredPosts: [],
+      analytics: [],
       bounceRates: {},
       pageViews: {},
       commentsData: {},
@@ -40,6 +41,10 @@ class Posts extends Component {
         post_title: "",
         is_deleting: false
       },
+      statisticsModal: {
+          isOpen: false,
+          data: null
+      },
       post_confirmation_deletion: false
     };
   }
@@ -54,6 +59,56 @@ class Posts extends Component {
     }));
   }
 
+  StatisticsModal = () => {
+      const { statisticsModal } = this.state;
+      return (
+          <div className={`modal ${statisticsModal.isOpen ? "open_this_modal" : ""}`}>
+              <div className="modal-background --jb-modal-close" onClick={() => this.toggleStatisticsModal(statisticsModal.data.slug)}></div>
+              <div className="modal-card">
+                  <header className="modal-card-head">
+                      <p className="modal-card-title">Statistics {statisticsModal.data ? "of " : ""}<b>{statisticsModal.data ? statisticsModal.data.slug : ""}</b></p>
+                  </header>
+                  <section className="modal-card-body">
+                      {statisticsModal.data ? (
+                          <div>
+                              <ul className="list-items-data"> 
+                                  <li>
+                                      <span>Views:</span> <b>{Helper.formatNumber(statisticsModal.data.totalPageViews)}</b>
+                                  </li>
+                                  <li>
+                                      <span>Bounce Rate:</span> <b>{statisticsModal.data.averageBounceRate}</b>
+                                  </li> 
+                                  <li>
+                                      <span>Page Views per Session:</span> <b>{statisticsModal.data.pageViewsPerSession}</b>
+                                  </li>
+                                  <li>
+                                      <span>Sessions:</span> <b>{Helper.formatNumber(statisticsModal.data.totalSessions)}</b>
+                                  </li>
+                                  <li>
+                                      <span>Average Session Duration:</span> <b>{statisticsModal.data.averageSessionDuration}</b>
+                                  </li>
+                                  <li>
+                                      <span>Active Users:</span> <b>{Helper.formatNumber(statisticsModal.data.activeUsers)}</b>
+                                  </li>
+                                  <li>
+                                      <span>New Users:</span> <b>{Helper.formatNumber(statisticsModal.data.newUsers)}</b>
+                                  </li>
+                                  <li>
+                                      <span>Event Counts:</span> <b>{Helper.formatNumber(statisticsModal.data.eventCount)}</b>
+                                  </li>
+                              </ul>
+                          </div>
+                      ) : (
+                          <p>No data available.</p>
+                      )}
+                  </section>
+                  <footer className="modal-card-foot">
+                      <button onClick={() => this.toggleStatisticsModal()} className="button --jb-modal-close">Close</button>
+                  </footer>
+              </div>
+          </div>
+      );
+  }
   CommentsModal = () => {
     const { commentsModal } = this.state;
     return (
@@ -136,7 +191,8 @@ class Posts extends Component {
           totalComments,
           totalReviews,
           totalPosts: posts.length,
-          tutorials
+          tutorials,
+          analytics: reportsResponse.data
         }, this.calculateMetrics);
       }
     } catch (error) {
@@ -378,6 +434,63 @@ class Posts extends Component {
     );
   }
 
+  getAnalyticsData = (tutorialSlug) => {
+      let totalSessions = 0;
+      let totalPageViews = 0;
+      let totalSessionDuration = 0;
+      let totalPageViewsPerSession = 0;
+      let totalActiveUsers = 0;
+      let totalNewUsers = 0;
+      let totalEventCount = 0;
+      let totalBounceRate = 0;
+      let reportCount = 0;
+
+      this.state.analytics.forEach((report) => {
+          const landingPageSlug = report.landingPage.split('/').filter(Boolean).pop();
+          if (landingPageSlug === tutorialSlug) {
+              totalSessions += report.sessions;
+              totalPageViews += report.pageViews;
+              totalSessionDuration += report.averageSessionDuration;
+              totalPageViewsPerSession += report.screenPageViewsPerSession;
+              totalActiveUsers += report.activeUsers;
+              totalNewUsers += report.newUsers;
+              totalEventCount += report.eventCount;
+              const numericBounceRate = parseFloat(report.averageBounceRate.replace('%', ''));
+              if (!isNaN(numericBounceRate)) {
+                  totalBounceRate += numericBounceRate;
+              }
+              reportCount++;
+          }
+      });
+
+      if (reportCount === 0) {
+          return null;
+      }
+
+      return {
+          slug: tutorialSlug,
+          totalSessions,
+          totalPageViews,
+          averageSessionDuration: (totalSessionDuration / reportCount / 60).toFixed(2) + " mins",
+          pageViewsPerSession: (totalPageViewsPerSession / reportCount).toFixed(2),
+          activeUsers: totalActiveUsers,
+          newUsers: totalNewUsers,
+          eventCount: totalEventCount,
+          averageBounceRate: (totalBounceRate / reportCount).toFixed(2) + '%'
+      };
+  }
+
+  toggleStatisticsModal = (tutorialSlug) => {
+      const data = this.getAnalyticsData(tutorialSlug);
+
+      this.setState(prevState => ({
+          statisticsModal: {
+              isOpen: !prevState.statisticsModal.isOpen,
+              data: data || null
+          }
+      }));
+  }
+
   renderPostsTable() {
     const { filteredPosts, bounceRates, pageViews, commentsData, averageSessionDurations, currentPage, postsPerPage } = this.state;
     const indexOfLastPost = currentPage * postsPerPage;
@@ -393,7 +506,7 @@ class Posts extends Component {
             <th onClick={() => this.sortPosts('review')}>Review</th>
             <th onClick={() => this.sortPosts('status')}>Status</th>
             <th onClick={() => this.sortPosts('bounceRate')}>Bounce Rate</th>
-            <th onClick={() => this.sortPosts('averageSessionDuration')}>Avg. Session Duration</th>
+            <th onClick={() => this.sortPosts('averageSessionDuration')}>Session Duration</th>
             <th onClick={() => this.sortPosts('comments')}>Comments</th>
             <th onClick={() => this.sortPosts('views')}>Views</th>
             <th></th>
@@ -416,6 +529,9 @@ class Posts extends Component {
               <td data-label="Views"><small className="text-gray-500" title="Programming">{pageViews[post.slug] !== undefined ? Helper.formatNumber(pageViews[post.slug]) : 'N/A'}</small></td>
               <td className="actions-cell">
                 <div className="buttons right nowrap">
+                  <button className="button small blue" type="button" onClick={() => this.toggleStatisticsModal(post.slug)}>
+                      <span className="icon"><i className="mdi mdi-chart-arc"></i></span>
+                  </button>
                   <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
                     <span className="icon"><i className="mdi mdi-pencil"></i></span>
                   </button>
@@ -716,6 +832,8 @@ class Posts extends Component {
         <this.FilterPostsModal />
         <this.DeleteModalConfirmation />
         <this.CommentsModal />
+        <this.StatisticsModal />
+
       </div>
     );
   }

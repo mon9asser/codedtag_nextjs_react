@@ -381,9 +381,28 @@ userRouters.post("/user/capabilities", async (req, res) => {
 
 }); 
 
-// Login 
+// get 
+userRouters.get("/user/get", async (req, res) => { 
+     
+     try {
+        
+        // check email or username exists in our database 
+        var users = await Usr.find({});
 
-// Subscribe 
+        return res.send({
+            data: users, 
+            is_error: false, 
+            message: "Users Fetched successfully!"
+        })
+
+     } catch (error) {
+        return res.send({
+            data: [], 
+            is_error: true, 
+            message: "Something went wrong!"
+        })
+    }
+});
 
 
 module.exports = { userRouters }

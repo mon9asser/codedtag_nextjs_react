@@ -325,7 +325,7 @@ class Tutorials extends Component {
                 }
             });
             
-            if (tutorial.options?.publish) totalPublishedPages += this.getChapterCount(tutorial._id);
+            if (tutorial.options?.publish) totalPublishedPages += 1;
         });
 
         const averageBounceRate = (totalBounceRate / reportCount).toFixed(2) + '%';

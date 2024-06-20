@@ -33,6 +33,7 @@ import { Comments} from './components/comments.js';
 import { Posts} from './components/posts.js';
 import { Pages} from './components/pages.js';
 import { Tutorials} from './components/tutorials.js';
+import { Users} from './components/users.js';
 
 var WrappApplication = () => (
   
@@ -60,6 +61,7 @@ var WrappApplication = () => (
             <Route path="/dashboard/posts" element={<Posts/>} /> 
             <Route path="/dashboard/pages" element={<Pages/>} /> 
             <Route path="/dashboard/tutorials" element={<Tutorials/>} /> 
+            <Route path="/dashboard/users" element={<Users/>} /> 
             
         </Routes>
       </AuthWrapper>
