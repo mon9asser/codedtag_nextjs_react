@@ -31,12 +31,27 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
     max-width: 100% !important;
 }
 
-.bg1, .bg1 h3{background-color: #8764B8; color: #fff;}
-.bg2, .bg2 h3{background-color: #E81123; color: #fff;}
-.bg3, .bg3 h3{background-color: #DA3B01; color: #fff;}
-.bg4, .bg4 h3{background-color: #038387; color: #fff;}
-.bg5, .bg5 h3{background-color: #4C4A48; color: #fff;}
-.bg6, .bg6 h3{background-color: #27AE60; color: #fff;}
+.bg1, .bg1 h3{background-color:#786fa6; color: #fff;}
+.bg2, .bg2 h3{background-color: #e15f41; color: #fff;}
+.bg3, .bg3 h3{background-color: #182C61; color: #fff;}
+.bg4, .bg4 h3{background-color: #222; color: #fff;}
+.bg5, .bg5 h3{background-color: #000; color: #fff;}
+.bg6, .bg6 h3{background-color: #6D214F; color: #fff;}
+
+.bg7, .bg7 h3{background-color: #1B9CFC; color: #fff;}
+.bg8, .bg8 h3{background-color: #e15f41; color: #fff;}
+.bg9, .bg9 h3{background-color: #786fa6; color: #fff;}
+.bg10, .bg10 h3{background-color: #6D214F; color: #fff;}
+
+
+ 
+
+@media (min-width: 768px) {
+    .md-grid-5 {
+        grid-template-columns: repeat(4, minmax(0, 1fr)); 
+    }
+}
+
 
 
 .row-container {

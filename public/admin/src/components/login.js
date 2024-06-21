@@ -96,6 +96,7 @@ class Login extends Component {
             this.setState({
                 show_message: "show_message",
                 request_status_class: "error",
+                is_pressed: false,
                 request_message: reqs.message
             })
             return;
