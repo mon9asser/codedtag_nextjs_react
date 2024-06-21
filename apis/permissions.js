@@ -46,6 +46,8 @@ var Permissions = [
             "comments",
 
             "edit-user",
+            "edit-page",
+            "edit-post",
 
             "pages",
             "posts",

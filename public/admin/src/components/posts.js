@@ -3,7 +3,10 @@ import { NavbarContainer } from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { Helper } from "../helper.js";
 
-class Posts extends Component {
+
+import withNavigate from "./parts/with-navigate.js";
+
+class postsWrap extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,6 +50,10 @@ class Posts extends Component {
       },
       post_confirmation_deletion: false
     };
+  }
+
+  navigateToEdit = (post_id) => { 
+    this.props.navigate("/dashboard/edit-post", {state: {post_id: post_id }});
   }
 
   toggleCommentsModal = (postTitle, comments) => {
@@ -532,7 +539,7 @@ class Posts extends Component {
                   <button className="button small blue" type="button" onClick={() => this.toggleStatisticsModal(post.slug)}>
                       <span className="icon"><i className="mdi mdi-chart-arc"></i></span>
                   </button>
-                  <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
+                  <button onClick={() => this.navigateToEdit(post.id)} className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
                     <span className="icon"><i className="mdi mdi-pencil"></i></span>
                   </button>
                   <button className="button small green --jb-modal" data-target="sample-modal-2" type="button">
@@ -838,5 +845,7 @@ class Posts extends Component {
     );
   }
 }
+
+var Posts = withNavigate(postsWrap)
 
 export { Posts };

@@ -21,6 +21,7 @@ class CreateUser extends Component {
             email: "", 
             about: "",
             rule: 0,
+            title: "",
             thumbnail_url: "https://www.gravatar.com/avatar/e1c8bd8b3ba85dc596abba84e0fdbc7ccc2da71d3d5f336020acdaca86ee2c9a?s=200&d=identicon",
             social_links: [],
             
@@ -135,6 +136,7 @@ class CreateUser extends Component {
             confirm_password: this.state.confirm_password, 
             about: this.state.about,
             rule: this.state.rule, 
+            title: this.state.title, 
             thumbnail_url: this.state.thumbnail_url, 
             social_links: this.state.social_links
         };
@@ -142,6 +144,7 @@ class CreateUser extends Component {
         if( this.state.user_id != "" ) {
             data_object.user_id = this.state.user_id;
         }
+
 
         var request = await Helper.sendRequest({
             api: "user/create-update",
@@ -167,6 +170,10 @@ class CreateUser extends Component {
             request_status_class: "success",
             request_message: request.message
         }); 
+    }
+
+    setUserTitle = (e) => {
+        this.setState({title: e.target.value})
     }
 
     setEmailValue = (e) => {
@@ -248,7 +255,7 @@ class CreateUser extends Component {
                                                 onChange={e => this.setState({
                                                     password: e.target.value
                                                 })} 
-                                            className="input" type="text" placeholder="Password" />
+                                            className="input" type="password" placeholder="Password" />
                                         </div> 
                                     </div>
 
@@ -260,7 +267,7 @@ class CreateUser extends Component {
                                             onChange={e => this.setState({
                                                 confirm_password: e.target.value
                                             })} 
-                                            className="input" type="text" placeholder="Confirm Password" />
+                                            className="input" type="password" placeholder="Confirm Password" />
                                         </div> 
                                     </div>
 
@@ -335,7 +342,17 @@ class CreateUser extends Component {
                                             </div>
                                         </div> 
                                     </div> 
-
+                                    
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Title</label>
+                                        <div className="control">
+                                            <input 
+                                                value={this.state.title} 
+                                                onChange={e => this.setUserTitle(e)} 
+                                            className="input" type="text" placeholder="Example: Web Developer" />
+                                        </div> 
+                                    </div> 
+                                    
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Social Media</label>
                                         

@@ -5,6 +5,8 @@ import {YouTubeEmbed} from "./parts/embed-iframe.js"
 import { createReactEditorJS } from 'react-editor-js';
 import StickyBox from "react-sticky-box";
 
+import withLocation from "./parts/with-location.js";
+import withNavigate from "./parts/with-navigate.js";
 
 // tools.js 
 import Iframe from "@hammaadhrasheedh/editorjs-iframe";
@@ -28,7 +30,7 @@ import Hyperlink from "editorjs-hyperlink";
 import { Settings } from "../settings.js";
 
 import {CustomCodeBlok} from "./parts/codeblock.js"
-import { Helper } from "../helper.js";
+import { Helper } from "../helper.js"; 
 
 const ReactEditorJS = createReactEditorJS();
 
@@ -102,7 +104,7 @@ var Tools = {
  
 };
 
-class CreatePost extends Component {
+class wrappedEditPost extends Component {
     
     constructor(props) {
     
@@ -898,5 +900,8 @@ class CreatePost extends Component {
 
 
 }
+ 
+var wrappedLocation = withLocation(wrappedEditPost);
+var EditPost = withNavigate(wrappedLocation);
 
-export { CreatePost };
+export { EditPost }; 

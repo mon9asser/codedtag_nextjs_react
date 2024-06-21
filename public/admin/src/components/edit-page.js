@@ -30,6 +30,8 @@ import { Settings } from "../settings.js";
 import {CustomCodeBlok} from "./parts/codeblock.js"
 import { Helper } from "../helper.js";
 
+import withLocation from "./parts/with-location.js";
+import withNavigate from "./parts/with-navigate.js";
 const ReactEditorJS = createReactEditorJS();
 
 var Tools = {
@@ -102,7 +104,7 @@ var Tools = {
  
 };
 
-class CreatePage extends Component {
+class wrappedEditPage extends Component {
     
     constructor(props) {
     
@@ -144,7 +146,10 @@ class CreatePage extends Component {
                     } 
                 ]
             },
-             
+            
+            deletion_confirm_modal_open: false,
+            delete_pressed: false,
+
             post_id: "", 
             meta_title: "",
             slug: "",
@@ -168,6 +173,73 @@ class CreatePage extends Component {
 
         this.editorInstance = null;
         
+    }
+    
+
+    deletePage = async () => {
+
+        this.setState({ delete_pressed: true });
+
+        try {
+            const response = await Helper.sendRequest({
+                api: 'post/delete',
+                method: 'POST',
+                data: {object_data: { post_id: this.state.post_id }}
+            });
+
+            if (!response.is_error) {
+
+                this.setState({
+                    deletion_confirm_modal_open: false,
+                    delete_pressed: false,
+                    show_message: "show_message",
+                    request_status_class: "success",
+                    request_message: "Page deleted successfully!",
+                });
+
+                // Redirect or handle post-deletion actions
+                this.props.navigate("/dashboard/pages");
+        
+                
+            } else {
+                this.setState({
+                    show_message: "show_message",
+                    request_status_class: "error",
+                    request_message: response.message,
+                    delete_pressed: false
+                });
+            }
+        } catch (error) {
+            console.error("An error occurred while deleting the user:", error);
+            this.setState({
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "An error occurred while deleting the user.",
+                delete_pressed: false
+            });
+        }
+    }
+
+    DeletionConfirm = () => {
+        return (
+            <div className={`modal ${this.state.deletion_confirm_modal_open ? "open_this_modal" : ""}`}>
+                <div className="modal-background --jb-modal-close" onClick={() => this.setState({ deletion_confirm_modal_open: false })}></div>
+                <div className="modal-card">
+                    <header className="modal-card-head">
+                        <p className="modal-card-title">Confirm Deletion</p>
+                    </header>
+                    <section className="modal-card-body">
+                        <p>Are you sure you want to delete this page?</p>
+                    </section>
+                    <footer className="modal-card-foot">
+                        <button onClick={() => this.setState({ deletion_confirm_modal_open: false })} className="button">Cancel</button>
+                        <button onClick={this.deletePage} className="button red">
+                            {this.state.delete_pressed ? <span className="loader"></span> : "Confirm"}
+                        </button>
+                    </footer>
+                </div>
+            </div>
+        );
     }
 
     initializedEditorComponents = async (instanceObj) => {
@@ -505,14 +577,58 @@ class CreatePage extends Component {
     componentDidMount = async () => {
          
 
-        // load all tutorials 
-        await this.loadAllTutorials();
+         // load all tutorials 
+    await this.loadAllTutorials();
 
-        // store site name
-        this.load_site_settings();
+    // store site name
+    await this.load_site_settings();
+
+    // => Load variables  
+    if (this.props?.location?.state?.post_id) {
+        var post_id = this.props.location.state.post_id;
+
+        var request = await Helper.sendRequest({
+            api: `post/get?post_id=${post_id}&post_type=${this.state.post_type}`,
+            method: "get",
+            data: {}
+        });
+
+        if (request.is_error || !request.data.length) {
+            return;
+        }
+
+        var post = request.data[0];
+
+        this.set_meta_title(post.meta_title);
+
+        var initialState = {
+            total_words: post.total_words,
+            total_chars: post.total_charachters,
+            links: post.links,
+            _id: post_id,
+            blocks: post.blocks,
+        };
+
+        this.setState({
+            post_id: post_id,
+            initialState: initialState,
+            slug: post.slug,
+            keyphrase: post.keyphrase,
+            meta_description: post.meta_description,
+            tutorials: post?.tutorials || {},
+            allow_search_engine: post.allow_search_engine,
+            canonical_url: post.canonical_url,
+            is_published: post.is_published
+        }, () => {
+            
+            // Re-initialize the editor with the new data
+            setTimeout(() => { 
+                this.editorInstance.render(initialState);
+            }, 1000)
+
+        });
+    }
         
-        // => Load Assets
-        //this.loadDashboardAssets(); 
         
     }   
 
@@ -554,7 +670,7 @@ class CreatePage extends Component {
         }
 
         var object_data = { 
-
+            keyphrase: this.state.keyphrase,
             post_type: this.state.post_type,
             post_title: post_title,
             total_words: this.state.initialState.total_words,
@@ -584,7 +700,8 @@ class CreatePage extends Component {
         
         if( this.state.post_id != "" ) {
             object_data.post_id = this.state.post_id;
-        }
+        } 
+
         var request = await Helper.sendRequest({
             api: "post/create-update",
             method: "post",
@@ -597,6 +714,7 @@ class CreatePage extends Component {
             this.setState({
                 show_message: "show_message",
                 request_status_class: "error",
+                is_pressed: false,
                 request_message: request.message
             })
             return;
@@ -679,8 +797,7 @@ class CreatePage extends Component {
                             <ReactEditorJS 
                                 onChange={this.changedElements}
                                 onInitialize={this.initializedEditorComponents}
-                                autofocus={true} 
-                                
+                                autofocus={true}  
                                 //placeholder="Start typing your article now!"  
                                 tools={Tools} 
                                 data={this.state.initialState}  
@@ -735,7 +852,8 @@ class CreatePage extends Component {
                                             style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}
                                         ></textarea>
                                     </label> 
-
+                                    
+                                    {/* 
                                     <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Tutorial
@@ -743,7 +861,8 @@ class CreatePage extends Component {
                                         <select value={this.state.tutorial.id} onChange={e => this.assign_tutorial_data(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
                                             {this.state.tutorials.map((x, key) => (<option key={key} value={x._id}>{x.tutorial_title}</option>))} 
                                         </select>
-                                    </label> 
+                                    </label>
+                                    */} 
 
                                     <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '120px'}}>
@@ -797,7 +916,7 @@ class CreatePage extends Component {
 
 
                 <div style={{position: "sticky", zIndex: "200", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
-                    <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
+                    <button className="button red" style={{marginTop: "15px"}} onClick={() => this.setState({deletion_confirm_modal_open: true})}>Delete this article</button>
                     <div style={{display: "flex", gap: 10, alignItems: "center"}}>
                         
                         <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
@@ -814,6 +933,8 @@ class CreatePage extends Component {
                         </a>
                     </div>
                 </div>
+                
+                <this.DeletionConfirm />
                 
                 <footer className="footer">
                     <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
@@ -839,4 +960,8 @@ class CreatePage extends Component {
 
 }
 
-export { CreatePage };
+ 
+var wrappedLocation = withLocation(wrappedEditPage);
+var EditPage = withNavigate(wrappedLocation);
+
+export { EditPage };

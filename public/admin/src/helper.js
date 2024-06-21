@@ -154,16 +154,16 @@ class HelperData {
           } else { 
               return {
                 data: [],
-                message: "Something went wrong, try later",
+                message: reqs.message || "Something went wrong, try later",
                 is_error: true 
               }
           }
     
         } catch (error) { 
-          console.log(error);
+          console.log(error?.response?.data?.message);
           return  {
               data: [],
-              message: "Something went wrong, try later",
+              message: error?.response?.data?.message || "Something went wrong, try later",
               is_error: true 
           }
         } 

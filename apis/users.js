@@ -104,6 +104,14 @@ userRouters.post("/user/create-update", async (req, res) => {
     try {
         const body = req.body;
 
+        if( body.username != undefined ) {
+            body.username = body.username.toLowerCase(); 
+        }
+
+        if( body.email != undefined ) {
+            body.email = body.email.toLowerCase(); 
+        }
+
         // Validate the request body
         if (!body || Object.keys(body).length === 0) {
             throw new Error("Invalid request body");
@@ -116,16 +124,27 @@ userRouters.post("/user/create-update", async (req, res) => {
         }
 
         let savedUser;
+
         if (body.user_id !== undefined && body.user_id !== "") {
+            // Check for existing user with the same username or email
+            let existingUser = await Usr.findOne({ 
+                $or: [{ username: body.username }, { email: body.email }],
+                _id: { $ne: body.user_id } // Exclude the current user
+            });
+
+            if (existingUser && existingUser._id.toString() !== body.user_id) {
+                throw new Error("Username or email already exists with another user");
+            }
+
             // Update the existing user data by user_id
             savedUser = await Usr.findByIdAndUpdate(body.user_id, body, { new: true });
+
         } else if (body.username !== undefined || body.email !== undefined) {
             // Check for existing user by username or email
             let existingUser = await Usr.findOne({ $or: [{ username: body.username }, { email: body.email }] });
 
             if (existingUser) {
-                // Update the existing user data
-                savedUser = await Usr.findByIdAndUpdate(existingUser._id, body, { new: true });
+                throw new Error("Username or email already exists with another user");
             } else {
                 // Create a new user
                 savedUser = await new Usr(body).save();
@@ -153,6 +172,7 @@ userRouters.post("/user/create-update", async (req, res) => {
         });
     }
 });
+
 
 // Register
 userRouters.post("/user/register", async (req, res) => {
@@ -383,11 +403,18 @@ userRouters.post("/user/capabilities", async (req, res) => {
 
 // get 
 userRouters.get("/user/get", async (req, res) => { 
-     
-     try {
+    
+    var user_id = req.query.user_id; 
+    
+    try {
+        
+        var obj_search = {};
+        if(user_id != undefined) {
+            obj_search = {_id: user_id };
+        }
         
         // check email or username exists in our database 
-        var users = await Usr.find({});
+        var users = await Usr.find(obj_search);
 
         return res.send({
             data: users, 

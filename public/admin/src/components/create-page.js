@@ -102,15 +102,15 @@ var Tools = {
  
 };
 
-class CreatePost extends Component {
+class CreatePage extends Component {
     
     constructor(props) {
     
         super(props);
-        
+        this.request_result_ref = React.createRef("");
         this.state = { 
             
-            post_type: 0, /* 1 => page --|-- 0 => post */
+            post_type: 1, /* 1 => page --|-- 0 => post */
             settings: {
                 site_name: ""
             },
@@ -127,8 +127,8 @@ class CreatePost extends Component {
                         id: "header-level-1",
                         type: "header",
                         data: {
-                            placeholder: "Post Title",
-                            text: "Post Title",
+                            placeholder: "Page Title",
+                            text: "Page Title",
                             level: 1
                         }
                     },
@@ -144,9 +144,7 @@ class CreatePost extends Component {
                     } 
                 ]
             },
-            
-            selected_tab: {_id: "root", title: "/Root", slug: ""}, // object
-            selected_tabs: null, // array  
+             
             post_id: "", 
             meta_title: "",
             slug: "",
@@ -217,8 +215,8 @@ class CreatePost extends Component {
         var target = document.querySelector(".ce-block[data-id='"+id+"']")
         if( target ) {
             var text = target.innerText.trim();
-            if( text.indexOf("Post Title") != -1 &&  text.length >= "Post Title".length) {
-                var new_text = text.replace("Post Title", "")
+            if( text.indexOf("Page Title") != -1 &&  text.length >= "Page Title".length) {
+                var new_text = text.replace("Page Title", "")
                 target.querySelector(".ce-header").innerText = new_text;
                 target.classList.remove("placeholder-block-item");
             }   
@@ -247,7 +245,7 @@ class CreatePost extends Component {
             return;
         }
         const title = titleBlock.holder.innerText.trim();
-        if( title == "Post Title") {
+        if( title == "Page Title") {
             titleBlock.holder.classList.add("placeholder-block-item")
         }  
         
@@ -359,7 +357,7 @@ class CreatePost extends Component {
                 text_value =  x.data.items.map(x => x.text == undefined? "":  x.text).join( " ");
             }
 
-            
+
             var wordsCounts = this.wordCounters(text_value)
             var charsCounts = this.charachtersLength(text_value);
             
@@ -379,7 +377,7 @@ class CreatePost extends Component {
         
        
         const parser = new DOMParser();
-        
+
         var links = save.blocks.map( x => {
             var text_value = "";
             if( x.type == "paragraph") {
@@ -398,11 +396,8 @@ class CreatePost extends Component {
                 text_value =  x.data.items.map(x => x.text == undefined? "":  x.text).join( " ");
             }
 
-            
-
             const doc = parser.parseFromString(text_value, "text/html");
             const _link = doc.querySelectorAll('a');
- 
             
             var all_links = [];
 
@@ -410,13 +405,11 @@ class CreatePost extends Component {
 
                 var is_external = link_item.getAttribute("href").toString().indexOf( this.state.settings.site_name ) == -1 ? true: false;
                 var site_names = this.extractDomainAndSubdomain(link_item.getAttribute("href"));
-                
                 var object_link = { 
                     paragraph_id: x.id,
                     element: link_item.outerHTML,
                     link_type: link_item.getAttribute("rel") == undefined ? "": link_item.getAttribute("rel"),
                     target: link_item.getAttribute("target") == undefined ? "": link_item.getAttribute("target"),
-                    rel: link_item.getAttribute("rel") == undefined ? "": link_item.getAttribute("rel"),
                     keyword: link_item.innerText,
                     url: link_item.getAttribute("href"),
                     domain_name: site_names.domain,
@@ -425,8 +418,7 @@ class CreatePost extends Component {
                 }
 
                 all_links.push(object_link);
-            });         
-             
+            });          
  
             if(all_links.length) {
                 return all_links;
@@ -541,7 +533,6 @@ class CreatePost extends Component {
       
     save_post = async (e) => {
 
-        
         e.preventDefault(); 
 
         this.setState({ 
@@ -555,7 +546,7 @@ class CreatePost extends Component {
             return; 
         }
 
-        // prepare post title 
+        // prepare Page Title 
         var post_title = "";
         var post_title_index = this.state.initialState.blocks.findIndex( x => x.id == "header-level-1");
         if(post_title_index != -1 ) {
@@ -564,7 +555,6 @@ class CreatePost extends Component {
 
         var object_data = { 
             keyphrase: this.state.keyphrase,
-            selected_tab: this.state.selected_tab,
             post_type: this.state.post_type,
             post_title: post_title,
             total_words: this.state.initialState.total_words,
@@ -622,37 +612,6 @@ class CreatePost extends Component {
 
     }
 
-    selected_tabs_order = (e) => {
-
-        if(this.state.tutorial == null ) {
-            return; 
-        }
-
-       
-        var index = this.state.tutorials.findIndex( x => x._id == this.state.tutorial.id);
-        var objx = this.state.tutorials[index];
-        
-        var tabs = objx.tabs;
-        var tab_index = tabs.findIndex(x => x._id == e.target.value );
-
-        if( tab_index == -1 ) {
-            
-            this.setState({
-                selected_tab: {
-                    _id: "root",
-                    title: "/Root",
-                    slug: ""
-                }
-            });
-
-            return; 
-        }
-
-        var selected_tab = tabs[tab_index]; 
-        this.setState({selected_tab});
-
-    }
-
     assign_tutorial_data = (e) => {
 
         // tutorial_title
@@ -663,7 +622,6 @@ class CreatePost extends Component {
         }
 
         this.setState({
-            selected_tabs: this.state.tutorials[index].tabs, 
             tutorial: {
                 id: this.state.tutorials[index]._id, 
                 name: this.state.tutorials[index].tutorial_title  
@@ -703,7 +661,8 @@ class CreatePost extends Component {
         return (
             <div id="app">
                 
-                <NavbarContainer/> 
+                <NavbarContainer/>
+
                 <SidebarContainer />
 
                 <section style={{maxWidth: "90%", margin: "0 auto", background: "#222", padding: "30px", justifyContent: "center", alignItems: "center"}}>
@@ -778,32 +737,16 @@ class CreatePost extends Component {
                                         ></textarea>
                                     </label> 
                                     
-                                    
-
+                                    {/* 
                                     <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Tutorial
                                         </span>
                                         <select value={this.state.tutorial.id} onChange={e => this.assign_tutorial_data(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
-                                            <option value="">Select a Tutorial</option>
                                             {this.state.tutorials.map((x, key) => (<option key={key} value={x._id}>{x.tutorial_title}</option>))} 
                                         </select>
-                                    </label> 
-
-                                    <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
-                                        <span>
-                                            Sub Folder
-                                        </span>
-                                        <select value={this.state.selected_tab != null ? this.state.selected_tab._id: "root"} onChange={e => this.selected_tabs_order(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
-                                            <option value={"root"}>/Root</option>
-                                            {
-                                                this.state.selected_tabs != null ? 
-                                                this.state.selected_tabs.map( x => {
-                                                    return (<option key={x._id} value={x._id}>{x.title}</option>)
-                                                }): ""
-                                            }
-                                        </select>
-                                    </label> 
+                                    </label>
+                                    */} 
 
                                     <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '120px'}}>
@@ -899,4 +842,4 @@ class CreatePost extends Component {
 
 }
 
-export { CreatePost };
+export { CreatePage };

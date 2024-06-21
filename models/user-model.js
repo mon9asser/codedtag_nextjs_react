@@ -20,6 +20,11 @@ let usersSchema = new Schema({
           trim: true,
           default: ""
     },
+      title: {
+            type : String ,
+            trim: true,
+            default: ""
+      },
     secondname: {
           type : String ,
           trim: true,

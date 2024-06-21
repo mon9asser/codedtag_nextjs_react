@@ -242,14 +242,14 @@ class Register extends Component {
                         <div className="field spaced">
                             <label className="label">Password</label>
                             <div className="control">
-                            <input value={this.state.password} onChange={(x) => this.setState({password: x.target.value})} className="input" type="text" placeholder="Password" />
+                            <input value={this.state.password} onChange={(x) => this.setState({password: x.target.value})} className="input" type="password" placeholder="Password" />
                             </div> 
                         </div>
 
                         <div className="field spaced">
                             <label className="label">Confirm Password</label>
                             <div className="control">
-                            <input value={this.state.confirm_password} onChange={(x) => this.setState({confirm_password: x.target.value})} className="input" type="text" placeholder="Confirm Password" />
+                            <input value={this.state.confirm_password} onChange={(x) => this.setState({confirm_password: x.target.value})} className="input" type="password" placeholder="Confirm Password" />
                             </div> 
                         </div>
 

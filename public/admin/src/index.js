@@ -21,7 +21,10 @@ import { Login } from './components/login';
 import { Dashboard } from "./components/dashboard.js";
 import { Settings } from './components/settings.js'; 
 import { CreatePost } from './components/create-posts.js';
-import { CreatePage } from './components/create-pages.js';
+import { EditPost  } from './components/edit-post.js';
+
+import { CreatePage } from './components/create-page.js';
+import { EditPage } from './components/edit-page.js'; 
 import { CreateTutorial } from './components/create-tutorial.js';
 import { CreateUser } from './components/create-user.js';
 import { EditUser } from './components/edit-user.js';
@@ -51,21 +54,30 @@ var WrappApplication = () => (
         <Routes> 
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/dashboard/settings" element={<Settings/>} /> 
-            <Route path="/dashboard/create-post" element={<CreatePost/>} />
-            <Route path="/dashboard/create-page" element={<CreatePage/>} />
+            
+            
             <Route path="/dashboard/create-tutorial" element={<CreateTutorial/>} />
-            <Route path="/dashboard/create-user" element={<CreateUser/>} /> 
+            
             <Route path="/dashboard/chapters" element={<Chapters/>} /> 
             <Route path="/dashboard/menus" element={<Menus/>} /> 
             <Route path="/dashboard/campaigns" element={<AdCampaigns/>} /> 
             <Route path="/dashboard/messages" element={<Contacts/>} /> 
             <Route path="/dashboard/links" element={<ManageLinks/>} /> 
             <Route path="/dashboard/comments" element={<Comments/>} /> 
-            <Route path="/dashboard/posts" element={<Posts/>} /> 
-            <Route path="/dashboard/pages" element={<Pages/>} /> 
+            
+            
             <Route path="/dashboard/tutorials" element={<Tutorials/>} /> 
             
+            <Route path="/dashboard/posts" element={<Posts/>} /> 
+            <Route path="/dashboard/create-post" element={<CreatePost/>} />
+            <Route path="/dashboard/edit-post" element={<EditPost/>} />
+
+            <Route path="/dashboard/pages" element={<Pages/>} /> 
+            <Route path="/dashboard/create-page" element={<CreatePage/>} />
+            <Route path="/dashboard/edit-page" element={<EditPage/>} />
+
             <Route path="/dashboard/users" element={<Users/>} /> 
+            <Route path="/dashboard/create-user" element={<CreateUser/>} /> 
             <Route path="/dashboard/edit-user" element={<EditUser/>} />  
             
         </Routes>

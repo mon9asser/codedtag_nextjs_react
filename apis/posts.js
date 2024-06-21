@@ -63,11 +63,206 @@ postRouter.post("/upload-image", upload.single('image'), (req, res) => {
 
 postRouter.post("/post/create-update", async (req, res) => {
     try {
-        const body = req.body; 
+        const body = req.body;
         
+        
+
         // Validate the request body
         if (!body || Object.keys(body).length === 0) {
             throw new Error("Invalid request body");
+        }
+
+        // Extract the fields for validation
+        const { slug, post_type, tutorial, keyphrase } = body;
+        
+        if (!slug || !keyphrase) {
+            throw new Error("Missing required fields: slug and post_type and keyphrase");
+        }
+
+        
+
+        // Ensure keyphrase is in lowercase
+        if (keyphrase) {
+            body.keyphrase = keyphrase.toLowerCase();
+        }
+
+        let savedPost;
+
+        if (body.post_id) {
+            // Update the existing post data
+            const existingPost = await Posts.findById(body.post_id);
+            if (existingPost) {
+                // Construct the query for finding conflicting posts by slug, post_type, and tutorial
+                const query = { slug, post_type, _id: { $ne: body.post_id } };
+                if (tutorial && tutorial.id) {
+                    query["tutorial.id"] = tutorial.id;
+                }
+
+                // Check if a conflicting post exists
+                const conflictingPost = await Posts.findOne(query);
+                if (conflictingPost) {
+                    throw new Error("A post with the same slug, post_type, and tutorial already exists");
+                }
+
+                // Check for conflicting keyphrase
+                if (body.keyphrase) {
+                    const keyphraseQuery = { keyphrase: body.keyphrase, _id: { $ne: body.post_id } };
+                    const conflictingKeyphrasePost = await Posts.findOne(keyphraseQuery);
+                    if (conflictingKeyphrasePost) {
+                        throw new Error("A post with the same keyphrase already exists");
+                    }
+                }
+
+                savedPost = await Posts.findByIdAndUpdate(body.post_id, body, { new: true });
+            } else {
+                throw new Error("Post not found");
+            }
+        } else {
+            // Construct the query for finding existing posts by slug, post_type, and tutorial
+            const query = { slug, post_type };
+            if (tutorial && tutorial.id) {
+                query["tutorial.id"] = tutorial.id;
+            }
+
+            // Check if a post with the same slug, post_type, and tutorial.id (if exists) already exists
+            const existingPost = await Posts.findOne(query);
+            if (existingPost) {
+                throw new Error("A post with the same slug, post_type, and tutorial already exists");
+            }
+
+            // Check for conflicting keyphrase
+            if (body.keyphrase) {
+                const keyphraseQuery = { keyphrase: body.keyphrase };
+                const existingKeyphrasePost = await Posts.findOne(keyphraseQuery);
+                if (existingKeyphrasePost) {
+                    throw new Error("A post with the same keyphrase already exists");
+                }
+            }
+
+            // Create a new post
+            savedPost = await new Posts(body).save();
+        }
+
+        if (savedPost) {
+            res.status(200).send({
+                is_error: false,
+                data: savedPost,
+                message: "Post saved successfully"
+            });
+        } else {
+            throw new Error("An error occurred, please try later");
+        }
+
+    } catch (error) {
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while creating or updating the post"
+        });
+    }
+});
+
+
+postRouter.post("/post/create-update/v2", async (req, res) => {
+    try {
+        const body = req.body;
+
+        // Validate the request body
+        if (!body || Object.keys(body).length === 0) {
+            throw new Error("Invalid request body");
+        }
+
+        // Extract the fields for validation
+        const { slug, post_type, tutorial } = body;
+        if (!slug || !post_type) {
+            throw new Error("Missing required fields: slug and post_type");
+        }
+
+        let savedPost;
+
+        if (body.post_id) {
+            // Update the existing post data
+            const existingPost = await Posts.findById(body.post_id);
+            if (existingPost) {
+                // Construct the query for finding conflicting posts
+                const query = { slug, post_type, _id: { $ne: body.post_id } };
+                if (tutorial && tutorial.id) {
+                    query["tutorial.id"] = tutorial.id;
+                }
+
+                // Check if a conflicting post exists
+                const conflictingPost = await Posts.findOne(query);
+                if (conflictingPost) {
+                    throw new Error("A post with the same slug, post_type, and tutorial already exists");
+                }
+
+                savedPost = await Posts.findByIdAndUpdate(body.post_id, body, { new: true });
+            } else {
+                throw new Error("Post not found");
+            }
+        } else {
+            // Construct the query for finding existing posts
+            const query = { slug, post_type };
+            if (tutorial && tutorial.id) {
+                query["tutorial.id"] = tutorial.id;
+            }
+
+            // Check if a post with the same slug, post_type, and tutorial.id (if exists) already exists
+            const existingPost = await Posts.findOne(query);
+            if (existingPost) {
+                throw new Error("A post with the same slug, post_type, and tutorial already exists");
+            }
+
+            // Create a new post
+            savedPost = await new Posts(body).save();
+        }
+
+        if (savedPost) {
+            res.status(200).send({
+                is_error: false,
+                data: savedPost,
+                message: "Post saved successfully"
+            });
+        } else {
+            throw new Error("An error occurred, please try later");
+        }
+
+    } catch (error) {
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while creating or updating the post"
+        });
+    }
+});
+
+
+
+postRouter.post("/post/create-update/v1", async (req, res) => {
+    try {
+        const body = req.body;
+
+        // Validate the request body
+        if (!body || Object.keys(body).length === 0) {
+            throw new Error("Invalid request body");
+        }
+
+        // Extract the fields for validation
+        const { slug, post_type, tutorial } = body;
+        if (!slug || !post_type) {
+            throw new Error("Missing required fields: slug and post_type");
+        }
+
+        // Construct the query for finding existing posts
+        const query = { slug, post_type };
+        if (tutorial && tutorial.id) {
+            query["tutorial.id"] = tutorial.id;
+        }
+
+        // Check if a post with the same slug, post_type, and tutorial.id (if exists) already exists
+        const existingPost = await Posts.findOne(query);
+        if (existingPost && (!body.post_id || body.post_id !== existingPost._id.toString())) {
+            throw new Error("A post with the same slug, post_type, and tutorial already exists");
         }
 
         let savedPost;
@@ -89,7 +284,7 @@ postRouter.post("/post/create-update", async (req, res) => {
             throw new Error("An error occurred, please try later");
         }
 
-    } catch (error) { 
+    } catch (error) {
         res.status(400).send({
             is_error: true,
             data: null,
@@ -97,6 +292,7 @@ postRouter.post("/post/create-update", async (req, res) => {
         });
     }
 });
+
 
 
 
@@ -438,11 +634,17 @@ postRouter.get("/post-links/get/v1", async (req, res) => {
 postRouter.get("/post/get", async (req, res) => {
     
     try {
+        
         const post_type = req.query.post_type;
-         
+        const post_id = req.query.post_id;
+
         var query_object = {};
         if( post_type != undefined ) {
-            query_object = { post_type: post_type };
+            query_object = { ...query_object, post_type: post_type };
+        }
+
+        if( post_id != undefined ) {
+            query_object = { ...query_object, _id: post_id };
         }
 
         // Fetch posts based on the post_type

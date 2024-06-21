@@ -241,13 +241,13 @@ class UsersWrapper extends Component {
 
     get_rule_type = (rule_number) => {
         if (rule_number == 4) {
-            return "Administrator";
+            return "Author"; 
         } else if (rule_number == 3) {
-            return "Author";
+            return "Administrator";
         } else if (rule_number == 2) {
-            return "Editor";
-        } else if (rule_number == 1) {
             return "Contributor";
+        } else if (rule_number == 1) {
+            return "Editor";
         } else {
             return "Subscriber";
         }
@@ -277,10 +277,14 @@ class UsersWrapper extends Component {
         return (
             users.length ? users.map(x => (
                 <tr key={x._id}>
-                    <td className="image-cell">
-                <input type="checkbox" />
+                
+                <td data-label="Name" style={{display:"flex", gap: 15, justifyContent: "flex-start", alignItems: "center", flexDirection: "row"}}>
+                    <img src={Helper.getGravatarUrl(x.email)} style={{borderRadius: "50%"}} width={60} height={60} />
+                    <div style={{display:"flex", flexDirection: "column"}}>
+                        <b>{x.firstname + ' ' + x.secondname}</b>
+                        <small style={{display:"block", color: "#666", fontSize: "16px"}}>{x.username != ""? "@" + x.username: ""}</small>
+                    </div>
                 </td>
-                <td data-label="Name">{x.firstname + ' ' + x.secondname}</td>
                 <td data-label="Company">
                 <small className="text-gray-500" title="Programming">{x.email}</small>
                 </td>
@@ -399,9 +403,7 @@ class UsersWrapper extends Component {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>
-                                            <input type="checkbox" />
-                                        </th> 
+                                         
                                         <th>User Name</th>
                                         <th>Email</th>
                                         <th>Rule</th>

@@ -162,7 +162,7 @@ class Login extends Component {
                         <div className="field spaced">
                             <label className="label">Password</label>
                             <div className="control">
-                            <input value={this.state.password} onChange={(x) => this.setState({password: x.target.value})} className="input" type="text" placeholder="Password" />
+                            <input value={this.state.password} onChange={(x) => this.setState({password: x.target.value})} className="input" type="password" placeholder="Password" />
                             </div> 
                         </div>
 

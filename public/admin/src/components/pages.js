@@ -3,7 +3,9 @@ import { NavbarContainer } from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { Helper } from "../helper.js";
 
-class Pages extends Component {
+import withNavigate from "./parts/with-navigate.js";
+
+class pageWrapped extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -374,6 +376,10 @@ class Pages extends Component {
         );
     }
 
+    navigateToEdit = (post_id) => {
+        this.props.navigate("/dashboard/edit-page", {state: {post_id: post_id }});
+    }
+
     renderPostsTable() {
         const { filteredPosts, bounceRates, pageViews, commentsData, pageSessions, pageViewsPerSession, pageAverageSessionDuration, currentPage, postsPerPage } = this.state;
         const indexOfLastPost = currentPage * postsPerPage;
@@ -406,10 +412,10 @@ class Pages extends Component {
                             <td data-label="Avg. Session Duration"><small className="text-gray-500" title="Programming">{pageAverageSessionDuration[post.slug] !== undefined ? pageAverageSessionDuration[post.slug] : 'N/A'}</small></td>
                             <td className="actions-cell">
                                 <div className="buttons right nowrap">
-                                    <button className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
+                                    <button onClick={() => this.navigateToEdit(post.id)} className="button small grey" data-target="sample-modal-2" type="button">
                                         <span className="icon"><i className="mdi mdi-pencil"></i></span>
                                     </button>
-                                    <button className="button small green --jb-modal" data-target="sample-modal-2" type="button">
+                                    <button className="button small green" data-target="sample-modal-2" type="button">
                                         <span className="icon"><i className="mdi mdi-eye"></i></span>
                                     </button>
                                     <button onClick={() => this.toggleDeletionConfirmation(post.id, post.title)} className="button small red" type="button">
@@ -472,7 +478,7 @@ class Pages extends Component {
                 }, this.calculateMetrics);
             }
         } catch (error) {
-            this.setState({
+            this.setState({ 
                 isError: true,
                 message: error.message,
                 delete_post: {
@@ -487,7 +493,7 @@ class Pages extends Component {
     DeleteModalConfirmation = () => {
         return (
             <div className={`modal ${this.state.post_confirmation_deletion ? "open_this_modal" : ""}`}>
-                <div className="modal-background --jb-modal-close"></div>
+                <div className="modal-background"></div>
                 <div className="modal-card">
                     <header className="modal-card-head">
                         <p className="modal-card-title">Confirm Deletion Process</p>
@@ -496,8 +502,8 @@ class Pages extends Component {
                         <p>Are you sure to delete page of <b>{this.state.delete_post.post_title}</b>?</p>
                     </section>
                     <footer className="modal-card-foot">
-                        <button onClick={() => this.setState({ post_confirmation_deletion: false })} className="button --jb-modal-close">Cancel</button>
-                        <button onClick={this.delete_this_post} className="button red --jb-modal-close">
+                        <button onClick={() => this.setState({ post_confirmation_deletion: false })} className="button-close">Cancel</button>
+                        <button onClick={this.delete_this_post} className="button red-close">
                             {
                                 this.state.delete_post.is_deleting ?
                                     <span className="loader"></span> : "Confirm"
@@ -513,7 +519,7 @@ class Pages extends Component {
         const { tutorials, filterTutorial, filterStatus } = this.state;
         return (
             <div className={`modal ${this.state.posts_filter_modal_open ? "open_this_modal" : ""}`}>
-                <div className="modal-background --jb-modal-close"></div>
+                <div className="modal-background-close"></div>
                 <div className="modal-card">
                     <header className="modal-card-head">
                         <p className="modal-card-title">Filter Articles by:</p>
@@ -529,8 +535,8 @@ class Pages extends Component {
                         </div>
                     </section>
                     <footer className="modal-card-foot">
-                        <button onClick={this.filterModalToggler} className="button --jb-modal-close">Cancel</button>
-                        <button onClick={this.apply_filters} className="button red --jb-modal-close">Apply</button>
+                        <button onClick={this.filterModalToggler} className="button-close">Cancel</button>
+                        <button onClick={this.apply_filters} className="button red-close">Apply</button>
                     </footer>
                 </div>
             </div>
@@ -699,4 +705,6 @@ class Pages extends Component {
     }
 }
 
+
+var Pages = withNavigate(pageWrapped); 
 export { Pages };

@@ -52,6 +52,10 @@ let postsSchema = new Schema({
         type: {},  
         default: {}
     },
+    keyphrase: {
+        type: String, 
+        default: ""
+    },
     allow_search_engine: {
         type: Boolean, 
         default: true
