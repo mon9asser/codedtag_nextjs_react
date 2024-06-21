@@ -147,6 +147,9 @@ class wrappedEditPost extends Component {
                 ]
             },
             
+            deletion_confirm_modal_open: false,
+            delete_pressed: false,
+
             selected_tab: {_id: "root", title: "/Root", slug: ""}, // object
             selected_tabs: null, // array  
             post_id: "", 
@@ -172,6 +175,72 @@ class wrappedEditPost extends Component {
 
         this.editorInstance = null;
         
+    }
+
+    deletePost = async () => {
+
+        this.setState({ delete_pressed: true });
+
+        try {
+            const response = await Helper.sendRequest({
+                api: 'post/delete',
+                method: 'POST',
+                data: {object_data: { post_id: this.state.post_id }}
+            });
+
+            if (!response.is_error) {
+
+                this.setState({
+                    deletion_confirm_modal_open: false,
+                    delete_pressed: false,
+                    show_message: "show_message",
+                    request_status_class: "success",
+                    request_message: "Article deleted successfully!",
+                });
+
+                // Redirect or handle post-deletion actions
+                this.props.navigate("/dashboard/posts");
+        
+                
+            } else {
+                this.setState({
+                    show_message: "show_message",
+                    request_status_class: "error",
+                    request_message: response.message,
+                    delete_pressed: false
+                });
+            }
+        } catch (error) {
+            console.error("An error occurred while deleting the user:", error);
+            this.setState({
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "An error occurred while deleting the user.",
+                delete_pressed: false
+            });
+        }
+    }
+
+    DeletionConfirm = () => {
+        return (
+            <div className={`modal ${this.state.deletion_confirm_modal_open ? "open_this_modal" : ""}`}>
+                <div className="modal-background --jb-modal-close" onClick={() => this.setState({ deletion_confirm_modal_open: false })}></div>
+                <div className="modal-card">
+                    <header className="modal-card-head">
+                        <p className="modal-card-title">Confirm Deletion</p>
+                    </header>
+                    <section className="modal-card-body">
+                        <p>Are you sure you want to delete this article?</p>
+                    </section>
+                    <footer className="modal-card-foot">
+                        <button onClick={() => this.setState({ deletion_confirm_modal_open: false })} className="button">Cancel</button>
+                        <button onClick={this.deletePost} className="button red">
+                            {this.state.delete_pressed ? <span className="loader"></span> : "Confirm"}
+                        </button>
+                    </footer>
+                </div>
+            </div>
+        );
     }
 
     initializedEditorComponents = async (instanceObj) => {
@@ -521,8 +590,51 @@ class wrappedEditPost extends Component {
         // store site name
         this.load_site_settings();
         
-        // => Load Assets
-        //this.loadDashboardAssets(); 
+        // location
+        if (this.props?.location?.state?.post_id) {
+            var post_id = this.props.location.state.post_id;
+
+            var request = await Helper.sendRequest({
+                api: `post/get?post_id=${post_id}&post_type=${this.state.post_type}`,
+                method: "get",
+                data: {}
+            });
+
+            if (request.is_error || !request.data.length) {
+                return;
+            }
+
+            var post = request.data[0];
+
+            this.set_meta_title(post.meta_title);
+
+            var initialState = {
+                total_words: post.total_words,
+                total_chars: post.total_charachters,
+                links: post.links,
+                _id: post_id,
+                blocks: post.blocks,
+            };
+
+            this.setState({
+                post_id: post_id,
+                initialState: initialState,
+                slug: post.slug,
+                keyphrase: post.keyphrase,
+                meta_description: post.meta_description,
+                tutorial: post?.tutorial || {},
+                allow_search_engine: post.allow_search_engine,
+                canonical_url: post.canonical_url,
+                is_published: post.is_published
+            }, () => {
+                
+                // Re-initialize the editor with the new data
+                setTimeout(() => { 
+                    this.editorInstance.render(initialState);
+                }, 1000);
+
+            });
+        }
         
     }   
 
@@ -859,7 +971,7 @@ class wrappedEditPost extends Component {
 
 
                 <div style={{position: "sticky", zIndex: "200", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
-                    <a className="button red" style={{marginTop: "15px"}}>Delete this article</a>
+                    <button onClick={() => this.setState({deletion_confirm_modal_open: true})} className="button red" style={{marginTop: "15px"}}>Delete this article</button>
                     <div style={{display: "flex", gap: 10, alignItems: "center"}}>
                         
                         <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
@@ -877,6 +989,8 @@ class wrappedEditPost extends Component {
                     </div>
                 </div>
                 
+                <this.DeletionConfirm />
+
                 <footer className="footer">
                     <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
                         <div className="flex items-center justify-start space-x-3">

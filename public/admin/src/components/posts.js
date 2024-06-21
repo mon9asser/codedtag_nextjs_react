@@ -70,7 +70,7 @@ class postsWrap extends Component {
       const { statisticsModal } = this.state;
       return (
           <div className={`modal ${statisticsModal.isOpen ? "open_this_modal" : ""}`}>
-              <div className="modal-background --jb-modal-close" onClick={() => this.toggleStatisticsModal(statisticsModal.data.slug)}></div>
+              <div className="modal-background" onClick={() => this.toggleStatisticsModal(statisticsModal.data.slug)}></div>
               <div className="modal-card">
                   <header className="modal-card-head">
                       <p className="modal-card-title">Statistics {statisticsModal.data ? "of " : ""}<b>{statisticsModal.data ? statisticsModal.data.slug : ""}</b></p>
@@ -110,7 +110,7 @@ class postsWrap extends Component {
                       )}
                   </section>
                   <footer className="modal-card-foot">
-                      <button onClick={() => this.toggleStatisticsModal()} className="button --jb-modal-close">Close</button>
+                      <button onClick={() => this.toggleStatisticsModal()} className="button">Close</button>
                   </footer>
               </div>
           </div>
@@ -120,7 +120,7 @@ class postsWrap extends Component {
     const { commentsModal } = this.state;
     return (
       <div className={`modal ${commentsModal.isOpen ? "open_this_modal" : ""}`}>
-        <div className="modal-background --jb-modal-close"></div>
+        <div className="modal-background"></div>
         <div className="modal-card">
           <header className="modal-card-head">
             <p className="modal-card-title">Comments for {commentsModal.postTitle}</p>
@@ -138,7 +138,7 @@ class postsWrap extends Component {
             )}
           </section>
           <footer className="modal-card-foot">
-            <button onClick={() => this.toggleCommentsModal()} className="button --jb-modal-close">Close</button>
+            <button onClick={() => this.toggleCommentsModal()} className="button">Close</button>
           </footer>
         </div>
       </div>
@@ -539,10 +539,10 @@ class postsWrap extends Component {
                   <button className="button small blue" type="button" onClick={() => this.toggleStatisticsModal(post.slug)}>
                       <span className="icon"><i className="mdi mdi-chart-arc"></i></span>
                   </button>
-                  <button onClick={() => this.navigateToEdit(post.id)} className="button small grey --jb-modal" data-target="sample-modal-2" type="button">
+                  <button onClick={() => this.navigateToEdit(post.id)} className="button small grey" data-target="sample-modal-2" type="button">
                     <span className="icon"><i className="mdi mdi-pencil"></i></span>
                   </button>
-                  <button className="button small green --jb-modal" data-target="sample-modal-2" type="button">
+                  <button className="button small green" data-target="sample-modal-2" type="button">
                     <span className="icon"><i className="mdi mdi-eye"></i></span>
                   </button>
                   <button onClick={() => this.toggleDeletionConfirmation(post.id, post.title)} className="button small red" type="button">
@@ -622,7 +622,7 @@ class postsWrap extends Component {
   DeleteModalConfirmation = () => {
     return (
       <div className={`modal ${this.state.post_confirmation_deletion ? "open_this_modal" : ""}`}>
-        <div className="modal-background --jb-modal-close"></div>
+        <div className="modal-background"></div>
         <div className="modal-card">
           <header className="modal-card-head">
             <p className="modal-card-title">Confirm Deletion Process</p>
@@ -631,8 +631,8 @@ class postsWrap extends Component {
             <p>Are you sure to delete post of <b>{this.state.delete_post.post_title}</b></p>
           </section>
           <footer className="modal-card-foot">
-            <button onClick={() => this.setState({ post_confirmation_deletion: false })} className="button --jb-modal-close">Cancel</button>
-            <button onClick={this.delete_this_post} className="button red --jb-modal-close">
+            <button onClick={() => this.setState({ post_confirmation_deletion: false })} className="button">Cancel</button>
+            <button onClick={this.delete_this_post} className="button red">
               {
                 this.state.delete_post.is_deleting ?
                   <span className="loader"></span> : "Confirm"
@@ -648,7 +648,7 @@ class postsWrap extends Component {
     const { tutorials, filterTutorial, filterStatus } = this.state;
     return (
       <div className={`modal ${this.state.posts_filter_modal_open ? "open_this_modal" : ""}`}>
-        <div className="modal-background --jb-modal-close"></div>
+        <div className="modal-background"></div>
         <div className="modal-card">
           <header className="modal-card-head">
             <p className="modal-card-title">Filter Articles by:</p>
@@ -673,8 +673,8 @@ class postsWrap extends Component {
             </div>
           </section>
           <footer className="modal-card-foot">
-            <button onClick={this.filterModalToggler} className="button --jb-modal-close">Cancel</button>
-            <button onClick={this.apply_filters} className="button red --jb-modal-close">Apply</button>
+            <button onClick={this.filterModalToggler} className="button">Cancel</button>
+            <button onClick={this.apply_filters} className="button red">Apply</button>
           </footer>
         </div>
       </div>

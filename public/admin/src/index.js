@@ -26,6 +26,7 @@ import { EditPost  } from './components/edit-post.js';
 import { CreatePage } from './components/create-page.js';
 import { EditPage } from './components/edit-page.js'; 
 import { CreateTutorial } from './components/create-tutorial.js';
+import { EditTutorial } from "./components/edit-tutorial.js";
 import { CreateUser } from './components/create-user.js';
 import { EditUser } from './components/edit-user.js';
 import { Chapters } from './components/chapters.js';
@@ -56,7 +57,7 @@ var WrappApplication = () => (
             <Route path="/dashboard/settings" element={<Settings/>} /> 
             
             
-            <Route path="/dashboard/create-tutorial" element={<CreateTutorial/>} />
+            
             
             <Route path="/dashboard/chapters" element={<Chapters/>} /> 
             <Route path="/dashboard/menus" element={<Menus/>} /> 
@@ -65,8 +66,9 @@ var WrappApplication = () => (
             <Route path="/dashboard/links" element={<ManageLinks/>} /> 
             <Route path="/dashboard/comments" element={<Comments/>} /> 
             
-            
             <Route path="/dashboard/tutorials" element={<Tutorials/>} /> 
+            <Route path="/dashboard/create-tutorial" element={<CreateTutorial/>} />
+            <Route path="/dashboard/edit-tutorial" element={<EditTutorial/>} />
             
             <Route path="/dashboard/posts" element={<Posts/>} /> 
             <Route path="/dashboard/create-post" element={<CreatePost/>} />

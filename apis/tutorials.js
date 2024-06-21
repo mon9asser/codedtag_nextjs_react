@@ -15,6 +15,21 @@ tutorialRouter.post("/tutorial/create-update", async (req, res) => {
             throw new Error("Invalid request body");
         }
 
+        // Check for the uniqueness of slug and keyphrase
+        if (body.slug) {
+            const existingSlug = await Tutorial.findOne({ slug: body.slug });
+            if (existingSlug && (!body.tutorial_id || existingSlug._id.toString() !== body.tutorial_id)) {
+                throw new Error("The slug must be unique. This slug is already in use.");
+            }
+        }
+
+        if (body.keyphrase) {
+            const existingKeyphrase = await Tutorial.findOne({ keyphrase: body.keyphrase });
+            if (existingKeyphrase && (!body.tutorial_id || existingKeyphrase._id.toString() !== body.tutorial_id)) {
+                throw new Error("The keyphrase must be unique. This keyphrase is already in use.");
+            }
+        }
+
         let savedTutorial;
         if (body.tutorial_id !== undefined && body.tutorial_id !== "") {
             // Update the existing tutorial data
@@ -27,7 +42,7 @@ tutorialRouter.post("/tutorial/create-update", async (req, res) => {
         if (savedTutorial) {
             res.status(200).send({
                 is_error: false,
-                data: savedTutorial, // You can replace this with savedTutorial or any processed data
+                data: savedTutorial,
                 message: "Tutorial saved successfully"
             });
         } else {
@@ -42,6 +57,7 @@ tutorialRouter.post("/tutorial/create-update", async (req, res) => {
         });
     }
 });
+
 
 
 /**
@@ -87,7 +103,7 @@ tutorialRouter.get("/tutorials", async (req, res) => {
 tutorialRouter.post("/tutorial/delete", async (req, res) => {
     try {
         const { tutorial_id } = req.body;
-
+        console.log(tutorial_id);
         if (!tutorial_id) {
             throw new Error("Tutorial ID is required");
         }

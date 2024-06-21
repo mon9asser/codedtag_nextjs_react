@@ -2,8 +2,11 @@ import { Component } from "react";
 import { NavbarContainer } from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { Helper } from "../helper.js";
+import withNavigate from "./parts/with-navigate.js";
 
-class Tutorials extends Component {
+
+
+class tutorialWrapper extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -421,6 +424,10 @@ class Tutorials extends Component {
         );
     }
 
+    navigateToEdit = (tutorial_id) => { 
+        this.props.navigate("/dashboard/edit-tutorial", {state: {tutorial_id: tutorial_id }});
+    }
+
     render() {
         const { tutorials, isError, message, currentPage, tutorialsPerPage } = this.state;
         const indexOfLastTutorial = currentPage * tutorialsPerPage;
@@ -564,7 +571,7 @@ class Tutorials extends Component {
                                                         <button className="button small blue" type="button" onClick={() => this.toggleStatisticsModal(tutorial.slug)}>
                                                             <span className="icon"><i className="mdi mdi-chart-arc"></i></span>
                                                         </button>
-                                                        <button className="button small grey" data-target="sample-modal-2" type="button">
+                                                        <button className="button small grey" onClick={() => this.navigateToEdit(tutorial._id)} type="button">
                                                             <span className="icon"><i className="mdi mdi-pencil"></i></span>
                                                         </button>
                                                         <button className="button small green" data-target="sample-modal-2" type="button">
@@ -619,5 +626,8 @@ class Tutorials extends Component {
         );
     }
 }
+
+
+var Tutorials = withNavigate(tutorialWrapper);
 
 export { Tutorials };

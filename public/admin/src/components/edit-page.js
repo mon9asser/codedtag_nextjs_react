@@ -916,7 +916,7 @@ class wrappedEditPage extends Component {
 
 
                 <div style={{position: "sticky", zIndex: "200", display: "flex", justifyContent: "space-between", bottom: "0", width: "90%", padding: "20px", background: "#f9f9f9", margin: "0 auto"}}>
-                    <button className="button red" style={{marginTop: "15px"}} onClick={() => this.setState({deletion_confirm_modal_open: true})}>Delete this article</button>
+                    <button className="button red" style={{marginTop: "15px"}} onClick={() => this.setState({deletion_confirm_modal_open: true})}>Delete this page</button>
                     <div style={{display: "flex", gap: 10, alignItems: "center"}}>
                         
                         <label style={{display: "flex", gap: "10px", marginRight: "40px"}}>
