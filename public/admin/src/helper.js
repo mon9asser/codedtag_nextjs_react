@@ -23,6 +23,7 @@ class HelperData {
         } /*else if (num >= 100) {
           return num + 'h';
       }*/ else {
+          
             return num.toString();
         }
     }

@@ -103,7 +103,7 @@ tutorialRouter.get("/tutorials", async (req, res) => {
 tutorialRouter.post("/tutorial/delete", async (req, res) => {
     try {
         const { tutorial_id } = req.body;
-        console.log(tutorial_id);
+         
         if (!tutorial_id) {
             throw new Error("Tutorial ID is required");
         }

@@ -9,11 +9,13 @@ const axios = require("axios");
 // cron jobs => google analytics 
 require("./apis/anlytics");
 
+
 var app = express();
 
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+ 
  
 
 /*
@@ -49,6 +51,8 @@ const {analyticsRouter} = require("./apis/google-analytics");
 
 const { required } = require("yargs");
 
+const { anyRouter } = require("./apis/check");
+
 // middlewares 
 app.use( Config.server.api, userRouters );
 app.use( Config.server.api, switcherRouter );
@@ -62,6 +66,10 @@ app.use( Config.server.api, adCampaignRouter);
 app.use( Config.server.api, contactRouter);
 app.use( Config.server.api, commentsRouter);
 app.use( Config.server.api, analyticsRouter);
+
+
+app.use( Config.server.api, anyRouter);
+
 
 
 
