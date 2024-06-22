@@ -5,6 +5,31 @@ import {YouTubeEmbed} from "./parts/embed-iframe.js"
 import { createReactEditorJS } from 'react-editor-js';
 import StickyBox from "react-sticky-box";
 
+// yoast seo 
+import { AnalysisWorkerWrapper, createWorker, Paper } from "yoastseo";
+const url = "http://127.0.0.1:3000/assets/js/worker.js";
+
+const worker = new AnalysisWorkerWrapper( createWorker( url ) );
+ 
+worker.initialize( {
+    locale: "en_US",
+    contentAnalysisActive: true,
+    keywordAnalysisActive: true,
+    logLevel: "ERROR",
+} ).then( () => {
+    // The worker has been configured, we can now analyze a Paper.
+    const paper = new Paper( "PHP OR", {
+        keyword: "analyze",
+    } );
+
+    return worker.analyze( paper );
+} ).then( ( results ) => {
+    console.log( 'Analysis results:' );
+    console.log( results );
+} ).catch( ( error ) => {
+    console.error( 'An error occured while analyzing the text:' );
+    console.error( error );
+} );
 
 // tools.js 
 import Iframe from "@hammaadhrasheedh/editorjs-iframe";
@@ -169,7 +194,7 @@ class CreatePost extends Component {
         };
 
         this.editorInstance = null;
-        
+        this.worker = null; // To store the worker instance
     }
 
     initializedEditorComponents = async (instanceObj) => {
@@ -518,9 +543,7 @@ class CreatePost extends Component {
 
         // store site name
         this.load_site_settings();
-        
-        // => Load Assets
-        //this.loadDashboardAssets(); 
+          
         
     }   
 

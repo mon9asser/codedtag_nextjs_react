@@ -20,7 +20,7 @@ import { Register } from './components/register';
 import { Login } from './components/login';
 import { Dashboard } from "./components/dashboard.js";
 import { Settings } from './components/settings.js'; 
-import { CreatePost } from './components/create-posts.js';
+import { CreatePost } from './components/create-post.js';
 import { EditPost  } from './components/edit-post.js';
 
 import { CreatePage } from './components/create-page.js';
