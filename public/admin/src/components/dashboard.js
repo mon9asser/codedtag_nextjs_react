@@ -13,6 +13,8 @@ class Dashboard extends Component {
             posts: [],
             currentPage: 1,
             recordsPerPage: 15,
+            sortColumn: 'country',
+            sortOrder: 'asc',
         };
     }
 
@@ -30,8 +32,55 @@ class Dashboard extends Component {
             posts: postsResponse.data,
             analytics: anlyticsResponse.data,
 
-            users_count: anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.activeUsers, 0): 0 
+            count_users: anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.activeUsers, 0): 0,
+            count_engagedSessions: anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.engagedSessions, 0): 0 ,
+            count_sessions: anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.sessions, 0): 0 ,
+            count_engagementRate: anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.engagementRate, 0) / (100 * anlyticsResponse.data.length ): 0 ,
+            count_bounceRate: ( anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.bounceRate, 0): 0 ) / (100 * anlyticsResponse.data.length ) ,
+            count_activeUsers: anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.activeUsers, 0): 0 ,
+            count_totalUsers: anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.totalUsers, 0): 0 ,
         });
+    }
+
+    handleSort = (column) => {
+        const { sortColumn, sortOrder, reportsByCountries } = this.state;
+        const newSortOrder = sortColumn === column && sortOrder === 'asc' ? 'desc' : 'asc';
+
+        const sortedData = [...reportsByCountries].sort((a, b) => {
+            if (a[column] < b[column]) return newSortOrder === 'asc' ? -1 : 1;
+            if (a[column] > b[column]) return newSortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        this.setState({
+            reportsByCountries: sortedData,
+            sortColumn: column,
+            sortOrder: newSortOrder,
+        });
+    }
+
+    renderTableRows = () => {
+        const { reportsByCountries, currentPage, recordsPerPage } = this.state;
+        const indexOfLastUser = currentPage * recordsPerPage;
+        const indexOfFirstUser = indexOfLastUser - recordsPerPage;
+        const currentReports = reportsByCountries.slice(indexOfFirstUser, indexOfLastUser);
+
+        return currentReports.map((report, index) => (
+            <tr key={index}>
+                <td style={{ display: "flex", gap: 15, alignItems: "center", justifyContent: "flex-start" }}>
+                    <img src={report.flagUrl} width={25} height={"auto"} alt={`Flag of ${report.country}`} />
+                    <small>{report.country}</small>
+                </td>
+                <td>{Helper.formatNumber(report.pageViews)}</td>
+                <td>{Helper.formatNumber(report.activeUsers)}</td>
+                <td>{Helper.formatNumber(report.sessions)}</td>
+                <td>{report.averageBounceRate}</td>
+                <td>{(report.averageSessionDuration / 60).toFixed(2)} mins</td>
+                <td>{report.screenPageViewsPerSession.toFixed(2)}</td>
+                <td>{Helper.formatNumber(report.eventCount)}</td>
+                <td>{Helper.formatNumber(report.newUsers)}</td>
+            </tr>
+        ));
     }
 
     renderPagination = () => {
@@ -55,33 +104,17 @@ class Dashboard extends Component {
         );
     }
 
-    renderTableRows = () => {
-        const { reportsByCountries, currentPage, recordsPerPage } = this.state;
-        const indexOfLastUser = currentPage * recordsPerPage;
-        const indexOfFirstUser = indexOfLastUser - recordsPerPage;
-        const currentReports = reportsByCountries.slice(indexOfFirstUser, indexOfLastUser);
-
-        return currentReports.map((report, index) => (
-            <tr key={index}>
-                <td style={{ display: "flex", gap: 5, alignItems: "center", justifyContent: "flex-start" }}>
-                    <img src={report.flagUrl} width={25} height={"auto"} alt={`Flag of ${report.country}`} />
-                    <small>{report.country}</small>
-                </td>
-                <td>{Helper.formatNumber(report.pageViews)}</td>
-                <td>{Helper.formatNumber(report.sessions)}</td>
-                <td>{report.averageBounceRate}</td>
-                <td>{Helper.formatNumber(report.activeUsers)}</td>
-                <td>{(report.averageSessionDuration / 60).toFixed(2)} mins</td>
-                <td>{report.screenPageViewsPerSession.toFixed(2)}</td>
-                <td>{Helper.formatNumber(report.eventCount)}</td>
-                <td>{Helper.formatNumber(report.newUsers)}</td>
-            </tr>
-        ));
-    }
-
     render() {
-
+        const { sortColumn, sortOrder } = this.state;
         var total = this.state.report;
+
+        const sortIcon = (column) => {
+            if (sortColumn === column) {
+                return sortOrder === 'asc' ? '' : '';
+            }
+            return '';
+        };
+
         return (
             <div id="app">
                 <NavbarContainer />
@@ -95,6 +128,17 @@ class Dashboard extends Component {
                                     <div className="widget-label">
                                         <h3>Views</h3>
                                         <h1>{Helper.formatNumber(parseInt(total.pageViews))}</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <div className="card-content bg9">
+                                <div className="flex items-center justify-between">
+                                    <div className="widget-label">
+                                        <h3>Total Users</h3>
+                                        <h1>{parseInt(this.state.count_users).toLocaleString()}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -122,16 +166,7 @@ class Dashboard extends Component {
                             </div>
                         </div>
 
-                        <div className="card">
-                            <div className="card-content bg9">
-                                <div className="flex items-center justify-between">
-                                    <div className="widget-label">
-                                        <h3>Total Users</h3>
-                                        <h1>{Helper.formatNumber(parseInt(this.state.users_count))}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         <div className="card">
                             <div className="card-content bg10">
@@ -182,7 +217,7 @@ class Dashboard extends Component {
                         <header className="card-header">
                             <p className="card-header-title">
                                 <span className="icon"><i className="mdi mdi-table"></i></span>
-                                Last 30 days
+                                Total Users
                             </p>
                             <a href="#" className="card-header-icon">
                                 <span className="icon"><i className="mdi mdi-filter-outline"></i></span>
@@ -192,17 +227,44 @@ class Dashboard extends Component {
                         <div className="card-content tble">
                             <table>
                                 <thead>
-                                    <tr>
+                                    <tr style={{borderBottom: "2px solid #ddd"}}>
                                         <th></th>
                                         <th>
-                                            <span>Users</span>
-                                            <b>{this.state.users_count}</b>
+                                            <div style={{display: "flex", flexDirection: "column", gap: 5}}>
+                                                <span>Users</span>
+                                                <span style={{fontWeight:"normal"}}>{parseFloat(this.state.count_users).toLocaleString()}</span>
+                                            </div>
                                         </th>
-                                        <th>bounce Rate</th>
-                                        <th>Engagement Rate</th>
-                                        <th>Sessions</th>
-                                        <th>Engaged Sessions</th>
-                                        <th>Total Users</th> 
+                                        <th>
+                                            <div style={{display: "flex", flexDirection: "column", gap: 5}}>
+                                                <span>Bounce Rate</span>
+                                                <span style={{fontWeight:"normal"}}>{parseFloat(this.state.count_bounceRate * 100).toFixed(2) + "%"}</span>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{display: "flex", flexDirection: "column", gap: 5}}>
+                                                <span>Engagement Rate</span>
+                                                <span style={{fontWeight:"normal"}}>{parseFloat(this.state.count_engagementRate * 100).toFixed(2) + "%"}</span>
+                                            </div>
+                                        </th> 
+                                        <th>
+                                            <div style={{display: "flex", flexDirection: "column", gap: 5}}>
+                                                <span>Sessions</span>
+                                                <span style={{fontWeight:"normal"}}>{parseFloat(this.state.count_sessions).toLocaleString()}</span>
+                                            </div>
+                                        </th>  
+                                        <th>
+                                            <div style={{display: "flex", flexDirection: "column", gap: 5}}>
+                                                <span>Engaged Sessions</span>
+                                                <span style={{fontWeight:"normal"}}>{parseFloat(this.state.count_engagedSessions).toLocaleString()}</span>
+                                            </div>
+                                        </th>   
+                                        <th>
+                                            <div style={{display: "flex", flexDirection: "column", gap: 5}}>
+                                                <span>Total Users</span>
+                                                <span style={{fontWeight:"normal"}}>{parseFloat(this.state.count_totalUsers).toLocaleString()}</span>
+                                            </div>
+                                        </th>    
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -210,13 +272,13 @@ class Dashboard extends Component {
                                             this.state.analytics?.map((x, index) => {
                                                 return (
                                                     <tr key={index}>
-                                                        <th>{x.channelGroup}</th>
-                                                        <th>{x.activeUsers}</th>
-                                                        <th>{x.bounceRate}</th>
-                                                        <th>Engagement Rate</th>
-                                                        <th>Sessions</th>
-                                                        <th>Engaged Sessions</th>
-                                                        <th>Total Users</th>
+                                                        <td>{x.channelGroup}</td>
+                                                        <td>{parseFloat(x.activeUsers).toLocaleString()}</td>
+                                                        <td>{parseFloat(x.bounceRate).toFixed(2) + "%"}</td>
+                                                        <td>{parseFloat(x.engagementRate).toFixed(2) + "%"}</td>
+                                                        <td>{parseFloat(x.sessions).toLocaleString()}</td>
+                                                        <td>{parseFloat(x.engagedSessions).toLocaleString()}</td>
+                                                        <td>{parseFloat(x.totalUsers).toLocaleString()}</td>
                                                     </tr> 
                                                 );
                                             })
@@ -224,20 +286,31 @@ class Dashboard extends Component {
                                 </tbody>
                             </table> 
                         </div>
+                    </div>
+                    <div className="card has-table mt-30">
+                        <header className="card-header">
+                            <p className="card-header-title">
+                                <span className="icon"><i className="mdi mdi-table"></i></span>
+                                Visitors by Countries
+                            </p>
+                            <a href="#" className="card-header-icon">
+                                <span className="icon"><i className="mdi mdi-filter-outline"></i></span>
+                            </a>
+                        </header>
 
                         <div className="card-content tble">
-                            <table>
+                        <table>
                                 <thead>
                                     <tr>
-                                        <th>Country</th>
-                                        <th>Views</th>
-                                        <th>Sessions</th>
-                                        <th>Bounce Rate</th>
-                                        <th>Active Users</th>
-                                        <th>Session Duration</th>
-                                        <th>Page View Per Session</th>
-                                        <th>Event Counts</th>
-                                        <th>New Users</th>
+                                        <th onClick={() => this.handleSort('country')}>Country {sortIcon('country')}</th>
+                                        <th onClick={() => this.handleSort('activeUsers')}>Users {sortIcon('activeUsers')}</th>
+                                        <th onClick={() => this.handleSort('pageViews')}>Views {sortIcon('pageViews')}</th>
+                                        <th onClick={() => this.handleSort('sessions')}>Sessions {sortIcon('sessions')}</th>
+                                        <th onClick={() => this.handleSort('averageBounceRate')}>Bounce Rate {sortIcon('averageBounceRate')}</th>
+                                        <th onClick={() => this.handleSort('averageSessionDuration')}>Session Duration {sortIcon('averageSessionDuration')}</th>
+                                        <th onClick={() => this.handleSort('screenPageViewsPerSession')}>Page View Per Session {sortIcon('screenPageViewsPerSession')}</th>
+                                        <th onClick={() => this.handleSort('eventCount')}>Event Counts {sortIcon('eventCount')}</th>
+                                        <th onClick={() => this.handleSort('newUsers')}>New Users {sortIcon('newUsers')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
