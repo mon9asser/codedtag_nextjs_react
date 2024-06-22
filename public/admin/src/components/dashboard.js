@@ -17,16 +17,20 @@ class Dashboard extends Component {
     }
 
     async componentDidMount() {
-        var [reportsByCountriesResponse, reportResponse, postsResponse] = await Promise.all([
+        var [reportsByCountriesResponse, reportResponse, postsResponse, anlyticsResponse] = await Promise.all([
             Helper.sendRequest({ api: 'reports/by-countries', method: 'GET', data: {} }),
             Helper.sendRequest({ api: 'reports/total', method: 'GET', data: {} }),
             Helper.sendRequest({ api: 'post/get', method: 'GET', data: {} }),
+            Helper.sendRequest({ api: 'reports', method: 'GET', data: {} }),
         ]);
  
         this.setState({
             reportsByCountries: reportsByCountriesResponse.data,
             report: reportResponse.data,
             posts: postsResponse.data,
+            analytics: anlyticsResponse.data,
+
+            users_count: anlyticsResponse.data.length ? anlyticsResponse.data.reduce((total, group) => total + group.activeUsers, 0): 0 
         });
     }
 
@@ -122,8 +126,8 @@ class Dashboard extends Component {
                             <div className="card-content bg9">
                                 <div className="flex items-center justify-between">
                                     <div className="widget-label">
-                                        <h3>Active Users</h3>
-                                        <h1>{Helper.formatNumber(parseInt(total.activeUsers))}</h1>
+                                        <h3>Total Users</h3>
+                                        <h1>{Helper.formatNumber(parseInt(this.state.users_count))}</h1>
                                     </div>
                                 </div>
                             </div>
@@ -184,6 +188,43 @@ class Dashboard extends Component {
                                 <span className="icon"><i className="mdi mdi-filter-outline"></i></span>
                             </a>
                         </header>
+
+                        <div className="card-content tble">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            <span>Users</span>
+                                            <b>{this.state.users_count}</b>
+                                        </th>
+                                        <th>bounce Rate</th>
+                                        <th>Engagement Rate</th>
+                                        <th>Sessions</th>
+                                        <th>Engaged Sessions</th>
+                                        <th>Total Users</th> 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        {
+                                            this.state.analytics?.map((x, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <th>{x.channelGroup}</th>
+                                                        <th>{x.activeUsers}</th>
+                                                        <th>{x.bounceRate}</th>
+                                                        <th>Engagement Rate</th>
+                                                        <th>Sessions</th>
+                                                        <th>Engaged Sessions</th>
+                                                        <th>Total Users</th>
+                                                    </tr> 
+                                                );
+                                            })
+                                        }                                         
+                                </tbody>
+                            </table> 
+                        </div>
+
                         <div className="card-content tble">
                             <table>
                                 <thead>

@@ -51,7 +51,7 @@ const {analyticsRouter} = require("./apis/google-analytics");
 
 const { required } = require("yargs");
 
-const { anyRouter } = require("./apis/check");
+const { analyticsRouter2 } = require("./apis/analytics-report");
 
 // middlewares 
 app.use( Config.server.api, userRouters );
@@ -68,7 +68,7 @@ app.use( Config.server.api, commentsRouter);
 app.use( Config.server.api, analyticsRouter);
 
 
-app.use( Config.server.api, anyRouter);
+app.use( Config.server.api, analyticsRouter2);
 
 
 

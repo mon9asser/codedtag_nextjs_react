@@ -3,9 +3,9 @@ const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 const path = require('path');
 const fs = require('fs');
 
-var anyRouter = express.Router();
+var analyticsRouter2 = express.Router();
 
-const { property_id } = require("./../config/db");
+const { property_id } = require("../config/db");
 
 // Ensure the environment variable is set.
 const credentialsPath = path.resolve(__dirname, 'config/credentials.json');
@@ -45,16 +45,16 @@ async function runReport() {
       },
       {
         name: 'sessions',
-      },
-      {
-        name: 'averageEngagementTimePerSession',
-      },
+      }, 
       {
         name: 'engagementRate',
       },
       {
         name: 'bounceRate',
-      }
+      },
+      {
+        name: 'activeUsers',
+      },
     ],
   });
 
@@ -63,9 +63,10 @@ async function runReport() {
     const totalUsers = parseFloat(row.metricValues[0].value);
     const engagedSessions = parseFloat(row.metricValues[1].value);
     const sessions = parseFloat(row.metricValues[2].value);
-    const averageEngagementTimePerSession = parseFloat(row.metricValues[3].value);
-    const engagementRate = parseFloat(row.metricValues[4].value) * 100; // Convert to percentage
-    const bounceRate = parseFloat(row.metricValues[5].value) * 100; // Convert to percentage
+    // const averageEngagementTimePerSession = parseFloat(row.metricValues[3].value);
+    const engagementRate = parseFloat(row.metricValues[3].value) * 100; // Convert to percentage
+    const bounceRate = parseFloat(row.metricValues[4].value) * 100; // Convert to percentage
+    const activeUsers = parseFloat(row.metricValues[5].value); // Convert to percentage
 
     if (!acc[channelGroup]) {
       acc[channelGroup] = {
@@ -73,18 +74,21 @@ async function runReport() {
         totalUsers: 0,
         engagedSessions: 0,
         sessions: 0,
-        averageEngagementTimePerSession: 0,
+        // averageEngagementTimePerSession: 0,
         engagementRate: 0,
         bounceRate: 0,
+        activeUsers: 0
       };
     }
 
     acc[channelGroup].totalUsers += totalUsers;
     acc[channelGroup].engagedSessions += engagedSessions;
     acc[channelGroup].sessions += sessions;
-    acc[channelGroup].averageEngagementTimePerSession += averageEngagementTimePerSession;
+   //  acc[channelGroup].averageEngagementTimePerSession += averageEngagementTimePerSession;
     acc[channelGroup].engagementRate += engagementRate;
     acc[channelGroup].bounceRate += bounceRate;
+    acc[channelGroup].activeUsers += activeUsers;
+    
 
     return acc;
   }, {});
@@ -96,13 +100,13 @@ async function runReport() {
 }
 
 // Route to fetch analytics data
-anyRouter.get('/analytics-data', async (req, res) => {
+analyticsRouter2.get('/reports', async (req, res) => {
   try {
     const reportData = await runReport();
-    res.status(200).json({ is_error: false, reportData });
+    res.status(200).json({ is_error: false, data: reportData });
   } catch (error) {
-    res.status(500).json({ is_error: true, message: error.message });
+    res.status(500).json({ is_error: true, message: error.message, data: [] });
   }
 });
 
-module.exports = {anyRouter};
+module.exports = {analyticsRouter2};
