@@ -29,9 +29,7 @@ import Delimiter from '@editorjs/delimiter'
 import InlineCode from '@editorjs/inline-code'
 import SimpleImage from '@editorjs/simple-image'  
 import Hyperlink from "editorjs-hyperlink";
-
-// yoast seo 
-import { Paper, ContentAssessor } from "yoastseo";
+ 
 
 const ReactEditorJS = createReactEditorJS();
 
@@ -520,29 +518,7 @@ class CreatePost extends Component {
         await this.loadAllTutorials();
 
         // store site name
-        this.load_site_settings();
-        
-
-        // Create a Paper instance with text to analyze and keyword
-        const paper = new Paper("Text to analyze", {
-            keyword: "analyze",
-        });
-        
-        // Create an instance of ContentAssessor with the paper
-        const contentAssessor = new ContentAssessor(paper);
-        
-        // Perform the assessment and log the results
-        contentAssessor.assess()
-        .then((result) => {
-            console.log(result);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-        
-
-
-
+        this.load_site_settings(); 
         
     }   
 
