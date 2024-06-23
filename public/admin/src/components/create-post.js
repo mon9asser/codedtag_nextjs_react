@@ -3,33 +3,13 @@ import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import {YouTubeEmbed} from "./parts/embed-iframe.js"
 import { createReactEditorJS } from 'react-editor-js';
+import { Settings } from "../settings.js";
+import {CustomCodeBlok} from "./parts/codeblock.js"
+import { Helper } from "../helper.js";
+
+
 import StickyBox from "react-sticky-box";
 
-// yoast seo 
-import { AnalysisWorkerWrapper, createWorker, Paper } from "yoastseo";
-const url = "http://127.0.0.1:3000/assets/js/worker.js";
-
-const worker = new AnalysisWorkerWrapper( createWorker( url ) );
- 
-worker.initialize( {
-    locale: "en_US",
-    contentAnalysisActive: true,
-    keywordAnalysisActive: true,
-    logLevel: "ERROR",
-} ).then( () => {
-    // The worker has been configured, we can now analyze a Paper.
-    const paper = new Paper( "PHP OR", {
-        keyword: "analyze",
-    } );
-
-    return worker.analyze( paper );
-} ).then( ( results ) => {
-    console.log( 'Analysis results:' );
-    console.log( results );
-} ).catch( ( error ) => {
-    console.error( 'An error occured while analyzing the text:' );
-    console.error( error );
-} );
 
 // tools.js 
 import Iframe from "@hammaadhrasheedh/editorjs-iframe";
@@ -50,10 +30,8 @@ import InlineCode from '@editorjs/inline-code'
 import SimpleImage from '@editorjs/simple-image'  
 import Hyperlink from "editorjs-hyperlink";
 
-import { Settings } from "../settings.js";
-
-import {CustomCodeBlok} from "./parts/codeblock.js"
-import { Helper } from "../helper.js";
+// yoast seo 
+import { Paper, ContentAssessor } from "yoastseo";
 
 const ReactEditorJS = createReactEditorJS();
 
@@ -543,7 +521,28 @@ class CreatePost extends Component {
 
         // store site name
         this.load_site_settings();
-          
+        
+
+        // Create a Paper instance with text to analyze and keyword
+        const paper = new Paper("Text to analyze", {
+            keyword: "analyze",
+        });
+        
+        // Create an instance of ContentAssessor with the paper
+        const contentAssessor = new ContentAssessor(paper);
+        
+        // Perform the assessment and log the results
+        contentAssessor.assess()
+        .then((result) => {
+            console.log(result);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+        
+
+
+
         
     }   
 
