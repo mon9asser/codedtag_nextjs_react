@@ -160,7 +160,7 @@ class wrappedEditPage extends Component {
                 name: "",
                 id: ""
             },
-            allow_search_engine: false, 
+            allow_search_engine: true, 
             canonical_url: "",
             is_published: false, 
 

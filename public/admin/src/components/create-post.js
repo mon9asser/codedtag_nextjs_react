@@ -159,7 +159,7 @@ class CreatePost extends Component {
                 id: "",
                 slug: ""
             },
-            allow_search_engine: false, 
+            allow_search_engine: true, 
             canonical_url: "",
             is_published: false, 
 

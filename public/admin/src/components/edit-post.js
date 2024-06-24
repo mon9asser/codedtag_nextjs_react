@@ -163,7 +163,7 @@ class wrappedEditPost extends Component {
                 id: "",
                 slug: ""
             },
-            allow_search_engine: false, 
+            allow_search_engine: true, 
             canonical_url: "",
             is_published: false, 
 
@@ -694,6 +694,7 @@ class wrappedEditPost extends Component {
             canonical_url: this.state.canonical_url,
             is_published: this.state.is_published 
         }
+        console.log(this.state.tutorial);
         if( this.state.meta_title == "" || this.state.slug == "" ) {
             
             this.setState({

@@ -32,16 +32,19 @@ const {Posts} = require("./../models/posts-model");
 sitemapRouter.get("/sitemap_articles.xml", async (req, res) => {
     try {
         var posts = await Posts.find({ post_type: 0, is_published: true, allow_search_engine: true });
-
+        
         var posts_data = posts.map(post => {
-            return `
-                <url>
-                    <loc>${site_url}${Config.redirect_to}${ (post.tutorial.slug == ""? "" : "/" + post.tutorial.slug) + "/" + post.slug}</loc>
-                    <lastmod>${new Date(post.updated_date).toISOString()}</lastmod>
-                    <changefreq>weekly</changefreq>
-                    <priority>0.8</priority>
-                </url>
-            `;
+            if ( post.tutorial.slug != undefined && post.updated_date != undefined && post.slug != undefined ) {
+                return `
+                    <url>
+                        <loc>${site_url}${Config.redirect_to}${ (post.tutorial.slug == "" ? "" : "/" + post.tutorial.slug) + "/" + post.slug}</loc>
+                        <lastmod>${new Date(post.updated_date).toISOString()}</lastmod>
+                        <changefreq>weekly</changefreq>
+                        <priority>0.8</priority>
+                    </url>
+                `;
+            } return ""
+            
         }).join("");
 
         var sitemap = `

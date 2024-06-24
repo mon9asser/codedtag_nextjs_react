@@ -70,7 +70,7 @@ app.use( Config.server.api, adCampaignRouter);
 app.use( Config.server.api, contactRouter);
 app.use( Config.server.api, commentsRouter);
 app.use( Config.server.api, analyticsRouter);
-app.use( Config.server.api, analyticsRouter);
+app.use( Config.server.api, analyticsRouter2);
 
 
 // update in server
