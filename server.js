@@ -53,6 +53,10 @@ const { required } = require("yargs");
 
 const { analyticsRouter2 } = require("./apis/analytics-report");
 
+
+// sitemaps and robots files 
+const { sitemapRouter } = require("./apis/sitemap");
+
 // middlewares 
 app.use( Config.server.api, userRouters );
 app.use( Config.server.api, switcherRouter );
@@ -66,9 +70,11 @@ app.use( Config.server.api, adCampaignRouter);
 app.use( Config.server.api, contactRouter);
 app.use( Config.server.api, commentsRouter);
 app.use( Config.server.api, analyticsRouter);
+app.use( Config.server.api, analyticsRouter);
 
 
-app.use( Config.server.api, analyticsRouter2);
+// update in server
+app.use( Config.server.sitemap, sitemapRouter);
 
 
 

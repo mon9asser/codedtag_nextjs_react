@@ -1,0 +1,35 @@
+/* 
+
+====================================
+Online server to do list
+====================================
+
+FOR Domains and SubDomains 
+	
+	MEDIA
+		https://media.codedtag.com
+		https://media.eratags.com
+		https://media.freeaccountingtutorial.com
+
+	API 
+		https://api.codedtag.com
+		https://api.eratags.com
+		https://api.freeaccountingtutorial.com
+
+	ADMIN => Dashboards
+		https://admin.codedtag.com
+		https://admin.eratags.com
+		https://admin.freeaccountingtutorial.com
+
+	Public 
+		https://codedtag.com
+		https://eratags.com
+		https://freeaccountingtutorial.com
+
+FOR Main SERVER
+
+	1- make sure "config/options"
+		A - localhost.site_url object property has empty value like this ""
+
+
+*/

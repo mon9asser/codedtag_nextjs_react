@@ -7,14 +7,14 @@ const bcrypt = require('bcrypt');
 
 
 const {Helper} = require("./../config/helper")
-const { domain } = require("./../config/db");
+const { domain, admin_url } = require("./../config/db");
 
 // Models of DB
 const {Usr} = require("./../models/user-model");
 
 // configuration
 const {Config} = require('./../config/options');
-
+const { dashboard_url } = require("./../config/db.js");
 const { Permissions} =   require('./permissions.js');
 
 // Login 
@@ -65,7 +65,7 @@ userRouters.post("/user/login", async (req, res) => {
                 full_name: user_check.full_name, 
                 idx: user_check.rule,
                 site_name: user_check.domain,
-                dashboard: Config.dashboard.url,
+                dashboard: Config.localhost.dashboard_url == "" ? dashboard_url: Config.localhost.dashboard_url,
                 is_user: user_check.rule === 0 
             }
         }, Config.jwt_secret, { expiresIn: '3h' }); 
@@ -79,7 +79,7 @@ userRouters.post("/user/login", async (req, res) => {
             token,
             site_name: user_check.domain,
             thumbnail: Helper.getGravatarUrl(user_check.email),
-            dashboard: Config.dashboard.url,
+            dashboard: Config.localhost.dashboard_url == "" ? dashboard_url: Config.localhost.dashboard_url,
             is_user: user_check.rule === 0
         };
 
@@ -290,7 +290,7 @@ userRouters.post("/user/register", async (req, res) => {
                             thumbnail: Helper.getGravatarUrl(email),
                             token: token, 
                             site_name: domain,
-                            dashboard: Config.dashboard.url,
+                            dashboard: Config.localhost.dashboard_url == "" ? dashboard_url: Config.localhost.dashboard_url,
                             is_user: (userObject.rule == 0 )? true: false 
                         }, 
                         is_error: false, 
@@ -320,7 +320,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
             data: [],
             message: "Permission denied!",
             is_error: true,
-            redirect_to: Config.dashboard.login,
+            redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
         });
     };  
     
@@ -340,7 +340,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 data: [], 
                 is_error: true, 
                 expired: false,
-                redirect_to: Config.dashboard.login,
+                redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
                 message: ""
             }
 
@@ -367,7 +367,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 data: [], 
                 is_error: true, 
                 expired: false,
-                redirect_to: Config.dashboard.login,
+                redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
                 message: "Permission Denied!"
             })
         }
@@ -380,7 +380,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 data: [], 
                 is_error: false, 
                 expired: false,
-                redirect_to: Config.dashboard.login,
+                redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
                 message: "Permission is allowed"
             })
         } else {
@@ -388,7 +388,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 data: [], 
                 is_error: true, 
                 expired: false,
-                redirect_to: Config.dashboard.login,
+                redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
                 message: "Permission Denied!"
             })
         }

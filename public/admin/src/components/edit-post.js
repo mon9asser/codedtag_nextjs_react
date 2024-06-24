@@ -160,7 +160,8 @@ class wrappedEditPost extends Component {
             tutorials: [],
             tutorial: {
                 name: "",
-                id: ""
+                id: "",
+                slug: ""
             },
             allow_search_engine: false, 
             canonical_url: "",
@@ -780,7 +781,8 @@ class wrappedEditPost extends Component {
             selected_tabs: this.state.tutorials[index].tabs, 
             tutorial: {
                 id: this.state.tutorials[index]._id, 
-                name: this.state.tutorials[index].tutorial_title  
+                name: this.state.tutorials[index].tutorial_title ,
+                slug: this.state.tutorials[index].slug
             }
         }) 
        

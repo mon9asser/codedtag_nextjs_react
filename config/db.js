@@ -5,10 +5,10 @@ module.exports = {
     index:0,
     property_id:"317812519",
 
-    site_url: "localhost:3001/",
-    admin_url: "localhost:3000/",
-    api_url: "localhost:5000/",
-    media_url: "localhost:3002/",
+    site_url: "https://eratags.com",
+    media_url: "https://media.eratags.com",
+    admin_url: "https://admin.eratags.com",
+    dashboard_url: "https://admin.eratags.com/dashboard",
 }
 
 
