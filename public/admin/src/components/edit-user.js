@@ -23,6 +23,7 @@ class EditUserWrapper extends Component {
             social_links: [],
             title:"",
             allow_appears_in_search_engine: false,
+            is_blocked: false,
             send_newsletter: false,
             is_pressed: false,
             show_message: "",
@@ -33,11 +34,14 @@ class EditUserWrapper extends Component {
         };
     }
 
-    componentDidMount = async () => {
+    load_user_data = async ( by_id = true ) => {
+
         var user_object = this.props?.location?.state?.user_data;
 
+        var user_id = by_id?user_object._id: this.state.user_id;
+
         var request = await Helper.sendRequest({
-            api: `user/get?user_id=${user_object._id}`,
+            api: `user/get?user_id=${user_id}`,
             method: "get",
             data: {}
         });
@@ -45,7 +49,7 @@ class EditUserWrapper extends Component {
         if (!request.is_error && request.data.length === 1) {
             user_object = request.data[0];
         }
-
+        console.log(user_object)
         if (user_object) {
             this.setState({
                 user_id: user_object._id || "",
@@ -60,10 +64,17 @@ class EditUserWrapper extends Component {
                 rule: user_object.rule || 0,
                 thumbnail_url: await Helper.getGravatarUrl(user_object.email),
                 social_links: user_object.social_links || [],
+                is_blocked: user_object.is_blocked,
                 allow_appears_in_search_engine: user_object.allow_appears_in_search_engine || false,
                 send_newsletter: user_object.send_newsletter || false
             });
         }
+    }
+
+    componentDidMount = async () => {
+    
+        await this.load_user_data();
+
     }
 
     confirmDeletion = () => {
@@ -152,6 +163,7 @@ class EditUserWrapper extends Component {
 
     save_user = async (e) => {
         e.preventDefault();
+
         this.setState({ is_pressed: true, show_message: "", request_status_class: "", request_message: "" });
 
         if (this.state.is_pressed) {
@@ -187,8 +199,12 @@ class EditUserWrapper extends Component {
             rule: this.state.rule,
             title: this.state.title,
             thumbnail_url: this.state.thumbnail_url,
+            is_blocked: this.state.is_blocked,
+            allow_appears_in_search_engine: this.state.allow_appears_in_search_engine,
             social_links: this.state.social_links
         };
+
+        console.log(data_object);
 
         if (this.state.password !== "") {
             data_object.password = this.state.password;
@@ -222,22 +238,7 @@ class EditUserWrapper extends Component {
             request_message: request.message,
         });
 
-        this.props.location.state.user_data = {
-            user_id: request.data._id || "",
-            firstname: request.data.firstname || "",
-            secondname: request.data.secondname || "",
-            password: "",
-            confirm_password: "",
-            title: request.data.title || "",
-            username: request.data.username || "",
-            email: request.data.email || "",
-            about: request.data.about || "",
-            rule: request.data.rule || 0,
-            thumbnail_url: await Helper.getGravatarUrl(request.data.email),
-            social_links: request.data.social_links || [],
-            allow_appears_in_search_engine: request.data.allow_appears_in_search_engine || false,
-            send_newsletter: request.data.send_newsletter || false
-        };
+        await this.load_user_data(false);
     }
 
     render() {
@@ -386,6 +387,31 @@ class EditUserWrapper extends Component {
                                         }
                                         <button onClick={this.add_media_link} className="button tan" style={{ marginTop: "15px", marginLeft: "auto" }}>Add New Media</button>
                                     </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">
+                                            <input
+                                                style={{marginRight: "8px"}}
+                                                checked={this.state.allow_appears_in_search_engine}
+                                                onChange={e => this.setState({allow_appears_in_search_engine: ! this.state.allow_appears_in_search_engine})}
+                                                type="checkbox" />
+                                            Allow Appear in Search Engines
+                                        </label> 
+                                    </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">
+                                            <input
+                                                style={{marginRight: "8px"}}
+                                                checked={this.state.is_blocked}
+                                                onChange={e => this.setState({is_blocked: ! this.state.is_blocked})}
+                                                type="checkbox" />
+                                            Block  user
+                                        </label> 
+                                    </div>
+
+
+                                    
                                 </div>
                             </div>
                         </div>

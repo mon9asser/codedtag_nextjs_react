@@ -25,7 +25,9 @@ class CreateUser extends Component {
             thumbnail_url: "https://www.gravatar.com/avatar/e1c8bd8b3ba85dc596abba84e0fdbc7ccc2da71d3d5f336020acdaca86ee2c9a?s=200&d=identicon",
             social_links: [],
             
-            allow_appears_in_search_engine:false,
+            allow_appears_in_search_engine: false,
+            is_blocked: false,
+
             send_newsletter: false,
             is_pressed: false,
 
@@ -138,7 +140,9 @@ class CreateUser extends Component {
             rule: this.state.rule, 
             title: this.state.title, 
             thumbnail_url: this.state.thumbnail_url, 
-            social_links: this.state.social_links
+            social_links: this.state.social_links,
+            is_blocked: this.state.is_blocked,
+            allow_appears_in_search_engine: this.state.allow_appears_in_search_engine,
         };
 
         if( this.state.user_id != "" ) {
@@ -374,6 +378,28 @@ class CreateUser extends Component {
 
                                         <button onClick={this.add_media_link} className="button tan" style={{marginTop: "15px", marginLeft: "auto"}}>Add New Media</button>
                                     </div> 
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">
+                                            <input
+                                                style={{marginRight: "8px"}}
+                                                checked={this.state.allow_appears_in_search_engine}
+                                                onChange={e => this.setState({allow_appears_in_search_engine: ! this.state.allow_appears_in_search_engine})}
+                                                type="checkbox" />
+                                            Allow Appear in Search Engines
+                                        </label> 
+                                    </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">
+                                            <input
+                                                style={{marginRight: "8px"}}
+                                                checked={this.state.is_blocked}
+                                                onChange={e => this.setState({is_blocked: ! this.state.is_blocked})}
+                                                type="checkbox" />
+                                            Block  user
+                                        </label> 
+                                    </div>
 
                                      
                                 </div> 

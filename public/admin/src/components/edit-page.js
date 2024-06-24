@@ -685,6 +685,8 @@ class wrappedEditPage extends Component {
             canonical_url: this.state.canonical_url,
             is_published: this.state.is_published 
         }
+
+         
         if( this.state.meta_title == "" || this.state.slug == "" ) {
             
             this.setState({
