@@ -63,6 +63,10 @@ let settingsSchema = new Schema({
             default: ""
         }, 
     },
+    robots_file_contents: {
+        type: String,
+        default: ""  
+    },
     script_url_1: {
         enabled: {
             type: Boolean ,

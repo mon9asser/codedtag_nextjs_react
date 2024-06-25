@@ -10,7 +10,7 @@ const {Config} = require("./../config/options")
 const {Usr} = require("./../models/user-model");
 const {Tutorial} = require("./../models/tutorial-model");
 const {Posts} = require("./../models/posts-model");
-
+const {Sets} = require("./../models/settings-model"); 
 /**
  * main sitemap => sitemap_index.xml
  * posts sitemap => sitemap_articles.xml
@@ -278,6 +278,39 @@ sitemapRouter.get("/sitemap_index.xml", async (req, res) => {
 })
 
 
-// robots txt 
+// robots txt robots.txt
+sitemapRouter.get("/robots.txt", async (req, res) => {
+    try {
+        // Fetch the settings from the database
+        var settings = await Sets.find({});
+        
+        // Check if settings exist
+        if (!settings.length) {
+            // Respond with a default or empty robots.txt content if no settings are found
+            res.type('text/plain');
+            res.send('User-agent: *\nDisallow:');
+            return;
+        }
+
+        // Get the robots.txt content from the settings
+        var robot_content = settings[0].robots_file_contents;
+        
+        // Ensure line breaks are properly handled
+        robot_content = robot_content.replace(/\r?\n/g, '\n');
+        
+        // Set the content type to plain text
+        res.type('text/plain');
+        
+        // Send the robots.txt content as the response
+        res.send(robot_content);
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error('Error fetching robots.txt content:', error);
+        res.status(500).send('Internal Server Error');
+    }
+
+
+     
+});
 
 module.exports = { sitemapRouter }

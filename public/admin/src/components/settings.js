@@ -30,6 +30,7 @@ class Settings extends Component {
                 enabled: false, 
                 field: "", 
             },
+            robots_file_contents: "",
             script_url_1: {
                 enabled: false, 
                 url_field: ""
@@ -85,6 +86,7 @@ class Settings extends Component {
             beside_post_title: settings.beside_post_title,
             site_meta_title: settings.site_meta_title,    
             site_meta_description: settings.site_meta_description,
+            robots_file_contents: settings.robots_file_contents,
             google_analytics: settings.google_analytics,
             script_url_1: settings.script_url_1,
             script_url_2: settings.script_url_2,
@@ -111,6 +113,7 @@ class Settings extends Component {
             beside_post_title: this.state.beside_post_title,
             site_meta_title: this.state.site_meta_title,    
             site_meta_description: this.state.site_meta_description,
+            robots_file_contents: this.state.robots_file_contents,
             google_analytics: this.state.google_analytics,
             script_url_1: this.state.script_url_1,
             script_url_2: this.state.script_url_2,
@@ -226,8 +229,7 @@ class Settings extends Component {
                                         </div> 
                                     </div> 
 
-                                    
-
+                                     
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Meta Description</label>
                                         <div className="control">
@@ -265,6 +267,14 @@ class Settings extends Component {
                                                 Enable
                                             </label>
                                             <textarea onChange={e => this.setState({ script_url_2: { ...this.state.script_url_2, url_field: e.target.value } })} value={this.state.script_url_2.url_field} className="input" style={{minHeight:"100px"}} placeholder="Example: Google Adx"></textarea>
+                                        </div> 
+                                    </div>
+
+                                    
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Robots File</label>
+                                        <div className="control">
+                                            <textarea onChange={e => this.setState({ robots_file_contents: e.target.value })} value={this.state.robots_file_contents} className="input" style={{minHeight:"100px"}} placeholder="Robots Content"></textarea>
                                         </div> 
                                     </div>
 
