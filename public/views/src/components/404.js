@@ -1,8 +1,9 @@
 import { Component } from "react";
-import { Header } from "../parts/header";
+import { Header } from "../parts/header"; 
+ 
 
 class PageNotFound extends Component {
-    
+     
     render() {
 
         return (
