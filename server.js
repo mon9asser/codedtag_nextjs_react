@@ -21,17 +21,20 @@ var app = express();
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(helmet());
+/*
+    app.use(helmet());
 
- // Rate limiting configuration
-const apiLimiter = rateLimit({
-    windowMs: 5 * 60 * 1000, // 5 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
-    message: 'Too many requests from this IP, please try again after 15 minutes',
-});
+    // Rate limiting configuration
+    const apiLimiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100, // Limit each IP to 100 requests per windowMs
+        message: 'Too many requests from this IP, please try again after 15 minutes',
+    });
 
-// Apply rate limiter to all requests
-app.use(apiLimiter);
+    // Apply rate limiter to all requests
+    app.use(apiLimiter);
+    
+*/
 
 /*
 app.use(function (req, res, next) {

@@ -26,8 +26,8 @@ class PageNotFound extends Component {
                         </p> 
 
                         <div className="items-center flexbox navigation-links"> 
-                            <a href="#" className="btn btn-default radius-30 ">Go Back</a>
-                            <a href="#" className="btn btn-default radius-30 ">Homepage</a>
+                            <a href="#" className="btn btn-default radius-30 btn-404">Go Back</a>
+                            <a href="#" className="btn btn-default radius-30 btn-404">Homepage</a>
                         </div> 
 
                         <div className="border-bottom mt-space"></div>

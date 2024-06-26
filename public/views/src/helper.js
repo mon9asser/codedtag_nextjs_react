@@ -1,7 +1,10 @@
+import React from 'react'
 import {Settings} from "./settings"; 
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 
+
+ 
 
 class HelperData {
 
@@ -10,7 +13,7 @@ class HelperData {
         var re =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
-
+ 
     formatNumber(num) {
         if (num >= 1000000000000) {
             return (num / 1000000000000).toFixed(1).replace(/\.0$/, '') + 'T';
@@ -194,5 +197,5 @@ class HelperData {
 var Helper = new HelperData(); 
 
 export {
-  Helper
+  Helper 
 }

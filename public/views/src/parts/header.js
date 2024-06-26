@@ -33,7 +33,22 @@ class Header extends Component {
 
         ])
 
-        console.log(menusResponse);
+        if( menusResponse.is_error || ! menusResponse.data.length ) {
+            return;
+        }
+
+        var menus = menusResponse.data;
+        
+        var left_nav = menus.filter( x => x.menu_name == 'main_menu');
+        var right_nav = menus.filter( x => x.menu_name == 'main_nav_right');
+        
+
+        // setup menus 
+        this.setState({
+            nav_left: left_nav,
+            nav_right: right_nav
+        });
+
     }   
 
     fadeToggle = (elem) => {
@@ -110,6 +125,26 @@ class Header extends Component {
         
     }
 
+    compile_items = (text) => {
+        
+        var item = text;
+        
+        if(text.indexOf("[button]") != -1 ) {
+            var arr = text.split(']');
+            var item_text = arr[arr.length - 1].trim();
+            item = <span className="btn third-btn radius-5 custom-header-btn">{item_text}</span>
+        } else if ( text.indexOf("[svg]") != -1) {
+            var arr = text.split(']');
+            var icon = arr[arr.length - 1];
+            item = <span className="flexbox" dangerouslySetInnerHTML={{__html: icon}} />
+        } else if ( text.indexOf("[burgericon]") != -1 ) {
+            item = <span data-sidebar-id="#aside-wrapper" ref={this.sidebarHandlerRefs} onClick={this.animatedSidebar} className="nav-toggler aside-toggler remove-anchor-paddings"><span></span><span></span><span></span></span>
+        } 
+
+        return item;
+
+    }
+
     render () {
         
 
@@ -138,18 +173,26 @@ class Header extends Component {
                             </div>
                             <div className="wrapper side-wrapper">
                                 <ul className="block-list">
-                                    <li><a href="#">Home </a></li>
-                                    <li className="has-slideitem">
-                                        <a href="#">Tutorials </a>
-                                        <ul className="slideitem">
-                                            <li><a href="#">Pages</a></li>
-                                            <li><a href="#">Blocks</a></li>
-                                            <li><a href="#">Headers</a></li>
-                                            <li><a href="#">Footers</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Contact </a></li>
-                                    <li><a href="#">About </a></li>
+                                    {
+                                        this.state.nav_left.length ?
+                                        this.state.nav_left.map(x => { 
+                                            
+                                            var _return = <li key={x._id}><Link target={x.openInNewTab?"_blank": ""} to={x.link}>{this.compile_items(x.title)}</Link></li>;
+                                            
+                                            if(x.subitems.length) {
+                                                _return = (
+                                                    <li className="has-slideitem" key={x._id}> 
+                                                        <Link target={x.openInNewTab?"_blank": ""} to={x.link}>{this.compile_items(x.title)}</Link>
+                                                        <ul className="slideitem">
+                                                            {x.subitems.map(y => <li key={y._id}><Link target={y.openInNewTab?"_blank": ""} to={y.link}>{y.title}</Link></li>)}
+                                                        </ul>
+                                                    </li>
+                                                );
+                                            }
+
+                                            return _return;
+                                        }): ""
+                                    }  
                                 </ul>
                             </div>
                         </div>
@@ -162,35 +205,51 @@ class Header extends Component {
                             </a>
                             
                             <ul className="inline-list left-p-30 main-nav">
-                                <li><a href="#">Home </a></li>
-                                <li className="has-subitem">
-                                    <a href="#">Tutorials </a>
-                                    <ul className="subitem">
-                                    <li><a href="#">Pages</a></li>
-                                    <li><a href="#">Blocks</a></li>
-                                    <li><a href="#">Headers</a></li>
-                                    <li><a href="#">Footers</a></li>
-                                    </ul>
-                                </li>
-                                <li> <a href="#">Contact </a></li>
-                                <li> <a href="#">About </a></li>
+                                {
+                                    this.state.nav_left.length ?
+                                    this.state.nav_left.map(x => { 
+                                        
+                                        var _return = <li key={x._id}><Link target={x.openInNewTab?"_blank": ""} to={x.link}>{this.compile_items(x.title)}</Link></li>;
+                                        
+                                        if(x.subitems.length) {
+                                            _return = (
+                                                <li className="has-subitem" key={x._id}> 
+                                                    <Link target={x.openInNewTab?"_blank": ""} to={x.link}>{this.compile_items(x.title)}</Link>
+                                                    <ul className="subitem">
+                                                        {x.subitems.map(y => <li key={y._id}><Link target={y.openInNewTab?"_blank": ""} to={y.link}>{y.title}</Link></li>)}
+                                                    </ul>
+                                                </li>
+                                            );
+                                        }
+
+                                        return _return;
+                                    }): ""
+                                } 
                             </ul>
     
     
-                            <ul className="inline-list left-p-30 offset-right mlr--15">
-                                <li> <a className="btn third-btn radius-5 custom-header-btn" href="#">Sign up </a></li>
-                                <li>
-                                    <a className="flexbox" href="#">
-                                        <span className="flexbox">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <circle className='stroke-color' cx="12" cy="10" r="3" stroke="#222222" strokeLinecap="round"/>
-                                                <circle className='stroke-color' cx="12" cy="12" r="9" stroke="#222222"/>
-                                                <path className='stroke-color' d="M18 18.7059C17.6461 17.6427 16.8662 16.7033 15.7814 16.0332C14.6966 15.3632 13.3674 15 12 15C10.6326 15 9.30341 15.3632 8.21858 16.0332C7.13375 16.7033 6.35391 17.6427 6 18.7059" stroke="#222222" strokeLinecap="round"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li> <a className="nav-toggler aside-toggler remove-anchor-paddings" href="#" data-sidebar-id="#aside-wrapper" ref={this.sidebarHandlerRefs} onClick={this.animatedSidebar}><span> </span><span></span><span>  </span></a></li>
+                            <ul className="inline-list left-p-30 offset-right mlr--15 update-html">
+                            {
+                                    this.state.nav_right.length ?
+                                    this.state.nav_right.map(x => { 
+                                        
+                                        var _return = <li key={x._id}><Link target={x.openInNewTab?"_blank": ""} to={x.link}>{this.compile_items(x.title)}</Link></li>;
+                                        
+                                        if(x.subitems.length) {
+                                            _return = (
+                                                <li className="has-subitem" key={x._id}> 
+                                                    <Link target={x.openInNewTab?"_blank": ""} to={x.link}>{this.compile_items(x.title)}</Link>
+                                                    <ul className="subitem">
+                                                        {x.subitems.map(y => <li key={y._id}><Link target={y.openInNewTab?"_blank": ""} to={y.link}>{y.title}</Link></li>)}
+                                                    </ul>
+                                                </li>
+                                            );
+                                        }
+
+                                        return _return;
+                                    }): ""
+                                }
+                                
                             </ul>
     
                         </nav>
