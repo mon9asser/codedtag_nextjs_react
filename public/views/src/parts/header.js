@@ -1,7 +1,8 @@
 import React, {Component} from "react"; 
 import logo from './../assets/img/logo-3.png'; 
+import {Helper} from './../helper';
 import { Link } from "react-router-dom";
-  
+
 
 class Header extends Component {
 
@@ -10,13 +11,29 @@ class Header extends Component {
         super( props ); 
  
         
+        this.state = {
+            nav_left: [],
+            nav_right: []
+        };
+
         this.sidebarHandlerRefs = React.createRef();
         this.sidebarRefs = React.createRef();
 
     }
     
-    componentDidMount() {
+    componentDidMount = async () => {
         
+        var [ menusResponse ] = await Promise.all([
+            
+            Helper.sendRequest({
+                api: "menus",
+                method: "get",
+                data: {}
+            })
+
+        ])
+
+        console.log(menusResponse);
     }   
 
     fadeToggle = (elem) => {
@@ -65,9 +82,7 @@ class Header extends Component {
                       
                     asideContent.classList.add("active--aside");
                 }, 5)
-
                 
-
             }  
         }
 

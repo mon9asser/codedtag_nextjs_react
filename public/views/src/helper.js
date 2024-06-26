@@ -1,4 +1,4 @@
- 
+import {Settings} from "./settings"; 
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 
@@ -60,7 +60,7 @@ class HelperData {
         }; 
       }
       
-      // passed check caps by request  
+      // passed check caps by request = settings
       var reqs = await this.sendRequest({
           api: "user/capabilities",
           method: "post",
@@ -92,7 +92,9 @@ class HelperData {
         
         if( is_create === undefined ) {
           is_create = false; 
-        } 
+        }
+
+        data["Secret-codedtag-api-key"] = Settings.keys.secret ;
          
         try {
            
@@ -140,9 +142,10 @@ class HelperData {
 
           var reqs = await axios({
             method: method,
-            url: `http://localhost:5000/${api}`,
+            url: `${Settings.server.api}/${api}`,
             data: data,
-            headers: { 
+            headers: {
+              'CT-public-api-key': Settings.keys.public,
               ...headers
             }
           });
