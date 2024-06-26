@@ -2,6 +2,9 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const path = require("path");
 const cors = require("cors");
+ 
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const {Config} = require("./config/options")
 const axios = require("axios");
@@ -13,10 +16,22 @@ require("./apis/anlytics");
 var app = express();
 
 
+
+
+
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
- 
- 
+app.use(helmet());
+
+ // Rate limiting configuration
+const apiLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again after 15 minutes',
+});
+
+// Apply rate limiter to all requests
+app.use(apiLimiter);
 
 /*
 app.use(function (req, res, next) {
