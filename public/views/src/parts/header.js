@@ -32,29 +32,27 @@ class Header extends Component {
     
     componentDidUpdate(prevProps, prevState, snapshot) {
         const { menus } = this.context;
-        this.updateMenus(menus, prevState);
+        this.updateMenus(menus);
     }
     
     updateMenus = (menus) => {
         
-        console.log();
-        const nav_left = menus.filter( x=> x.menu_name === "main_menu")
-        const nav_right = menus.filter( x=> x.menu_name === 'main_nav_right');
-        
-        if(this.state.is_loaded) {
-            return;
-        }
-        console.log(nav_right);
-        this.setState({
-            nav_left,
-            nav_right,
-            is_loaded: true
-        });
-    }    
-    
-    
-      
+        if(menus.length) {
+            const nav_left = menus.filter( x=> x.menu_name === "main_menu")
+            const nav_right = menus.filter( x=> x.menu_name === 'main_nav_right');
+            
+            if(this.state.is_loaded) {
+                return;
+            }
 
+            this.setState({
+                nav_left,
+                nav_right,
+                is_loaded: true
+            });
+        }
+    }     
+    
     fadeToggle = (elem) => {
         elem.classList.toggle('fade'); 
     }

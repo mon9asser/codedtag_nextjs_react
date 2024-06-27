@@ -19,16 +19,24 @@
  
 
 .page-not-found-section {
-    padding: 40px 25px;
+    margin: 50px auto;
+    padding: 20px;
     text-align: center;
+    max-width: 540px;
+    display: block;
+    width: 100%;
 }
 
 .error-code {
-    font-size: 16vw;
+    font-size: calc(100px + 2vw); 
     text-align: center;
     overflow: hidden;
-    line-height: 16vw;
+    line-height: calc(90px + 2vw);  
     margin: 0;
+}
+.page-not-found-msg {
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 
 .error-message-container {
@@ -37,10 +45,14 @@
     padding: 10px;
     max-width: 550px;
     margin: 0 auto;
+    font-size: 18px; 
 }
 
+
+
 .error-message {
-    margin: 30px 0;
+    margin: 20px 0;
+    font-size: 95%;
 }
 
 .search-form {
@@ -121,8 +133,8 @@
 /* Responsive Design */
 @media (max-width: 600px) {
     .error-code {
-        font-size: 24vw;
-        line-height: 24vw;
+        font-size: 18vw;
+        line-height: 18vw;
     }
 
     .error-message-container {

@@ -10,36 +10,48 @@ class DataProvider extends Component {
         super(props);
 
         this.state = {
-            menus: []
+            menus: [],
+            settings: []
         }
     }
 
     
     componentDidMount = async () => {
-
+        
         // getting menus
-        var [menusResponse] = await Promise.all([
+        var [menusResponse, settingsResponse] = await Promise.all([
             Helper.sendRequest({
                 api: "menus",
                 method: "get",
                 data: {}
+            }),
+            Helper.sendRequest({
+                api: "settings/get",
+                method: "get",
+                data: {}
             })
         ]);
-
+        
         if( menusResponse.is_error ) {
             menusResponse.data = [];
         }
+        
+        if( settingsResponse.is_error ) {
+            settingsResponse.data = [];
+        } 
 
-        console.log("menusResponse");
         this.setState({
-            menus: menusResponse.data
+            menus: menusResponse.data,
+            settings: settingsResponse.data
         })
     }
 
     render() {
         
+         
         var data = {
-            menus: this.state.menus
+            menus: this.state.menus,
+            settings: this.state.settings
         };
 
         return (

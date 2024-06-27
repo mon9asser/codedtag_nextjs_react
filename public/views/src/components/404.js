@@ -14,7 +14,9 @@ class PageNotFound extends Component {
             <>
                 <Header/>
                 <section className="page-not-found-section">
-                    <h1 className="error-code">404</h1>
+                    <span className="error-code">404</span>
+                    <h1 className="page-not-found-msg">Page Not Found</h1>
+                    
                     <div className="error-message-container">
 
                         <form className="search-form">
