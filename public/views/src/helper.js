@@ -190,6 +190,103 @@ class HelperData {
       
       return paddedNumber;
 
+    } 
+
+    initMethods () {
+          
+        // slide Items 
+        this.slideitems();
+        
+    }
+
+
+    slideDownElem = (elem, duration = 200) => {
+        elem.style.display = 'block';  // Make the element visible
+        let startHeight = 0;
+        let endHeight = elem.scrollHeight;  // Get the natural height of the element
+    
+        elem.style.height = startHeight + 'px';  // Start animation from 0 height
+    
+        let startTime = Date.now();  // Get the start time
+    
+        function animate() {
+            let elapsedTime = Date.now() - startTime;
+            let nextHeight = Math.min(endHeight, (elapsedTime / duration) * endHeight);
+            elem.style.height = nextHeight + 'px';  // Update the height
+    
+            if (nextHeight < endHeight) {
+                requestAnimationFrame(animate);  // Continue the animation
+            } else {
+                elem.style.height = null;  // Clear the inline height style
+            }
+        }
+    
+        requestAnimationFrame(animate);  // Start the animation
+    }
+    
+    slideUpElem = (elem, duration = 200) => {
+        let startHeight = elem.scrollHeight;
+        let endHeight = 0;
+    
+        let startTime = Date.now();
+    
+        function animate() {
+            let elapsedTime = Date.now() - startTime;
+            let nextHeight = Math.max(endHeight, startHeight - (elapsedTime / duration) * startHeight);
+            elem.style.height = nextHeight + 'px';
+    
+            if (nextHeight > endHeight) {
+                requestAnimationFrame(animate);
+            } else {
+                elem.style.display = 'none';  // Hide the element
+                elem.style.height = null;  // Clear the inline height style
+            }
+        }
+    
+        requestAnimationFrame(animate);
+    }
+    
+    toggleSlide(elem) {
+        let myList = elem;
+        
+        if (window.getComputedStyle(myList).display === 'none') {
+            this.slideDownElem(myList);
+        } else {
+            this.slideUpElem(myList);
+        }
+    }
+    
+
+    slideitems = () => {
+
+        var _this = this; 
+
+        var items = document.querySelectorAll("li.has-slideitem");
+         
+        if( !items.length ) {
+            return; 
+        }
+
+        items.forEach((item, index) => {
+            var elem = Array.from(item.childNodes).filter(item => item.tagName.toLowerCase() == "a");
+            if( ! elem.length ) {
+                return; 
+            }
+
+            elem[0].addEventListener("click", function(e){
+
+                this.classList.toggle("active")
+
+                e.preventDefault();
+                
+                var ul = this.nextElementSibling;
+                ul.style.overflow = "hidden";
+                _this.toggleSlide(ul);
+
+            });
+
+        });
+
     }
 
 }

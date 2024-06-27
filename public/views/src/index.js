@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom/client'; 
+import { Helper } from './helper.js';
+
+import { DataProvider } from './context.js';
+
 import {
   BrowserRouter,
   Routes,
@@ -14,12 +18,44 @@ import "./assets/css/styles.css"
 // Components 
 import { PageNotFound } from "./components/404.js" 
 
+ 
+
+
+class WrappApplication extends Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      menus: []
+    };
+  }
+
+  componentDidMount = async () => { 
+
+    // Set menus 
+    setTimeout(() => Helper.initMethods(), 1000); 
+
+  }
+
+  render() {
+ 
+
+    return (
+      <DataProvider>
+        <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<h1>Hello world</h1>} />
+              <Route path="*" element={<PageNotFound/>} />
+            </Routes>
+        </BrowserRouter>
+      </DataProvider>
+    );
+  }
+
+}
+
+
+
+// Render
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<h1>Hello world</h1>} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  </BrowserRouter>
-); 
+root.render(<WrappApplication/>); 

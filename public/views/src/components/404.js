@@ -4,14 +4,15 @@ import { Footer } from "../parts/footer";
 
 class PageNotFound extends Component {
 
-    componentDidMount() {
-        // Any necessary initialization can be done here
+    constructor(props) {
+        super(props)
     }
-
+     
     render() {
+        
         return (
             <>
-                <Header />
+                <Header/>
                 <section className="page-not-found-section">
                     <h1 className="error-code">404</h1>
                     <div className="error-message-container">
@@ -44,7 +45,7 @@ class PageNotFound extends Component {
                        
                     </div>
                 </section>
-                <Footer />
+                <Footer/>
             </>
         );
     }

@@ -2,9 +2,11 @@ import React, {Component} from "react";
 import logo from './../assets/img/logo-3.png'; 
 import {Helper} from './../helper';
 import { Link } from "react-router-dom";
-
+import { DataContext } from "../context";
 
 class Header extends Component {
+
+    static contextType = DataContext;
 
     constructor( props ) {
         
@@ -13,7 +15,9 @@ class Header extends Component {
         
         this.state = {
             nav_left: [],
-            nav_right: []
+            nav_right: [],
+
+            is_loaded: false
         };
 
         this.sidebarHandlerRefs = React.createRef();
@@ -21,35 +25,35 @@ class Header extends Component {
 
     }
     
-    componentDidMount = async () => {
+    componentDidMount() {
+        const { menus } = this.context;
+        this.updateMenus(menus);
+    }
+    
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const { menus } = this.context;
+        this.updateMenus(menus, prevState);
+    }
+    
+    updateMenus = (menus) => {
         
-        var [ menusResponse ] = await Promise.all([
-            
-            Helper.sendRequest({
-                api: "menus",
-                method: "get",
-                data: {}
-            })
-
-        ])
-
-        if( menusResponse.is_error || ! menusResponse.data.length ) {
+        console.log();
+        const nav_left = menus.filter( x=> x.menu_name === "main_menu")
+        const nav_right = menus.filter( x=> x.menu_name === 'main_nav_right');
+        
+        if(this.state.is_loaded) {
             return;
         }
-
-        var menus = menusResponse.data;
-        
-        var left_nav = menus.filter( x => x.menu_name == 'main_menu');
-        var right_nav = menus.filter( x => x.menu_name == 'main_nav_right');
-        
-
-        // setup menus 
+        console.log(nav_right);
         this.setState({
-            nav_left: left_nav,
-            nav_right: right_nav
+            nav_left,
+            nav_right,
+            is_loaded: true
         });
-
-    }   
+    }    
+    
+    
+      
 
     fadeToggle = (elem) => {
         elem.classList.toggle('fade'); 
