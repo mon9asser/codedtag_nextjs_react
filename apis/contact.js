@@ -1,24 +1,75 @@
 const express = require('express');
 const { Contact } = require('./../models/contact-model');
 var contactRouter = express.Router();
+const crypto = require('crypto');
+const validator = require('validator');
+
+// Encryption setup
+const algorithm = 'aes-256-cbc';
+const key = crypto.randomBytes(32);
+const iv = crypto.randomBytes(16);
+
+function encrypt(text) {
+    let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
+    let encrypted = cipher.update(text);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+}
+
+function validateAndSanitize(data) {
+    let sanitizedData = {};
+
+    // Validate and sanitize name
+    if (validator.isAlpha(data.name, 'en-US', { ignore: ' ' })) {
+        sanitizedData.name = validator.trim(validator.escape(data.name));
+    } else {
+        throw new Error('Invalid name');
+    }
+
+    // Validate and sanitize email
+    if (validator.isEmail(data.email)) {
+        sanitizedData.email = validator.normalizeEmail(data.email);
+    } else {
+        throw new Error('Invalid email');
+    }
+
+    // Validate and sanitize subject
+    if (validator.isLength(data.subject, { min: 1, max: 100 })) {
+        sanitizedData.subject = validator.trim(validator.escape(data.subject));
+    } else {
+        throw new Error('Invalid subject');
+    }
+
+    // Validate and sanitize message
+    if (validator.isLength(data.message, { min: 1, max: 500 })) {
+        sanitizedData.message = validator.trim(validator.escape(data.message));
+    } else {
+        throw new Error('Invalid message');
+    }
+
+    // Encrypt the message
+    const encryptedMessage = encrypt(sanitizedData.message);
+    sanitizedData.message =sanitizedData.message // encryptedMessage.encryptedData;
+    sanitizedData.iv = encryptedMessage.iv;
+
+    return sanitizedData;
+}
 
 // Create or Update Contact
-contactRouter.post('/contact/create-update', async (req, res) => {
+contactRouter.post('/contact-message', async (req, res) => {
     try {
+
         const body = req.body;
 
         if (!body || Object.keys(body).length === 0) {
             throw new Error('Invalid request body');
         }
 
-        let savedContact;
-        if (body.contact_id !== undefined && body.contact_id !== "") {
-            // Update the existing contact data
-            savedContact = await Contact.findByIdAndUpdate(body.contact_id, body, { new: true });
-        } else {
-            // Save a new contact
-            savedContact = await new Contact(body).save();
-        }
+        // Validate and sanitize the input data
+        const secureData = validateAndSanitize(body);
+
+        // Save the sanitized and encrypted data to MongoDB
+        let savedContact = await new Contact(secureData).save();
 
         if (savedContact) {
             res.status(200).send({

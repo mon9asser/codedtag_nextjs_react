@@ -36,8 +36,7 @@ class PageNotFoundComponents extends Component {
         var pages = reqs.data.filter( x => x.page_template == "not_found_404_page");
         if( pages.length ) {
             
-            var not_found = pages[pages.length - 1];
-            console.log(not_found);
+            var not_found = pages[pages.length - 1]; 
             this.setState({ content: not_found })
             
         }
@@ -81,7 +80,7 @@ class PageNotFoundComponents extends Component {
                                          
                                         return (
                                             <p key={x.id} className="error-message">
-                                                I'm afraid you've found a page that doesn't exist on our site. This can happen if you follow a link to something that has been deleted, or if the link was wrong from the start.
+                                                {x.data.text}
                                             </p>
                                         );
                                     }

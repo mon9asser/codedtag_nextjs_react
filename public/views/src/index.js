@@ -15,6 +15,7 @@ import "./assets/css/styles.css"
 
 // Components 
 import { PageNotFound } from "./components/404.js"
+import { ContactPage } from './components/contact.js';
 
 class WrappApplication extends Component {
   componentDidMount = async () => {
@@ -29,6 +30,7 @@ class WrappApplication extends Component {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<h1>Hello world</h1>} />
+            <Route path="/contact-us" element={<ContactPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
