@@ -59,8 +59,10 @@ class ContactPageComponents extends Component {
         var pages = reqs.data.filter( x => x.page_template == "contact_page");
         if( pages.length ) {
             
-            var contact_page = pages[pages.length - 1]; 
+            var contact_page = pages[pages.length - 1];  
+            
             console.log(contact_page);
+
             this.setState({ content: contact_page })
             
         }
@@ -162,6 +164,73 @@ class ContactPageComponents extends Component {
                 <Helmet>
                     <title>{this.state.content?.meta_title || "Contact Us"}</title>
                     <meta name="description" content={this.state.content?.meta_description || "Discover top-notch programming tutorials and web development resources at CodedTag. Enhance your coding skills with our comprehensive guides. Contact us today!"} />
+                    <script type="application/ld+json">
+                        {`
+                        {
+                            "@context": "https://schema.org",
+                            "@graph": [
+                                {
+                                "@type": "WebPage",
+                                "@id": "https://codedtag.com/contact-us/",
+                                "url": "https://codedtag.com/contact-us/",
+                                "name": "Contact Us - CodedTag",
+                                "isPartOf": {
+                                    "@id": "https://codedtag.com/#website"
+                                },
+                                "datePublished": "2022-06-09T11:38:41+00:00",
+                                "dateModified": "2023-03-22T19:09:11+00:00",
+                                "breadcrumb": {
+                                    "@id": "https://codedtag.com/contact-us/#breadcrumb"
+                                },
+                                "inLanguage": "en-US",
+                                "potentialAction": [
+                                    {
+                                    "@type": "ReadAction",
+                                    "target": [
+                                        "https://codedtag.com/contact-us/"
+                                    ]
+                                    }
+                                ]
+                                },
+                                {
+                                "@type": "BreadcrumbList",
+                                "@id": "https://codedtag.com/contact-us/#breadcrumb",
+                                "itemListElement": [
+                                    {
+                                    "@type": "ListItem",
+                                    "position": 1,
+                                    "name": "Home",
+                                    "item": "https://codedtag.com/"
+                                    },
+                                    {
+                                    "@type": "ListItem",
+                                    "position": 2,
+                                    "name": "Contact Us",
+                                    "item": "https://codedtag.com/contact-us/"
+                                    }
+                                ]
+                                },
+                                {
+                                "@type": "WebSite",
+                                "@id": "https://codedtag.com/#website",
+                                "url": "https://codedtag.com/",
+                                "name": "CodedTag",
+                                "description": "Unlock the world of coding for free! With online platforms, interactive tutorials, and coding communities, learn at your own pace and explore limitless possibilities. Start your coding journey now! #LearnToCode #FreeResources",
+                                "potentialAction": [
+                                    {
+                                    "@type": "SearchAction",
+                                    "target": {
+                                        "@type": "EntryPoint",
+                                        "urlTemplate": "https://codedtag.com/?s={search_term_string}"
+                                    },
+                                    "query-input": "required name=search_term_string"
+                                    }
+                                ],
+                                "inLanguage": "en-US"
+                                }
+                            ]
+                            }`}
+                    </script>
                 </Helmet>
 
                 <Header/>
@@ -170,7 +239,7 @@ class ContactPageComponents extends Component {
 
                     <div className="wrapper max-960 offset-left offset-right mt-20 mb-10">
                         <header className="container-col-75">
-                            <h1 className="headline">Contact Us</h1>
+                            <h1 className="headline">{this.state.content?.post_title || "Contact Us"}</h1>
                         </header>
                     </div>
 
@@ -178,8 +247,24 @@ class ContactPageComponents extends Component {
 
                         <form className="container-col-75 content content-section" action="">
                             
-
-                            <p>Greetings! If you have any questions or suggestions regarding our tutorials or products, please use the form below to send us a message. We will respond as soon as we can. Have a great day! 🙂</p>
+                        {
+                            (this.state.content == null || !this.state.content?.blocks?.filter(x => x.type === 'paragraph').length) ? (
+                                <p>Greetings! If you have any questions or suggestions regarding our tutorials or products, please use the form below to send us a message. We will respond as soon as we can. Have a great day! 🙂</p>
+                            ) : (
+                                this.state.content?.blocks.map(x => {
+                                    if (x.type === "paragraph") {
+                                         
+                                        return (
+                                            <p key={x.id} className="error-message">
+                                                {x.data.text}
+                                            </p>
+                                        );
+                                    }
+                                    return ''; // Add this line to avoid returning undefined
+                                })
+                            )
+                        }
+                            
                             
                             <input onChange={e => this.setState({full_name: e.target.value})} value={this.state.full_name} className="full-border grey-border mb-20" type="text" placeholder="Full Name"/>
                             <input onChange={e => this.setState({email: e.target.value})} value={this.state.email} className="full-border grey-border mb-20" type="text" placeholder="Email"/>
