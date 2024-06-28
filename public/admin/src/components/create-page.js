@@ -156,6 +156,8 @@ class CreatePage extends Component {
                 id: ""
             },
             allow_search_engine: true, 
+            enable_ads: true, 
+            page_template: '', 
             canonical_url: "",
             is_published: false, 
 
@@ -566,6 +568,8 @@ class CreatePage extends Component {
             meta_description: this.state.meta_description,
             tutorial: this.state.tutorial,
             allow_search_engine: this.state.allow_search_engine,
+            enable_ads: this.state.enable_ads,
+            page_template: this.state.page_template,
             canonical_url: this.state.canonical_url,
             is_published: this.state.is_published 
         }
@@ -770,6 +774,28 @@ class CreatePage extends Component {
                                             <option value={false}>No</option>
                                         </select>
                                     </label> 
+
+                                    <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <span>
+                                            Enable Google Ads
+                                        </span>
+                                        <select value={this.state.enable_ads} onChange={e => this.setState({ enable_ads: e.target.value })} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                        <option value={''}>Enable Ads</option>
+                                            <option value={true}>Yes</option>
+                                            <option value={false}>No</option>
+                                        </select>
+                                    </label>
+
+                                    <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <span>
+                                            Page Template
+                                        </span>
+                                        <select value={this.state.page_template} onChange={e => this.setState({ page_template: e.target.value })} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                            <option value={''}>Select Template</option>
+                                            <option value={'not_found_404_page'}>404 - Not Found</option>
+                                            <option value={'contact_page'}>Contact</option> 
+                                        </select>
+                                    </label>
 
                                     <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '120px'}}>

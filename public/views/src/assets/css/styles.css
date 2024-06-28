@@ -22,7 +22,7 @@
     margin: 50px auto;
     padding: 20px;
     text-align: center;
-    max-width: 540px;
+    max-width: 840px;
     display: block;
     width: 100%;
 }
@@ -33,32 +33,34 @@
     overflow: hidden;
     line-height: calc(90px + 2vw);  
     margin: 0;
+    color: #000;
 }
 .page-not-found-msg {
     font-size: 20px;
     margin-bottom: 20px;
+    color: #000;
+    font-weight: bold;
 }
 
 .error-message-container {
     display: block;
     color: #666;
     padding: 10px;
-    max-width: 550px;
+    max-width:95%;
     margin: 0 auto;
     font-size: 18px; 
 }
-
-
-
+ 
 .error-message {
     margin: 20px 0;
     font-size: 95%;
 }
 
 .search-form {
+    width: 70%;
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 10px; 
+    margin: 0 auto 30px auto ;
 }
 
 .search-form input {

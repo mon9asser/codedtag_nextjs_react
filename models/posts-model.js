@@ -52,6 +52,14 @@ let postsSchema = new Schema({
         type: {},  
         default: {}
     },
+    enable_ads : {
+        type: Boolean,  
+        default: true
+    },
+    page_template: {
+        type: String,  
+        default: '' // no_found_404 - contact_us - about_us - 
+    },
     keyphrase: {
         type: String, 
         default: ""

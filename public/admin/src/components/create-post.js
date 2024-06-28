@@ -159,7 +159,8 @@ class CreatePost extends Component {
                 id: "",
                 slug: ""
             },
-            allow_search_engine: true, 
+            allow_search_engine: true,
+            enable_ads: true,  
             canonical_url: "",
             is_published: false, 
 
@@ -575,6 +576,7 @@ class CreatePost extends Component {
             meta_description: this.state.meta_description,
             tutorial: this.state.tutorial,
             allow_search_engine: this.state.allow_search_engine,
+            enable_ads: this.state.enable_ads,
             canonical_url: this.state.canonical_url,
             is_published: this.state.is_published 
         }
@@ -827,6 +829,17 @@ class CreatePost extends Component {
                                             <option value={false}>No</option>
                                         </select>
                                     </label> 
+
+                                    <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <span>
+                                            Enable Google Ads
+                                        </span>
+                                        <select value={this.state.enable_ads} onChange={e => this.setState({ enable_ads: e.target.value })} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                        <option value={''}>Enable Ads</option>
+                                            <option value={true}>Yes</option>
+                                            <option value={false}>No</option>
+                                        </select>
+                                    </label>
 
                                     <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '120px'}}>
