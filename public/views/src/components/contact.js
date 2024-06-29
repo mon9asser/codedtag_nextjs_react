@@ -86,8 +86,7 @@ class ContactPageComponents extends Component {
         var pages = reqs.data.filter( x => x.page_template == "contact_page");
         if( pages.length ) {
             
-            var contact_page = pages[pages.length - 1];   
-
+            var contact_page = pages[pages.length - 1];    
             this.setState({ content: contact_page })
             
         }
@@ -197,11 +196,11 @@ class ContactPageComponents extends Component {
                         {
                             JSON.stringify({
                                 // schema truncated for brevity
-                                '@context': 'http://schema.org',
+                                '@context': this.state.site_address,
                                 '@type': 'JobPosting',
                                 'datePosted': 'JobPosting',
                                 'description': 'JobPosting',
-                                'title': 'JobPosting',
+                                'title': this.state.content?.post_title,
                                 'image': 'JobPosting',
                                 'workHours': 'Flexible',
                                 'validThrough': "",

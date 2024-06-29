@@ -6,9 +6,7 @@ import withNavigation from "../utils/with-navigation";
 import { Helper } from "../helper";
 import { Helmet } from "react-helmet";
 
-// disable_ads - page_template
-
-
+// disable_ads - page_template 
 class PageNotFoundComponents extends Component {
 
     constructor(props) {
