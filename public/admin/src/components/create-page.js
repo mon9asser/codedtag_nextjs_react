@@ -28,6 +28,7 @@ import Hyperlink from "editorjs-hyperlink";
 import { Settings } from "../settings.js";
 
 import {CustomCodeBlok} from "./parts/codeblock.js"
+import {page_templates} from "./parts/templates_options.js"
 import { Helper } from "../helper.js";
 
 const ReactEditorJS = createReactEditorJS();
@@ -792,8 +793,7 @@ class CreatePage extends Component {
                                         </span>
                                         <select value={this.state.page_template} onChange={e => this.setState({ page_template: e.target.value })} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
                                             <option value={''}>Select Template</option>
-                                            <option value={'not_found_404_page'}>404 - Not Found</option>
-                                            <option value={'contact_page'}>Contact</option> 
+                                            {page_templates.map(x => <option value={x.value}>{x.name}</option> )}
                                         </select>
                                     </label>
 

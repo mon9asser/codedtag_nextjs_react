@@ -12,6 +12,8 @@ const {Posts} = require("./../models/posts-model");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
+const {Sets} = require('./../models/settings-model')
+
 // Function to ensure directory exists
 const ensureDirectoryExistence = (dirPath) => {
     if (!fs.existsSync(dirPath)) {
@@ -644,10 +646,15 @@ postRouter.get("/post/get", async (req, res) => {
         
         const post_type = req.query.post_type;
         const post_id = req.query.post_id;
+        const page_template = req.query.page_template;
 
         var query_object = {};
         if( post_type != undefined ) {
             query_object = { ...query_object, post_type: post_type };
+        }
+
+        if( page_template != undefined ) {
+            query_object = { ...query_object, page_template: page_template };
         }
 
         if( post_id != undefined ) {
@@ -656,18 +663,21 @@ postRouter.get("/post/get", async (req, res) => {
 
         // Fetch posts based on the post_type
         const posts = await Posts.find(query_object);
+        const settings = await Sets.find({});
 
         if (posts.length > 0) {
             res.status(200).send({
                 is_error: false,
                 data: posts,
-                message: "Posts retrieved successfully"
+                message: "Posts retrieved successfully",
+                settings: settings
             });
         } else {
-            res.status(404).send({
+            res.send({
                 is_error: true,
-                data: null,
-                message: "No posts found for the given post_type"
+                data: [],
+                message: "No posts found for the given post_type",
+                settings: settings
             });
         }
 

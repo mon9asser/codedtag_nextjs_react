@@ -9,7 +9,7 @@ import { Settings } from "../settings";
 import ReCAPTCHA from "react-google-recaptcha"; 
 
 
-var ContactPage = () => {
+var AboutPage = () => {
 
     // states 
     var [captcha, changed_capatch] = React.useState(null);
@@ -19,12 +19,7 @@ var ContactPage = () => {
         is_pressed: false
     });
 
-    var [form_object, change_form_object] = React.useState({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-    });
+     
 
     var [ upcoming, upcoming_change ] = React.useState({
         paragraphs: [{ data: { text: 'Greetings! If you have any questions or suggestions regarding our tutorials or products, please use the form below to send us a message. We will respond as soon as we can. Have a great day! 🙂' }}], 
@@ -50,7 +45,7 @@ var ContactPage = () => {
     React.useEffect(() => {
         
         Helper.sendRequest({
-            api: "post/get?post_type=1&page_template=contact_page",
+            api: "post/get?post_type=1&page_template=about_page",
             method: "get",
             data: {}
         }).then( row => {
@@ -79,15 +74,8 @@ var ContactPage = () => {
         });
 
     }, []);
-
-    // functions 
-    var apply_object_change = (obj) => {
-        var old_objec = {...form_object};
-        var __key = Object.keys(obj)[0];
-        old_objec[__key] = obj[__key];
-        change_form_object(old_objec);
-    }
-
+    
+    // functions
     var response_res_change_callback = (obj) => {
         var old_objec = {...response_result};
         var __keys = Object.keys(obj);
@@ -105,88 +93,7 @@ var ContactPage = () => {
         }); 
         upcoming_change(old_objec);
     }
-
-    var handleCaptchaReset = () => {
-
-        if (recaptchaRef.current) {
-          recaptchaRef.current.reset();
-        }
-
-        changed_capatch(null);
-    };
-
-    var submit_form = async (e) => {
-        
-        e.preventDefault();
-        response_res_change_callback({
-            is_pressed: true,
-            cls: '',
-            text: '',
-        });
-
-        if(response_result.is_pressed) {
-            return;
-        }
-
-        if(captcha == null ) {
-            response_res_change_callback({
-                is_pressed: false,
-                cls: 'show-msg error',
-                text: 'Confirm that you are not robot!',
-            });
-
-            return;
-        }
-
-        var email_validator = Helper.validateEmail(form_object.email);
-        if( !email_validator ) {
-  
-            response_res_change_callback({
-                is_pressed: false, 
-                cls: 'show-msg error',
-                text: 'Email is not valid!', 
-            });
-
-            return; 
-
-        }
-
-        if( form_object.email == '' || form_object.full_name == "" || form_object.subject == '' || form_object.message == '' ) {
-  
-            response_res_change_callback({
-                is_pressed: false, 
-                cls: 'show-msg error',
-                text: 'All fileds are required !', 
-            });
-
-            return; 
-
-        }
-
-        var res = await Helper.sendRequest({ api: "contact-message", method: "post", data: form_object })
-
-        
-        if( res.is_error) {
-            
-            response_res_change_callback({
-                is_pressed: false, 
-                cls: 'show-msg error',
-                text: res.message, 
-            });
-
-            return;
-        } 
-
-        // success 
-        response_res_change_callback({
-            is_pressed: false, 
-            cls: 'show-msg success',
-            text: "Thank you for reaching out to us. We will get back to you within a few days.", 
-        });
-
-    }
     
-
     return (
         <>
 
@@ -205,9 +112,9 @@ var ContactPage = () => {
                             "@type": "ContactPage",
                             "mainEntityOfPage": {
                                 "@type": "WebPage",
-                                "@id": "${upcoming.settings?.site_address.site_address}/${upcoming.slug}/"
+                                "@id": "${upcoming.settings?.site_address}/${upcoming.slug}/"
                             },
-                            "url": "${upcoming.settings?.site_address.site_address}/${upcoming.slug}/",
+                            "url": "${upcoming.settings?.site_address}/${upcoming.slug}/",
                             "name": "${upcoming.meta_title}",
                             "description": "${upcoming.meta_description}"
                         }
@@ -226,37 +133,7 @@ var ContactPage = () => {
                 </div>
 
                 <div className="wrapper max-960 offset-left offset-right">
-
-                    <form className="container-col-75 content content-section" action="">
-                        
-                        
-                        { upcoming.paragraphs.map((x, k) => <p key={k}>{x.data.text}</p> ) }
-
-                        <input value={form_object.name} onChange={(e) => apply_object_change({name: e.target.value})} className="full-border grey-border mb-20" type="text" placeholder="Full Name"/>
-                        <input value={form_object.email} onChange={(e) => apply_object_change({email: e.target.value})} className="full-border grey-border mb-20" type="text" placeholder="Email"/>
-                        <input value={form_object.subject} onChange={(e) => apply_object_change({subject: e.target.value})} className="full-border grey-border mb-20" type="text" placeholder="Subject"/>
-                        <textarea value={form_object.message} onChange={(e) => apply_object_change({message: e.target.value})} className="full-border grey-border mb-20" name="" cols="15" rows="5" aria-invalid="false" placeholder="Message"></textarea>
-                        
-                        <ReCAPTCHA
-                            ref={recaptchaRef}
-                            sitekey={Settings.google.captcha.public}
-                            onChange={changed_capatch} 
-                            onReset={handleCaptchaReset}
-                        />
-
-                        <div className={`response-msg ${response_result.cls}`}>{response_result.text}</div>
-
-                        <div className="flexbox items-center">
-                            <button onClick={submit_form} className="btn primary-btn third-btn btn-fit" type="submit" id="submit-contact-form">
-                                {
-                                    response_result.is_pressed ? 
-                                    <span className="loader"></span> :
-                                    'Send Message'
-                                }
-                            </button>
-                        </div>
-                    </form>
-                    
+                    <p>lorem ipsume dummy text!</p>
                 </div>
 
             </div>
@@ -264,5 +141,6 @@ var ContactPage = () => {
         </>
     );
 }
+ 
 
-export { ContactPage };
+export { AboutPage }
