@@ -7,12 +7,14 @@ import { Helper } from "../helper";
 import { Helmet } from "react-helmet";
 import { Settings } from "../settings";
 import ReCAPTCHA from "react-google-recaptcha";
+import { DataContext } from "../context";
 // disable_ads - page_template
 
 
 class ContactPageComponents extends Component {
-
+    static contextType = DataContext;
     constructor(props) {
+
         super(props);
         
         this.state = {
@@ -23,7 +25,8 @@ class ContactPageComponents extends Component {
             subject: '',
             message: '',
             captcha: null,
-
+            site_address: '',
+            is_loaded_state: false,
             result_class: '',
             result_text: '',
             is_pressed: false
@@ -44,9 +47,33 @@ class ContactPageComponents extends Component {
     goBack = () => {
         this.props.navigate(-1); // Go back in the history stack
     };
- 
+    
+    site_settings = (settings) => {
+        
+        if(this.state.is_loaded_state) {
+            return;
+        }
+
+        if( settings.length ) {
+            var site_url = settings[0]?.site_address;
+            var trail_arr = site_url.split("/");
+            if( trail_arr[trail_arr.length - 1] !== '') {
+                site_url = `${site_url}/`;
+            }
+            this.setState({site_address: site_url, is_loaded_state: true})
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const { settings } = this.context;
+        this.site_settings(settings);
+    }
+
     componentDidMount = async () => {
         
+        const { settings } = this.context;
+        this.site_settings(settings);
+
         // get content of not found page 
         var reqs = await Helper.sendRequest({
             api: "post/get?post_type=1",
@@ -59,9 +86,7 @@ class ContactPageComponents extends Component {
         var pages = reqs.data.filter( x => x.page_template == "contact_page");
         if( pages.length ) {
             
-            var contact_page = pages[pages.length - 1];  
-            
-            console.log(contact_page);
+            var contact_page = pages[pages.length - 1];   
 
             this.setState({ content: contact_page })
             
@@ -155,81 +180,39 @@ class ContactPageComponents extends Component {
         });
 
     }
+    
 
     render() {
-        
+         
         return (
             <>
 
                 <Helmet>
                     <title>{this.state.content?.meta_title || "Contact Us"}</title>
                     <meta name="description" content={this.state.content?.meta_description || "Discover top-notch programming tutorials and web development resources at CodedTag. Enhance your coding skills with our comprehensive guides. Contact us today!"} />
-                    <script type="application/ld+json">
-                        {`
+                    <script
+                        key={`jobJSON-data-fuls`}
+                        type='application/ld+json' 
+                    >
                         {
-                            "@context": "https://schema.org",
-                            "@graph": [
-                                {
-                                "@type": "WebPage",
-                                "@id": "https://codedtag.com/contact-us/",
-                                "url": "https://codedtag.com/contact-us/",
-                                "name": "Contact Us - CodedTag",
-                                "isPartOf": {
-                                    "@id": "https://codedtag.com/#website"
-                                },
-                                "datePublished": "2022-06-09T11:38:41+00:00",
-                                "dateModified": "2023-03-22T19:09:11+00:00",
-                                "breadcrumb": {
-                                    "@id": "https://codedtag.com/contact-us/#breadcrumb"
-                                },
-                                "inLanguage": "en-US",
-                                "potentialAction": [
-                                    {
-                                    "@type": "ReadAction",
-                                    "target": [
-                                        "https://codedtag.com/contact-us/"
-                                    ]
-                                    }
-                                ]
-                                },
-                                {
-                                "@type": "BreadcrumbList",
-                                "@id": "https://codedtag.com/contact-us/#breadcrumb",
-                                "itemListElement": [
-                                    {
-                                    "@type": "ListItem",
-                                    "position": 1,
-                                    "name": "Home",
-                                    "item": "https://codedtag.com/"
-                                    },
-                                    {
-                                    "@type": "ListItem",
-                                    "position": 2,
-                                    "name": "Contact Us",
-                                    "item": "https://codedtag.com/contact-us/"
-                                    }
-                                ]
-                                },
-                                {
-                                "@type": "WebSite",
-                                "@id": "https://codedtag.com/#website",
-                                "url": "https://codedtag.com/",
-                                "name": "CodedTag",
-                                "description": "Unlock the world of coding for free! With online platforms, interactive tutorials, and coding communities, learn at your own pace and explore limitless possibilities. Start your coding journey now! #LearnToCode #FreeResources",
-                                "potentialAction": [
-                                    {
-                                    "@type": "SearchAction",
-                                    "target": {
-                                        "@type": "EntryPoint",
-                                        "urlTemplate": "https://codedtag.com/?s={search_term_string}"
-                                    },
-                                    "query-input": "required name=search_term_string"
-                                    }
-                                ],
-                                "inLanguage": "en-US"
+                            JSON.stringify({
+                                // schema truncated for brevity
+                                '@context': 'http://schema.org',
+                                '@type': 'JobPosting',
+                                'datePosted': 'JobPosting',
+                                'description': 'JobPosting',
+                                'title': 'JobPosting',
+                                'image': 'JobPosting',
+                                'workHours': 'Flexible',
+                                'validThrough': "",
+                                'hiringOrganization': {
+                                    '@type': 'Organization',
+                                    'name': 'JobPosting',
+                                    'sameAs': 'JobPosting' || null,
+                                    'logo': 'JobPosting',
                                 }
-                            ]
-                            }`}
+                            })
+                        }
                     </script>
                 </Helmet>
 
@@ -246,7 +229,7 @@ class ContactPageComponents extends Component {
                     <div className="wrapper max-960 offset-left offset-right">
 
                         <form className="container-col-75 content content-section" action="">
-                            
+                           
                         {
                             (this.state.content == null || !this.state.content?.blocks?.filter(x => x.type === 'paragraph').length) ? (
                                 <p>Greetings! If you have any questions or suggestions regarding our tutorials or products, please use the form below to send us a message. We will respond as soon as we can. Have a great day! 🙂</p>

@@ -13,6 +13,72 @@ class HelperData {
         var re =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
+
+    generateJsonLdWebPage = (url, pageTitle, siteId, imageUrl, datePublished, dateModified, description, breadcrumbItems) => {
+        // Constructing the JSON-LD object
+        const jsonLdObject = {
+            "@context": "https://schema.org",
+            "@graph": [{
+                "@type": "WebPage",
+                "@id": url,
+                "url": url,
+                "name": pageTitle,
+                "isPartOf": {
+                    "@id": siteId
+                },
+                "primaryImageOfPage": {
+                    "@id": url + "/#primaryimage"
+                },
+                "image": {
+                    "@id": url + "/#primaryimage"
+                },
+                "thumbnailUrl": imageUrl,
+                "datePublished": datePublished,
+                "dateModified": dateModified,
+                "description": description,
+                "breadcrumb": {
+                    "@id": url + "/#breadcrumb"
+                },
+                "inLanguage": "en-US",
+                "potentialAction": [{
+                    "@type": "ReadAction",
+                    "target": [url]
+                }]
+            }, {
+                "@type": "ImageObject",
+                "inLanguage": "en-US",
+                "@id": url + "/#primaryimage",
+                "url": imageUrl,
+                "contentUrl": imageUrl
+            }, {
+                "@type": "BreadcrumbList",
+                "@id": url + "/#breadcrumb",
+                "itemListElement": breadcrumbItems.map((item, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "name": item.name,
+                    "item": item.url
+                }))
+            }, {
+                "@type": "WebSite",
+                "@id": siteId,
+                "url": siteId,
+                "name": "CodedTag", // Replace with actual site name if dynamic
+                "description": "Unlock the world of coding for free! With online platforms, interactive tutorials, and coding communities, learn at your own pace and explore limitless possibilities. Start your coding journey now! #LearnToCode #FreeResources",
+                "potentialAction": [{
+                    "@type": "SearchAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": siteId + "?s={search_term_string}"
+                    },
+                    "query-input": "required name=search_term_string"
+                }],
+                "inLanguage": "en-US"
+            }]
+        };
+    
+        return jsonLdObject;
+    }
  
     formatNumber(num) {
         if (num >= 1000000000000) {
