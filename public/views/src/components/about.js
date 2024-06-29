@@ -7,24 +7,15 @@ import { Helper } from "../helper";
 import { Helmet } from "react-helmet";
 import { Settings } from "../settings";
 import ReCAPTCHA from "react-google-recaptcha"; 
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 var AboutPage = () => {
 
-    // states 
-    var [captcha, changed_capatch] = React.useState(null);
-    var [response_result, response_res_change] = React.useState({
-        cls: '',
-        text: '',
-        is_pressed: false
-    });
-
-     
-
+    // states  
     var [ upcoming, upcoming_change ] = React.useState({
-        paragraphs: [{ data: { text: 'Greetings! If you have any questions or suggestions regarding our tutorials or products, please use the form below to send us a message. We will respond as soon as we can. Have a great day! 🙂' }}], 
-        post_title: 'Contact Us', 
-        meta_title: 'Contact Us', 
+        blocks: [], 
+        post_title: 'About Us', 
+        meta_title: 'About Us', 
         description: '',
         meta_description: '',
         allow_search_engine: false,
@@ -52,10 +43,9 @@ var AboutPage = () => {
             
             var this_page = row.data.length? row.data[0]: {}; 
             var settings = row?.settings?.length ? row.settings[0]: null;
-             
-            var paragraphs = this_page?.blocks?.filter(x => x.type == 'paragraph') || [];
+              
             var object_to_change = {
-                paragraphs: paragraphs.length ? paragraphs: upcoming.paragraphs, 
+                blocks: this_page?.blocks, 
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
                 meta_title: this_page.meta_title ? (this_page.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ) ): upcoming.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ), 
                 description: this_page.description ? this_page.description: upcoming.description, 
@@ -75,15 +65,7 @@ var AboutPage = () => {
 
     }, []);
     
-    // functions
-    var response_res_change_callback = (obj) => {
-        var old_objec = {...response_result};
-        var __keys = Object.keys(obj);
-        __keys.map(x => {
-            old_objec[x] = obj[x]
-        }); 
-        response_res_change(old_objec);
-    }
+    // functions 
 
     var response_upcoming_callback = (obj) => {
         var old_objec = {...upcoming};
@@ -109,14 +91,38 @@ var AboutPage = () => {
                         `
                         {
                             "@context": "https://schema.org",
-                            "@type": "ContactPage",
-                            "mainEntityOfPage": {
-                                "@type": "WebPage",
-                                "@id": "${upcoming.settings?.site_address}/${upcoming.slug}/"
-                            },
+                            "@type": "WebPage",
                             "url": "${upcoming.settings?.site_address}/${upcoming.slug}/",
                             "name": "${upcoming.meta_title}",
                             "description": "${upcoming.meta_description}"
+                            "mainEntity": {
+                                "@type": "Organization",
+                                "name": "الصباغ للمعلوميات",
+                                "url": "${upcoming.settings?.site_address}",
+                                "logo": {
+                                "@type": "ImageObject",
+                                "url": "https://codedtag.com/logo.png",
+                                    "width": 250,
+                                    "height": 250
+                                },
+                                "contactPoint": {
+                                    "@type": "ContactPoint",
+                                    "contactType": "Customer Support", 
+                                    "email": "contact@codedtag.com",
+                                    "url": "https://codedtag.com/contact-us"
+                                },
+                                "founder": {
+                                    "@type": "Person",
+                                    "name": "Montasser Mossallem"
+                                },
+                                "foundingDate": "2022-06-26",
+                                "sameAs": [
+                                    "https://www.facebook.com/YourFacebookPage",
+                                    "https://www.twitter.com/YourTwitterHandle",
+                                    "https://www.linkedin.com/company/YourCompanyName"
+                                ]
+                            }
+                            
                         }
                         `
                     }
@@ -124,16 +130,73 @@ var AboutPage = () => {
             </Helmet>
 
             <Header/>
-            <div className="container ptb-50">
+            
+            <div className="max-850 offset-left offset-right mt-space-long plr-block"> 
+                <header className="flexbox content-center column-direction mb-30">
+                        
+                    <h1 className="tutorial-headline mt-h">PHP Variable Functions</h1>
+                    <div className="flexbox items-center author-section mt-5"> 
+                        <div className="flexbox content-center auth-name">
+                                <i>Last Update: 25 January, 2023</i>
+                        </div>
+                    </div>
+                </header> 
 
-                <div className="wrapper max-960 offset-left offset-right mt-20 mb-10">
-                    <header className="container-col-75">
-                        <h1 className="headline">{upcoming.post_title}</h1>
-                    </header>
-                </div>
-
-                <div className="wrapper max-960 offset-left offset-right">
-                    <p>lorem ipsume dummy text!</p>
+                <div className="lg-2-content tutorial-content content-section">
+                    
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
+                     
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
+                    <blockquote>
+                        <p>Learn and read how to Install Node.js on Windows and write your first</p>
+                        <cite> Montasser Mossallem </cite>
+                    </blockquote>
+                    <h2>Learn and read how to Install Node.js on Windows and write your first program</h2>
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
+                    <h3>Learn and read how to Install Node.js on Windows and write your first program</h3>
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
+                    <h4>Learn and read how to Install Node.js on Windows and write your first program</h4>
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
+                    <h5>Learn and read how to Install Node.js on Windows and write your first program</h5>
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
+                    <h6>Learn and read how to Install Node.js on Windows and write your first program</h6>
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
+                    <iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
+                    <figure> 
+                        <LazyLoadImage
+                            className="half"
+                            alt={'Alt of image'}
+                            height={'auto'}
+                            src="https://www.freecodecamp.org/news/content/images/size/w1000/2020/02/clem-onojeghuo-gBnHMsAOWrs-unsplash.jpg" // use normal <img> attributes as props
+                            width={'auto'} /> 
+                    </figure>
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p> 
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
+                     
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p> 
+                    <p>
+                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
+                    </p>
                 </div>
 
             </div>
