@@ -6,7 +6,7 @@ module.exports = {
     property_id:"317812519",
 
     site_url: "http://localhost.com:3000",
-    media_url: "http://localhost.com:3000",
+    media_url: "http://localhost:5000",
     admin_url: "http://localhost.com:3000",
     dashboard_url: "http://localhost.com:3000/dashboard",
 }

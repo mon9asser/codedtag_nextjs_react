@@ -1,18 +1,198 @@
-import React from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Settings} from "./settings"; 
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-
+import Highlight from 'react-highlight'
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
  
 
+const StyledList = ({ data }) => {
+  const { style, items } = data;
+
+  return (
+      <div className="list-container">
+          {style === 'ordered' ? (
+              <ol>
+                  {items.map((item, index) => (
+                      <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
+                  ))}
+              </ol>
+          ) : (
+              <ul>
+                  {items.map((item, index) => (
+                      <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
+                  ))}
+              </ul>
+          )}
+      </div>
+  );
+};
+
+
+const ResponsiveTable = ({ data }) => {
+  const { withHeadings, content } = data;
+
+  return (
+      <div className="table-container">
+          <table className="table">
+              <thead>
+                  {withHeadings && (
+                      <tr>
+                          {content[0].map((heading, index) => (
+                              <th key={index}>{heading}</th>
+                          ))}
+                      </tr>
+                  )}
+              </thead>
+              <tbody>
+                  {content.slice(withHeadings ? 1 : 0).map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                          {row.map((cell, cellIndex) => (
+                              <td key={cellIndex} data-label={withHeadings ? content[0][cellIndex] : `Column ${cellIndex + 1}`}>
+                                  {cell}
+                              </td>
+                          ))}
+                      </tr>
+                  ))}
+              </tbody>
+          </table>
+      </div>
+  );
+}; 
+
+var LazyLoadYouTube = ({ url, width = '560', height = '315' }) => {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const iframeRef = useRef();
+
+  useEffect(() => {
+      const observer = new IntersectionObserver(
+          (entries) => {
+              if (entries[0].isIntersecting) {
+                  setIsIntersecting(true);
+                  observer.disconnect();
+              }
+          },
+          {
+              rootMargin: '0px 0px 200px 0px' // Adjust this value as needed
+          }
+      );
+
+      if (iframeRef.current) {
+          observer.observe(iframeRef.current);
+      }
+
+      return () => {
+          if (iframeRef.current) {
+              observer.unobserve(iframeRef.current);
+          }
+      };
+  }, []);
+
+  return (
+      <div ref={iframeRef} style={{ minHeight: height, minWidth: width }}>
+          {isIntersecting ? (
+              <iframe
+                  width={width}
+                  height={height}
+                  src={`${url}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+              ></iframe>
+          ) : (
+              <div style={{ minHeight: height, minWidth: width, backgroundColor: '#000' }}></div>
+          )}
+      </div>
+  );
+}
+
+
 class HelperData {
+
+
+      
+
+    ArticleContent = ({blocks}) => {
+      console.log(blocks);
+      return(
+        <>
+          {blocks?.map(x => {
+
+            if(x.id != 'header-level-1') {
+              
+              if( x.type == 'paragraph') {
+                return (<p key={x.id}>{x?.data?.text}</p>)
+              } else if (x.type == 'code' ) {
+                return (
+                  <Highlight key={x.id} className={x?.data?.language_type}>
+                    {x?.data?.value}
+                  </Highlight>
+                )
+              } else if (x.type == 'image') {
+                return (
+                  <figure key={x.id}> 
+                        <LazyLoadImage
+                            className={x?.data?.stretched ? 'full': 'half'}
+                            alt={x?.data?.caption}
+                            height={'auto'}
+                            src={x?.data?.file?.url} // use normal <img> attributes as props
+                            width={'auto'} /> 
+                  </figure>
+                )
+              } else if (x.type == 'header') {
+                return (
+                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id}, x?.data?.text)
+                )
+              } else if (x.type == 'youtubeEmbed') {
+                return (<LazyLoadYouTube key={x.id} url={x.data?.url}/>);
+              } else if (x.type == 'delimiter') {
+                return (<hr key={x.id} />)
+              } else if (x.type == 'raw') {
+                return (
+                  <Highlight key={x.id} className={'html'}>
+                    {x?.data?.html}
+                  </Highlight>
+                )
+              } else if (x.type == 'table') {
+                return <ResponsiveTable key={x.id} data={x.data} />
+              } else if (x.type == 'list') {
+                return <StyledList key={x.id} data={x.data} />
+              } 
+
+            } 
+
+          })}
+        </>
+      );     
+    }
 
     validateEmail(email){
        // var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         var re =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
+    
+    formatDate = (dateString) => {
+        const date = new Date(dateString);
+
+        // Check if the date is valid
+        if (isNaN(date.getTime())) {
+          console.error('Invalid date');
+          return 'Invalid date';
+        }
+
+        // Format the date components separately
+        const day = date.getDate();
+        const month = date.toLocaleString('en-GB', { month: 'long' });
+        const year = date.getFullYear();
+
+        // Combine them with a comma
+        const formattedDate = `${day} ${month}, ${year}`;
+        
+        return formattedDate;
+
+    };
 
     generateJsonLdWebPage = (url, pageTitle, siteId, imageUrl, datePublished, dateModified, description, breadcrumbItems) => {
         // Constructing the JSON-LD object

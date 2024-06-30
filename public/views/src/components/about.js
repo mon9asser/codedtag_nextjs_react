@@ -139,69 +139,16 @@ var AboutPage = () => {
             <div className="max-850 offset-left offset-right mt-space-long plr-block"> 
                 <header className="flexbox content-center column-direction mb-30">
                         
-                    <h1 className="tutorial-headline mt-h">PHP Variable Functions</h1>
+                    <h1 className="tutorial-headline mt-h">{upcoming.post_title}</h1>
                     <div className="flexbox items-center author-section mt-5"> 
                         <div className="flexbox content-center auth-name">
-                                <i>Last Update: 25 January, 2023</i>
+                            <i>Last Update: { Helper.formatDate(upcoming.updated_date)}</i>
                         </div>
                     </div>
                 </header> 
 
                 <div className="lg-2-content tutorial-content content-section">
-                    
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
-                     
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
-                    <blockquote>
-                        <p>Learn and read how to Install Node.js on Windows and write your first</p>
-                        <cite> Montasser Mossallem </cite>
-                    </blockquote>
-                    <h2>Learn and read how to Install Node.js on Windows and write your first program</h2>
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
-                    <h3>Learn and read how to Install Node.js on Windows and write your first program</h3>
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
-                    <h4>Learn and read how to Install Node.js on Windows and write your first program</h4>
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
-                    <h5>Learn and read how to Install Node.js on Windows and write your first program</h5>
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
-                    <h6>Learn and read how to Install Node.js on Windows and write your first program</h6>
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
-                    <iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
-                    <figure> 
-                        <LazyLoadImage
-                            className="half"
-                            alt={'Alt of image'}
-                            height={'auto'}
-                            src="https://www.freecodecamp.org/news/content/images/size/w1000/2020/02/clem-onojeghuo-gBnHMsAOWrs-unsplash.jpg" // use normal <img> attributes as props
-                            width={'auto'} /> 
-                    </figure>
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p> 
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
-                     
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p> 
-                    <p>
-                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                    </p>
+                    <Helper.ArticleContent blocks={upcoming.blocks}/>
                 </div>
 
             </div>

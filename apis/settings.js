@@ -50,6 +50,7 @@ settingsRouter.post("/upload-logo", upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).send({ success: false, message: "No file uploaded" });
     }
+    
     res.send({ success: true, message: "File uploaded successfully", filePath: `${media_url}/${req.file_name}` });
 });
 

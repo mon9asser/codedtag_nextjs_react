@@ -2,7 +2,9 @@ import hljs from 'highlight.js';
  
 class CustomCodeBlok {
  
-
+    constructor(initialData = {}) {
+        this.initialData = initialData;
+    }
             
     static get isReadOnlySupported() {
         return true;
@@ -10,6 +12,22 @@ class CustomCodeBlok {
 
     static get enableLineBreaks() {
         return true;
+    }
+
+    setInitialData(codeContainer) {
+        const textareaElem = codeContainer.querySelector('textarea');
+        const codeElem = codeContainer.querySelector('code');
+        
+        if (this.initialData) {
+            textareaElem.value = this.initialData.data.value || '';
+            
+            const language = this.initialData.data.language_type || 'plaintext';
+            
+            textareaElem.dataset.lang = language;
+            codeElem.innerHTML = hljs.highlight(textareaElem.value, {language}).value;
+            codeContainer.querySelector('.language-type').innerText = language.toUpperCase();
+            codeContainer.querySelector('pre').className = `hljs language-${language}`;
+        }
     }
 
     static get toolbox() {
@@ -82,7 +100,7 @@ class CustomCodeBlok {
         codeElem.appendChild(code);
         block.appendChild(codeElem);
         block.appendChild(textareaElem);
-
+         
         // Footer section
         const codeFooter = document.createElement('div');
         codeFooter.setAttribute('contenteditable', 'false');
@@ -93,12 +111,12 @@ class CustomCodeBlok {
         codeContainer.appendChild(codeHeader);
         codeContainer.appendChild(block);
         codeContainer.appendChild(codeFooter);
-
+        
         // Event listeners
         textareaElem.addEventListener('input', function (e) {
             e.preventDefault();
             var language = textareaElem.dataset.lang == undefined ? "plaintext": textareaElem.dataset.lang
-            console.log();
+             
             code.innerHTML = hljs.highlight(textareaElem.value, {language: language}).value;
         });
 
@@ -122,6 +140,8 @@ class CustomCodeBlok {
         });
         
         // Return the codeContainer element
+        this.setInitialData(codeContainer);
+
         return codeContainer;
 
     }

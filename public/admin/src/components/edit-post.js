@@ -61,7 +61,7 @@ var Tools = {
         inlineToolbar: ["bold", "hyperlink", "italic", "marker", "inlineCode"]
     },
     // warning: Warning, 
-    quote: Quote,
+    //quote: Quote,
     marker: Marker,
     checklist: CheckList,
     delimiter: Delimiter,
@@ -661,6 +661,8 @@ class wrappedEditPost extends Component {
 
         
         e.preventDefault(); 
+
+         
 
         this.setState({ 
             is_pressed: true, 
