@@ -150,8 +150,11 @@ class Settings extends Component {
             subscribe_title: this.state.subscribe_title,
             contact_email: this.state.contact_email,
             subscribe_description: this.state.subscribe_description,
-            site_logo: fileUrl // Add the file URL to the data object
         };
+
+        if(this.state.selectedFile != null ) {
+            data_object.site_logo = fileUrl // Add the file URL to the data object
+        }
 
         var request = await Helper.sendRequest({
             api: "settings/update",

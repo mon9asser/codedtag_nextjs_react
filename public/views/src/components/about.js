@@ -26,7 +26,8 @@ var AboutPage = () => {
         slug: '',  
         settings: {
             site_address: ''
-        }
+        },
+        social_links: []
     });
     
     // refs 
@@ -44,6 +45,7 @@ var AboutPage = () => {
             var this_page = row.data.length? row.data[0]: {}; 
             var settings = row?.settings?.length ? row.settings[0]: null;
             var social_links = row?.social_links || [];
+            
             var object_to_change = {
                 blocks: this_page?.blocks, 
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
@@ -57,9 +59,15 @@ var AboutPage = () => {
                 slug: this_page.slug ? this_page.slug: upcoming.slug, 
                 updated_date: this_page.updated_date ? this_page.updated_date: upcoming.updated_date, 
                 settings: settings,
-                social_links: social_links?.map(x => x.social_link)
+                social_links: social_links?.map(x => `"${x.social_link}"`)
             };
-            console.log(object_to_change);
+
+            var site_url = object_to_change.settings?.site_address;
+            var last_char = site_url?.length ? site_url[site_url.length - 1]: "";
+            if(last_char != "/" && last_char != "") {
+                object_to_change.settings.site_address = object_to_change.settings?.site_address + "/";
+            }
+            
             response_upcoming_callback(object_to_change);
 
         });
@@ -93,7 +101,7 @@ var AboutPage = () => {
                         {
                             "@context": "https://schema.org",
                             "@type": "WebPage",
-                            "url": "${upcoming.settings?.site_address}/${upcoming.slug}/",
+                            "url": "${upcoming.settings?.site_address}${upcoming.slug}/",
                             "name": "${upcoming.meta_title}",
                             "description": "${upcoming.meta_description}"
                             "mainEntity": {
@@ -117,11 +125,7 @@ var AboutPage = () => {
                                     "name": "Montasser Mossallem"
                                 },
                                 "foundingDate": "2022-06-26",
-                                "sameAs": [
-                                    "https://www.facebook.com/YourFacebookPage",
-                                    "https://www.twitter.com/YourTwitterHandle",
-                                    "https://www.linkedin.com/company/YourCompanyName"
-                                ]
+                                "sameAs": [${upcoming.social_links}]
                             }
                             
                         }
