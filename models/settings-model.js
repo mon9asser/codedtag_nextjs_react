@@ -1,103 +1,107 @@
-const {mongoose} = require("./../config/connection");
+const { mongoose } = require("./../config/connection");
 
-
-// Create Schema 
+// Create Schema
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 let settingsSchema = new Schema({
-    subscribe_title: { 
-        type: String ,
-        trim : true,
-        default: "" 
+    subscribe_title: {
+        type: String,
+        trim: true,
+        default: ""
     },
-    subscribe_description: { 
-        type: String ,
-        trim : true,
-        default: "" 
+    subscribe_description: {
+        type: String,
+        trim: true,
+        default: ""
     },
-    banner_site_title: { 
-        type: String ,
-        trim : true,
-        default: "" 
+    banner_site_title: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    site_name: {
+        type: String,
+        trim: true,
+        default: ""
     },
     banner_site_description: {
-        type: String ,
-        trim : true,
+        type: String,
+        trim: true,
         default: ""
-    }, 
+    },
     site_address: {
-        type: String ,
-        trim : true,
+        type: String,
+        trim: true,
         default: ""
     },
     beside_post_title: {
-        type: String ,
-        trim : true,
+        type: String,
+        trim: true,
         default: ""
     },
     site_meta_title: {
-        type: String ,
-        trim : true,
+        type: String,
+        trim: true,
         default: ""
     },
     site_meta_description: {
-        type: String ,
-        trim : true,
+        type: String,
+        trim: true,
         default: ""
     },
     contact_email: {
-        type: String ,
-        trim : true,
+        type: String,
+        trim: true,
         default: ""
     },
     google_analytics: {
         enabled: {
-            type: Boolean ,
-            trim : true,
+            type: Boolean,
+            trim: true,
             default: false
         },
         field: {
-            type: String ,
-            trim : true,
+            type: String,
+            trim: true,
             default: ""
-        }, 
+        },
     },
     robots_file_contents: {
         type: String,
-        default: ""  
+        default: ""
     },
     script_url_1: {
         enabled: {
-            type: Boolean ,
-            trim : true,
+            type: Boolean,
+            trim: true,
             default: false
         },
         url_field: {
-            type: String ,
-            trim : true,
+            type: String,
+            trim: true,
             default: ""
         },
     },
     script_url_2: {
         enabled: {
-            type: Boolean ,
-            trim : true,
+            type: Boolean,
+            trim: true,
             default: false
         },
         url_field: {
-            type: String ,
-            trim : true,
+            type: String,
+            trim: true,
             default: ""
         },
+    },
+    site_logo: {
+        type: String,
+        trim: true,
+        default: ""
     }
 });
 
-
-
 // Create Collection
-var Sets = mongoose.model("settings" , settingsSchema );
+var Sets = mongoose.model("settings", settingsSchema);
 
-
-
-module.exports = {Sets};
+module.exports = { Sets };

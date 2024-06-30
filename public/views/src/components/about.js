@@ -43,7 +43,7 @@ var AboutPage = () => {
             
             var this_page = row.data.length? row.data[0]: {}; 
             var settings = row?.settings?.length ? row.settings[0]: null;
-              
+            var social_links = row?.social_links || [];
             var object_to_change = {
                 blocks: this_page?.blocks, 
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
@@ -56,9 +56,10 @@ var AboutPage = () => {
                 page_template: this_page.page_template ? this_page.page_template: upcoming.page_template, 
                 slug: this_page.slug ? this_page.slug: upcoming.slug, 
                 updated_date: this_page.updated_date ? this_page.updated_date: upcoming.updated_date, 
-                settings: settings
+                settings: settings,
+                social_links: social_links?.map(x => x.social_link)
             };
-            
+            console.log(object_to_change);
             response_upcoming_callback(object_to_change);
 
         });
@@ -97,11 +98,11 @@ var AboutPage = () => {
                             "description": "${upcoming.meta_description}"
                             "mainEntity": {
                                 "@type": "Organization",
-                                "name": "الصباغ للمعلوميات",
+                                "name": "${upcoming.settings?.site_name}",
                                 "url": "${upcoming.settings?.site_address}",
                                 "logo": {
-                                "@type": "ImageObject",
-                                "url": "https://codedtag.com/logo.png",
+                                    "@type": "ImageObject",
+                                    "url": "${upcoming.settings?.site_logo}",
                                     "width": 250,
                                     "height": 250
                                 },
@@ -109,7 +110,7 @@ var AboutPage = () => {
                                     "@type": "ContactPoint",
                                     "contactType": "Customer Support", 
                                     "email": "contact@codedtag.com",
-                                    "url": "https://codedtag.com/contact-us"
+                                    "url": "${upcoming.settings?.site_address}contact-us/"
                                 },
                                 "founder": {
                                     "@type": "Person",

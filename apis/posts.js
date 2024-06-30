@@ -12,7 +12,8 @@ const {Posts} = require("./../models/posts-model");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
-const {Sets} = require('./../models/settings-model')
+const {Sets} = require('./../models/settings-model');
+const { Usr } = require('../models/user-model');
 
 // Function to ensure directory exists
 const ensureDirectoryExistence = (dirPath) => {
@@ -664,20 +665,30 @@ postRouter.get("/post/get", async (req, res) => {
         // Fetch posts based on the post_type
         const posts = await Posts.find(query_object);
         const settings = await Sets.find({});
+        const users = await Usr.find({email: "moun2030@gmail.com"});
+       
+        var social_links = [];
+
+        if(users.length) {
+            var user = users[0];
+            social_links = user.social_links?user.social_links: [] 
+        }
 
         if (posts.length > 0) {
             res.status(200).send({
                 is_error: false,
                 data: posts,
                 message: "Posts retrieved successfully",
-                settings: settings
+                settings: settings,
+                social_links: social_links
             });
         } else {
             res.send({
                 is_error: true,
                 data: [],
                 message: "No posts found for the given post_type",
-                settings: settings
+                settings: settings,
+                social_links: social_links
             });
         }
 

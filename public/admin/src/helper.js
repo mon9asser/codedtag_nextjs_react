@@ -84,62 +84,65 @@ class HelperData {
 
     }
 
-    async sendRequest ({api, method, data, headers, is_create } = null) {
+    async sendRequest ({api, method, data, headers, is_create, is_file } = null) {
 
-        if( headers === undefined ) {
-            headers = {};
-        }
         
-        if( is_create === undefined ) {
-          is_create = false; 
-        }
-
-        data["Secret-codedtag-api-key"] = Settings.keys.secret ;
-         
-        try {
-           
-           
-          var session = localStorage.getItem("session"); 
-           
-          var additional = {}; 
-          if( session != null ) {
-
-            session = JSON.parse(session)
-
-            // updated data 
-            additional = {
-              updated_date: Date.now(),
-              updated_by: {
-                id: session.id,
-                name: session.full_name,
-                email: session.email,
-                thumbnail: session.thumbnail,
-              }
-            };
+ 
+            if( headers === undefined ) {
+                headers = {};
+            }
             
-            // created data 
-            if(is_create) { 
-                additional.created_date= Date.now();
-                additional.created_by = {
-                  id: session.id,
-                  name: session.full_name,
-                  email: session.email,
-                  thumbnail: session.thumbnail,
-                }
+            if( is_create === undefined ) {
+              is_create = false; 
             }
 
-          }
-          
-          if(data.data_array != undefined ) {
-            data.data_array = data.data_array.map( x => {
-              return {
-                ...x, ...additional
-              }
-            })
-          } else {
-            data = {...data, ...additional}
-          }
+            
+            
+            try {
+              if( is_file == undefined || ! is_file ) {
+                data["Secret-codedtag-api-key"] = Settings.keys.secret ;
+                var session = localStorage.getItem("session"); 
+                
+                var additional = {}; 
+                if( session != null ) {
 
+                  session = JSON.parse(session)
+
+                  // updated data 
+                  additional = {
+                    updated_date: Date.now(),
+                    updated_by: {
+                      id: session.id,
+                      name: session.full_name,
+                      email: session.email,
+                      thumbnail: session.thumbnail,
+                    }
+                  };
+                  
+                  // created data 
+                  if(is_create) { 
+                      additional.created_date= Date.now();
+                      additional.created_by = {
+                        id: session.id,
+                        name: session.full_name,
+                        email: session.email,
+                        thumbnail: session.thumbnail,
+                      }
+                  }
+
+                }
+                
+                if(data.data_array != undefined ) {
+                  data.data_array = data.data_array.map( x => {
+                    return {
+                      ...x, ...additional
+                    }
+                  })
+                } else {
+                  data = {...data, ...additional}
+                }
+
+              }
           var reqs = await axios({
             method: method,
             url: `${Settings.server.api}/${api}`,
