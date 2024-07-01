@@ -178,7 +178,8 @@ class CreateTutorial extends Component {
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
             options: this.state.options, 
-            tabs: this.state.tabs
+            tabs: this.state.tabs,
+            selected_category: this.state.selected_category
         };
 
         if(this.state.tutorial_id != "") {

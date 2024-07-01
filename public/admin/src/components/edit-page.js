@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import {YouTubeEmbed} from "./parts/embed-iframe.js"
+import { tutorialsList } from "./parts/tutorials-list.js"
 import { createReactEditorJS } from 'react-editor-js';
 import StickyBox from "react-sticky-box";
 
@@ -38,6 +39,8 @@ import {page_templates} from "./parts/templates_options.js";
 const ReactEditorJS = createReactEditorJS();
 
 var Tools = {
+
+    tutorialsList: tutorialsList,
     youtubeEmbed: {
         class: YouTubeEmbed,
         inlineToolbar: true,

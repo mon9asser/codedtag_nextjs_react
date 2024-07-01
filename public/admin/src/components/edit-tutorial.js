@@ -81,8 +81,7 @@ class EditTutorialWrap extends Component {
             api: 'tutorial/delete',
             method: 'POST',
             data: { tutorial_id: object_to_delete.id }
-        });
-
+        }); 
         if (!response.is_error) {
             this.props.navigate("/dashboard/tutorials");
         } else {
@@ -161,6 +160,12 @@ class EditTutorialWrap extends Component {
         await this.loadCategories();
 
         // => get data 
+        if( this.props.location.state == null ) {
+            this.props.navigate("/dashboard/tutorials");
+            return;
+        }
+            
+
         var tutorial_id = this.props.location.state.tutorial_id; 
         var request = await Helper.sendRequest({api: `tutorials?tutorial_id=${tutorial_id}`, method: "get", data: {}})
         
@@ -250,6 +255,7 @@ class EditTutorialWrap extends Component {
             return; 
         }
 
+         
         var data_to_send = {
             tutorial_title: this.state.tutorial_title,
             duration: this.state.duration,
@@ -259,7 +265,8 @@ class EditTutorialWrap extends Component {
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
             options: this.state.options, 
-            tabs: this.state.tabs
+            tabs: this.state.tabs,
+            selected_category: this.state.selected_category
         };
 
         if(this.state.tutorial_id != "") {
@@ -283,7 +290,7 @@ class EditTutorialWrap extends Component {
 
             return;
         }
-        console.log(request);
+         
         this.setState({ 
             is_pressed: false, 
             show_message: "show_message",

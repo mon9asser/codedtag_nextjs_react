@@ -19,6 +19,10 @@ var page_templates = [
     {
         value: 'terms_and_conditions',
         name: "Terms and Conditions Page"
+    },
+    {
+        value: 'all_tutorials_by_categories',
+        name: "Tutorials Page"
     }
 ];
 
