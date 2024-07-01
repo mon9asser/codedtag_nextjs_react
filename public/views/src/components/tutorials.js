@@ -47,7 +47,7 @@ var TutorialsComponent = () => {
     React.useEffect(() => {
          
         Helper.sendRequest({  
-            api: "all_data/get?post_type=1&page_template=all_tutorials_by_categories",
+            api: "tutorials-page/get?post_type=1&page_template=all_tutorials_by_categories",
             method: "get",
             data: {}
         }).then( row => {

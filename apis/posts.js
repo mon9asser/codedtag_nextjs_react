@@ -705,7 +705,7 @@ postRouter.get("/post/get", async (req, res) => {
 
 
 
-postRouter.get("/all_data/get", async (req, res) => {
+postRouter.get("/tutorials-page/get", async (req, res) => {
     
     try {
         
