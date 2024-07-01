@@ -5,22 +5,15 @@ const { name, domain, media_url } = require("./../config/db");
 var postRouter = express.Router();
 var path = require("path");
 var fs = require("fs");
-const { Config } = require("./../config/options");
-const { Helper } = require("./../config/helper");
+const {Config} = require("./../config/options");
+const {Helper} = require("./../config/helper")
 const multer = require('multer');
-const sharp = require('sharp');
-const { Posts } = require("./../models/posts-model");
+const {Posts} = require("./../models/posts-model");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
-const { Sets } = require('./../models/settings-model');
+
+const {Sets} = require('./../models/settings-model');
 const { Usr } = require('../models/user-model');
-
-
-
-// Handle Upload images of posts 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
 
 // Function to ensure directory exists
 const ensureDirectoryExistence = (dirPath) => {
@@ -29,55 +22,60 @@ const ensureDirectoryExistence = (dirPath) => {
     }
 };
 
-postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
-    
-    const filePath = req.file.buffer;
+// Set up storage engine
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const now = new Date();
+        const year = now.getFullYear().toString();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        var build_folder = `${Config.uploads.folder}/${Config.uploads.serve}`
+        const uploadPath = path.join(build_folder, year, month, day);
+        ensureDirectoryExistence(uploadPath);
+        
+        req.upload_date = `${year}/${month}/${day}`;
 
-    const now = new Date();
-    const year = now.getFullYear().toString();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const day = now.getDate().toString().padStart(2, '0');
-    var build_folder = `${Config.uploads.folder}/${Config.uploads.serve}`;
-    const uploadPath = path.join(build_folder, year, month, day);
-    ensureDirectoryExistence(uploadPath);
-    
-    var file_name = Helper.removeLastExtension(req.file.originalname);
-    var extension = Helper.getLastExtension(req.file.originalname);
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
 
-    var randomizer = Math.floor(1000 + Math.random() * 9000);
-    var new_file_name = `${file_name}-${randomizer}.webp`;
-
-    try {
-        // Get the metadata of the image
-        const metadata = await sharp(filePath).metadata();
-
-        let resizeWidth = metadata.width;
-
-        // Set max width to 800px if the original width is greater than 800px
-        if (metadata.width > 800) {
-            resizeWidth = 800;
-        }
-
-        // Resize and convert image to WebP
-        await sharp(filePath)
-            .resize(resizeWidth) // Resize to the calculated width
-            .toFormat('webp', { quality: 80 })
-            .toFile(`${uploadPath}/${new_file_name}`);
-          
-        var file_url = `${Config.localhost.site_url}/${Config.uploads.serve}/${year}/${month}/${day}/${new_file_name}`;
-        console.log(file_url);
-        //var fileUrl = `${Config.localhost.site_url}/${uploadPath}/${new_file_name}`;
-        res.json({ success: 1, file: { url: file_url, width: resizeWidth } });
-    } catch (error) {
-        console.error('Error processing image:', error);
-        res.status(500).send('Error processing image.');
+        var file_name = Helper.removeLastExtension(file.originalname); 
+        var extension = Helper.getLastExtension(file.originalname);
+        
+        var randomizer = Math.floor(1000 + Math.random() * 9000);
+        var new_file_name = `${file_name}-${randomizer}${extension}`;
+        cb(null, new_file_name);
     }
 });
 
+// Initialize multer with storage engine
+const upload = multer({ storage: storage });
+
+postRouter.post("/upload-image", upload.single('image'), (req, res) => {
+     
+    if (!req.file) {
+        return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+
+    var upload_dir = `${Config.uploads.serve}/`;
+
+    if( Config.localhost.site_url == "" ) {
+        Config.localhost.site_url = media_url;
+        upload_dir = "";
+    }
+
+    var fileUrl = `${Config.localhost.site_url}/${upload_dir}${req.upload_date}/${req.file.filename}`
+     
+    res.json({ success: 1, file: {url: fileUrl }  });
+
+});
+ 
 
 postRouter.post("/post/create-update", async (req, res) => {
     try {
         const body = req.body;
+        
+        
 
         // Validate the request body
         if (!body || Object.keys(body).length === 0) {
@@ -86,10 +84,12 @@ postRouter.post("/post/create-update", async (req, res) => {
 
         // Extract the fields for validation
         const { slug, post_type, tutorial, keyphrase } = body;
-
+        
         if (!slug || !keyphrase) {
             throw new Error("Missing required fields: slug and post_type and keyphrase");
         }
+
+        
 
         // Ensure keyphrase is in lowercase
         if (keyphrase) {
@@ -741,5 +741,6 @@ postRouter.post("/post/delete", async (req, res) => {
         });
     }
 });
+
 
 module.exports = { postRouter };

@@ -151,6 +151,8 @@ var AboutPage = () => {
                     <Helper.ArticleContent blocks={upcoming.blocks}/>
                 </div>
 
+                {/**/}
+
             </div>
             <Footer/>
         </>

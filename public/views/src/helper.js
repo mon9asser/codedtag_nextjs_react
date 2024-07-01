@@ -137,7 +137,7 @@ class HelperData {
                             alt={x?.data?.caption}
                             height={'auto'}
                             src={x?.data?.file?.url} // use normal <img> attributes as props
-                            width={'auto'} /> 
+                            width={x?.data?.file?.width} /> 
                   </figure>
                 )
               } else if (x.type == 'header') {
@@ -174,13 +174,15 @@ class HelperData {
     }
     
     formatDate = (dateString) => {
+
         const date = new Date(dateString);
 
         // Check if the date is valid
+        /*
         if (isNaN(date.getTime())) {
           console.error('Invalid date');
           return 'Invalid date';
-        }
+        } */
 
         // Format the date components separately
         const day = date.getDate();

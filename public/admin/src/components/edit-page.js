@@ -79,8 +79,7 @@ var Tools = {
         class: Image,
         config: {
             endpoints: {
-                byFile: `${Settings.server.api}/upload-image`,  
-                byUrl: `${Settings.server.api}/get-image`,
+                byFile: `${Settings.server.api}/upload-image`
             },
             additionalRequestHeaders: {
                 // Any additional headers if needed
@@ -659,7 +658,7 @@ class wrappedEditPage extends Component {
     save_post = async (e) => {
 
         e.preventDefault(); 
-
+        
         this.setState({ 
             is_pressed: true, 
             show_message: "",
