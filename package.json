@@ -25,6 +25,7 @@
   "dependencies": {
     "@google-analytics/data": "^4.7.0",
     "axios": "^1.7.2",
+    "charp": "^0.23.1",
     "cors": "^2.8.5",
     "express-rate-limit": "^7.3.1",
     "google-auth-library": "^9.11.0",

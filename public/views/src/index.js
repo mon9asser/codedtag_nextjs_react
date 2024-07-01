@@ -17,6 +17,7 @@ import "./assets/css/styles.css"
 import { PageNotFound } from "./components/404.js"
 import { ContactPage } from './components/contact.js';
 import { AboutPage } from "./components/about.js"
+import { PrivacyPolicyPage } from './components/privacy-policy.js';
 
 class WrappApplication extends Component {
   componentDidMount = async () => {
@@ -32,7 +33,8 @@ class WrappApplication extends Component {
           <Routes>
             <Route path="/" element={<h1>Hello world</h1>} />
             <Route path="/contact-us/" element={<ContactPage />} /> 
-            <Route path="/about-us/" element={<AboutPage />} /> 
+            <Route path="/about-us/" element={<AboutPage />} />
+            <Route path="/privacy-policy/" element={<PrivacyPolicyPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
