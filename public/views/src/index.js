@@ -18,6 +18,9 @@ import { PageNotFound } from "./components/404.js"
 import { ContactPage } from './components/contact.js';
 import { AboutPage } from "./components/about.js"
 import { PrivacyPolicyPage } from './components/privacy-policy.js';
+import { TermsConditionsPage } from './components/terms-and-conditions.js';
+
+import { TutorialsComponent } from './components/tutorials.js'
 
 class WrappApplication extends Component {
   componentDidMount = async () => {
@@ -35,6 +38,9 @@ class WrappApplication extends Component {
             <Route path="/contact-us/" element={<ContactPage />} /> 
             <Route path="/about-us/" element={<AboutPage />} />
             <Route path="/privacy-policy/" element={<PrivacyPolicyPage />} />
+            <Route path="/terms-and-conditions/" element={<TermsConditionsPage />} />
+            <Route path="/tutorials/" element={<TutorialsComponent />} />
+            
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>

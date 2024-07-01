@@ -9,13 +9,13 @@ import { Settings } from "../settings";
 import ReCAPTCHA from "react-google-recaptcha"; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-var PrivacyPolicyPage = () => {
+var TermsConditionsPage = () => {
 
     // states  df
     var [ upcoming, upcoming_change ] = React.useState({
         blocks: [], 
-        post_title: 'Privacy Policy', 
-        meta_title: 'Privacy Policy', 
+        post_title: 'Terms and Conditions', 
+        meta_title: 'Terms and Conditions', 
         description: '',
         meta_description: '',
         allow_search_engine: false,
@@ -37,7 +37,7 @@ var PrivacyPolicyPage = () => {
     React.useEffect(() => {
         
         Helper.sendRequest({ // privacy-policy
-            api: "post/get?post_type=1&page_template=privacy_policy",
+            api: "post/get?post_type=1&page_template=terms_and_conditions",
             method: "get",
             data: {}
         }).then( row => {
@@ -98,28 +98,38 @@ var PrivacyPolicyPage = () => {
                 <script type="application/ld+json">
                     {
                         `
-                        {
-                            "@context": "https://schema.org",
-                            "@type": "WebSite",
-                            "url": "${upcoming.settings?.site_address}${upcoming.slug}/", 
-                            "name": "${upcoming.meta_title}",
-                            "description": "${upcoming.meta_description}"
-                            "mainEntity": {
-                                    "@type": "Organization",
-                                    "name": "${upcoming.settings?.site_name}",
-                                    "url": "${upcoming.settings?.site_address}",
-                                    "description": "This privacy policy document outlines the types of personal information that is received and collected by ${upcoming.settings?.site_name} and how it is used.",
-                                    "about": {
-                                        "@type": "Thing",
-                                        "name": "${upcoming.post_title}",
-                                    },
-                                    "creator": {
-                                        "@type": "Organization",
-                                        "name": "${upcoming.settings?.site_name}",
-                                        "url": "${upcoming.settings?.site_address}",
-                                    },
-                                    "datePublished": "${upcoming.created_date}",
-                                    "dateModified":  "${upcoming.updated_date}",
+                        "@context": "https://schema.org",
+                        "@type": "WebPage",
+                        "mainEntity": {
+                            "@type": "WebPageElement",
+                            "name": "${upcoming.post_title}",
+                            "description": "These Terms and Conditions outline the rules and regulations for the use of ${upcoming.settings?.site_name}'s Website, located at ${upcoming.settings?.site_address}.",
+                            "about": {
+                                "@type": "Thing",
+                                "name": "${upcoming.post_title}"
+                            },
+                            "url": "${upcoming.settings?.site_address}terms-and-conditions/",
+                            "mainEntityOfPage": "${upcoming.settings?.site_address}terms-and-conditions/",
+                            "datePublished": "${upcoming.created_date}",
+                            "dateModified": "${upcoming.updated_date}",
+                            "author": {
+                                "@type": "Organization",
+                                "name": "${upcoming.settings?.site_name}",
+                                "url": "${upcoming.settings?.site_address}"
+                            },
+                            "copyrightHolder": {
+                                "@type": "Organization",
+                                "name": "${upcoming.settings?.site_name}",
+                                "url": "${upcoming.settings?.site_address}"
+                            },
+                            "publisher": {
+                                "@type": "Organization",
+                                "name": "${upcoming.settings?.site_name}",
+                                "url": "${upcoming.settings?.site_address}"
+                            },
+                            "potentialAction": {
+                                "@type": "ReadAction",
+                                "target": "${upcoming.settings?.site_address}terms-and-conditions/"
                             }
                         } 
                         `
@@ -151,4 +161,4 @@ var PrivacyPolicyPage = () => {
 }
  
 
-export { PrivacyPolicyPage }
+export { TermsConditionsPage }
