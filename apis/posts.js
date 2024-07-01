@@ -14,6 +14,7 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const { Sets } = require('./../models/settings-model');
 const { Usr } = require('../models/user-model');
+const { Tutorial } = require('../models/tutorial-model');
 
 
 
@@ -701,6 +702,73 @@ postRouter.get("/post/get", async (req, res) => {
         });
     }
 })
+
+
+
+postRouter.get("/all_data/get", async (req, res) => {
+    
+    try {
+        
+        const post_type = req.query.post_type;
+        const post_id = req.query.post_id;
+        const page_template = req.query.page_template;
+
+        var query_object = {};
+        if( post_type != undefined ) {
+            query_object = { ...query_object, post_type: post_type };
+        }
+
+        if( page_template != undefined ) {
+            query_object = { ...query_object, page_template: page_template };
+        }
+
+        if( post_id != undefined ) {
+            query_object = { ...query_object, _id: post_id };
+        }
+
+        // Fetch posts based on the post_type
+        const posts = await Posts.find(query_object);
+        const settings = await Sets.find({});
+        const users = await Usr.find({email: "moun2030@gmail.com"});
+        const tutorials = await Tutorial.find()
+
+        var social_links = [];
+
+        if(users.length) {
+            var user = users[0];
+            social_links = user.social_links?user.social_links: [] 
+        }
+
+        if (posts.length > 0) {
+            res.status(200).send({
+                is_error: false,
+                data: posts,
+                message: "Posts retrieved successfully",
+                settings: settings,
+                social_links: social_links,
+                tutorials: tutorials
+            });
+        } else {
+            res.send({
+                is_error: true,
+                data: [],
+                message: "No posts found for the given post_type",
+                settings: settings,
+                social_links: social_links,
+                tutorials: tutorials
+            });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while retrieving posts"
+        });
+    }
+})
+
 
 
 // Delete a post by its post_id

@@ -45,27 +45,9 @@ var TutorialsComponent = () => {
 
     // Contexts 
     React.useEffect(() => {
-        
+         
         Helper.sendRequest({  
-            api: "tutorials",
-            method: "get",
-            data: {}
-        }).then(item => {
-            
-            if( item.is_error ) {
-                return;
-            }
-
-            var all_tutorials = item.data.filter( x => x.selected_category != null )
-            
-            response_upcoming_callback({
-                tutorials: all_tutorials
-            })
-
-        });
-
-        Helper.sendRequest({  
-            api: "post/get?post_type=1&page_template=all_tutorials_by_categories",
+            api: "all_data/get?post_type=1&page_template=all_tutorials_by_categories",
             method: "get",
             data: {}
         }).then( row => {
@@ -74,6 +56,9 @@ var TutorialsComponent = () => {
             var settings = row?.settings?.length ? row.settings[0]: null;
             var social_links = row?.social_links || [];
             
+            var all_tutorials = row.tutorials?.filter( x => x.selected_category != null )
+           
+
             var object_to_change = {
                 blocks: this_page?.blocks, 
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
@@ -87,8 +72,10 @@ var TutorialsComponent = () => {
                 slug: this_page.slug ? this_page.slug: upcoming.slug, 
                 updated_date: this_page.updated_date ? this_page.updated_date: upcoming.updated_date, 
                 settings: settings,
-                social_links: social_links?.map(x => `"${x.social_link}"`)
+                social_links: social_links?.map(x => `"${x.social_link}"`),
+                tutorials: all_tutorials
             };
+             
 
             var site_url = object_to_change.settings?.site_address;
             var last_char = site_url?.length ? site_url[site_url.length - 1]: "";
@@ -155,7 +142,7 @@ var TutorialsComponent = () => {
                 </script>
             </Helmet> 
             <Header/>
-                <div className="max-850 offset-left offset-right mt-space-long plr-block"> 
+                <div className="max-1050 offset-left offset-right mt-space-long plr-block"> 
                      
                     <div className="lg-2-content tutorial-content content-section">
                         <Helper.TutorialsContent blocks={upcoming.blocks} tutorials={upcoming.tutorials}/>
