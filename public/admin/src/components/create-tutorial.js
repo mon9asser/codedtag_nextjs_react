@@ -19,6 +19,7 @@ class CreateTutorial extends Component {
             tutorial_title: "",
             duration: "",
             description: "", 
+            tutorial_svg_icon: "",
             meta_title: "",
             slug: "",
             keyphrase: "",
@@ -41,6 +42,7 @@ class CreateTutorial extends Component {
                 keyphrase: "",
                 meta_title: "",
                 meta_description: "",
+                tutorial_svg_icon: "",
                 hide_from_search_engines: false,
                 publish_chapters: false,
                 is_open: false,
@@ -177,6 +179,7 @@ class CreateTutorial extends Component {
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
+            tutorial_svg_icon: this.state.tutorial_svg_icon, 
             options: this.state.options, 
             tabs: this.state.tabs,
             selected_category: this.state.selected_category
@@ -534,6 +537,24 @@ class CreateTutorial extends Component {
                                     </div>
                                 </div>
 
+                                <div className="block-container">
+                                    <div style={{display:"flex", justifyContent: "space-between"}}>
+                                        <h1>Logo of tutorials in SVG code</h1>
+                                    </div>
+                                    <div className="tab-wrap">
+                                        <div className="field" style={{marginTop: "5px", display:"flex", flexDirection: "column"}}>
+                                            <textarea 
+                                                onChange={e => this.setState({
+                                                    tutorial_svg_icon: e.target.value
+                                                })}
+                                                value={this.state.tutorial_svg_icon}
+                                                className="input" 
+                                                style={{minHeight:"100px"}}
+                                            ></textarea>
+                                        </div> 
+                                    </div>
+                                </div>
+                                    
                                 <div className="block-container">
                                     <div style={{display:"flex", justifyContent: "space-between"}}>
                                         <h1>Tutorial Tabs</h1>

@@ -89,8 +89,7 @@ var TutorialsComponent = () => {
 
     }, []);
     
-    // functions 
-
+    // functions  
     var response_upcoming_callback = (obj) => {
         var old_objec = {...upcoming};
         var __keys = Object.keys(obj);
@@ -116,9 +115,9 @@ var TutorialsComponent = () => {
                             {
                                 "@context": "https://schema.org",
                                 "@type": "WebPage",
-                                "name": "Tutorials",
-                                "description": "A collection of tutorials on programming, computer science, system engineering, and more.",
-                                "url": "https://codedtag.com/tutorials/",
+                                "name": "${upcoming.post_title}",
+                                "description": "${upcoming.meta_description}",
+                                "url": "${upcoming.settings?.site_address}tutorials/",
                                 "breadcrumb": {
                                     "@type": "BreadcrumbList",
                                     "itemListElement": [
@@ -126,13 +125,13 @@ var TutorialsComponent = () => {
                                             "@type": "ListItem",
                                             "position": 1,
                                             "name": "Home",
-                                            "item": "https://codedtag.com/"
+                                            "item": "${upcoming.settings?.site_address}"
                                         },
                                         {
                                             "@type": "ListItem",
                                             "position": 2,
-                                            "name": "Tutorials",
-                                            "item": "https://codedtag.com/tutorials/"
+                                            "name": "${upcoming.post_title}",
+                                            "item": "${upcoming.settings?.site_address}tutorials/"
                                         }
                                     ]
                                 }
@@ -142,12 +141,20 @@ var TutorialsComponent = () => {
                 </script>
             </Helmet> 
             <Header/>
-                <div className="max-1050 offset-left offset-right mt-space-long plr-block"> 
-                     
-                    <div className="lg-2-content tutorial-content content-section">
-                        <Helper.TutorialsContent blocks={upcoming.blocks} tutorials={upcoming.tutorials}/>
-                    </div> 
-                </div>
+            <div className="max-1050 offset-left offset-right mt-space-long plr-block ptb-60"> 
+                <header className="flexbox content-center column-direction mb-30">
+                    
+                    <h1 className="tutorial-headline mt-h">{upcoming.post_title}</h1>
+                    <div className="flexbox items-center author-section mt-5"> 
+                        <div className="flexbox content-center auth-name">
+                            <i>Last Update: { Helper.formatDate(upcoming.updated_date)}</i>
+                        </div>
+                    </div>
+                </header> 
+                <div className="lg-2-content tutorial-content content-section">
+                    <Helper.TutorialsContent blocks={upcoming.blocks} tutorials={upcoming.tutorials}/>
+                </div> 
+            </div>
             <Footer/>
         </>
     );

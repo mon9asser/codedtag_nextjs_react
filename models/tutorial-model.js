@@ -37,7 +37,12 @@ let tutorialSchema = new Schema({
         default: null
     },
 
-
+    tutorial_svg_icon: {
+        type: String ,
+        trim : true,
+        default: "" 
+    },
+    
     meta_title: {
         type: String ,
         trim : true,

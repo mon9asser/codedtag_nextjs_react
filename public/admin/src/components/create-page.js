@@ -25,8 +25,7 @@ import InlineCode from '@editorjs/inline-code'
 import SimpleImage from '@editorjs/simple-image'  
 import Hyperlink from "editorjs-hyperlink";
 
-import { Settings } from "../settings.js";
-
+import { Settings } from "../settings.js"; 
 import {CustomCodeBlok} from "./parts/codeblock.js"
 import {page_templates} from "./parts/templates_options.js"
 import { Helper } from "../helper.js";

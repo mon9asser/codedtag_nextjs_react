@@ -28,7 +28,7 @@ class EditTutorialWrap extends Component {
             slug: "",
             keyphrase: "",
             meta_description: "",
-
+            tutorial_svg_icon: "",
             options: {
                 show_total_of_tutorial: false,
                 show_duration_time: false,
@@ -46,6 +46,7 @@ class EditTutorialWrap extends Component {
                 keyphrase: "",
                 meta_title: "",
                 meta_description: "",
+                tutorial_svg_icon: "",
                 hide_from_search_engines: false,
                 publish_chapters: false,
                 is_open: false,
@@ -185,6 +186,7 @@ class EditTutorialWrap extends Component {
             slug: tutorial.slug,
             keyphrase: tutorial.keyphrase,
             meta_description: tutorial.meta_description, 
+            tutorial_svg_icon: tutorial.tutorial_svg_icon,
             options:tutorial.options,  
             tabs: tutorial.tabs,  
 
@@ -264,6 +266,7 @@ class EditTutorialWrap extends Component {
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
+            tutorial_svg_icon: this.state.tutorial_svg_icon, 
             options: this.state.options, 
             tabs: this.state.tabs,
             selected_category: this.state.selected_category
@@ -617,6 +620,24 @@ class EditTutorialWrap extends Component {
                                             <label className="flexbox items-center"> <input checked={this.state.options.publish} onChange={(e) => this.setState({options: { ...this.state.options, publish: !this.state.options.publish }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish</span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.hide_from_search_engines} onChange={(e) => this.setState({options: { ...this.state.options, hide_from_search_engines: !this.state.options.hide_from_search_engines }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Hide from Search Engines</span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.publish_chapters} onChange={(e) => this.setState({options: { ...this.state.options, publish_chapters: !this.state.options.publish_chapters }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish Chapters</span> </label>
+                                        </div> 
+                                    </div>
+                                </div>
+
+                                <div className="block-container">
+                                    <div style={{display:"flex", justifyContent: "space-between"}}>
+                                        <h1>Logo of tutorials in SVG code</h1>
+                                    </div>
+                                    <div className="tab-wrap">
+                                        <div className="field" style={{marginTop: "5px", display:"flex", flexDirection: "column"}}>
+                                            <textarea 
+                                                onChange={e => this.setState({
+                                                    tutorial_svg_icon: e.target.value
+                                                })}
+                                                value={this.state.tutorial_svg_icon}
+                                                className="input" 
+                                                style={{minHeight:"100px"}}
+                                            ></textarea>
                                         </div> 
                                     </div>
                                 </div>

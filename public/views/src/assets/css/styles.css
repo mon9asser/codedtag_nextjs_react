@@ -326,3 +326,15 @@ textarea:focus {
   .max-1050 {
     max-width: 1050px;
   }
+
+
+  .tutorial-thumbs svg {
+    max-width: 50px;
+    max-height: 50px;
+  }
+
+
+  .ptb-60 {
+    padding-top:60px;
+    padding-bottom:60px;
+  }
