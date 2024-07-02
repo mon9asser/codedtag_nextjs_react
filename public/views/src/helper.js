@@ -123,7 +123,7 @@ class HelperData {
             if(x.id != 'header-level-1') {
               
               if( x.type == 'paragraph') {
-                return (<p key={x.id}>{x?.data?.text}</p>)
+                return (<p style={{textAlign:x?.data?.alignment}} key={x.id}>{x?.data?.text}</p>)
               } else if (x.type == 'code' ) {
                 return (
                   <Highlight key={x.id} className={x?.data?.language_type}>
@@ -142,8 +142,9 @@ class HelperData {
                   </figure>
                 )
               } else if (x.type == 'header') {
+                
                 return (
-                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id}, x?.data?.text)
+                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, style:{textAlign: x?.data?.alignment }}, x?.data?.text)
                 )
               } else if (x.type == 'youtubeEmbed') {
                 return (<LazyLoadYouTube key={x.id} url={x.data?.url}/>);
@@ -174,11 +175,11 @@ class HelperData {
       return(
         <>
           {blocks?.map(x => {
-
+            console.log(x)
             if(x.id != 'header-level-1') {
  
               if( x.type == 'paragraph') {
-                return (<p key={x.id}>{x?.data?.text}</p>)
+                return (<p style={{textAlign:x?.data?.alignment}} key={x.id}>{x?.data?.text}</p>)
               } else if (x.type == 'code' ) {
                 return (
                   <Highlight key={x.id} className={x?.data?.language_type}>
@@ -197,8 +198,9 @@ class HelperData {
                   </figure>
                 )
               } else if (x.type == 'header') {
+                 
                 return (
-                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id}, x?.data?.text)
+                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, style:{textAlign: x?.data?.alignment }}, x?.data?.text)
                 )
               } else if (x.type == 'youtubeEmbed') {
                 return (<LazyLoadYouTube key={x.id} url={x.data?.url}/>);
@@ -227,8 +229,7 @@ class HelperData {
                   return (
                     <div className="row content-center">
                         {
-                            filtered.map(item => { 
-                              console.log(item);
+                            filtered.map(item => {  
                                 return (
                                   <div key={item._id} className="sm-6 md-4 lg-4 text-center p-all-15">
                                       <div className="tutorial-box">

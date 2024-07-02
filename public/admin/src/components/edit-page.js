@@ -8,16 +8,19 @@ import StickyBox from "react-sticky-box";
 
 
 // tools.js 
+
+import Header from "editorjs-header-with-alignment";
+import Paragraph from 'editorjs-paragraph-with-alignment';
 import Iframe from "@hammaadhrasheedh/editorjs-iframe";
 import Table from '@editorjs/table'
-import Paragraph from '@editorjs/paragraph'
+
 import List from '@editorjs/list'
 import Warning from '@editorjs/warning'
 import Code from '@editorjs/code'
 import LinkTool from '@editorjs/link'
 import Image from '@editorjs/image'
 import Raw from '@editorjs/raw'
-import Header from '@editorjs/header'
+// import Header from '@editorjs/header'
 import Quote from '@editorjs/quote'
 import Marker from '@editorjs/marker'
 import CheckList from '@editorjs/checklist'
