@@ -16,11 +16,14 @@ class EditTutorialWrap extends Component {
         this.request_result_ref = React.createRef();
         this.state = {
             
+            shortcode_modal: false,
+            category_modal: false, 
+
             tutorial_id: "",
 
             categories: [],
             selected_category: null,
-
+            
             tutorial_title: "",
             duration: "",
             description: "", 
@@ -65,6 +68,45 @@ class EditTutorialWrap extends Component {
             
         };
 
+    }
+
+    ShortCodeComponentModal = () => {
+        const { shortcode_modal } = this.state;
+        return (
+            <div className={`modal ${shortcode_modal ? "open_this_modal" : ""}`}>
+                <div className="modal-background --jb-modal-close"></div>
+                <div className="modal-card">
+                    <header className="modal-card-head">
+                    <p className="modal-card-title">Shortcode Modal</p>
+                    </header>
+                    <section className="modal-card-body">
+                        <ul>
+                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                                <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
+                                    |
+                                </b>
+                                <span>
+                                    Break line between elements 
+                                </span>
+                            </li>
+
+                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                              
+                                <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
+                                    [youtube src="URL OF VIDEO"]
+                                </b>
+                                <span>
+                                    Youtube Iframe 
+                                </span>
+                            </li>
+                        </ul>
+                    </section>
+                    <footer className="modal-card-foot"> 
+                        <button onClick={e => this.setState({shortcode_modal: false})} className="button red">Ok</button>
+                    </footer>
+                </div>
+            </div>
+        )
     }
 
     confirmDeletion = () => {
@@ -313,7 +355,8 @@ class EditTutorialWrap extends Component {
             var cats = prevState.categories.filter( x => x.category_name != '');
 
             return {
-                categories: cats
+                categories: cats,
+                category_modal: false
             };
         });
 
@@ -394,8 +437,9 @@ class EditTutorialWrap extends Component {
     }
 
     Categories_List_Modal = () => {
+        var  { category_modal } = this.state;
         return (
-            <div id="categories-list-modal" className="modal">
+                <div className={`modal ${category_modal ? "open_this_modal" : ""}`}>
                     <div className="modal-background --jb-modal-close"></div>
                     <div className="modal-card">
                         <header className="modal-card-head" style={{display:"flex", justifyContent: "space-between"}}>
@@ -420,8 +464,8 @@ class EditTutorialWrap extends Component {
 
                         </section>
                         <footer className="modal-card-foot">
-                            <button className="button --jb-modal-close">Cancel</button>
-                            <button onClick={this.save_categories_data} className="button blue --jb-modal-close">Confirm</button>
+                            <button className="button" onClick={e => this.setState({category_modal: false})}>Cancel</button>
+                            <button onClick={this.save_categories_data} className="button blue">Confirm</button>
                         </footer>
                     </div>
             </div>
@@ -506,7 +550,11 @@ class EditTutorialWrap extends Component {
                                     </div> 
 
                                     <div className="field" style={{marginTop: "25px"}}>
-                                        <label className="label">Description</label>
+                                         
+                                        <div style={{display: "flex", alignItems:"center", justifyContent:"space-between"}}>
+                                            <label className="label">Description</label>
+                                            <button onClick={e => this.setState({shortcode_modal: true})} style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Shortcode</button>
+                                        </div>
                                         <div className="control">
                                             <textarea 
                                                 onChange={e => this.setState({
@@ -522,7 +570,8 @@ class EditTutorialWrap extends Component {
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <div style={{display: "flex", alignItems:"center", justifyContent:"space-between"}}>
                                             <label className="label">Category</label>
-                                            <a data-target="categories-list-modal" className="--jb-modal" href="#" style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Add new</a>
+                                            <button onClick={e => this.setState({category_modal: true})} style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Add new</button>
+                                             
                                         </div>
                                         <this.Categories_List_Modal/> 
                                         <div className="control">
@@ -877,6 +926,8 @@ class EditTutorialWrap extends Component {
                     </div>
                 </section> 
 
+                <this.ShortCodeComponentModal/>
+
                 <footer className="footer">
                     <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
                         <div className="flex items-center justify-start space-x-3">
@@ -890,41 +941,7 @@ class EditTutorialWrap extends Component {
                          
                         </div> 
                     </div>
-                    </footer>
-
-                    <div id="sample-modal" className="modal">
-                    <div className="modal-background --jb-modal-close"></div>
-                    <div className="modal-card">
-                        <header className="modal-card-head">
-                        <p className="modal-card-title">Sample modal</p>
-                        </header>
-                        <section className="modal-card-body">
-                        <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-                        <p>This is sample modal</p>
-                        </section>
-                        <footer className="modal-card-foot">
-                        <button className="button --jb-modal-close">Cancel</button>
-                        <button className="button red --jb-modal-close">Confirm</button>
-                        </footer>
-                    </div>
-                    </div>
-
-                    <div id="sample-modal-2" className="modal">
-                    <div className="modal-background --jb-modal-close"></div>
-                    <div className="modal-card">
-                        <header className="modal-card-head">
-                        <p className="modal-card-title">Sample modal</p>
-                        </header>
-                        <section className="modal-card-body">
-                        <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-                        <p>This is sample modal</p>
-                        </section>
-                        <footer className="modal-card-foot">
-                        <button className="button --jb-modal-close">Cancel</button>
-                        <button className="button blue --jb-modal-close">Confirm</button>
-                        </footer>
-                    </div>
-                    </div>
+                </footer> 
 
             </div>            
         );

@@ -21,7 +21,7 @@ import { PrivacyPolicyPage } from './components/privacy-policy.js';
 import { TermsConditionsPage } from './components/terms-and-conditions.js';
 
 import { TutorialsComponent } from './components/tutorials.js'
-
+import { TurorialComponent } from './components/tutorial.js'
 class WrappApplication extends Component {
   componentDidMount = async () => {
     // Initialize methods
@@ -29,7 +29,7 @@ class WrappApplication extends Component {
   }
 
   render() {
-   
+   alert("Api to check tutorial exists if it not found so redirect it to page 404 by the server")
     return (
       <DataProvider>
         <BrowserRouter>
@@ -40,6 +40,7 @@ class WrappApplication extends Component {
             <Route path="/privacy-policy/" element={<PrivacyPolicyPage />} />
             <Route path="/terms-and-conditions/" element={<TermsConditionsPage />} />
             <Route path="/tutorials/" element={<TutorialsComponent />} />
+            <Route path="/tutorials/:tut_slug" element={<TurorialComponent />} />
             
             <Route path="*" element={<PageNotFound />} />
           </Routes>
