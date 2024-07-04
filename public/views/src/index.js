@@ -29,7 +29,7 @@ class WrappApplication extends Component {
   }
 
   render() {
-   alert("Api to check tutorial exists if it not found so redirect it to page 404 by the server")
+   
     return (
       <DataProvider>
         <BrowserRouter>

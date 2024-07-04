@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const express = require("express"); 
 const  {Tutorial} = require("./../models/tutorial-model")
+const  {Chapters} = require("./../models/chapter-model")
+const  {Posts} = require("./../models/posts-model")
 var tutorialRouter = express.Router(); 
 var path = require("path");
 var fs = require("fs");
@@ -129,5 +131,45 @@ tutorialRouter.post("/tutorial/delete", async (req, res) => {
     }
 });
 
+
+tutorialRouter.get("/tutorial-page/get", async (req, res) => {
+    
+   try {
+     
+    
+    if( ! req.query.tut_name ) {
+        throw new Error("The page could not be found");   
+    }
+    var tutorial_slug = req.query.tut_name;
+
+    var tutorial = await Tutorial.findOne({slug: tutorial_slug});
+    if(tutorial == null) {
+        throw new Error("The page could not be found");  
+    }
+    var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": "root" });
+    var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": "root", post_type: 0});
+    
+    var response = {
+      tutorial,
+      chapters,
+      posts  
+    } 
+
+    res.send({
+        redirect: false, 
+        data: response,
+        is_error: false, 
+        message: "Fetched successfully!",
+    });
+
+   } catch (error) {
+        return res.send( {
+            redirect: true, // for only page 404 
+            is_error: true, 
+            message: error.message || "Something went wrong",
+            data: []
+        })
+   }
+})
  
 module.exports = { tutorialRouter }
