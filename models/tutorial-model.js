@@ -21,6 +21,14 @@ let tutorialSchema = new Schema({
         trim : true,
         default: "" 
     },
+    views: {
+        type: Number , 
+        default: 0 
+    },
+    reviews: {
+        type: Number , 
+        default: 0 
+    },
     selected_category: {
         type: {
             id:  {

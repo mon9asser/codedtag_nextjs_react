@@ -32,6 +32,7 @@ class EditTutorialWrap extends Component {
             keyphrase: "",
             meta_description: "",
             tutorial_svg_icon: "",
+            reviews: 0,
             options: {
                 show_total_of_tutorial: false,
                 show_duration_time: false,
@@ -50,6 +51,7 @@ class EditTutorialWrap extends Component {
                 meta_title: "",
                 meta_description: "",
                 tutorial_svg_icon: "",
+                reviews: 0,
                 hide_from_search_engines: false,
                 publish_chapters: false,
                 is_open: false,
@@ -229,6 +231,7 @@ class EditTutorialWrap extends Component {
             keyphrase: tutorial.keyphrase,
             meta_description: tutorial.meta_description, 
             tutorial_svg_icon: tutorial.tutorial_svg_icon,
+            reviews: tutorial.reviews,
             options:tutorial.options,  
             tabs: tutorial.tabs,  
 
@@ -299,6 +302,16 @@ class EditTutorialWrap extends Component {
             return; 
         }
 
+        if( this.state.selected_category == null ) {
+            this.setState({ 
+                is_pressed: false, 
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "Category is required"
+            }); 
+
+            return;
+        }
          
 
         var data_to_send = {
@@ -310,6 +323,7 @@ class EditTutorialWrap extends Component {
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
             tutorial_svg_icon: this.state.tutorial_svg_icon, 
+            reviews: this.state.reviews, 
             options: this.state.options, 
             tabs: this.state.tabs,
             selected_category: {
@@ -693,6 +707,22 @@ class EditTutorialWrap extends Component {
                                             ></textarea>
                                         </div> 
                                     </div>
+
+                                    <div style={{display:"flex", marginTop: "30px", justifyContent: "space-between"}}>
+                                        <h1>Reviews</h1>
+                                    </div>
+                                    <div className="tab-wrap">
+                                        <div className="field" style={{marginTop: "5px", display:"flex", flexDirection: "column"}}>
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    reviews: e.target.value
+                                                })}
+                                                value={this.state.reviews}
+                                                className="input"  
+                                            />
+                                        </div> 
+                                    </div>
+                                    
                                 </div>
 
                                 <div className="block-container">

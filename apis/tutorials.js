@@ -146,6 +146,11 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
     if(tutorial == null) {
         throw new Error("The page could not be found");  
     }
+
+    // add counter
+    tutorial.views = ( tutorial.views + 1 )
+    await tutorial.save();
+
     var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": "root" });
     var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": "root", post_type: 0});
     

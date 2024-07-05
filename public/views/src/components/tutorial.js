@@ -76,10 +76,31 @@ var TurorialComponent = () => {
                 <ul className="tuts-categ">
                     <li>
                         <a>
-                            <div>
-                                <span>PHP Predefined Constants</span>
-                                <div className="flexbox items-center post-auth-block"><img src="https://webdeveloper.com/wp-content/uploads/2022/05/ManoelaIlic_Portrait-46x50.jpg" alt="" srcSet="" /><span>Manoela Ilic </span></div>
-                            </div>
+                            <span>PHP Predefined Constants</span>
+                            <span>2.5 Mins Read </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>PHP Predefined Constants</span>
+                            <span>2.5 Mins Read </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>PHP Predefined Constants</span>
+                            <span>2.5 Mins Read </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>PHP Predefined Constants</span>
+                            <span>2.5 Mins Read </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span>PHP Predefined Constants</span>
                             <span>2.5 Mins Read </span>
                         </a>
                     </li>
@@ -178,9 +199,8 @@ var TurorialComponent = () => {
                                     {
                                        upcoming.posts == null ?
                                         <Helper.PreLoader/>
-                                        : <><span>{Helper.formatNumber(upcoming.posts?.length)}</span><span>Total Tutorials</span></>
+                                        : <><span>{Helper.formatNumber(upcoming.posts?.length)}</span><span>Tutorials</span></>
                                     }
-                                    
                                 </li> 
                                 <li> 
                                     {
@@ -188,8 +208,22 @@ var TurorialComponent = () => {
                                         : <><span>{Helper.formatNumber(upcoming.tutorial?.duration.split(" ")[0])}</span><span>{upcoming.tutorial?.duration.split(" ")[1]}</span></>
                                     }
                                 </li> 
-                                <li> <span>4.8</span><span>Reviews</span></li>
-                                <li> <span>5.0K</span><span>Views</span></li>
+
+                                <li>
+                                    {
+                                       upcoming.posts == null ?
+                                        <Helper.PreLoader/>
+                                        : <><span>{upcoming.tutorial?.reviews}</span><span>Reviews</span></>
+                                    }
+                                </li>  
+
+                                <li>
+                                    {
+                                       upcoming.posts == null ?
+                                        <Helper.PreLoader/>
+                                        : <><span>{Helper.formatNumber(upcoming.tutorial?.views)}</span><span>Views</span></>
+                                    }
+                                </li>   
                             </ul>
                             
                             
@@ -216,7 +250,7 @@ var TurorialComponent = () => {
     return (
         <>
             <Header/>
-            <main className="wrapper max-1150 offset-left offset-right ptb-50">
+            <main className="wrapper max-1250 offset-left offset-right ptb-50">
 
                 <div className="wrapper floating index-bottom">
                     <div className="circle floating-small left--15 top--25"></div>
@@ -225,12 +259,12 @@ var TurorialComponent = () => {
 
                 <TutorialHeader />
 
-                <div className="wrapper max-960 offset-left offset-right ptb-50"> 
+                <div className="wrapper max-1250 offset-left offset-right ptb-50"> 
                     <div className="row mlr--10 tutorial-list-items"> 
-                        <div className="md-6 p-all-10">
+                        <div className="md-4 p-all-10">
                             <TutorialsList/>
                         </div>
-                        <div className="md-6 p-all-10">
+                        <div className="md-4 p-all-10">
                             <TutorialsList/>
                         </div>
                         <div className="md-12 p-all-10">
@@ -238,10 +272,10 @@ var TurorialComponent = () => {
                                 Ads block
                             </div>
                         </div>
-                        <div className="md-6 p-all-10">
+                        <div className="md-4 p-all-10">
                             <TutorialsList/>
                         </div>
-                        <div className="md-6 p-all-10">
+                        <div className="md-4 p-all-10">
                             <TutorialsList/>
                         </div>
                     </div> 
