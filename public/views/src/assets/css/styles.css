@@ -316,6 +316,10 @@ textarea:focus {
     }
   }
 
+    .loader-dark {
+        border-bottom-color: #0a0a23 !important;
+    }
+
   .tutorial-box  h3 {
     margin-top: 0 !important;
     padding-top: 0 !important;
@@ -338,3 +342,34 @@ textarea:focus {
     padding-top:60px;
     padding-bottom:60px;
   }
+
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
+.placeholder-text-loader {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1000px 104px;
+    height: 10px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.ifram-tut-youtube {
+    width: 100%;
+    max-width: 675px;
+    height: 375px;
+    border-radius: 10px;
+}
+

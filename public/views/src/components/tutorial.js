@@ -25,8 +25,8 @@ var TurorialComponent = () => {
     // states  df
     var [ upcoming, upcoming_change ] = React.useState({
         tutorial: null,
-        posts: [],
-        chapters: [],
+        posts: null,
+        chapters: null,
         settings: null
     });
 
@@ -43,12 +43,17 @@ var TurorialComponent = () => {
             if(row.redirect) {
                 redirect404();
                 return;
-            }
+            } 
 
-            console.log(row);
-
+            response_upcoming_callback({
+                tutorial: row.data.tutorial,
+                posts: row.data.posts,
+                chapters: row.data.chapters,
+                settings: null
+            });
+            
         }); 
-
+        console.log(upcoming);
     }, []);
 
     // functions  
@@ -145,26 +150,59 @@ var TurorialComponent = () => {
                     <div className="row mlr--15">
                         <div className="md-9 text-center offset-left offset-right p-all-15 flexbox content-center column-direction tutorial-header-block"> 
                             
-                            <h1 className="tutorial-headline">PHP Tutorials </h1><span className="sub-title">Programming Language </span>
+                            <h1 className="tutorial-headline">
+                                {
+                                    upcoming.tutorial == null ?
+                                    <Helper.PreLoader/>: upcoming.tutorial?.tutorial_title
+                                } 
+                            </h1>
+                            
+                            
+                            <span className="sub-title">{upcoming.tutorial?.selected_category.name} </span>
+
+
                             <div className="div-block">
                                 Ads block
                             </div>
-                            <ul className="no-list-style flexbox gap-50 content-center items-center flex-wrap bold-list tab-lang-categories">
-                                <li><a href="#">Tutorials</a></li>
-                                <li><a href="#">References</a></li>
-                                <li><a href="#">Examples</a></li>
-                                <li><a href="#">PHP Compiler</a></li>
-                            </ul>
-                            <div className="div-block">
-                                Ads block
-                            </div>
-                            <p className="tutorial-description text-center">Hello! Do you have any question or suggestion about this site, or just want to say Hi? Send me a message using below form. I will get back to you as soon as possible.</p>
+                            {
+                                upcoming.tutorial?.tabs?.length ?
+                                <ul className="no-list-style flexbox gap-50 content-center items-center flex-wrap bold-list tab-lang-categories">
+                                    <li><Link to={`/tutorials/${upcoming.tutorial?.slug}/`}>Tutorials</Link></li>
+                                    {upcoming.tutorial?.tabs.map(tb => <li key={tb._id}><Link to={tb?.slug.indexOf('http') == -1 ? `/tutorials/${upcoming.tutorial?.slug}/p/${tb?.slug}/`: tb?.slug }>{tb?.title}</Link></li>)}
+                                </ul>
+                                :""
+                            } 
                             <ul className="content-center no-list-style flexbox gap-50 items-center flex-wrap list-in-tuts">
-                                <li> <span>150k</span><span>Total Tutorials</span></li>
-                                <li> <span>150.0</span><span>Minutes</span></li>
+
+                                <li>
+                                    {
+                                       upcoming.posts == null ?
+                                        <Helper.PreLoader/>
+                                        : <><span>{Helper.formatNumber(upcoming.posts?.length)}</span><span>Total Tutorials</span></>
+                                    }
+                                    
+                                </li> 
+                                <li> 
+                                    {
+                                        upcoming.tutorial == null ?  <Helper.PreLoader/>
+                                        : <><span>{Helper.formatNumber(upcoming.tutorial?.duration.split(" ")[0])}</span><span>{upcoming.tutorial?.duration.split(" ")[1]}</span></>
+                                    }
+                                </li> 
                                 <li> <span>4.8</span><span>Reviews</span></li>
                                 <li> <span>5.0K</span><span>Views</span></li>
                             </ul>
+                            
+                            
+                            {
+                                upcoming.tutorial == null ?
+                                 <Helper.PreLoader type={'text'} lines={5}/>: 
+                                    <div className="mt-20">
+                                        <Helper.GenerateTutorialContent data={upcoming.tutorial.description} />
+                                    </div>
+                            }
+                            
+                            
+                           
                             <div className="div-block">
                                 Ads block
                             </div>

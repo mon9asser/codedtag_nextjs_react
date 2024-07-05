@@ -194,13 +194,19 @@ sitemapRouter.get( sitemaps.tabs, async (req, res) => {
                 tut_slash = `/${tab.tutorial_slug}`;
             }
 
+            var build_it = `${site_url}${Config.redirect_to}${tut_slash}/p${ tab_slash + "/"}`;
+            if(tab_slash.indexOf("http") != -1 ) {
+                build_it = tab_slash.replace("/http", "http");
+            }
+             
             return `
                 <url>
-                    <loc>${site_url}${Config.redirect_to}${tut_slash}${ tab_slash + "/"}</loc>
+                    <loc>${build_it}</loc>
                     <changefreq>weekly</changefreq>
                     <priority>0.8</priority>
                 </url>
             `;
+            
             
         }).join("");
     

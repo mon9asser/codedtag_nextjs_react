@@ -62,7 +62,7 @@ const ResponsiveTable = ({ data }) => {
   );
 }; 
 
-var LazyLoadYouTube = ({ url, width = '560', height = '315' }) => {
+var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const iframeRef = useRef();
 
@@ -94,6 +94,7 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315' }) => {
       <div ref={iframeRef} style={{ minHeight: height, minWidth: width }}>
           {isIntersecting ? (
               <iframe
+                  className={cls}
                   width={width}
                   height={height}
                   src={`${url}`}
@@ -112,7 +113,22 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315' }) => {
 class HelperData {
 
 
+    PreLoader = ({type, lines}) => {
+
+      let element = <span className="loader loader-dark"></span>;
+
+      if (type === 'text') {
+        const elementLines = [];
+        for (let i = 0; i < lines; i++) {
+          elementLines.push(<div key={i} className="placeholder-text-loader mt-13"></div>);
+        }
+        element = <div className="mt-20">{elementLines}</div>;
+      } 
+
+      return element;
+
       
+    }
 
     ArticleContent = ({blocks}) => {
        
@@ -141,13 +157,14 @@ class HelperData {
                             width={x?.data?.file?.width} /> 
                   </figure>
                 )
-              } else if (x.type == 'header') {
-                
+              } else if (x.type == 'header') { 
+
                 return (
                   React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, style:{textAlign: x?.data?.alignment }}, x?.data?.text)
                 )
+
               } else if (x.type == 'youtubeEmbed') {
-                return (<LazyLoadYouTube key={x.id} url={x.data?.url}/>);
+                return (<LazyLoadYouTube key={x.id} url={x.data?.url} height='500'/>);
               } else if (x.type == 'delimiter') {
                 return (<hr key={x.id} />)
               } else if (x.type == 'raw') {
@@ -384,7 +401,8 @@ class HelperData {
         return jsonLdObject;
     }
  
-    formatNumber(num) {
+    formatNumber(numer) {
+        var num = parseInt(numer); 
         if (num >= 1000000000000) {
             return (num / 1000000000000).toFixed(1).replace(/\.0$/, '') + 'T';
         } else if (num >= 1000000000) {
@@ -659,6 +677,27 @@ class HelperData {
 
     }
 
+    GenerateTutorialContent = ({data}) => {
+
+      // paragraphs => <p className="tutorial-description text-center"></p> 
+        // Split the data by the delimiter "|"
+        const parts = data.split('|').map(part => part.trim());
+
+        // Process the parts to create the appropriate elements
+        return (
+          <div>
+            {parts.map((part, index) => {
+              if (part.startsWith('[youtube')) {
+                const src = part.match(/src="([^"]+)"/)[1]; 
+                return (<div key={index} className={'mt-25'}><LazyLoadYouTube cls='ifram-tut-youtube' url={src}/></div>);                
+              } else {
+                return <p key={index} className="tutorial-description text-center">{part}</p>;
+              }
+            })}
+          </div>
+      );
+    }
+     
 }
 
 var Helper = new HelperData(); 

@@ -224,7 +224,10 @@ class CreateTutorial extends Component {
             tutorial_svg_icon: this.state.tutorial_svg_icon, 
             options: this.state.options, 
             tabs: this.state.tabs,
-            selected_category: this.state.selected_category
+            selected_category: {
+                name: this.state.selected_category.category_name,
+                id: this.state.selected_category._id,
+            }
         };
 
         if(this.state.tutorial_id != "") {

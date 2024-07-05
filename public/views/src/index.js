@@ -40,7 +40,9 @@ class WrappApplication extends Component {
             <Route path="/privacy-policy/" element={<PrivacyPolicyPage />} />
             <Route path="/terms-and-conditions/" element={<TermsConditionsPage />} />
             <Route path="/tutorials/" element={<TutorialsComponent />} />
-            <Route path="/tutorials/:tut_slug" element={<TurorialComponent />} />
+            <Route path="/tutorials/:tut_slug/" element={<TurorialComponent />} />
+            <Route path="/tutorials/:tut_slug/:post_slug/" element={<h1>Post Title</h1>} />
+            <Route path="/tutorials/:tut_slug/:tab_slug/post/" element={<h1>Slug name</h1>} /> 
             
             <Route path="*" element={<PageNotFound />} />
           </Routes>
