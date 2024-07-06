@@ -3,6 +3,8 @@ const express = require("express");
 const  {Tutorial} = require("./../models/tutorial-model")
 const  {Chapters} = require("./../models/chapter-model")
 const  {Posts} = require("./../models/posts-model")
+const {Sets} = require("./../models/settings-model");
+
 var tutorialRouter = express.Router(); 
 var path = require("path");
 var fs = require("fs");
@@ -153,11 +155,15 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
 
     var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": "root" });
     var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": "root", post_type: 0});
-    
+    var settings = await Sets.find({})
+    if(settings.length) {
+        settings = settings[0]
+    }
     var response = {
       tutorial,
       chapters,
-      posts  
+      posts,
+      settings
     } 
 
     res.send({
