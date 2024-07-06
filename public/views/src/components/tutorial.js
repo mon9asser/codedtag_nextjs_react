@@ -165,7 +165,8 @@ var TurorialComponent = () => {
                         </> 
                 }
                 
-                <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block">                    
+                <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
+                    {alert("When click on share button should store count in database to know how is share it")}                   
                     {
                         
                         upcoming.settings == null ?
