@@ -27,6 +27,7 @@ class EditTutorialWrap extends Component {
             tutorial_title: "",
             duration: "",
             description: "", 
+            content: "",
             meta_title: "",
             slug: "",
             keyphrase: "",
@@ -46,6 +47,7 @@ class EditTutorialWrap extends Component {
             tab_copy: {
                 title: "",
                 description: "",
+                content: "",
                 slug: "",
                 keyphrase: "",
                 meta_title: "",
@@ -83,7 +85,7 @@ class EditTutorialWrap extends Component {
                     </header>
                     <section className="modal-card-body">
                         <ul>
-                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                        <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
                                 <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
                                     |
                                 </b>
@@ -99,6 +101,36 @@ class EditTutorialWrap extends Component {
                                 </b>
                                 <span>
                                     Youtube Iframe 
+                                </span>
+                            </li>
+
+                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                              
+                                <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
+                                    [youtube src="URL OF VIDEO"]
+                                </b>
+                                <span>
+                                    Youtube Iframe 
+                                </span>
+                            </li>
+
+                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                              
+                                <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
+                                    [h(1 to 6)]
+                                </b>
+                                <span>
+                                    Headline 
+                                </span>
+                            </li>
+
+                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                              
+                                <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
+                                    [chapters-posts]
+                                </b>
+                                <span>
+                                    Chapter or Posts List 
                                 </span>
                             </li>
                         </ul>
@@ -226,6 +258,7 @@ class EditTutorialWrap extends Component {
             tutorial_title: tutorial.tutorial_title,
             duration: tutorial.duration,
             description: tutorial.description,
+            content: tutorial.content,
             meta_title: tutorial.meta_title,
             slug: tutorial.slug,
             keyphrase: tutorial.keyphrase,
@@ -318,6 +351,7 @@ class EditTutorialWrap extends Component {
             tutorial_title: this.state.tutorial_title,
             duration: this.state.duration,
             description: this.state.description,
+            content: this.state.content,
             meta_title: this.state.meta_title,
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
@@ -579,6 +613,24 @@ class EditTutorialWrap extends Component {
                                                     description: e.target.value
                                                 })}
                                                 value={this.state.description}
+                                                className="input" 
+                                                style={{minHeight:"100px"}}
+                                            ></textarea>
+                                        </div> 
+                                    </div> 
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                         
+                                        <div style={{display: "flex", alignItems:"center", justifyContent:"space-between"}}>
+                                            <label className="label">Turorial Content</label>
+                                            <button onClick={e => this.setState({shortcode_modal: true})} style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Shortcode</button>
+                                        </div>
+                                        <div className="control">
+                                            <textarea 
+                                                onChange={e => this.setState({
+                                                    content: e.target.value
+                                                })}
+                                                value={this.state.content}
                                                 className="input" 
                                                 style={{minHeight:"100px"}}
                                             ></textarea>

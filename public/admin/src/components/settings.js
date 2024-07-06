@@ -19,6 +19,8 @@ class Settings extends Component {
             contact_email: "",
             subscribe_description: "",
             basic_id: -1,
+            circle_buttons:false,
+            share_social_buttons: '',
             banner_site_title: "",
             site_name: "",
             banner_site_description: "",
@@ -88,6 +90,8 @@ class Settings extends Component {
             script_url_1: settings.script_url_1,
             script_url_2: settings.script_url_2,
             subscribe_description: settings.subscribe_description,
+            circle_buttons:settings.circle_buttons,
+            share_social_buttons: settings.share_social_buttons,
             subscribe_title: settings.subscribe_title,
             contact_email: settings.contact_email
         })
@@ -150,6 +154,8 @@ class Settings extends Component {
             subscribe_title: this.state.subscribe_title,
             contact_email: this.state.contact_email,
             subscribe_description: this.state.subscribe_description,
+            circle_buttons:this.state.circle_buttons,
+            share_social_buttons: this.state.share_social_buttons,
         };
 
         if(this.state.selectedFile != null ) {
@@ -314,6 +320,23 @@ class Settings extends Component {
                                         <label className="label">Robots File</label>
                                         <div className="control">
                                             <textarea onChange={e => this.setState({ robots_file_contents: e.target.value })} value={this.state.robots_file_contents} className="input" style={{ minHeight: "100px" }} placeholder="Robots Content"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        
+                                            <label className="label">Social Share Buttons</label>
+                                            
+
+                                        <div className="control">
+                                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                                <label>
+                                                    <input checked={this.state.circle_buttons} onChange={e => this.setState({ circle_buttons:  e.target.checked })} type="checkbox" />
+                                                    Circle Buttons ?
+                                                </label>
+                                                <button>Show Socials Buttons</button>
+                                            </div>
+                                            <textarea onChange={e => this.setState({ share_social_buttons:  e.target.value })} value={this.state.share_social_buttons} className="input" style={{ minHeight: "100px" }} placeholder="Example: facebook, twitter, tumblr"></textarea>
                                         </div>
                                     </div>
                                 </div>

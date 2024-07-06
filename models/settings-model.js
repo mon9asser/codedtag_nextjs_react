@@ -98,7 +98,17 @@ let settingsSchema = new Schema({
         type: String,
         trim: true,
         default: ""
-    }
+    },
+
+    circle_buttons:{
+        type: Boolean, 
+        default: false
+    },
+    share_social_buttons: {
+        type: String,
+        trim: true,
+        default: ""
+    },
 });
 
 // Create Collection

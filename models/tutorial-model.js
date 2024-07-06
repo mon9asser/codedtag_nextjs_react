@@ -21,6 +21,11 @@ let tutorialSchema = new Schema({
         trim : true,
         default: "" 
     },
+    content: {
+        type: String ,
+        trim : true,
+        default: "" 
+    },
     views: {
         type: Number , 
         default: 0 

@@ -22,6 +22,7 @@ class CreateTutorial extends Component {
             tutorial_title: "",
             duration: "",
             description: "", 
+            content: "",
             tutorial_svg_icon: "",
             reviews: 0,
             meta_title: "",
@@ -42,6 +43,7 @@ class CreateTutorial extends Component {
             tab_copy: {
                 title: "",
                 description: "",
+                content: "",
                 slug: "",
                 keyphrase: "",
                 meta_title: "",
@@ -91,6 +93,36 @@ class CreateTutorial extends Component {
                                 </b>
                                 <span>
                                     Youtube Iframe 
+                                </span>
+                            </li>
+
+                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                              
+                                <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
+                                    [youtube src="URL OF VIDEO"]
+                                </b>
+                                <span>
+                                    Youtube Iframe 
+                                </span>
+                            </li>
+
+                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                              
+                                <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
+                                    [h(1 to 6)]
+                                </b>
+                                <span>
+                                    Headline 
+                                </span>
+                            </li>
+
+                            <li style={{display:'flex', alignItems: "center", marginBottom: "10px"}}>
+                              
+                                <b style={{flexBasis: '150px', border: '1px solid #ddd', marginRight: '12px', background: '#fff', padding: '11px'}}>
+                                    [chapters-posts]
+                                </b>
+                                <span>
+                                    Chapter or Posts List 
                                 </span>
                             </li>
                         </ul>
@@ -230,6 +262,7 @@ class CreateTutorial extends Component {
             tutorial_title: this.state.tutorial_title,
             duration: this.state.duration,
             description: this.state.description,
+            content: this.state.content,
             meta_title: this.state.meta_title,
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
@@ -494,6 +527,26 @@ class CreateTutorial extends Component {
                                                 style={{minHeight:"100px"}}
                                             ></textarea>
                                         </div> 
+                                    </div> 
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                         
+                                        <div style={{display: "flex", alignItems:"center", justifyContent:"space-between"}}>
+                                            <label className="label">Turorial Content</label>
+                                            <button onClick={e => this.setState({shortcode_modal: true})} style={{color:"blue", fontWeight:"bold", fontSize: "14px"}}>Shortcode</button>
+                                        </div>
+
+                                        <div className="control">
+                                            <textarea 
+                                                onChange={e => this.setState({
+                                                    content: e.target.value
+                                                })}
+                                                value={this.state.content}
+                                                className="input" 
+                                                style={{minHeight:"100px"}}
+                                            ></textarea>
+                                        </div> 
+
                                     </div> 
 
                                     <div className="field" style={{marginTop: "25px"}}>

@@ -122,6 +122,7 @@ class CreatePost extends Component {
                 total_chars: 0,
                 links: [],
                 _id: "",
+                
                 blocks: [
                     {
                         chars_counts: 0,

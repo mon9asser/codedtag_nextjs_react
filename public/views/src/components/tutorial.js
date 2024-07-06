@@ -10,6 +10,31 @@ import { Helmet } from "react-helmet";
 import { Settings } from "../settings"; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
  
+import {
+    FacebookShareCount,
+    EmailShareButton,
+    FacebookShareButton,
+    GabShareButton,
+    HatenaShareButton,
+    InstapaperShareButton,
+    LineShareButton,
+    LinkedinShareButton,
+    LivejournalShareButton,
+    MailruShareButton,
+    OKShareButton,
+    PinterestShareButton,
+    PocketShareButton,
+    RedditShareButton,
+    TelegramShareButton,
+    TumblrShareButton,
+    TwitterShareButton,
+    ViberShareButton,
+    VKShareButton,
+    WhatsappShareButton,
+    WorkplaceShareButton,
+  } from "react-share";
+
+  
 var TurorialComponent = () => {
 
     const navigate = useNavigate();
@@ -65,31 +90,7 @@ var TurorialComponent = () => {
         }); 
         upcoming_change(old_objec);
     }
-
-
-    var TutorialsList = ({ index, data, chapter_title }) => {
-        
-        return ( 
-           
-            <div className="container white-grey-bg category-container update-chpt">
-                 
-                 {
-                    chapter_title != undefined ?
-                    <>
-                        <span className="cats-number">{Helper.produceNumber(index)}</span>
-                        <h2 className="category-headline">{chapter_title}</h2>
-                    </> : ""
-                 }
-                 
-                 <div className="chapter-cont">
-                    <ul className="tuts-categ">
-                        {data.map(x => <li key={x._id}><Link to={'#'}>{x.post_title}</Link></li>)} 
-                    </ul>
-                 </div>
-            </div>
-
-        );
-    }
+    
 
     var TutorialHeader = () => {
         return (
@@ -152,8 +153,8 @@ var TurorialComponent = () => {
                             {
                                 upcoming.tutorial == null ?
                                  <Helper.PreLoader type={'text'} lines={5}/>: 
-                                    <div className="mt-20">
-                                        <Helper.GenerateTutorialContent data={upcoming.tutorial.description} />
+                                    <div className="mt-20 content-elem">
+                                        <Helper.GenerateTutorialContent upcoming={upcoming} data={upcoming.tutorial.description} />
                                     </div>
                             } 
 
@@ -163,30 +164,7 @@ var TurorialComponent = () => {
         );
     }
 
-    var TutorialLinks = () => {
-        return (
-            <div className="wrapper max-1150 offset-left offset-right ptb-30-50 flexbox gap-20 flex-wrap content-center"> 
-                            
-                        
-                {
-                    upcoming.chapters.length ?
-                    (
-                        upcoming.chapters.map(( chapter, k) => {
-                            return ( <TutorialsList key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
-                        })
-                    ) :
-                    (
-                        upcoming.posts.length ?
-                            Helper.chunkArray(upcoming.posts, 3 ).map(( posts, k) => {
-                                return ( <TutorialsList key={k} data={posts} index={k}/> );
-                            })
-                        : ""
-                    )
-                }
-                
-            </div>
-        );
-    }
+    
     
     return (
         <>
@@ -201,24 +179,34 @@ var TurorialComponent = () => {
                         <div className="wrapper max-950 mt-20 mb-20"><Helper.PreLoader type={'text'} lines={3} columns={true}/></div> :
                         <>
 
-                        
+                            {
+                                upcoming.tutorial.content != '' ?
+                                <div className="wrapper ptb-30-50 content-elem max-full text-center mlr--15 chapter-block-hlght">
+                                    <Helper.GenerateTutorialContent upcoming={upcoming} data={upcoming.tutorial.content} />
+                                </div>: ''
+                            }   
 
-                        <div className="wrapper max-1150 text-center">
-                            <h2 className="text-center tutorial-contents-headline">Basic Giude fo PHP Tutorials</h2>
-                            <p className="mt-15 tutorial-description text-center">
-                                Hello! Do you have any question or suggestion about this site, or just want to say Hi? Send me a message using below form. I will get back to you as soon as possible.
-                            </p>
-
-                            <TutorialLinks />  
-                            ds
-                        </div>
-                        
-                        
-
-                     </> 
+                        </> 
                 }
                 
-                
+                <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block">
+                    
+                    <span>Share</span>
+                    <div className="flexbox gap-15 share-box">
+                        {/* should use loader until data loaded */}
+                        <Helper.SocialShare 
+                            
+                            platforms={"email, viber, twitter, instagram, tumblr"} 
+                            url={"https://codedtag.com/php/"} 
+                            size={32} 
+                            height={'32px'} 
+                            width={'32px'} 
+                            radius={true} 
+                            title={"PHP Tutorials for Beginners"}
+                        />
+
+                    </div>
+                </div>
 
                 
             </main>

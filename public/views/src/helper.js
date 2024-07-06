@@ -5,7 +5,48 @@ import CryptoJS from 'crypto-js';
 import Highlight from 'react-highlight'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
-
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  GabShareButton,
+  HatenaShareButton,
+  InstapaperShareButton,
+  LineShareButton,
+  LinkedinShareButton,
+  LivejournalShareButton,
+  MailruShareButton,
+  OKShareButton,
+  PinterestShareButton,
+  PocketShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TumblrShareButton,
+  TwitterShareButton,
+  ViberShareButton,
+  VKShareButton,
+  WhatsappShareButton,
+  WorkplaceShareButton,
+  EmailIcon,
+  FacebookIcon,
+  GabIcon,
+  HatenaIcon,
+  InstapaperIcon,
+  LineIcon,
+  LinkedinIcon,
+  LivejournalIcon,
+  MailruIcon,
+  OKIcon,
+  PinterestIcon,
+  PocketIcon,
+  RedditIcon,
+  TelegramIcon,
+  TumblrIcon,
+  TwitterIcon,
+  ViberIcon,
+  VKIcon,
+  WhatsappIcon,
+  WorkplaceIcon,
+} from 'react-share';
  
 
 const StyledList = ({ data }) => {
@@ -112,7 +153,152 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
 
 class HelperData {
 
+    CustomShareIcon = ({ IconComponent, size, width, height }) => (
+      <div style={{ borderRadius: '8px', overflow: 'hidden', width: width, height: height }}>
+        <IconComponent size={size} />
+      </div>
+    );
+  
+  
+    SocialShare = ({platforms, url, title, radius, size, width, height}) => {
+      if( size == undefined ) {
+        size = 32;
+      }
 
+      if( width == undefined ) {
+        width = '32px';
+      }
+      if( height == undefined ) {
+        height = '32px';
+      }
+      return platforms.split(',').map((platform, index) => {
+        const trimmedPlatform = platform.trim().toLowerCase();
+        switch (trimmedPlatform) {
+          case 'email':
+            return (
+              <EmailShareButton key={index} url={url} subject={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={EmailIcon} /> : <EmailIcon width={width} height={height} size={size} round />}
+              </EmailShareButton>
+            );
+          case 'facebook':
+            return (
+              <FacebookShareButton key={index} url={url} quote={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={FacebookIcon} /> : <FacebookIcon width={width} height={height} size={size} round />}
+              </FacebookShareButton>
+            );
+          case 'gab':
+            return (
+              <GabShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={GabIcon} /> : <GabIcon width={width} height={height} size={size} round />}
+              </GabShareButton>
+            );
+          case 'hatena':
+            return (
+              <HatenaShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={HatenaIcon} /> : <HatenaIcon width={width} height={height} size={size} round />}
+              </HatenaShareButton>
+            );
+          case 'instapaper':
+            return (
+              <InstapaperShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={InstapaperIcon} /> : <InstapaperIcon width={width} height={height} size={size} round />}
+              </InstapaperShareButton>
+            );
+          case 'line':
+            return (
+              <LineShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={LineIcon} /> : <LineIcon width={width} height={height} size={size} round />}
+              </LineShareButton>
+            );
+          case 'linkedin':
+            return (
+              <LinkedinShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={LinkedinIcon} /> : <LinkedinIcon width={width} height={height} size={size} round />}
+              </LinkedinShareButton>
+            );
+          case 'livejournal':
+            return (
+              <LivejournalShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={LivejournalIcon} /> : <LivejournalIcon width={width} height={height} size={size} round />}
+              </LivejournalShareButton>
+            );
+          case 'mailru':
+            return (
+              <MailruShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={MailruIcon} /> : <MailruIcon width={width} height={height} size={size} round />}
+              </MailruShareButton>
+            );
+          case 'ok':
+            return (
+              <OKShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={OKIcon} /> : <OKIcon width={width} height={height} size={size} round />}
+              </OKShareButton>
+            );
+          case 'pinterest':
+            return (
+              <PinterestShareButton key={index} url={url} media={url} description={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={PinterestIcon} /> : <PinterestIcon width={width} height={height} size={size} round />}
+              </PinterestShareButton>
+            );
+          case 'pocket':
+            return (
+              <PocketShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={PocketIcon} /> : <PocketIcon width={width} height={height} size={size} round />}
+              </PocketShareButton>
+            );
+          case 'reddit':
+            return (
+              <RedditShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={RedditIcon} /> : <RedditIcon width={width} height={height} size={size} round />}
+              </RedditShareButton>
+            );
+          case 'telegram':
+            return (
+              <TelegramShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={TelegramIcon} /> : <TelegramIcon width={width} height={height} size={size} round />}
+              </TelegramShareButton>
+            );
+          case 'tumblr':
+            return (
+              <TumblrShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={TumblrIcon} /> : <TumblrIcon width={width} height={height} size={size} round />}
+              </TumblrShareButton>
+            );
+          case 'twitter':
+            return (
+              <TwitterShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={TwitterIcon} /> : <TwitterIcon width={width} height={height} size={size} round />}
+              </TwitterShareButton>
+            );
+          case 'viber':
+            return (
+              <ViberShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={ViberIcon} /> : <ViberIcon width={width} height={height} size={size} round />}
+              </ViberShareButton>
+            );
+          case 'vk':
+            return (
+              <VKShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={VKIcon} /> : <VKIcon width={width} height={height} size={size} round />}
+              </VKShareButton>
+            );
+          case 'whatsapp':
+            return (
+              <WhatsappShareButton key={index} url={url} title={title} separator=":: " className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={WhatsappIcon} /> : <WhatsappIcon width={width} height={height} size={size} round />}
+              </WhatsappShareButton>
+            );
+          case 'workplace':
+            return (
+              <WorkplaceShareButton key={index} url={url} title={title} className="social-share-button">
+                {radius ? <this.CustomShareIcon width={width} height={height} size={size} IconComponent={WorkplaceIcon} /> : <WorkplaceIcon width={width} height={height} size={size} round />}
+              </WorkplaceShareButton>
+            );
+          default:
+            return null;
+        }
+      });
+    }
     PreLoader = ({type, lines, columns }) => {
 
       let element = <span className="loader loader-dark"></span>;
@@ -697,26 +883,96 @@ class HelperData {
     }
     
 
-    GenerateTutorialContent = ({data}) => {
-
-      // paragraphs => <p className="tutorial-description text-center"></p> 
-        // Split the data by the delimiter "|"
-        const parts = data.split('|').map(part => part.trim());
-
-        // Process the parts to create the appropriate elements
-        return (
-          <div>
-            {parts.map((part, index) => {
-              if (part.startsWith('[youtube')) {
-                const src = part.match(/src="([^"]+)"/)[1]; 
-                return (<div key={index} className={'mt-25'}><LazyLoadYouTube cls='ifram-tut-youtube' url={src}/></div>);                
-              } else {
-                return <p key={index} className="tutorial-description text-center">{part}</p>;
-              }
-            })}
-          </div>
+    GenerateTutorialContent = ({ data, upcoming }) => {
+      // Split the data by the delimiter "|"
+      const parts = data.split('|').map(part => part.trim());
+    
+      // Process the parts to create the appropriate elements
+      return (
+        <div>
+          {parts.map((part, index) => {
+            // YouTube shortcode
+            if (part.startsWith('[youtube')) {
+              const src = part.match(/src="([^"]+)"/)[1];
+              return (
+                <div key={index} className="mt-25">
+                  <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
+                </div>
+              );
+            }
+            // Headline shortcodes from h1 to h6
+            else if (part.match(/^\[h[1-6]/)) {
+              const tag = part.match(/^\[h([1-6])/)[1];
+              const content = part.replace(/^\[h[1-6]\]/, '').trim();
+              const TagName = `h${tag}`;
+              return <TagName key={index} className="tutorial-subheadline">{content}</TagName>;
+            }
+            // Chapters and posts shortcode
+            else if (part.startsWith('[chapters-posts]')) {
+              if(upcoming != undefined )
+                return <this.TutorialLinks key={index} upcoming={upcoming} />;
+            } 
+            // Default case: plain paragraph
+            else {
+              return (
+                <p key={index} className="tutorial-description text-center">
+                  {part}
+                </p>
+              );
+            }
+          })}
+        </div>
       );
     }
+
+    TutorialLinks = ({upcoming}) => {
+      return (
+          <div className="wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center"> 
+                          
+                      
+              {
+                  upcoming.chapters.length ?
+                  (
+                      upcoming.chapters.map(( chapter, k) => {
+                          return ( <this.TutorialsList key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
+                      })
+                  ) :
+                  (
+                      upcoming.posts.length ?
+                          Helper.chunkArray(upcoming.posts, 3 ).map(( posts, k) => {
+                              return ( <this.TutorialsList key={k} data={posts} index={k}/> );
+                          })
+                      : ""
+                  )
+              }
+              
+          </div>
+      );
+  }
+
+  TutorialsList = ({ index, data, chapter_title }) => {
+      
+      return ( 
+         
+          <div className="container white-grey-bg category-container update-chpt">
+               
+               {
+                  chapter_title != undefined ?
+                  <>
+                      <span className="cats-number">{Helper.produceNumber(index)}</span>
+                      <h2 className="category-headline">{chapter_title}</h2>
+                  </> : ""
+               }
+               
+               <div className="chapter-cont">
+                  <ul className="tuts-categ">
+                      {data.map(x => <li key={x._id}><Link to={'#'}>{x.post_title}</Link></li>)} 
+                  </ul>
+               </div>
+          </div>
+
+      );
+  }
 
     produceNumber = (number) => {
       
