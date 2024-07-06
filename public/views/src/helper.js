@@ -113,16 +113,21 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
 class HelperData {
 
 
-    PreLoader = ({type, lines}) => {
+    PreLoader = ({type, lines, columns }) => {
 
       let element = <span className="loader loader-dark"></span>;
+      var col = columns == undefined ? false: columns;
 
       if (type === 'text') {
         const elementLines = [];
         for (let i = 0; i < lines; i++) {
           elementLines.push(<div key={i} className="placeholder-text-loader mt-13"></div>);
         }
-        element = <div className="mt-20">{elementLines}</div>;
+
+        if( col ) 
+            element = <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap">{elementLines}</div>;
+          else 
+            element = <div className="mt-20">{elementLines}</div>;
       } 
 
       return element;
@@ -696,6 +701,19 @@ class HelperData {
             })}
           </div>
       );
+    }
+
+    produceNumber = (number) => {
+      
+      var num = number + 1;
+
+      var string = `0${num}`
+      if( num > 10 ) {
+        string = `${num}`
+      }
+      
+      return string;
+
     }
      
 }

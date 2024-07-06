@@ -67,100 +67,26 @@ var TurorialComponent = () => {
     }
 
 
-    var TutorialsList = () => {
+    var TutorialsList = ({ index, data, chapter_title }) => {
+        
         return ( 
            
-            <div className="container white-grey-bg category-container">
-                <span className="cats-number">01</span>
-                <h2 className="category-headline">Introduction to UI/UX Design</h2>
-                <ul className="tuts-categ">
-                    <li>
-                        <a>
-                            <span>PHP Predefined Constants</span>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span>PHP Predefined Constants</span>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span>PHP Predefined Constants</span>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span>PHP Predefined Constants</span>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span>PHP Predefined Constants</span>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <div>
-                                <span>Latest News The Real News Network</span>
-                                <div className="flexbox items-center post-auth-block"><img src="https://webdeveloper.com/wp-content/uploads/2022/05/ManoelaIlic_Portrait-46x50.jpg" alt="" srcSet="" /><span>Manoela Ilic </span></div>
-                            </div>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <div className="div-block">
-                            Ads block
-                        </div>
-                    </li>
-                    <li>
-                        <a>
-                            <div>
-                                <span>NBC News - Breaking News &amp; Top Stories</span>
-                                <div className="flexbox items-center post-auth-block"><img src="https://webdeveloper.com/wp-content/uploads/2022/05/ManoelaIlic_Portrait-46x50.jpg" alt="" srcSet="" /><span>Manoela Ilic </span></div>
-                            </div>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <div>
-                                <span>CNN: Breaking News, Latest News and Videos</span>
-                                <div className="flexbox items-center post-auth-block"><img src="https://webdeveloper.com/wp-content/uploads/2022/05/ManoelaIlic_Portrait-46x50.jpg" alt="" srcSet="" /><span>Manoela Ilic </span></div>
-                            </div>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <div className="div-block">
-                            Ads block
-                        </div>
-                    </li>
-                    <li>
-                        <a>
-                            <div>
-                                <span>ABC News - Breaking News Latest News and Videos</span>
-                                <div className="flexbox items-center post-auth-block"><img src="https://webdeveloper.com/wp-content/uploads/2022/05/ManoelaIlic_Portrait-46x50.jpg" alt="" srcSet="" /><span>Manoela Ilic </span></div>
-                            </div>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <div>
-                                <span>National Of Security Advisor Jake</span>
-                                <div className="flexbox items-center post-auth-block"><img src="https://webdeveloper.com/wp-content/uploads/2022/05/ManoelaIlic_Portrait-46x50.jpg" alt="" srcSet="" /><span>Manoela Ilic </span></div>
-                            </div>
-                            <span>2.5 Mins Read </span>
-                        </a>
-                    </li>
-                </ul>
-            </div> 
+            <div className="container white-grey-bg category-container update-chpt">
+                 
+                 {
+                    chapter_title != undefined ?
+                    <>
+                        <span className="cats-number">{Helper.produceNumber(index)}</span>
+                        <h2 className="category-headline">{chapter_title}</h2>
+                    </> : ""
+                 }
+                 
+                 <div className="chapter-cont">
+                    <ul className="tuts-categ">
+                        {data.map(x => <li key={x._id}><Link to={'#'}>{x.post_title}</Link></li>)} 
+                    </ul>
+                 </div>
+            </div>
 
         );
     }
@@ -180,11 +106,7 @@ var TurorialComponent = () => {
                             
                             
                             <span className="sub-title">{upcoming.tutorial?.selected_category.name} </span>
-
-
-                            <div className="div-block">
-                                Ads block
-                            </div>
+                                
                             {
                                 upcoming.tutorial?.tabs?.length ?
                                 <ul className="no-list-style flexbox gap-50 content-center items-center flex-wrap bold-list tab-lang-categories">
@@ -233,13 +155,8 @@ var TurorialComponent = () => {
                                     <div className="mt-20">
                                         <Helper.GenerateTutorialContent data={upcoming.tutorial.description} />
                                     </div>
-                            }
-                            
-                            
-                           
-                            <div className="div-block">
-                                Ads block
-                            </div>
+                            } 
+
                         </div>
                     </div>
             </header>
@@ -252,38 +169,30 @@ var TurorialComponent = () => {
             <Header/>
             <main className="wrapper max-1250 offset-left offset-right ptb-50">
 
-                <div className="wrapper floating index-bottom">
-                    <div className="circle floating-small left--15 top--25"></div>
-                    <div className="circle floating-small right--15 bottom--25"></div>
-                </div>
-
                 <TutorialHeader />
 
-                <div className="wrapper max-1250 offset-left offset-right ptb-50"> 
-                    <div className="row mlr--10 tutorial-list-items"> 
-                        <div className="md-4 p-all-10">
-                            <TutorialsList/>
-                        </div>
-                        <div className="md-4 p-all-10">
-                            <TutorialsList/>
-                        </div>
-                        <div className="md-12 p-all-10">
-                            <div className="div-block">
-                                Ads block
-                            </div>
-                        </div>
-                        <div className="md-4 p-all-10">
-                            <TutorialsList/>
-                        </div>
-                        <div className="md-4 p-all-10">
-                            <TutorialsList/>
-                        </div>
+                
+                {
+                    upcoming.chapters == null ?
+                    <div className="wrapper max-950 mt-20 mb-20"><Helper.PreLoader type={'text'} lines={3} columns={true}/></div> :
+                    <div className="wrapper max-1150 offset-left offset-right ptb-50 flexbox gap-20 flex-wrap content-center"> 
+                        
+                        {
+                            upcoming.chapters.length ?
+                            upcoming.chapters.map(( chapter, k) => {
+                                return ( <TutorialsList key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
+                            }) :
+                            (
+                                upcoming.posts.length
+                            )
+                        }
+                        
                     </div> 
-                </div>
+                }
+                
+                
 
-                <div className="div-block">
-                    Ads block
-                </div>
+                
             </main>
             <Footer/>
         </>
