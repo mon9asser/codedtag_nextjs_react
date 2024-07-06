@@ -415,6 +415,12 @@ textarea:focus {
 .mt-15 {
     margin-top: 15px;
 }
+.social-share-button {
+    opacity:0.89; 
+}
+.social-share-button:hover {
+    opacity: 1;
+}
 .ptb-30-50 {
     padding-top: 30px !important;
     padding-bottom: 50px !important;

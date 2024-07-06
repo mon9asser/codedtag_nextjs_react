@@ -9,31 +9,7 @@ import { Helper } from "../helper";
 import { Helmet } from "react-helmet";
 import { Settings } from "../settings"; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
- 
-import {
-    FacebookShareCount,
-    EmailShareButton,
-    FacebookShareButton,
-    GabShareButton,
-    HatenaShareButton,
-    InstapaperShareButton,
-    LineShareButton,
-    LinkedinShareButton,
-    LivejournalShareButton,
-    MailruShareButton,
-    OKShareButton,
-    PinterestShareButton,
-    PocketShareButton,
-    RedditShareButton,
-    TelegramShareButton,
-    TumblrShareButton,
-    TwitterShareButton,
-    ViberShareButton,
-    VKShareButton,
-    WhatsappShareButton,
-    WorkplaceShareButton,
-  } from "react-share";
-
+  
   
 var TurorialComponent = () => {
 
@@ -74,7 +50,7 @@ var TurorialComponent = () => {
                 tutorial: row.data.tutorial,
                 posts: row.data.posts,
                 chapters: row.data.chapters,
-                settings: null
+                settings: row.data.settings
             });
             
         }); 
@@ -189,23 +165,30 @@ var TurorialComponent = () => {
                         </> 
                 }
                 
-                <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block">
-                    
-                    <span>Share</span>
-                    <div className="flexbox gap-15 share-box">
-                        {/* should use loader until data loaded */}
-                        <Helper.SocialShare 
-                            
-                            platforms={"email, viber, twitter, instagram, tumblr"} 
-                            url={"https://codedtag.com/php/"} 
-                            size={32} 
-                            height={'32px'} 
-                            width={'32px'} 
-                            radius={true} 
-                            title={"PHP Tutorials for Beginners"}
-                        />
-
-                    </div>
+                <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block">                    
+                    {
+                        
+                        upcoming.settings == null ?
+                        <Helper.PreLoader type={'text'} lines={1}/>
+                        : (
+                            upcoming.settings.share_social_buttons == '' ? ''
+                            : 
+                                <>
+                                    <span>Share</span>
+                                    <div className="flexbox gap-15 share-box"> 
+                                    <Helper.SocialShare   
+                                        platforms={upcoming.settings.share_social_buttons} 
+                                        url={"https://codedtag.com/php/"} 
+                                        size={32} 
+                                        height={'32px'} 
+                                        width={'32px'} 
+                                        radius={!upcoming.settings.circle_buttons} 
+                                        title={"PHP Tutorials for Beginners"}
+                                    />
+                                    </div>
+                                </>
+                        )
+                    }                    
                 </div>
 
                 
