@@ -179,9 +179,11 @@ var TurorialComponent = () => {
                         
                         {
                             upcoming.chapters.length ?
-                            upcoming.chapters.map(( chapter, k) => {
-                                return ( <TutorialsList key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
-                            }) :
+                            (
+                                upcoming.chapters.map(( chapter, k) => {
+                                    return ( <TutorialsList key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
+                                })
+                            ) :
                             (
                                 upcoming.posts.length
                             )
