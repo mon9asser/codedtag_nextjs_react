@@ -402,10 +402,25 @@ textarea:focus {
     border-radius: 15px; 
     border: 1px dashed #d9d9d9;
     flex-basis: 333px;  
+    align-self: flex-start;
 }
 
 .update-chpt .cats-number {
     color: #b9355e47;
+}
+.mt-15 {
+    margin-top: 15px;
+}
+.ptb-30-50 {
+    padding-top: 30px;
+    padding-bottom: 50px;
+}
+.tutorial-contents-headline {
+    font-weight: 800;
+    color: #0a0a23;
+    font-size: clamp(18px,5vw,25px);
+    line-height: 1.3;
+    margin-top: 30px;
 }
 
 
@@ -430,13 +445,15 @@ textarea:focus {
     -o-transition:padding-left .3s ease-in-out;
     transition:padding-left .3s ease-in-out;
     font-size: 14px;
-    padding: 5px 15px;
+    padding: 10px 15px;
 }
 
 .tuts-categ li:hover a {
     padding-left: 20px;
 }
- 
+ .tuts-categ li {
+    margin-bottom: 0;
+ }
 
 .columns-loader .placeholder-text-loader {
     flex-basis: 30%;

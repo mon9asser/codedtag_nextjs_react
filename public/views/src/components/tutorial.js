@@ -163,33 +163,59 @@ var TurorialComponent = () => {
         );
     }
 
+    var TutorialLinks = () => {
+        return (
+            <div className="wrapper max-1150 offset-left offset-right ptb-30-50 flexbox gap-20 flex-wrap content-center"> 
+                            
+                        
+                {
+                    upcoming.chapters.length ?
+                    (
+                        upcoming.chapters.map(( chapter, k) => {
+                            return ( <TutorialsList key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
+                        })
+                    ) :
+                    (
+                        upcoming.posts.length ?
+                            Helper.chunkArray(upcoming.posts, 3 ).map(( posts, k) => {
+                                return ( <TutorialsList key={k} data={posts} index={k}/> );
+                            })
+                        : ""
+                    )
+                }
+                
+            </div>
+        );
+    }
     
     return (
         <>
             <Header/>
             <main className="wrapper max-1250 offset-left offset-right ptb-50">
 
+                
                 <TutorialHeader />
-
                 
                 {
                     upcoming.chapters == null ?
-                    <div className="wrapper max-950 mt-20 mb-20"><Helper.PreLoader type={'text'} lines={3} columns={true}/></div> :
-                    <div className="wrapper max-1150 offset-left offset-right ptb-50 flexbox gap-20 flex-wrap content-center"> 
+                        <div className="wrapper max-950 mt-20 mb-20"><Helper.PreLoader type={'text'} lines={3} columns={true}/></div> :
+                        <>
+
                         
-                        {
-                            upcoming.chapters.length ?
-                            (
-                                upcoming.chapters.map(( chapter, k) => {
-                                    return ( <TutorialsList key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
-                                })
-                            ) :
-                            (
-                                upcoming.posts.length
-                            )
-                        }
+
+                        <div className="wrapper max-1150 text-center">
+                            <h2 className="text-center tutorial-contents-headline">Basic Giude fo PHP Tutorials</h2>
+                            <p className="mt-15 tutorial-description text-center">
+                                Hello! Do you have any question or suggestion about this site, or just want to say Hi? Send me a message using below form. I will get back to you as soon as possible.
+                            </p>
+
+                            <TutorialLinks />  
+                            ds
+                        </div>
                         
-                    </div> 
+                        
+
+                     </> 
                 }
                 
                 
