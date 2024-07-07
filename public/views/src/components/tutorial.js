@@ -13,8 +13,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
   
 var TurorialComponent = () => {
 
-    const navigate = useNavigate();
-    var feedback_form = React.useRef();
+    const navigate = useNavigate(); 
 
     const redirect404 = () => {
         navigate('/page-404');
@@ -26,7 +25,7 @@ var TurorialComponent = () => {
 
     // states  df
     var [thumbs, thumbs_change] = React.useState(null);
-    var [comment, comment_change] = React.useState('');
+    var [comment, comment_change] = React.useState();
 
     var [ upcoming, upcoming_change ] = React.useState({
         tutorial: null,
@@ -80,22 +79,13 @@ var TurorialComponent = () => {
         upcoming_change(old_objec);
     }
 
-    var comments_feedback_callback = (obj) => {
-        var old_objec = {...comments};
-        var __keys = Object.keys(obj);
-        __keys.map(x => {
-            old_objec[x] = obj[x]
-        }); 
-        comments_change(old_objec);
-    }
+ 
     
     var thumbUpHandler = ( e ) => {
         
         e.preventDefault();
-  
-        comments_feedback_callback({
-            thumb: true
-        });
+        
+        thumbs_change(true)
        // var hldr = document.querySelector(".feedback-form-block");
         
     }
@@ -103,11 +93,9 @@ var TurorialComponent = () => {
     var thumbDownHandler = ( e ) => {
         
         e.preventDefault();
-
-        comments_feedback_callback({
-            thumb: false
-        });
-    }
+        
+        thumbs_change(false)
+    }   
 
 
     var ThumbUp = () => (
@@ -121,12 +109,11 @@ var TurorialComponent = () => {
     var submit_feedback = (e) => {
         
         e.preventDefault();
-        // assign title to form 
-
-        comments_feedback_callback({title: upcoming.tutorial.tutorial_title})
-
-        console.log(comments);
+        // assign title to form  
+        console.log(comment, thumbs);
+        
     }
+
     var FeedBackBlock = () => {
 
         return (
@@ -146,18 +133,16 @@ var TurorialComponent = () => {
                         </a>
                     </div>
                 </div>
-                <form className="feedback-form-block" ref={feedback_form}>
-                    <textarea  
-                        onChange={e => {
-                            comments_change({
-                                comment: e.target.value
-                            })
-                        }}
-                        value={comments.comment}
-                        placeholder="write your feedback here!"
-                    ></textarea>
+                <div className="feedback-form-block">
+                    
                     <button type="submit" onClick={submit_feedback} className="btn third-btn radius-5 custom-header-btn auto-left">Submit</button>
-                </form>
+                </div>
+
+                <input  
+                        onChange={e => comment_change(e.target.value)}
+                        value={comment}
+                        placeholder="write your feedback here!"
+                    />
             </div>
         );
 
