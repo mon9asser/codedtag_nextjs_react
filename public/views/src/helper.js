@@ -138,8 +138,7 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
                   className={cls}
                   width={width}
                   height={height}
-                  src={`${url}`}
-                  frameBorder="0"
+                  src={`${url}`} 
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
               ></iframe>
@@ -883,7 +882,7 @@ class HelperData {
     }
     
 
-    GenerateTutorialContent = ({ data, upcoming }) => {
+    GenerateTutorialContent = ({ data, upcoming, built_url }) => {
       // Split the data by the delimiter "|"
       const parts = data.split('|').map(part => part.trim());
     
@@ -910,7 +909,7 @@ class HelperData {
             // Chapters and posts shortcode
             else if (part.startsWith('[chapters-posts]')) {
               if(upcoming != undefined )
-                return <this.TutorialLinks key={index} upcoming={upcoming} />;
+                return <this.TutorialLinks key={index} built_url={built_url} upcoming={upcoming} />;
             } 
             // Default case: plain paragraph
             else {
@@ -925,7 +924,7 @@ class HelperData {
       );
     }
 
-    TutorialLinks = ({upcoming}) => {
+    TutorialLinks = ({upcoming, built_url}) => {
       return (
           <div className="wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center"> 
                           
@@ -934,13 +933,13 @@ class HelperData {
                   upcoming.chapters.length ?
                   (
                       upcoming.chapters.map(( chapter, k) => {
-                          return ( <this.TutorialsList key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
+                          return ( <this.TutorialsList built_url={built_url} key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
                       })
                   ) :
                   (
                       upcoming.posts.length ?
                           Helper.chunkArray(upcoming.posts, 3 ).map(( posts, k) => {
-                              return ( <this.TutorialsList key={k} data={posts} index={k}/> );
+                              return ( <this.TutorialsList built_url={built_url} key={k} data={posts} index={k}/> );
                           })
                       : ""
                   )
@@ -950,7 +949,7 @@ class HelperData {
       );
   }
 
-  TutorialsList = ({ index, data, chapter_title }) => {
+  TutorialsList = ({ index, data, chapter_title, built_url }) => {
       
       return ( 
          
@@ -963,10 +962,10 @@ class HelperData {
                       <h2 className="category-headline">{chapter_title}</h2>
                   </> : ""
                }
-               
+               {console.log(data)}
                <div className="chapter-cont">
                   <ul className="tuts-categ">
-                      {data.map(x => <li key={x._id}><Link to={'#'}>{x.post_title}</Link></li>)} 
+                      {data.map(x => <li key={x._id}><Link to={`${built_url}${x.slug}/`}>{x.post_title}</Link></li>)} 
                   </ul>
                </div>
           </div>
