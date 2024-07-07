@@ -35,7 +35,8 @@ commentsRouter.post('/comments/create-update', async (req, res) => {
          
         if( _comments != null ) {
 
-            _comments.comments = [..._comments.comments, body.comment];
+            if( body.comment != '' )
+                _comments.comments = [..._comments.comments, body.comment];
             
             if( body.thumb ) {
                 _comments.like_counts = _comments.like_counts + 1

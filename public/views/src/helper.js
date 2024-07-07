@@ -881,8 +881,10 @@ class HelperData {
       return result;
     }
     
-    FeedBackBlock = ({data_id, data_title}) => {
- 
+    FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
+
+        feeadback_title = feeadback_title == undefined ? 'Did you find this tutorial useful?': feeadback_title;
+
         var [feedback, feedback_change] = React.useState({
           thumb: null, 
           comment: '', 
@@ -920,7 +922,12 @@ class HelperData {
         var submit_feedback = async (e, presstype ) => {
         
             e.preventDefault();  
-            console.log(presstype);
+            
+            changed_data_callback({
+              press_type: presstype,
+              is_pressed: true
+            })
+
             var response = await this.sendRequest({
               api: "comments/create-update",
               data: feedback, 
@@ -961,27 +968,45 @@ class HelperData {
             <div className="feedback-block max-1050 update-sider">
                 <div className="flexbox direction-row items-center space-between flex-wrap">
                     <div className="ptb-10">
-                        <h3>Did you find this tutorial useful?</h3>
+                        <h3>{feeadback_title}</h3>
                         <p className="mt-8">Your feedback helps us improve our tutorials.</p>
                     </div>
                     <div className="flexbox direction-row gap-15 ptb-10">
                         <a href='#' className="x-thumb-up" onClick={e => thumbUpHandler(e, "thumb-up")}>
-                            <ThumbUp/>
+                            {
+                              data.is_pressed && data.press_type == 'thumb-up' ?
+                              <span className='loader' style={{borderBottomColor: '#00bec4'}}></span> :
+                              <ThumbUp/>
+                            }  
                         </a>
 
                         <a href='#' className="x-thumb-down" onClick={e => thumbDownHandler(e, "thumb-down")}>
-                            <ThumbDown/>
+                            
+                            {
+                              data.is_pressed && data.press_type == 'thumb-down' ?
+                              <span className='loader' style={{borderBottomColor: '#f9756e'}}></span> :
+                              <ThumbDown/>
+                            }  
+                            
                         </a>
                     </div>
                 </div>
+                {/* 
                 <div className="feedback-form-block"> 
                     <textarea
                         onChange={e => changed_feedback_callback({comment: e.target.value})}
                         value={feedback.comment}
                         placeholder="write your feedback here!">
                     </textarea>
-                    <button type="submit" onClick={e => submit_feedback(e, "comment")} className="btn third-btn radius-5 custom-header-btn auto-left">Submit</button>
+                    <button type="submit" onClick={e => submit_feedback(e, "comment")} className="btn third-btn radius-5 custom-header-btn auto-left">
+                      {
+                        data.is_pressed && data.press_type == 'comment' ?
+                        <span className='loader'></span> :
+                        'Submit'
+                      }   
+                    </button>
                 </div>
+                */}
             
             </div>
         );
