@@ -1,18 +1,51 @@
 const express = require('express');
 const { Comments } = require('../models/comments-model');
+const { body, validationResult } = require('express-validator');
+ 
+
 var commentsRouter = express.Router();
 
+// Define the validation and sanitization middleware
+const commentValidation = [
+    body('comment').isString().trim().escape().isLength({ max: 500 }).withMessage('Comment is too long'),
+    body('data_id').isString().trim().escape().withMessage('Data ID must be a string'),
+    body('data_title').isString().trim().escape().isLength({ max: 200 }).withMessage('Data title is too long'),
+];
+ 
 // Create or Update Review
 commentsRouter.post('/comments/create-update', async (req, res) => {
     try {
 
+
+        // Define the validation and sanitization
+        await Promise.all(commentValidation.map(validation => validation.run(req)));
+        
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            throw new Error( 'Sorry, something went wrong');
+        }
+         
         const body = req.body;
 
         if (!body || Object.keys(body).length === 0) {
             throw new Error('Invalid request body');
         }
 
-        let savedReview = await new comments(body).save();
+        var _comments = await Comments.findOne({data_id: body.data_id });
+         
+        if( _comments != null ) {
+
+            _comments.comments = [..._comments.comments, body.comment];
+            
+            if( body.thumb ) {
+                _comments.like_counts = _comments.like_counts + 1
+            } else {
+                _comments.dis_like_counts = _comments.dis_like_counts + 1
+            } 
+            _comments.data_title = body.data_title; 
+        }
+
+        let savedReview = await ( _comments != null ? _comments : new Comments(body) ).save();
 
         if (savedReview) {
             res.status(200).send({

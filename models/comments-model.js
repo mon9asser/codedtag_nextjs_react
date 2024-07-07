@@ -3,7 +3,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 
 // Create Schema 
 const Schema = mongoose.Schema;
-
+/*
 let reviewsSchema = new Schema({
     post_id: {
         type: Schema.Types.ObjectId, // Assuming this references another collection's ObjectId
@@ -21,7 +21,7 @@ let reviewsSchema = new Schema({
     views: {
         type: Number,
         default: 0
-    },*/
+    }, 
     comments: [{
         text: {
             type: String,
@@ -32,6 +32,29 @@ let reviewsSchema = new Schema({
             default: 0
         },
     }]
+}); */
+
+
+let reviewsSchema = new Schema({
+    
+    like_counts :{
+        type: Number,
+        default: 0
+    },
+    dis_like_counts:{
+        type: Number,
+        default: 0
+    },
+    comments: [],
+    data_id : {
+        type: String,
+        default: ""
+    },
+    data_title: {
+        type: String,
+        default: ""
+    },
+
 });
 
 
