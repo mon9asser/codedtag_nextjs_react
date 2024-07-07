@@ -25,7 +25,7 @@ var TurorialComponent = () => {
 
     // states  df
     var [thumbs, thumbs_change] = React.useState(null);
-    var [comment, comment_change] = React.useState();
+    var [textarea_comment, textarea_comment_change] = React.useState();
 
     var [ upcoming, upcoming_change ] = React.useState({
         tutorial: null,
@@ -51,10 +51,12 @@ var TurorialComponent = () => {
             } 
 
             
-            var site_url = row.data.settings.site_address;
-            var url_array = site_url.split('/');
-            if( url_array[url_array.length - 1] != '' ) {
-                site_url = site_url + '/';
+            var site_url = row.data?.settings?.site_address;
+            if(site_url) {
+                var url_array = site_url.split('/');
+                if( url_array[url_array.length - 1] != '' ) {
+                    site_url = site_url + '/';
+                }
             }
             
             response_upcoming_callback({
@@ -108,9 +110,7 @@ var TurorialComponent = () => {
     
     var submit_feedback = (e) => {
         
-        e.preventDefault();
-        // assign title to form  
-        console.log(comment, thumbs);
+        e.preventDefault(); 
         
     }
 
@@ -133,16 +133,15 @@ var TurorialComponent = () => {
                         </a>
                     </div>
                 </div>
-                <div className="feedback-form-block">
-                    
+                <div className="feedback-form-block"> 
+                    <textarea
+                        onChange={e => textarea_comment_change(e.target.value)}
+                        value={textarea_comment}
+                        placeholder="write your feedback here!">
+                    </textarea>
                     <button type="submit" onClick={submit_feedback} className="btn third-btn radius-5 custom-header-btn auto-left">Submit</button>
                 </div>
-
-                <input  
-                        onChange={e => comment_change(e.target.value)}
-                        value={comment}
-                        placeholder="write your feedback here!"
-                    />
+            
             </div>
         );
 
