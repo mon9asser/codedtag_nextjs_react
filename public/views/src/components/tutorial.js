@@ -179,7 +179,7 @@ var TurorialComponent = () => {
                 {
                     upcoming.tutorial == null ? 
                     <Helper.PreLoader type={'text'} columns={true} is_full={true} lines={1}/>
-                    : <Helper.FeedBackBlock data_id={upcoming.tutorial._id} data_title={upcoming.tutorial.tutorial_title} feeadback_title="How would you like rate this content ?"/>  
+                    : <Helper.FeedBackBlock data_id={upcoming.tutorial._id} data_title={upcoming.tutorial.tutorial_title} feeadback_title="How Would You Like to Rate This Content?"/>  
                 }
                   
                 
