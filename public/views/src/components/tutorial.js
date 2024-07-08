@@ -176,15 +176,15 @@ var TurorialComponent = () => {
                                 "@type": "Person",
                                 "name": "Montasser Mossallem"
                             },
-                            "datePublished": "${upcoming.tutorial?.date_published}",  // Replace with the actual publication date
-                            "dateModified": "${upcoming.tutorial?.date_updated}",  // Replace with the actual modification date
+                            "datePublished": "${upcoming.tutorial?.date_published}",   
+                            "dateModified": "${upcoming.tutorial?.date_updated}",   
                             "description": "${upcoming.tutorial?.meta_description}",
                             "publisher": {
                                 "@type": "Organization",
                                 "name": "${upcoming.settings?.site_name}",
                                 "logo": {
                                 "@type": "ImageObject",
-                                "url": "${upcoming.settings?.site_logo}"  // Replace with the actual URL of your logo
+                                "url": "${upcoming.settings?.site_logo}"  
                                 }
                             },
                             "mainEntityOfPage": {
@@ -194,7 +194,7 @@ var TurorialComponent = () => {
                             "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
                             "articleSection": "${upcoming.tutorial?.tag}",
                             "keywords": "${upcoming.tutorial?.keyphrase}",
-                            "image": "https://codedtag.com/images/javascript-fundamentals.png"  // Replace with the actual URL of your image
+                            "image": "https://codedtag.com/images/javascript-fundamentals.png" 
                         }
                     `
                 }
