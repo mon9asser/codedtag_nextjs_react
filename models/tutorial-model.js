@@ -101,7 +101,20 @@ let tutorialSchema = new Schema({
             hide_from_search_engines: { type: Boolean,  default: false },
             publish_chapters: { type: Boolean,  default: false },
         }
-    ]
+    ],
+    tag: {
+        type: String ,
+        trim : true,
+        default: "" 
+    },
+    date_published: {
+        type: Date,
+        default: Date.now
+    },
+    date_updated: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 

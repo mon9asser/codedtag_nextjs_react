@@ -35,7 +35,7 @@ var TurorialComponent = () => {
     
     // Contexts 
     React.useEffect(() => {
-         
+        
         Helper.sendRequest({  
             api: `tutorial-page/get?tut_name=${tutorial_slug}`,
             method: "get",
@@ -155,6 +155,53 @@ var TurorialComponent = () => {
     
     return (
         <>
+             
+            <Helmet>
+                <title>{upcoming.tutorial?.meta_title}</title>
+                <meta name="description" content={upcoming.tutorial?.meta_description} />
+                {
+                    upcoming.tutorial?.options?.hide_from_search_engines ?
+                    <meta name="robots" content={"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"} />
+                    : ""
+                }
+                
+                <script type="application/ld+json">
+                {
+                    `
+                        {
+                            "@context": "https://schema.org",
+                            "@type": "Course",
+                            "headline": "${upcoming.tutorial?.tutorial_title}",
+                            "author": {
+                                "@type": "Person",
+                                "name": "Montasser Mossallem"
+                            },
+                            "datePublished": "${upcoming.tutorial?.date_published}",  // Replace with the actual publication date
+                            "dateModified": "${upcoming.tutorial?.date_updated}",  // Replace with the actual modification date
+                            "description": "${upcoming.tutorial?.meta_description}",
+                            "publisher": {
+                                "@type": "Organization",
+                                "name": "${upcoming.settings?.site_name}",
+                                "logo": {
+                                "@type": "ImageObject",
+                                "url": "${upcoming.settings?.site_logo}"  // Replace with the actual URL of your logo
+                                }
+                            },
+                            "mainEntityOfPage": {
+                                "@type": "WebPage",
+                                "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
+                            },
+                            "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
+                            "articleSection": ${upcoming.tutorial?.tag},
+                            "keywords": ${upcoming.tutorial?.keyphrase},
+                            "image": "https://codedtag.com/images/javascript-fundamentals.png"  // Replace with the actual URL of your image
+                        }
+                    `
+                }
+                </script>
+                {console.log(upcoming)}
+            </Helmet>
+
             <Header/>
             <main className="wrapper max-1250 offset-left offset-right ptb-50">
 

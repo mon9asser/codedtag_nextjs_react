@@ -29,7 +29,7 @@ class CreateTutorial extends Component {
             slug: "",
             keyphrase: "",
             meta_description: "",
-
+            tag: '',
             options: {
                 show_total_of_tutorial: false,
                 show_duration_time: false,
@@ -48,6 +48,7 @@ class CreateTutorial extends Component {
                 keyphrase: "",
                 meta_title: "",
                 meta_description: "",
+                tag: "",
                 tutorial_svg_icon: "",
                 reviews: 0,
                 hide_from_search_engines: false,
@@ -267,6 +268,7 @@ class CreateTutorial extends Component {
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
+            tag: this.state.tag,
             tutorial_svg_icon: this.state.tutorial_svg_icon, 
             reviews: this.state.reviews, 
             options: this.state.options, 
@@ -612,6 +614,21 @@ class CreateTutorial extends Component {
                                                 className="input" 
                                                 type="text" 
                                                 placeholder="Keyphrase if two more than one use comma(,)" 
+                                            />
+                                        </div> 
+                                    </div> 
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Tag</label>
+                                        <div className="control">
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    tag: e.target.value
+                                                })}
+                                                value={this.state.tag}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="Example: JavaScript" 
                                             />
                                         </div> 
                                     </div> 

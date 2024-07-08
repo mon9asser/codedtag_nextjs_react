@@ -884,6 +884,7 @@ class HelperData {
     FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
 
         feeadback_title = feeadback_title == undefined ? 'Did you find this tutorial useful?': feeadback_title;
+        const textareaRef = useRef(null);
 
         var [feedback, feedback_change] = React.useState({
           thumb: null, 
@@ -892,12 +893,14 @@ class HelperData {
           data_title: data_title
         });
 
+        const [isDisabled, setIsDisabled] = useState(false);
         var [data, data_change] = React.useState({
           is_pressed: false, 
           message: "",
           type: "", // error, success 
-          exposed: false,
-          press_type: 'comment'
+          exposed: 'none-display',
+          press_type: 'comment',
+          hide_form: 'hide'
         })
 
         // functions  
@@ -934,6 +937,43 @@ class HelperData {
               method: "post"
             }); 
             
+            if( presstype == 'comment' ) {
+              
+              if( response.is_error ) {
+                changed_data_callback({
+                  message: 'Unable to send your feedback due to an error.',
+                  type: 'error',
+                  exposed: '', 
+                  is_pressed: false
+                })
+
+                return;
+              }
+              
+              setIsDisabled(true);
+              changed_data_callback({
+                message: 'Thank you for your feedback! We will address the issue promptly.',
+                type: 'success',
+                exposed: '', 
+                is_pressed: false
+              })
+
+              return;
+            }
+
+            if( response.is_error ) {
+              changed_data_callback({
+                press_type: presstype,
+                is_pressed: false
+              })
+              return; 
+            }
+
+            setIsDisabled(true); 
+            changed_data_callback({ 
+              is_pressed: false,
+              hide_form: 'hide'
+            })
             
         }
 
@@ -942,17 +982,30 @@ class HelperData {
             
             
             changed_feedback_callback({thumb: true }) 
+            
             submit_feedback(e, press_type)
             e.preventDefault();
+
         }
     
         var thumbDownHandler = ( e, press_type ) => {
             
             
-            
+            // it only show input text
             changed_feedback_callback({thumb: false }) 
-            submit_feedback(e, press_type)
+            changed_data_callback({hide_form: ''});
+
+            setTimeout(() => {
+              // setIsDisabled(true);
+              if (textareaRef.current) {
+                textareaRef.current.focus();
+              }
+            }, 50)
+
+            // submit_feedback(e, press_type)
             e.preventDefault();
+
+
         }   
     
     
@@ -969,18 +1022,11 @@ class HelperData {
                 <div className="flexbox direction-row items-center space-between flex-wrap">
                     <div className="ptb-10">
                         <h3>{feeadback_title}</h3>
-                        <p className="mt-8">Your feedback helps us improve our tutorials.</p>
                     </div>
                     <div className="flexbox direction-row gap-15 ptb-10">
-                        <a href='#' className="x-thumb-up" onClick={e => thumbUpHandler(e, "thumb-up")}>
-                            {
-                              data.is_pressed && data.press_type == 'thumb-up' ?
-                              <span className='loader' style={{borderBottomColor: '#00bec4'}}></span> :
-                              <ThumbUp/>
-                            }  
-                        </a>
+                        
 
-                        <a href='#' className="x-thumb-down" onClick={e => thumbDownHandler(e, "thumb-down")}>
+                        <button disabled={isDisabled} style={{padding: 0}} className={`x-thumb-down ${isDisabled ? 'disable-feedback': ''}`} onClick={e => thumbDownHandler(e, "thumb-down")}>
                             
                             {
                               data.is_pressed && data.press_type == 'thumb-down' ?
@@ -988,17 +1034,30 @@ class HelperData {
                               <ThumbDown/>
                             }  
                             
-                        </a>
+                        </button>
+
+                        <button disabled={isDisabled} style={{padding: 0}} className={`x-thumb-up ${isDisabled ? 'disable-feedback': ''}`} onClick={e => thumbUpHandler(e, "thumb-up")}>
+                            {
+                              data.is_pressed && data.press_type == 'thumb-up' ?
+                              <span className='loader' style={{borderBottomColor: '#00bec4'}}></span> :
+                              <ThumbUp/>
+                            }  
+                        </button>
                     </div>
                 </div>
-                {/* 
-                <div className="feedback-form-block"> 
+                 
+                <div className={`feedback-form-block ${data.hide_form}`}> 
+                    <p className="mb-8" style={{marginBottom: '10px'}}>Your feedback helps us improve our tutorials.</p>
                     <textarea
+                        ref={textareaRef}
                         onChange={e => changed_feedback_callback({comment: e.target.value})}
                         value={feedback.comment}
                         placeholder="write your feedback here!">
                     </textarea>
-                    <button type="submit" onClick={e => submit_feedback(e, "comment")} className="btn third-btn radius-5 custom-header-btn auto-left">
+                    <div className={`feedback-response msg-${data.type} ${data.exposed}`}>
+                      <p>{data.message}</p>
+                    </div>
+                    <button disabled={isDisabled} type="submit" onClick={e => submit_feedback(e, "comment")} className="btn third-btn radius-5 custom-header-btn auto-left">
                       {
                         data.is_pressed && data.press_type == 'comment' ?
                         <span className='loader'></span> :
@@ -1006,7 +1065,7 @@ class HelperData {
                       }   
                     </button>
                 </div>
-                */}
+                 
             
             </div>
         );

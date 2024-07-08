@@ -32,6 +32,7 @@ class EditTutorialWrap extends Component {
             slug: "",
             keyphrase: "",
             meta_description: "",
+            tag: "",
             tutorial_svg_icon: "",
             reviews: 0,
             options: {
@@ -52,6 +53,7 @@ class EditTutorialWrap extends Component {
                 keyphrase: "",
                 meta_title: "",
                 meta_description: "",
+                tag: "",
                 tutorial_svg_icon: "",
                 reviews: 0,
                 hide_from_search_engines: false,
@@ -263,6 +265,7 @@ class EditTutorialWrap extends Component {
             slug: tutorial.slug,
             keyphrase: tutorial.keyphrase,
             meta_description: tutorial.meta_description, 
+            tag: tutorial.tag, 
             tutorial_svg_icon: tutorial.tutorial_svg_icon,
             reviews: tutorial.reviews,
             options:tutorial.options,  
@@ -356,6 +359,7 @@ class EditTutorialWrap extends Component {
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
+            tag: this.state.tag, 
             tutorial_svg_icon: this.state.tutorial_svg_icon, 
             reviews: this.state.reviews, 
             options: this.state.options, 
@@ -705,6 +709,21 @@ class EditTutorialWrap extends Component {
                                         </div> 
                                     </div> 
 
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Tag</label>
+                                        <div className="control">
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    tag: e.target.value
+                                                })}
+                                                value={this.state.tag}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="Example: JavaScript" 
+                                            />
+                                        </div> 
+                                    </div> 
+                                    
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Meta Description</label>
                                         <div className="control">

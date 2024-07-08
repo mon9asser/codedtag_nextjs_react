@@ -555,3 +555,32 @@ textarea:focus {
     margin-right: auto;
 }
  
+.feedback-response {
+    padding: 10px;
+    background: transparent;
+    margin-top: 15px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+.none-display {
+    display: none;
+}
+.msg-error {
+    background-color: #ffcfcf;
+    color: #c90000;
+    border: 1px solid #c90000;
+}
+
+.msg-success {
+    background-color: #05742c2e;
+    color: #05742c;
+    border: 1px solid #05742c;
+}
+
+.disable-feedback svg path {
+    fill: #505050;
+}
+.disable-feedback {
+    background: #999999b0;
+    opacity: 0.4; 
+}

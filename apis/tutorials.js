@@ -12,7 +12,7 @@ var fs = require("fs");
 
 tutorialRouter.post("/tutorial/create-update", async (req, res) => {
     try {
-        const body = req.body;
+        var body = req.body;
 
         // Assuming some form of validation or database operation happens here
         if (!body || Object.keys(body).length === 0) {
@@ -37,6 +37,7 @@ tutorialRouter.post("/tutorial/create-update", async (req, res) => {
         let savedTutorial;
         if (body.tutorial_id !== undefined && body.tutorial_id !== "") {
             // Update the existing tutorial data
+            body = {...body, date_updated: Date.now()}
             savedTutorial = await Tutorial.findByIdAndUpdate(body.tutorial_id, body, { new: true });
         } else {
             // Simulate a successful operation (e.g., saving to a database)
