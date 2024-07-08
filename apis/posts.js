@@ -14,6 +14,7 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const { Sets } = require('./../models/settings-model');
 const { Usr } = require('../models/user-model');
+const { Chapters } = require("../models/chapter-model");
 const { Tutorial } = require('../models/tutorial-model');
 
 
@@ -770,6 +771,62 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
 })
 
 
+
+postRouter.get("/post-page/get", async (req, res) => {
+     
+    // post-page/get?tut_name=${tutorial_slug}&post_slug=${post_slug}
+    try {
+     
+    
+        if( ! req.query.tut_name || ! req.query.post_slug ) {
+            throw new Error("The page could not be found");   
+        }
+
+        var tutorial_slug = req.query.tut_name;
+        var post_slug = req.query.post_slug;
+    
+        var tutorial = await Tutorial.findOne({slug: tutorial_slug}); 
+        var post = await Posts.findOne({slug: post_slug, post_type: 0 });
+        var posts = await Posts.findOne({post_type: 0});
+
+        if(post == null || tutorial == null) {
+            throw new Error("The page could not be found");  
+        }
+    
+        // add counter
+        post.views = ( tutorial.views + 1 )
+        await post.save();
+    
+        var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": "root" });
+        var settings = await Sets.find({})
+        if(settings.length) {
+            settings = settings[0]
+        }
+        var response = {
+          tutorial,
+          chapters,
+          post,
+          settings,
+          posts
+        } 
+    
+        res.send({
+            redirect: false, 
+            data: response,
+            is_error: false, 
+            message: "Fetched successfully!",
+        });
+    
+       } catch (error) {
+            return res.send( {
+                redirect: true, // for only page 404 
+                is_error: true, 
+                message: error.message || "Something went wrong",
+                data: []
+            })
+       }
+
+});
 
 // Delete a post by its post_id
 postRouter.post("/post/delete", async (req, res) => {

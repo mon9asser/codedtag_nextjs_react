@@ -29,6 +29,7 @@ class CreateTutorial extends Component {
             slug: "",
             keyphrase: "",
             meta_description: "",
+            thumbnail_url: "",
             tag: '',
             options: {
                 show_total_of_tutorial: false,
@@ -48,6 +49,7 @@ class CreateTutorial extends Component {
                 keyphrase: "",
                 meta_title: "",
                 meta_description: "",
+                thumbnail_url: "",
                 tag: "",
                 tutorial_svg_icon: "",
                 reviews: 0,
@@ -268,6 +270,7 @@ class CreateTutorial extends Component {
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
+            thumbnail_url: this.state.thumbnail_url, 
             tag: this.state.tag,
             tutorial_svg_icon: this.state.tutorial_svg_icon, 
             reviews: this.state.reviews, 
@@ -617,7 +620,22 @@ class CreateTutorial extends Component {
                                             />
                                         </div> 
                                     </div> 
-
+                                    
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Tutorial Thumbnail (Image URL)</label>
+                                        <div className="control">
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    thumbnail_url: e.target.value
+                                                })}
+                                                value={this.state.thumbnail_url}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="Image URL" 
+                                            />
+                                        </div> 
+                                    </div> 
+                                    
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Tag</label>
                                         <div className="control">

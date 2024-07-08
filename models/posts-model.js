@@ -77,6 +77,10 @@ let postsSchema = new Schema({
         type: Boolean, 
         default: false
     },
+    views: {
+        type: Number, 
+        default: 0
+    },
     selected_tab: {
         title: {
             type: String, 

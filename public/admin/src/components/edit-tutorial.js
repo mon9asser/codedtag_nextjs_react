@@ -32,6 +32,7 @@ class EditTutorialWrap extends Component {
             slug: "",
             keyphrase: "",
             meta_description: "",
+            thumbnail_url: "",
             tag: "",
             tutorial_svg_icon: "",
             reviews: 0,
@@ -53,6 +54,7 @@ class EditTutorialWrap extends Component {
                 keyphrase: "",
                 meta_title: "",
                 meta_description: "",
+                thumbnail_url: "",
                 tag: "",
                 tutorial_svg_icon: "",
                 reviews: 0,
@@ -265,6 +267,7 @@ class EditTutorialWrap extends Component {
             slug: tutorial.slug,
             keyphrase: tutorial.keyphrase,
             meta_description: tutorial.meta_description, 
+            thumbnail_url: tutorial.thumbnail_url,
             tag: tutorial.tag, 
             tutorial_svg_icon: tutorial.tutorial_svg_icon,
             reviews: tutorial.reviews,
@@ -359,6 +362,7 @@ class EditTutorialWrap extends Component {
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
             meta_description: this.state.meta_description, 
+            thumbnail_url:this.state.thumbnail_url, 
             tag: this.state.tag, 
             tutorial_svg_icon: this.state.tutorial_svg_icon, 
             reviews: this.state.reviews, 
@@ -708,7 +712,22 @@ class EditTutorialWrap extends Component {
                                             />
                                         </div> 
                                     </div> 
-
+                                    
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Tutorial Thumbnail (Image URL)</label>
+                                        <div className="control">
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    thumbnail_url: e.target.value
+                                                })}
+                                                value={this.state.thumbnail_url}
+                                                className="input" 
+                                                type="text" 
+                                                placeholder="Image URL" 
+                                            />
+                                        </div> 
+                                    </div> 
+                                    
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Tag</label>
                                         <div className="control">

@@ -881,6 +881,39 @@ class HelperData {
       return result;
     }
     
+    ArticleSidebar = ({chapters}) => {
+      return (
+        <>
+            <ul className="block-list custom-aside-tuts list-items">
+                <li><a href="#">PHP or</a></li> 
+            </ul> 
+            <ul className="block-list custom-aside-tuts list-items">
+                <li className="has-slideitem">
+                    <a href="#">Tutorials </a>
+                    <ul className="slideitem">
+                        <li><a href="#">Pages</a></li>
+                        <li><a href="#">Blocks</a></li>
+                        <li><a href="#">Headers</a></li>
+                        <li><a href="#">Footers</a></li>
+                    </ul>
+                </li>
+            </ul> 
+            <ul className="block-list custom-aside-tuts list-items">
+                <li><a href="#">PHP Operators</a></li>
+                <li><a href="#">Boolean Statements</a></li>
+                <li><a href="#">Home </a></li> 
+                
+            </ul> 
+
+            <ul className="block-list custom-aside-tuts">
+                <li><a href="#">C++ Compiler</a></li>
+                <li><a href="#">JavaScript Editor</a></li>
+                <li><a href="#">Swift Programming Tutorials</a></li>
+            </ul>
+        </>
+      );
+    }
+
     FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
 
         feeadback_title = feeadback_title == undefined ? 'Did you find this tutorial useful?': feeadback_title;

@@ -173,8 +173,8 @@ var TurorialComponent = () => {
                             "@type": "Course",
                             "headline": "${upcoming.tutorial?.tutorial_title}",
                             "author": {
-                                "@type": "Person",
-                                "name": "Montasser Mossallem"
+                                "@type": "Organization",
+                                "name": "${upcoming.settings?.site_name}"
                             },
                             "datePublished": "${upcoming.tutorial?.date_published}",   
                             "dateModified": "${upcoming.tutorial?.date_updated}",   
@@ -194,12 +194,11 @@ var TurorialComponent = () => {
                             "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
                             "articleSection": "${upcoming.tutorial?.tag}",
                             "keywords": "${upcoming.tutorial?.keyphrase}",
-                            "image": "https://codedtag.com/images/javascript-fundamentals.png" 
+                            "image": ${upcoming.tutorial?.thumbnail_url} 
                         }
                     `
                 }
-                </script>
-                {console.log(upcoming)}
+                </script> 
             </Helmet>
 
             <Header/>

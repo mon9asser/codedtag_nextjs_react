@@ -22,6 +22,7 @@ import { TermsConditionsPage } from './components/terms-and-conditions.js';
 
 import { TutorialsComponent } from './components/tutorials.js'
 import { TurorialComponent } from './components/tutorial.js'
+import {ArticleComponent} from './components/article.js'
 class WrappApplication extends Component {
   componentDidMount = async () => {
     // Initialize methods
@@ -41,7 +42,7 @@ class WrappApplication extends Component {
             <Route path="/terms-and-conditions/" element={<TermsConditionsPage />} />
             <Route path="/tutorials/" element={<TutorialsComponent />} />
             <Route path="/tutorials/:tut_slug/" element={<TurorialComponent />} />
-            <Route path="/tutorials/:tut_slug/:post_slug/" element={<h1>Post Title</h1>} />
+            <Route path="/tutorials/:tut_slug/:post_slug/" element={<ArticleComponent/>} />
             <Route path="/tutorials/:tut_slug/:tab_slug/post/" element={<h1>Slug name</h1>} /> 
             
             <Route path="*" element={<PageNotFound />} />
