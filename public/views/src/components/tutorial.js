@@ -192,8 +192,8 @@ var TurorialComponent = () => {
                                 "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
                             },
                             "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
-                            "articleSection": ${upcoming.tutorial?.tag},
-                            "keywords": ${upcoming.tutorial?.keyphrase},
+                            "articleSection": "${upcoming.tutorial?.tag}",
+                            "keywords": "${upcoming.tutorial?.keyphrase}",
                             "image": "https://codedtag.com/images/javascript-fundamentals.png"  // Replace with the actual URL of your image
                         }
                     `
