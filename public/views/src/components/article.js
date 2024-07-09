@@ -75,9 +75,7 @@ var ArticleComponent = () => {
     }, [location]);
    
 
-    var contentTableToggler = () => { 
-        expandor_checkbox_change(!expandor_checkbox);
-    }
+
 
     var [upcoming, upcoming_change] = React.useState({
         is_redirect: null,
@@ -88,6 +86,19 @@ var ArticleComponent = () => {
         posts: null,
         site_url: null,
     });
+
+    var expand_collapse_tbl_content = () => {
+        var id = document.querySelector('#article-tbl-of-content');
+        var handler = document.querySelector('#table-of-content-toggler');
+
+        if(id.classList.contains('expanded')) {
+            id.classList.remove('expanded')
+            handler.classList.remove('tbl-arrow')
+        } else {
+            id.classList.add('expanded')
+            handler.classList.add('tbl-arrow')
+        }
+    }
     
     // getting data 
     var ArticleComponents = () => {
@@ -152,11 +163,11 @@ var ArticleComponent = () => {
                                     In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
                                     </p>
                                     {/* Table Of Content */}
-                                    <input checked={expandor_checkbox} onChange={e => null} id="tbl-block-collapser-expander" type="checkbox" className="hide" />
-                                    <div className="content-tble-mobile-block">
+                                     
+                                    <div id='article-tbl-of-content' className={`content-tble-mobile-block tble-content ${expandor_checkbox ? 'expanded': ''}`}>
                                         <ul className="block-list custom-aside-tuts list-items">
                                             <li className="has-slideitem" style={{background: "#f9f9f9"}}>
-                                                <a href="#">Table of Content</a>
+                                                <b className='content-table-head-title'>Table of Content</b>
                                                 <ul className="slideitem" style={{display: "block"}}>
                                                     <li><a href="#">Pages</a></li>
                                                     <li><a href="#">Blocks</a></li>
@@ -165,7 +176,7 @@ var ArticleComponent = () => {
                                                 </ul>
                                             </li>
                                         </ul>
-                                        <label className={"tble-content-handler expander" + (( expandor_checkbox )? " collapser": "")} onClick={contentTableToggler}></label>
+                                        <label className={"tble-content-handler expander"} id='table-of-content-toggler' onClick={expand_collapse_tbl_content}></label>
                                     </div>
                                     
                                     <p>

@@ -554,7 +554,9 @@ textarea:focus {
     margin-left: auto;
     margin-right: auto;
 }
- 
+ .custom-aside-tuts li a {
+    border-left: none !important;
+ }
 .feedback-response {
     padding: 10px;
     background: transparent;
@@ -597,4 +599,81 @@ li a.selected_tab:hover {
 
 .list-items li a:hover {
     padding-left: 20px !important;
+}
+
+.collapsible {
+    display: -moz-flex;
+    display: flex;
+    -moz-flex-direction: column;
+    -o-flex-direction: column;
+    flex-direction: column;
+    align-items: start;
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    overflow: hidden;
+    -o-transition: max-height 0.3s ease-out;
+    -webkit-transition:max-height 0.3s ease-out;
+    transition: max-height 0.3s ease-out;
+    max-height: 0; /* Initial state: collapsed */
+}
+  
+.collapsible.expanded {
+    max-height: 200px; /* Adjust based on the content height */
+    -o-transition: max-height 0.3s ease-in; 
+    -webkit-transition:max-height 0.3s ease-in; 
+    transition: max-height 0.3s ease-in;
+}
+
+
+ul li a.expanded-a::after{
+    -webkit-transform:translate(7px,-1px)  rotate(-130deg);
+    -moz-transform:translate(7px,-1px)  rotate(-130deg);
+    -ms-transform:translate(7px,-1px)  rotate(-130deg);
+    -o-transform:translate(7px,-1px)  rotate(-130deg);
+    transform:translate(7px,-1px)  rotate(-130deg);
+}
+
+.tble-content {
+     
+    -o-transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    -webkit-transition:transform 0.5s ease-out, opacity 0.5s ease-out; 
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    right: 0 !important; 
+    -webkit-transform:translateX(240px);
+    -moz-transform:translateX(240px);
+    -ms-transform:translateX(240px);
+    -o-transform:translateX(240px);
+    transform: translateX(240px);   
+
+}
+
+
+.tble-content.expanded { 
+    -webkit-transform:translateX(0);  
+    -moz-transform:translateX(0);  
+    -ms-transform:translateX(0);  
+    -o-transform:translateX(0);  
+    transform: translateX(0);  
+    opacity: 1;   
+    -o-transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+    -webkit-transition:transform 0.5s ease-in, opacity 0.5s ease-in;
+    transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+}
+
+.tbl-arrow::after{ 
+    -webkit-transform:translate(-3px,10px) rotate(-45deg) !important;
+    -moz-transform:translate(-3px,10px) rotate(-45deg) !important;
+    -ms-transform:translate(-3px,10px) rotate(-45deg)!important;
+    -o-transform:translate(-3px,10px) rotate(-45deg)!important;
+    transform: translate(-3px,10px) rotate(-45deg)!important;
+}
+
+.content-table-head-title {
+    font-weight: 500;
+    font-size: 17px;
+    margin-bottom: 10px !important;
+    display: block;
+    color: #000001;
+    padding: 0px 10px;
 }

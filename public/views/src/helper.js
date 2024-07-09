@@ -929,9 +929,19 @@ class HelperData {
       
       var collapsed_item = (e, id) => {
         
-        var doc_id = document.querySelector(`#${id}`); 
-        console.log(doc_id)
-        this.toggleSlide(doc_id);
+        e.preventDefault();
+
+        var doc_id = document.querySelector(`#item-${id}`); 
+        var anchor = document.querySelector(`#anchor-${id}`); 
+        
+
+        if( doc_id.classList.contains('expanded') ) {
+          anchor.classList.remove('expanded-a')
+          doc_id.classList.remove('expanded'); 
+        } else {
+          doc_id.classList.add('expanded');
+          anchor.classList.add('expanded-a')
+        }
           
       }
 
@@ -964,26 +974,28 @@ class HelperData {
                       {chapter.chapter_title !== "" ? (
                         
                           <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
-                            <Link onClick={e => collapsed_item(e, `item-${chapter._id}`)} to="#">{chapter.chapter_title}</Link>
+                            <Link id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} to="#">{chapter.chapter_title}</Link>
                             {chapter.posts.length ? (
-                              <ul id={`item-${chapter._id}`} className="slideitem list-items">
+                              <ul id={`item-${chapter._id}`} className="collapsible list-items">
                                 {chapter.posts.map(x => (
                                   <li key={x._id}>
                                     <Link className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
                                   </li>
-                                ))}
+                                ))} 
                               </ul>
                             ) : null}
                           </li>
                         
                       ) : (
-                        <ul className="block-list custom-aside-tuts list-items">
-                          {chapter.posts.map(x => (
-                            <li key={x._id}>
-                              <Link className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
-                            </li>
-                          ))}
-                        </ul>
+                        <li>
+                          <ul className="block-list custom-aside-tuts list-items">
+                            {chapter.posts.map(x => (
+                              <li key={x._id}>
+                                <Link className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
                       )}
                     </React.Fragment>
                   );
