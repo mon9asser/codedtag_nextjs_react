@@ -930,7 +930,7 @@ class HelperData {
       var collapsed_item = (e, id) => {
         
         var doc_id = document.querySelector(`#${id}`); 
-        alert(doc_id.length)
+        console.log(doc_id)
         this.toggleSlide(doc_id);
           
       }
