@@ -589,3 +589,12 @@ textarea:focus {
     background: #999999b0;
     opacity: 0.4; 
 }
+
+li a.selected_tab,
+li a.selected_tab:hover { 
+    border-left:2px solid #b9355e !important;
+}
+
+.list-items li a:hover {
+    padding-left: 20px !important;
+}

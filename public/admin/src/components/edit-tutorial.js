@@ -257,6 +257,7 @@ class EditTutorialWrap extends Component {
         }
 
         var tutorial = request.data;
+         
         this.setState({
 
             tutorial_id: tutorial._id, 
@@ -288,8 +289,12 @@ class EditTutorialWrap extends Component {
         }
 
         var selected = this.state.categories[index];
+         
         this.setState({
-            selected_category: selected
+            selected_category: {
+                name: selected.category_name,
+                id: selected._id
+            }
         });
          
     }
@@ -355,6 +360,8 @@ class EditTutorialWrap extends Component {
         }
          
 
+        
+
         var data_to_send = {
             tutorial_title: this.state.tutorial_title,
             duration: this.state.duration,
@@ -370,10 +377,7 @@ class EditTutorialWrap extends Component {
             reviews: this.state.reviews, 
             options: this.state.options, 
             tabs: this.state.tabs,
-            selected_category: {
-                name: this.state.selected_category.category_name,
-                id: this.state.selected_category._id,
-            }
+            selected_category: this.state.selected_category
         };
 
         if(this.state.tutorial_id != "") {
@@ -656,7 +660,8 @@ class EditTutorialWrap extends Component {
                                         <this.Categories_List_Modal/> 
                                         <div className="control">
                                             <div className="select">
-                                                <select onChange={e => this.select_category(e.target.value)} value={this.state.selected_category != null ? this.state.selected_category._id: ""}>
+                                                
+                                                <select onChange={e => this.select_category(e.target.value)} value={this.state.selected_category != null ? this.state.selected_category.id: ""}>
                                                     {
                                                         this.state.categories.map(x => (
                                                             <option value={x._id} key={x._id}>{x.category_name}</option>

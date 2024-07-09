@@ -157,7 +157,14 @@ class HelperData {
         <IconComponent size={size} />
       </div>
     );
-  
+    
+    Breadcrumbs = ({data}) => {
+      return (
+        <ul className="breadcrumbs">
+            {data.map((x, index) => <li key={index} className='sub-title'><Link to={x.url}>{x.title}</Link></li>)}
+        </ul>
+      );
+    }
   
     SocialShare = ({platforms, url, title, radius, size, width, height}) => {
       if( size == undefined ) {
@@ -814,6 +821,7 @@ class HelperData {
 
 
     slideDownElem = (elem, duration = 200) => {
+         
         elem.style.display = 'block';  // Make the element visible
         let startHeight = 0;
         let endHeight = elem.scrollHeight;  // Get the natural height of the element
@@ -904,7 +912,7 @@ class HelperData {
 
     chunkArray(array, chunkSize) {
       if (chunkSize <= 0) {
-        throw new Error("Chunk size must be greater than 0");
+        throw new Error("No Posts found!");
       }
       
       const result = [];
@@ -916,53 +924,97 @@ class HelperData {
       return result;
     }
     
-    ArticleSidebar = ({type, data, site_url, tutorial_slug}) => {
+    ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug}) => {
 
-      // posts chapters
-      console.log(site_url, tutorial_slug);
-      console.log(type);
-      console.log(data);
+      
+      var collapsed_item = (e, id) => {
+        
+        var doc_id = document.querySelector(`#${id}`); 
+        alert(doc_id.length)
+        this.toggleSlide(doc_id);
+          
+      }
+
+      var posts = [];
+      if( type == 'posts' ) {
+        if(data.length)
+          posts = this.chunkArray(data, 5 ) 
+      }
+
+      var chapters = []; 
+      if( type == 'chapters' ) {
+        if(data.length)
+          chapters = this.chunkArray(data, 5 ) 
+      } 
 
       var itemComponents = (
         <>
 
           {/* Chapters */}
           {type === 'chapters' ? 
-            data.map(chapter => {
-              var link_url = `${site_url}tutorials/${tutorial_slug}/`;
-      
-              return (
-                <React.Fragment key={chapter._id}>
-                  {chapter.chapter_title !== "" ? (
-                    <ul className="block-list custom-aside-tuts list-items">
-                      <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
-                        <Link to="#">{chapter.chapter_title}</Link>
-                        {chapter.posts.length ? (
-                          <ul className="slideitem">
-                            {chapter.posts.map(x => (
-                              <li key={x._id}>
-                                <Link to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
-                      </li>
-                    </ul>
-                  ) : (
-                    <ul className="block-list custom-aside-tuts list-items">
-                      {chapter.posts.map(x => (
-                        <li key={x._id}>
-                          <Link to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </React.Fragment>
-              );
-            })
+            chapters.map( (chapterData, indexer) => (
+
+              <ul key={indexer} className="block-list custom-aside-tuts">
+
+                {chapterData.map(chapter => {
+                  var link_url = `${site_url}tutorials/${tutorial_slug}/`;
+          
+                  return (
+                    <React.Fragment key={chapter._id}>
+                      {chapter.chapter_title !== "" ? (
+                        
+                          <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
+                            <Link onClick={e => collapsed_item(e, `item-${chapter._id}`)} to="#">{chapter.chapter_title}</Link>
+                            {chapter.posts.length ? (
+                              <ul id={`item-${chapter._id}`} className="slideitem list-items">
+                                {chapter.posts.map(x => (
+                                  <li key={x._id}>
+                                    <Link className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : null}
+                          </li>
+                        
+                      ) : (
+                        <ul className="block-list custom-aside-tuts list-items">
+                          {chapter.posts.map(x => (
+                            <li key={x._id}>
+                              <Link className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+
+              </ul>
+
+            ))
+           
           : ''}
           
           {/* Posts */} 
+          {
+            (type == 'posts') ?
+            posts.map( (x, index) => (
+              <ul key={index} className="block-list custom-aside-tuts list-items">
+                {
+                  x.map(post => {
+                    var link_url =  `${site_url}tutorials/${tutorial_slug}/`;
+                    return (
+                      <React.Fragment key={post._id}>
+                        <li key={post._id}>
+                          <Link className={current_post_slug == post.slug ? 'selected_tab': ''} to={`/tutorials/${tutorial_slug}/${post.slug}/`}>{post.post_title}</Link>
+                        </li>
+                      </React.Fragment>
+                    );
+                  })
+                }
+              </ul>
+            )): ''
+          }
         </>
       );
       
@@ -1066,6 +1118,8 @@ class HelperData {
             })
             
         }
+
+        
 
         var thumbUpHandler = ( e, press_type ) => {
         

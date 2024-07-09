@@ -4,7 +4,7 @@ import { Header } from "../parts/header";
 import { Footer } from "../parts/footer";
 import { Link } from "react-router-dom";
 import withNavigation from "../utils/with-navigation";
-import { useParams, useNavigate  } from 'react-router-dom';
+import { useParams, useNavigate, useLocation  } from 'react-router-dom';
 import { Helper } from "../helper";
 import { Helmet } from "react-helmet";
 import { Settings } from "../settings"; 
@@ -28,6 +28,8 @@ var CopyIcon = (props) => (
 var ArticleComponent = () => {
 
     const navigate = useNavigate(); 
+    var location = useLocation();
+
     var [expandor_checkbox, expandor_checkbox_change] = React.useState(false);
 
     const redirect404 = () => {
@@ -70,7 +72,7 @@ var ArticleComponent = () => {
             })
         });
 
-    }, []);
+    }, [location]);
    
 
     var contentTableToggler = () => { 
@@ -102,8 +104,8 @@ var ArticleComponent = () => {
                                     
                                     {
                                         upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                        <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters}/> 
-                                        : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts}/> 
+                                        <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/> 
+                                        : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
                                     }
                                     
 
@@ -116,20 +118,23 @@ var ArticleComponent = () => {
                             <div className="max-1150 offset-left offset-right">
                                  
                                 <header className="flexbox content-center column-direction mb-30">
+                                    
                                     <div className="flexbox items-center">
-                                        <ul className="breadcrumbs">
-                                            <li>
-                                                <a className="sub-title" href="#">Programming</a>  
-                                            </li>
-                                            <li>
-                                                <a className="sub-title" href="#">PHP</a>  
-                                            </li>
-                                            <li> 
-                                                <span className="">Data Format and Types</span> 
-                                            </li>
-                                        </ul>
+                                        <Helper.Breadcrumbs
+                                            data={[
+                                                {
+                                                    title: upcoming.tutorial.selected_category.name,
+                                                    url: upcoming.site_url + 'tutorials/',
+                                                },
+                                                {
+                                                    title: upcoming.tutorial.tutorial_title,
+                                                    url: upcoming.site_url + 'tutorials/' + upcoming.tutorial.slug + '/'
+                                                }
+                                            ]}
+                                        /> 
                                     </div>
-                                    <h1 className="tutorial-headline mt-h">PHP Variable Functions</h1>
+
+                                    <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
                                     <div className="flexbox items-center author-section mt-h">
                                         <div className="flexbox items-center author-thumb-section"> <a className="thumb" href="#"><img src="https://webdeveloper.com/wp-content/uploads/2022/05/ManoelaIlic_Portrait-46x50.jpg" width="35" height="35" alt="Author Name" /></a><a className="thumb" href="#">
                                             <img src="https://webdeveloper.com/wp-content/uploads/2022/09/erikdietrich-300x300.png" width="35" height="35" alt="Author Name" /></a>
