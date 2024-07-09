@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {Settings} from "./settings"; 
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
+import CryptoJS, { RabbitLegacy } from 'crypto-js';
 import Highlight from 'react-highlight'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
@@ -916,40 +916,59 @@ class HelperData {
       return result;
     }
     
-    ArticleSidebar = ({type, data}) => {
+    ArticleSidebar = ({type, data, site_url, tutorial_slug}) => {
 
       // posts chapters
-      console.log(type)
-      return (
-        <>
-            <ul className="block-list custom-aside-tuts list-items">
-                <li><a href="#">PHP or</a></li> 
-            </ul> 
-            <ul className="block-list custom-aside-tuts list-items">
-                <li className="has-slideitem">
-                    <a href="#">Tutorials </a>
-                    <ul className="slideitem">
-                        <li><a href="#">Pages</a></li>
-                        <li><a href="#">Blocks</a></li>
-                        <li><a href="#">Headers</a></li>
-                        <li><a href="#">Footers</a></li>
-                    </ul>
-                </li>
-            </ul> 
-            <ul className="block-list custom-aside-tuts list-items">
-                <li><a href="#">PHP Operators</a></li>
-                <li><a href="#">Boolean Statements</a></li>
-                <li><a href="#">Home </a></li> 
-                
-            </ul> 
+      console.log(site_url, tutorial_slug);
+      console.log(type);
+      console.log(data);
 
-            <ul className="block-list custom-aside-tuts">
-                <li><a href="#">C++ Compiler</a></li>
-                <li><a href="#">JavaScript Editor</a></li>
-                <li><a href="#">Swift Programming Tutorials</a></li>
-            </ul>
+      var itemComponents = (
+        <>
+
+          {/* Chapters */}
+          {type === 'chapters' ? 
+            data.map(chapter => {
+              var link_url = `${site_url}tutorials/${tutorial_slug}/`;
+      
+              return (
+                <React.Fragment key={chapter._id}>
+                  {chapter.chapter_title !== "" ? (
+                    <ul className="block-list custom-aside-tuts list-items">
+                      <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
+                        <Link to="#">{chapter.chapter_title}</Link>
+                        {chapter.posts.length ? (
+                          <ul className="slideitem">
+                            {chapter.posts.map(x => (
+                              <li key={x._id}>
+                                <Link to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </li>
+                    </ul>
+                  ) : (
+                    <ul className="block-list custom-aside-tuts list-items">
+                      {chapter.posts.map(x => (
+                        <li key={x._id}>
+                          <Link to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </React.Fragment>
+              );
+            })
+          : ''}
+          
+          {/* Posts */} 
         </>
       );
+      
+
+      
+      return (itemComponents);
     }
 
     FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
@@ -1217,11 +1236,11 @@ class HelperData {
           <div className="container white-grey-bg category-container update-chpt">
                
                {
-                  chapter_title != undefined ?
+                  chapter_title != undefined && chapter_title != '' ?
                   <>
                       <span className="cats-number">{Helper.produceNumber(index)}</span>
                       <h2 className="category-headline">{chapter_title}</h2>
-                  </> : ""
+                  </> : <span className="cats-number">{Helper.produceNumber(index)}</span>
                } 
                <div className="chapter-cont">
                   <ul className="tuts-categ">

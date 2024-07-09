@@ -49,6 +49,15 @@ var ArticleComponent = () => {
             data: {}
         }).then( row => { 
             var {data, redirect, is_error} = row 
+            
+            // working with site_url 
+            var site_url = row.data?.settings?.site_address;
+            if(site_url) {
+                var url_array = site_url.split('/');
+                if( url_array[url_array.length - 1] != '' ) {
+                    site_url = site_url + '/';
+                }
+            }
 
             upcoming_change({
                 is_redirect: redirect,
@@ -56,7 +65,8 @@ var ArticleComponent = () => {
                 tutorial: data.tutorial, // object
                 chapters: data.chapters, // array 
                 settings: data.settings, // object
-                posts: data.posts
+                posts: data.posts,
+                site_url
             })
         });
 
@@ -73,14 +83,13 @@ var ArticleComponent = () => {
         tutorial: null, // object
         chapters: null, // array 
         settings: null, // object
-        posts: null
+        posts: null,
+        site_url: null,
     });
-
-
-
+    
     // getting data 
     var ArticleComponents = () => {
-        
+         
         return (
             <main className="wrapper max-1150 offset-left offset-right ptb-50">
                     <div className="row mlr--15">
@@ -93,8 +102,8 @@ var ArticleComponent = () => {
                                     
                                     {
                                         upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                        <Helper.ArticleSidebar type='chapters' data={upcoming.chapters}/> 
-                                        : <Helper.ArticleSidebar type='posts' data={upcoming.posts}/> 
+                                        <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters}/> 
+                                        : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts}/> 
                                     }
                                     
 
