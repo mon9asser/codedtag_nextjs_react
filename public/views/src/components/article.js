@@ -147,7 +147,7 @@ var ArticleComponent = () => {
                                     In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
                                     </p>
                                     {/* Table Of Content */}
-                                    <input checked={expandor_checkbox} id="tbl-block-collapser-expander" type="checkbox" className="hide" />
+                                    <input checked={expandor_checkbox} onChange={e => null} id="tbl-block-collapser-expander" type="checkbox" className="hide" />
                                     <div className="content-tble-mobile-block">
                                         <ul className="block-list custom-aside-tuts list-items">
                                             <li className="has-slideitem" style={{background: "#f9f9f9"}}>
