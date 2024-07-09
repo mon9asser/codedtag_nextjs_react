@@ -38,7 +38,8 @@ class CreateTutorial extends Component {
                 show_views: false,
                 publish: false,
                 hide_from_search_engines: false,
-                publish_chapters: false
+                publish_chapters: false,
+                sidebar_content: 'none',
             },
 
             tab_copy: {
@@ -55,6 +56,7 @@ class CreateTutorial extends Component {
                 reviews: 0,
                 hide_from_search_engines: false,
                 publish_chapters: false,
+                sidebar_content: 'none',
                 is_open: false,
                 
             },
@@ -684,7 +686,15 @@ class CreateTutorial extends Component {
                                             <label className="flexbox items-center"> <input checked={this.state.options.show_views} onChange={(e) => this.setState({options: { ...this.state.options, show_views: !this.state.options.show_views }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show views</span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.publish} onChange={(e) => this.setState({options: { ...this.state.options, publish: !this.state.options.publish }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish</span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.hide_from_search_engines} onChange={(e) => this.setState({options: { ...this.state.options, hide_from_search_engines: !this.state.options.hide_from_search_engines }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Hide from Search Engines</span> </label>
-                                            <label className="flexbox items-center"> <input checked={this.state.options.publish_chapters} onChange={(e) => this.setState({options: { ...this.state.options, publish_chapters: !this.state.options.publish_chapters }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish Chapters</span> </label>
+                                            {/* <label className="flexbox items-center"> <input checked={this.state.options.publish_chapters} onChange={(e) => this.setState({options: { ...this.state.options, publish_chapters: !this.state.options.publish_chapters }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Publish Chapters</span> </label> */}
+                                            <label className="flexbox items-center contain-selectbox"> 
+                                                <span style={{marginLeft: 5, fontSize: "14px"}}>Sidebar Type</span>
+                                                <select value={this.state.options.sidebar_content} onChange={e => this.setState({ options: { ...this.state.options, sidebar_content: e.target.value } })}>
+                                                    <option value={'none'}>Disable Sidebar</option>
+                                                    <option value={'chapters'}>Chapters</option>
+                                                    <option value={'posts'}>Posts Links</option>
+                                                </select> 
+                                            </label>
                                         </div> 
                                     </div>
                                 </div>
@@ -911,6 +921,32 @@ class CreateTutorial extends Component {
                                                                     type="checkbox" 
                                                                 />
                                                                 <span style={{marginLeft: 5, fontSize: "14px"}}>Publish Chapters</span> 
+                                                            </label>
+                                                        </div> 
+
+                                                        <div className="field" style={{marginTop: "10px", display:"flex", flexDirection: "column"}}>
+                                                        <label className="flexbox items-center contain-selectbox-tabs"> 
+                                                                <span style={{marginLeft: 5, fontSize: "14px"}}>Sidebar Type</span> 
+                                                                <select 
+                                                                    onChange={(e) => {
+                                                                        
+                                                                        this.setState((prevState) => {
+                                                                            var value = e.target.value;
+                                                                            prevState.tabs[index].sidebar_content = value
+                                                                            return {
+                                                                                tabs: prevState.tabs
+                                                                            }
+                                                                        })
+                                                                    }} 
+                                                                    value={x.sidebar_content} 
+                                                                    className="mr-8" 
+                                                                    type="checkbox" 
+                                                                >
+                                                                    <option value={'none'}>Disable Sidebar</option>
+                                                                    <option value={'chapters'}>Chapters</option>
+                                                                    <option value={'posts'}>Posts Links</option>
+                                                                </select>
+                                                                
                                                             </label>
                                                         </div> 
                                                     </div>

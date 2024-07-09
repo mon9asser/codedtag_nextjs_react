@@ -12,7 +12,8 @@ class PageNotFoundComponents extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            content: null
+            content: null,
+            load_parts: true 
         };
     }
 
@@ -22,6 +23,9 @@ class PageNotFoundComponents extends Component {
  
     componentDidMount = async () => {
         
+        if( this.props.parts != undefined ) {
+            this.setState({load_parts: this.props.parts })
+        }
         // get content of not found page 
         var reqs = await Helper.sendRequest({
             api: "post/get?post_type=1",
@@ -53,7 +57,10 @@ class PageNotFoundComponents extends Component {
                     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex, unavailable_after: 2024-12-31T23:59:59Z" />
                 </Helmet>
 
-                <Header/>
+                {
+                    this.state.load_parts? <Header/>: ''
+                }
+                
 
                 <section className="page-not-found-section">
 
@@ -96,8 +103,12 @@ class PageNotFoundComponents extends Component {
                        
                     </div>
                 </section>
-
-                <Footer/>
+                
+                {
+                    this.state.load_parts? <Footer/>: ''
+                }
+                
+                
             </>
         );
     }

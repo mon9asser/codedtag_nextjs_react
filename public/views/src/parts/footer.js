@@ -69,15 +69,11 @@ class Footer extends Component {
 
         if(this.state.is_loaded == false && menus.length && settings.length) {
             this.setState({ is_loaded: true, ...objx_data });
-        } 
-        
-        
-        // this.setState({...objx_data})
+        }  
 
 
     }    
-    render() {
-        console.log(this.state.subscribe)
+    render() { 
         return (
             <footer className="wrapper white-bg plr-0 footer">
                 <div className="wrapper offset-left offset-right plr-15 max-1170 ptb-25">

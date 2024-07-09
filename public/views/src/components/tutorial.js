@@ -9,7 +9,8 @@ import { Helper } from "../helper";
 import { Helmet } from "react-helmet";
 import { Settings } from "../settings"; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-  
+
+import {PageNotFound} from './404'
   
 var TurorialComponent = () => {
 
@@ -29,7 +30,8 @@ var TurorialComponent = () => {
         posts: null,
         chapters: null,
         settings: null,
-        site_url: null
+        site_url: null,
+        is_redirect: null
     });
 
     
@@ -42,12 +44,7 @@ var TurorialComponent = () => {
             data: {}
         }).then( row => { 
 
-            if(row.redirect) {
-                redirect404();
-                return;
-            } 
-
-            
+             
             var site_url = row.data?.settings?.site_address;
             if(site_url) {
                 var url_array = site_url.split('/');
@@ -61,7 +58,8 @@ var TurorialComponent = () => {
                 posts: row.data.posts,
                 chapters: row.data.chapters,
                 settings: row.data.settings,
-                site_url
+                site_url,
+                is_redirect: row.redirect
             });
             
         });  
@@ -152,11 +150,10 @@ var TurorialComponent = () => {
     }
 
     
-    
-    return (
-        <>
-             
-            <Helmet>
+    var TutorialContentComponents = () => {
+        return (
+            <>
+                <Helmet>
                 <title>{upcoming.tutorial?.meta_title}</title>
                 <meta name="description" content={upcoming.tutorial?.meta_description} />
                 {
@@ -200,8 +197,8 @@ var TurorialComponent = () => {
                 }
                 </script> 
             </Helmet>
+ 
 
-            <Header/>
             <main className="wrapper max-1250 offset-left offset-right ptb-50">
 
                 
@@ -259,9 +256,23 @@ var TurorialComponent = () => {
                  
 
                 
-            </main>
+            </main> 
+            </>
+        );
+    }
+    
+    return (
+        <>
+            <Header/>
+                {
+                    upcoming.post == null && upcoming.is_redirect == null ?
+                    <Helper.PreLoader type={'article'} /> : (
+                        upcoming.is_redirect ? <PageNotFound parts={false}/>: <TutorialContentComponents/>
+                    )
+                    
+                }
             <Footer/>
-        </>
+        </>       
     );
 }
 

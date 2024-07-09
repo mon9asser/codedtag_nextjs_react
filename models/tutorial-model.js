@@ -87,7 +87,7 @@ let tutorialSchema = new Schema({
             
             // not completed !
             publish_chapters: { type: Boolean ,  default: false },
-            
+            sidebar_content: { type: String, default: "" } // chapters - posts - none
         }  
     },
     tabs: [
@@ -100,6 +100,7 @@ let tutorialSchema = new Schema({
             meta_description:{ type: String , trim : true, default: "" },
             hide_from_search_engines: { type: Boolean,  default: false },
             publish_chapters: { type: Boolean,  default: false },
+            sidebar_content: { type: String, default: "" } // chapters - posts - none
         }
     ],
     tag: {

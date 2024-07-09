@@ -773,7 +773,7 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
 
 
 postRouter.get("/post-page/get", async (req, res) => {
-     
+   
     // post-page/get?tut_name=${tutorial_slug}&post_slug=${post_slug}
     try {
      
@@ -787,7 +787,7 @@ postRouter.get("/post-page/get", async (req, res) => {
     
         var tutorial = await Tutorial.findOne({slug: tutorial_slug}); 
         var post = await Posts.findOne({slug: post_slug, post_type: 0 });
-        var posts = await Posts.findOne({post_type: 0});
+        var posts = await Posts.find({post_type: 0});
 
         if(post == null || tutorial == null) {
             throw new Error("The page could not be found");  

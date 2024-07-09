@@ -8,6 +8,7 @@ import {
   BrowserRouter,
   Routes,
   Route, 
+  useLocation 
 } from "react-router-dom";
 
 // Stylesheets 
@@ -23,17 +24,23 @@ import { TermsConditionsPage } from './components/terms-and-conditions.js';
 import { TutorialsComponent } from './components/tutorials.js'
 import { TurorialComponent } from './components/tutorial.js'
 import {ArticleComponent} from './components/article.js'
-class WrappApplication extends Component {
-  componentDidMount = async () => {
-    // Initialize methods
-    setTimeout(() => Helper.initMethods(), 1000);
-  }
 
-  render() {
-   
-    return (
-      <DataProvider>
-        <BrowserRouter>
+
+const Wrapper = ({ children }) => {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    Helper.initMethods();
+  }, [location]);
+
+  return children;
+};
+
+
+var WrappApplication = () => {
+  
+  return (
+    <DataProvider>  
           <Routes>
             <Route path="/" element={<h1>Hello world</h1>} />
             <Route path="/contact-us/" element={<ContactPage />} /> 
@@ -46,13 +53,23 @@ class WrappApplication extends Component {
             <Route path="/tutorials/:tut_slug/:tab_slug/post/" element={<h1>Slug name</h1>} /> 
             
             <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </BrowserRouter>
+          </Routes> 
       </DataProvider>
-    );
-  }
+  );
 }
+
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Wrapper>
+        <WrappApplication />
+      </Wrapper>
+    </BrowserRouter>
+  );
+}
+ 
 
 // Render
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<WrappApplication />);
+root.render(<App />);

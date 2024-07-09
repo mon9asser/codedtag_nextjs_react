@@ -313,7 +313,50 @@ class HelperData {
             element = <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>{elementLines}</div>;
           else 
             element = <div className="mt-20">{elementLines}</div>;
-      } 
+      } else if ('article') {
+        return <div style={{maxWidth: '95%', margin: '25px auto 55px auto'}}>
+        
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "75%", height:"20px"}}></div>
+          </div>
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "75%", height:"20px"}}></div>
+          </div>
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"250px"}}></div>
+            <div className="mt-13 flexbox gap-20" style={{flexBasis: "75%", height:"250px"}}>
+              <div className='placeholder-text-loader' style={{flexBasis: "50%", height:"250px"}}></div>
+              <div className='placeholder-text-loader' style={{flexBasis: "50%", height:"250px"}}></div>
+            </div>
+          </div>
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "75%", height:"20px"}}></div>
+          </div>
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "75%", height:"20px"}}></div>
+          </div>
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "75%", height:"20px"}}></div>
+          </div>
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "75%", height:"20px"}}></div>
+          </div>
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "75%", height:"20px"}}></div>
+          </div>
+          <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>
+            <div className="placeholder-text-loader mt-13" style={{flexBasis: "75%", height:"20px"}}></div>
+          </div>
+        </div>
+      }
 
       return element;
 
@@ -381,8 +424,7 @@ class HelperData {
        
       return(
         <>
-          {blocks?.map(x => {
-            console.log(x)
+          {blocks?.map(x => { 
             if(x.id != 'header-level-1') {
  
               if( x.type == 'paragraph') {
@@ -505,13 +547,7 @@ class HelperData {
     formatDate = (dateString) => {
 
         const date = new Date(dateString);
-
-        // Check if the date is valid
-        /*
-        if (isNaN(date.getTime())) {
-          console.error('Invalid date');
-          return 'Invalid date';
-        } */
+ 
 
         // Format the date components separately
         const day = date.getDate();
@@ -741,8 +777,7 @@ class HelperData {
               }
           }
     
-        } catch (error) { 
-          console.log(error?.response?.data?.message);
+        } catch (error) {  
           return  {
               data: [],
               message: error?.response?.data?.message || "Something went wrong, try later",
@@ -881,7 +916,10 @@ class HelperData {
       return result;
     }
     
-    ArticleSidebar = ({chapters}) => {
+    ArticleSidebar = ({type, data}) => {
+
+      // posts chapters
+      console.log(type)
       return (
         <>
             <ul className="block-list custom-aside-tuts list-items">
@@ -1184,8 +1222,7 @@ class HelperData {
                       <span className="cats-number">{Helper.produceNumber(index)}</span>
                       <h2 className="category-headline">{chapter_title}</h2>
                   </> : ""
-               }
-               {console.log(data)}
+               } 
                <div className="chapter-cont">
                   <ul className="tuts-categ">
                       {data.map(x => <li key={x._id}><Link to={`${built_url}${x.slug}/`}>{x.post_title}</Link></li>)} 

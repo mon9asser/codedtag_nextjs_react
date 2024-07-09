@@ -11,7 +11,7 @@ import { Settings } from "../settings";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Highlight from 'react-highlight'
 import StickyBox from "react-sticky-box";
-
+import { PageNotFound } from './404'
 
 var BrowserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="54" height="14" viewBox="0 0 54 14"><g fill="none" fillRule="evenodd" transform="translate(1 1)"><circle cx="6" cy="6" r="6" fill="#FF5F56" stroke="#E0443E" strokeWidth=".5"></circle><circle cx="26" cy="6" r="6" fill="#FFBD2E" stroke="#DEA123" strokeWidth=".5"></circle><circle cx="46" cy="6" r="6" fill="#27C93F" stroke="#1AAB29" strokeWidth=".5"></circle></g></svg>
@@ -48,7 +48,16 @@ var ArticleComponent = () => {
             method: "get",
             data: {}
         }).then( row => { 
-            console.log(row);
+            var {data, redirect, is_error} = row 
+
+            upcoming_change({
+                is_redirect: redirect,
+                post: data.post, // object
+                tutorial: data.tutorial, // object
+                chapters: data.chapters, // array 
+                settings: data.settings, // object
+                posts: data.posts
+            })
         });
 
     }, []);
@@ -59,28 +68,42 @@ var ArticleComponent = () => {
     }
 
     var [upcoming, upcoming_change] = React.useState({
+        is_redirect: null,
         post: null, // object
         tutorial: null, // object
         chapters: null, // array 
-        settings: null // object
+        settings: null, // object
+        posts: null
     });
 
 
+
     // getting data 
-    
-    return (
-        <>
-            <Header/>
-                <main className="wrapper max-1150 offset-left offset-right ptb-50">
+    var ArticleComponents = () => {
+        
+        return (
+            <main className="wrapper max-1150 offset-left offset-right ptb-50">
                     <div className="row mlr--15">
-                                            
-                        <div className="md-4 md-1-half plr-15 main-sidebar flex-order-2-md">
-                            <StickyBox offsetTop={20} offsetBottom={20}>
-                                <Helper.ArticleSidebar/> 
-                            </StickyBox>
-                        </div>
+                        
+                        {
+                            upcoming.tutorial.options.sidebar_content != 'none' ?
+                            <div className="md-4 md-1-half plr-15 main-sidebar flex-order-2-md">
+                                <StickyBox offsetTop={85} offsetBottom={20}>
+                                    
+                                    
+                                    {
+                                        upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                        <Helper.ArticleSidebar type='chapters' data={upcoming.chapters}/> 
+                                        : <Helper.ArticleSidebar type='posts' data={upcoming.posts}/> 
+                                    }
+                                    
+
+                                </StickyBox>
+                            </div> : ''
+                        }
+                        
                             
-                        <div className="md-8 plr-15 md-2-content main-content flex-order-1-md">
+                        <div className={`plr-15 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
                             <div className="max-1150 offset-left offset-right">
                                  
                                 <header className="flexbox content-center column-direction mb-30">
@@ -233,8 +256,21 @@ var ArticleComponent = () => {
 
                     </div>
 
-                </main> 
-                <Footer/>
+            </main> 
+        )
+    }
+    return (
+        <>
+            <Header/>
+                {
+                    upcoming.post == null && upcoming.is_redirect == null ?
+                    <Helper.PreLoader type={'article'} /> : (
+                        upcoming.is_redirect ? <PageNotFound parts={false}/>: <ArticleComponents />
+                    )
+                    
+                }
+                
+            <Footer/>
         </>
     );
 }
