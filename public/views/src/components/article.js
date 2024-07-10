@@ -93,11 +93,11 @@ var ArticleComponent = () => {
          
         return (
             <main className="wrapper max-1150 offset-left offset-right ptb-50">
-                    <div className="row mlr--15">
+                    <div className="row mlr--20">
                         
                         {
                             upcoming.tutorial.options.sidebar_content != 'none' ?
-                            <div className="md-4 md-1-half plr-15 main-sidebar flex-order-2-md">
+                            <div className="md-4 md-1-half plr-20 main-sidebar flex-order-2-md">
                                 <StickyBox offsetTop={85} offsetBottom={20}>
                                     
                                     
@@ -113,7 +113,7 @@ var ArticleComponent = () => {
                         }
                         
                             
-                        <div className={`plr-15 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
+                        <div className={`plr-20 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
                             <div className="max-1150 offset-left offset-right">
                                  
                                 <header className="flexbox content-center column-direction mb-30">
@@ -134,15 +134,9 @@ var ArticleComponent = () => {
                                     </div>
 
                                     <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
-                                    <div className="flexbox items-center author-section mt-h">
-                                        <div className="flexbox items-center author-thumb-section"> <a className="thumb" href="#"><img src="https://webdeveloper.com/wp-content/uploads/2022/05/ManoelaIlic_Portrait-46x50.jpg" width="35" height="35" alt="Author Name" /></a><a className="thumb" href="#">
-                                            <img src="https://webdeveloper.com/wp-content/uploads/2022/09/erikdietrich-300x300.png" width="35" height="35" alt="Author Name" /></a>
-                                        </div>
-                                        <div className="flexbox content-center auth-name">
-                                            <div className="flexbox items-center">Published By <a href="#">Isabella</a> and <a href="#">Montasser</a></div>
-                                            <i>Last Update: 25 January, 2023</i>
-                                        </div>
-                                    </div>
+                                    <i className="modified-date">
+                                    Last updated on <time datetime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
+                                    </i>
                                 </header> 
 
                                 <div className="lg-2-content tutorial-content content-section">
@@ -177,6 +171,9 @@ var ArticleComponent = () => {
             </main> 
         )
     }
+
+
+
     return (
         <>
             <Header/>

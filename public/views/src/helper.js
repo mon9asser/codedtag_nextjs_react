@@ -4,7 +4,8 @@ import axios from 'axios';
 import CryptoJS, { RabbitLegacy } from 'crypto-js';
 import Highlight from 'react-highlight'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Link } from 'react-router-dom';
+import { Link, Element, animateScroll as scroll } from 'react-scroll';
+import { Link as RouterLink} from 'react-router-dom';
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -166,15 +167,14 @@ class HelperData {
               id.classList.add('expanded')
               handler.classList.add('tbl-arrow')
           }
-      }
-
+      } 
       return (
         <div id='article-tbl-of-content' className={`content-tble-mobile-block tble-content ${expandor_checkbox ? 'expanded': ''}`}>
             <ul className="block-list custom-aside-tuts list-items">
                 <li className="has-slideitem" style={{background: "#f9f9f9"}}>
                     <b className='content-table-head-title'>Table of Content</b>
                     <ul className="slideitem" style={{display: "block"}}>
-                      {data.map((x, index) => <li key={index}><Link to={`#${x.href}`}>{x.title}</Link></li>)} 
+                      {data.map((x, index) => <li key={index}><Link to={x.href} smooth={true} duration={500}>{x.title}</Link></li>)} 
                     </ul>
                 </li>
             </ul>
@@ -192,7 +192,7 @@ class HelperData {
     Breadcrumbs = ({data}) => {
       return (
         <ul className="breadcrumbs">
-            {data.map((x, index) => <li key={index} className='sub-title'><Link to={x.url}>{x.title}</Link></li>)}
+            {data.map((x, index) => <li key={index} className='sub-title'><RouterLink to={x.url}>{x.title}</RouterLink></li>)}
         </ul>
       );
     }
@@ -401,18 +401,57 @@ class HelperData {
       
     }
 
+    generate_slugs = (text) => {
+      return text
+        .toLowerCase()          // Convert all characters to lowercase
+        .replace(/\s+/g, '-')   // Replace all spaces with hyphens
+        .replace(/[^\w-]+/g, ''); // Remove all non-word characters except hyphens
+    }
+
+    formated_published_date = (isoString) => {
+      const date = new Date(isoString);
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+      const textValue = date.toLocaleDateString('en-US', options);
+      const datetimeValue = date.toISOString();
+
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June', 
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+ 
+      
+      return {
+          value: datetimeValue,
+          text: `${monthNames[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`
+      };
+    }
+
+
     ArticleContent = ({blocks}) => {
-       
+      
+      var subheadings = blocks.filter(x => x.type == 'header' && x.id != 'header-level-1' ).map(x => ({
+        href: this.generate_slugs(x?.data?.text),
+        title: x?.data?.text
+      }));
+
       return(
         <>
           {blocks?.map((x, index) => {
 
             if(x.id != 'header-level-1') {
-              console.log(index);
+               
               // return <this.TableOfContent/>
 
               if( x.type == 'paragraph') {
-                return (<p style={{textAlign:x?.data?.alignment}} key={x.id} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>)
+                return (
+                  <React.Fragment key={x.id}>
+                    <p style={{textAlign:x?.data?.alignment}} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>
+                    {
+                      index == 1 && subheadings.length ? <this.TableOfContent data={subheadings}/>: ""
+                    }
+                  </React.Fragment>
+                )
               } else if (x.type == 'code' ) {
                 return (
                   <Highlight key={x.id} className={x?.data?.language_type}>
@@ -432,8 +471,8 @@ class HelperData {
                 )
               } else if (x.type == 'header') { 
 
-                return (
-                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, style:{textAlign: x?.data?.alignment }}, x?.data?.text)
+                return ( 
+                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, name:this.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, x?.data?.text)
                 )
 
               } else if (x.type == 'youtubeEmbed') {
@@ -534,7 +573,7 @@ class HelperData {
                                                 <span className="subtitle">Duration:- {item.duration}</span> : ""
                                               }                                              
                                             </h3>
-                                            <Link className="floating-all" to="/tutorials"></Link>
+                                            <RouterLink className="floating-all" to="/tutorials"></RouterLink>
                                       </div>
                                   </div>
                               );
@@ -1007,12 +1046,12 @@ class HelperData {
                       {chapter.chapter_title !== "" ? (
                         
                           <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
-                            <Link id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} to="#">{chapter.chapter_title}</Link>
+                            <RouterLink id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} to="#">{chapter.chapter_title}</RouterLink>
                             {chapter.posts.length ? (
                               <ul id={`item-${chapter._id}`} className="collapsible list-items">
                                 {chapter.posts.map(x => (
                                   <li key={x._id}>
-                                    <Link className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                                    <RouterLink className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</RouterLink>
                                   </li>
                                 ))} 
                               </ul>
@@ -1024,7 +1063,7 @@ class HelperData {
                           <ul className="block-list custom-aside-tuts list-items">
                             {chapter.posts.map(x => (
                               <li key={x._id}>
-                                <Link className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                                <RouterLink className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</RouterLink>
                               </li>
                             ))}
                           </ul>
@@ -1051,7 +1090,7 @@ class HelperData {
                     return (
                       <React.Fragment key={post._id}>
                         <li key={post._id}>
-                          <Link className={current_post_slug == post.slug ? 'selected_tab': ''} to={`/tutorials/${tutorial_slug}/${post.slug}/`}>{post.post_title}</Link>
+                          <RouterLink className={current_post_slug == post.slug ? 'selected_tab': ''} to={`/tutorials/${tutorial_slug}/${post.slug}/`}>{post.post_title}</RouterLink>
                         </li>
                       </React.Fragment>
                     );
@@ -1343,7 +1382,7 @@ class HelperData {
                } 
                <div className="chapter-cont">
                   <ul className="tuts-categ">
-                      {data.map(x => <li key={x._id}><Link to={`${built_url}${x.slug}/`}>{x.post_title}</Link></li>)} 
+                      {data.map(x => <li key={x._id}><RouterLink to={`${built_url}${x.slug}/`}>{x.post_title}</RouterLink></li>)} 
                   </ul>
                </div>
           </div>
