@@ -1048,7 +1048,7 @@ class HelperData {
                           <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
                             <RouterLink id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} to="#">{chapter.chapter_title}</RouterLink>
                             {chapter.posts.length ? (
-                              <ul id={`item-${chapter._id}`} className="collapsible list-items">
+                              <ul id={`item-${chapter._id}`} className={`collapsible list-items ${chapter.posts.findIndex( x => x.slug == current_post_slug) != -1 ? 'expanded': ''}`}>
                                 {chapter.posts.map(x => (
                                   <li key={x._id}>
                                     <RouterLink className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</RouterLink>
