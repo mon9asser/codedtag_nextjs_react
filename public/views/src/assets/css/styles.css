@@ -668,12 +668,20 @@ ul li a.expanded-a::after{
     -o-transform:translate(-3px,10px) rotate(-45deg)!important;
     transform: translate(-3px,10px) rotate(-45deg)!important;
 }
-
+.content-section a { 
+    color: #b9355e; 
+    font-weight: 500; 
+    text-decoration: none;
+}
+.content-section a:hover {
+    text-decoration: underline;
+}
+ 
 .content-table-head-title {
     font-weight: 500;
     font-size: 17px;
     margin-bottom: 10px !important;
     display: block;
     color: #000001;
-    padding: 0px 10px;
+    padding: 25px 10px 0px 10px;
 }

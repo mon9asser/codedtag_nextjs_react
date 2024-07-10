@@ -30,8 +30,7 @@ var ArticleComponent = () => {
     const navigate = useNavigate(); 
     var location = useLocation();
 
-    var [expandor_checkbox, expandor_checkbox_change] = React.useState(false);
-
+     
     const redirect404 = () => {
         navigate('/page-404');
     };
@@ -87,18 +86,7 @@ var ArticleComponent = () => {
         site_url: null,
     });
 
-    var expand_collapse_tbl_content = () => {
-        var id = document.querySelector('#article-tbl-of-content');
-        var handler = document.querySelector('#table-of-content-toggler');
-
-        if(id.classList.contains('expanded')) {
-            id.classList.remove('expanded')
-            handler.classList.remove('tbl-arrow')
-        } else {
-            id.classList.add('expanded')
-            handler.classList.add('tbl-arrow')
-        }
-    }
+    
     
     // getting data 
     var ArticleComponents = () => {
@@ -158,102 +146,7 @@ var ArticleComponent = () => {
                                 </header> 
 
                                 <div className="lg-2-content tutorial-content content-section">
-                                    
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                    {/* Table Of Content */}
-                                     
-                                    <div id='article-tbl-of-content' className={`content-tble-mobile-block tble-content ${expandor_checkbox ? 'expanded': ''}`}>
-                                        <ul className="block-list custom-aside-tuts list-items">
-                                            <li className="has-slideitem" style={{background: "#f9f9f9"}}>
-                                                <b className='content-table-head-title'>Table of Content</b>
-                                                <ul className="slideitem" style={{display: "block"}}>
-                                                    <li><a href="#">Pages</a></li>
-                                                    <li><a href="#">Blocks</a></li>
-                                                    <li><a href="#">Headers</a></li>
-                                                    <li><a href="#">Footers</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                        <label className={"tble-content-handler expander"} id='table-of-content-toggler' onClick={expand_collapse_tbl_content}></label>
-                                    </div>
-                                    
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                    <blockquote>
-                                        <p>Learn and read how to Install Node.js on Windows and write your first</p>
-                                        <cite> Montasser Mossallem </cite>
-                                    </blockquote>
-                                    <h2>Learn and read how to Install Node.js on Windows and write your first program</h2>
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                    <h3>Learn and read how to Install Node.js on Windows and write your first program</h3>
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                    <h4>Learn and read how to Install Node.js on Windows and write your first program</h4>
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                    <h5>Learn and read how to Install Node.js on Windows and write your first program</h5>
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                    <h6>Learn and read how to Install Node.js on Windows and write your first program</h6>
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                    <iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
-                                    <figure>
-                                        
-                                        <LazyLoadImage
-                                            className="half"
-                                            alt={'Alt of image'}
-                                            height={'auto'}
-                                            src="https://www.freecodecamp.org/news/content/images/size/w1000/2020/02/clem-onojeghuo-gBnHMsAOWrs-unsplash.jpg" // use normal <img> attributes as props
-                                            width={'auto'} /> 
-                                    </figure>
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                     
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                    
-                                    
-                                    <div className="hljs code-block"> 
-                                        <div className="code-header flexbox items-center space-between">
-                                            <BrowserIcon/>
-                                            <div className="flexbox items-center gap-10">
-                                                <a className="hljs btn-highlighted">
-                                                    <CopyIcon checked={false}/>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <Highlight className='javascript'> 
-                                        {`var data = 'Hello world';\nvar data = 'Hello world';`}
-                                        </Highlight>
-
-                                        <div className="code-footer flexbox items-center space-between">
-                                            <a href="#" className="btn flexbox gap-5 go-to-compiler-button">
-                                                <span>Try it yourself</span>
-                                            </a>
-                                        </div>
-
-                                    </div>
-
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
-                                     
-                                    <p>
-                                    In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. Wikipedia
-                                    </p>
+                                    <Helper.ArticleContent blocks={upcoming.post.blocks}/>
                                 </div>
 
                             </div> 

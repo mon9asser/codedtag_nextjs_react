@@ -151,6 +151,37 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
 
 
 class HelperData {
+    
+    TableOfContent = ({data}) => {
+
+      var [expandor_checkbox, expandor_checkbox_change] = React.useState(false);
+      var expand_collapse_tbl_content = () => {
+          var id = document.querySelector('#article-tbl-of-content');
+          var handler = document.querySelector('#table-of-content-toggler');
+
+          if(id.classList.contains('expanded')) {
+              id.classList.remove('expanded')
+              handler.classList.remove('tbl-arrow')
+          } else {
+              id.classList.add('expanded')
+              handler.classList.add('tbl-arrow')
+          }
+      }
+
+      return (
+        <div id='article-tbl-of-content' className={`content-tble-mobile-block tble-content ${expandor_checkbox ? 'expanded': ''}`}>
+            <ul className="block-list custom-aside-tuts list-items">
+                <li className="has-slideitem" style={{background: "#f9f9f9"}}>
+                    <b className='content-table-head-title'>Table of Content</b>
+                    <ul className="slideitem" style={{display: "block"}}>
+                      {data.map((x, index) => <li key={index}><Link to={`#${x.href}`}>{x.title}</Link></li>)} 
+                    </ul>
+                </li>
+            </ul>
+            <label className={"tble-content-handler expander"} id='table-of-content-toggler' onClick={expand_collapse_tbl_content}></label>
+        </div>
+      )
+    }
 
     CustomShareIcon = ({ IconComponent, size, width, height }) => (
       <div style={{ borderRadius: '8px', overflow: 'hidden', width: width, height: height }}>
@@ -374,12 +405,14 @@ class HelperData {
        
       return(
         <>
-          {blocks?.map(x => {
+          {blocks?.map((x, index) => {
 
             if(x.id != 'header-level-1') {
-              
+              console.log(index);
+              // return <this.TableOfContent/>
+
               if( x.type == 'paragraph') {
-                return (<p style={{textAlign:x?.data?.alignment}} key={x.id}>{x?.data?.text}</p>)
+                return (<p style={{textAlign:x?.data?.alignment}} key={x.id} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>)
               } else if (x.type == 'code' ) {
                 return (
                   <Highlight key={x.id} className={x?.data?.language_type}>
@@ -435,7 +468,7 @@ class HelperData {
             if(x.id != 'header-level-1') {
  
               if( x.type == 'paragraph') {
-                return (<p style={{textAlign:x?.data?.alignment}} key={x.id}>{x?.data?.text}</p>)
+                return (<p style={{textAlign:x?.data?.alignment}} key={x.id} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>)
               } else if (x.type == 'code' ) {
                 return (
                   <Highlight key={x.id} className={x?.data?.language_type}>
@@ -1318,6 +1351,7 @@ class HelperData {
       );
   }
 
+  
     produceNumber = (number) => {
       
       var num = number + 1;
