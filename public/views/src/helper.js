@@ -153,6 +153,60 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
 
 class HelperData {
     
+
+   
+    NextPrevPagination = ({site_url, tutorial_slug, type, data, current_post_slug}) => {
+      console.log(site_url, tutorial_slug, type, current_post_slug)
+      
+      var posts = data; 
+      if(type == 'chapters') {
+        posts = data.map(x => x.posts).flat();
+      }
+
+      // get current index;
+      var index = posts.findIndex( x => x.slug == current_post_slug );
+
+      
+      var nex_index = index + 1;
+      var prev_index = index - 1;
+
+
+      var next = posts[nex_index];
+      var prev = posts[prev_index]
+      
+      var next_link = next == undefined ? '':`${site_url}tutorials/${tutorial_slug}/${next.slug}/`;
+      var prev_link = prev == undefined ? '':`${site_url}tutorials/${tutorial_slug}/${prev.slug}/`;
+
+      return (
+        <div className="flexbox space-between pagination">
+            
+            {
+              
+              ( prev == undefined ) ? '':
+            
+            <RouterLink to={prev_link} className="flexbox direction-row items-center hover-to-left">
+                <i className="left-arrow-pagin"></i>
+                <span>
+                    <span className="d-none d-sm-block">{prev.post_title}</span> 
+                    <span className="d-block d-sm-none">Prev</span> 
+                </span>
+            </RouterLink> 
+            } 
+
+            {
+              
+              ( next == undefined ) ? '':
+              <RouterLink to={next_link} className="flexbox direction-row items-center hover-to-right auto-right">
+                  <span>
+                      <span className="d-none d-sm-block">{next.post_title}</span> 
+                      <span className="d-block d-sm-none">Next</span>
+                  </span>
+                  <i className="right-arrow-pagin"></i>
+              </RouterLink> 
+            }
+        </div>
+      );
+    }                        
     TableOfContent = ({data}) => {
 
       var [expandor_checkbox, expandor_checkbox_change] = React.useState(false);
@@ -1040,15 +1094,17 @@ class HelperData {
 
                 {chapterData.map(chapter => {
                   var link_url = `${site_url}tutorials/${tutorial_slug}/`;
-          
+                  
+                  var is_expaned = chapter.posts.findIndex( x => x.slug == current_post_slug) != -1;
+
                   return (
                     <React.Fragment key={chapter._id}>
                       {chapter.chapter_title !== "" ? (
-                        
+
                           <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
-                            <RouterLink id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} to="#">{chapter.chapter_title}</RouterLink>
+                            <RouterLink className={` ${is_expaned ? 'expanded-a': ''}`} id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} to="#">{chapter.chapter_title}</RouterLink>
                             {chapter.posts.length ? (
-                              <ul id={`item-${chapter._id}`} className={`collapsible list-items ${chapter.posts.findIndex( x => x.slug == current_post_slug) != -1 ? 'expanded': ''}`}>
+                              <ul id={`item-${chapter._id}`} className={`collapsible list-items ${is_expaned ? 'expanded': ''}`}>
                                 {chapter.posts.map(x => (
                                   <li key={x._id}>
                                     <RouterLink className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</RouterLink>
@@ -1145,6 +1201,7 @@ class HelperData {
             __keys.map(x => {
                 old_objec[x] = obj[x]
             }); 
+             
             feedback_change(old_objec);
         } 
       
@@ -1156,7 +1213,7 @@ class HelperData {
               press_type: presstype,
               is_pressed: true
             })
-
+            console.log(feedback);
             var response = await this.sendRequest({
               api: "comments/create-update",
               data: feedback, 
@@ -1206,12 +1263,12 @@ class HelperData {
         
 
         var thumbUpHandler = ( e, press_type ) => {
-        
-            
-            
-            changed_feedback_callback({thumb: true }) 
-            
-            submit_feedback(e, press_type)
+         
+
+            feedback.thumb= true;
+
+            console.log(feedback);
+            setTimeout(() => submit_feedback(e, press_type), 100);
             e.preventDefault();
 
         }

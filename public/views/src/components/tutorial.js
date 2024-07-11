@@ -219,11 +219,7 @@ var TurorialComponent = () => {
                         </> 
                 }
                 
-                {
-                    upcoming.tutorial == null ? 
-                    <Helper.PreLoader type={'text'} columns={true} is_full={true} lines={1}/>
-                    : <Helper.FeedBackBlock data_id={upcoming.tutorial._id} data_title={upcoming.tutorial.tutorial_title} feeadback_title="How Would You Like to Rate This Content?"/>  
-                }
+                
                   
                 
                 <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
@@ -253,7 +249,11 @@ var TurorialComponent = () => {
                     }                    
                 </div>
 
-                 
+                {
+                    upcoming.tutorial == null ? 
+                    <Helper.PreLoader type={'text'} columns={true} is_full={true} lines={1}/>
+                    : <Helper.FeedBackBlock data_id={upcoming.tutorial._id} data_title={upcoming.tutorial.tutorial_title} feeadback_title="How Would You Like to Rate This Content?"/>  
+                }
 
                 
             </main> 

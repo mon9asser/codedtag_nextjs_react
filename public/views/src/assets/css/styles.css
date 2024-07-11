@@ -519,7 +519,7 @@ textarea:focus {
     margin-right: auto;
     border: 1px dashed #38383852;
     padding: 50px;
-    margin-top: 80px;
+    margin-top: 50px;
     background-color: #fff;
 }
 
@@ -697,3 +697,8 @@ ul li a.expanded-a::after{
 .modified-date {
     font-size: 12px;
 }
+
+.auto-right {
+    margin-left: auto;
+}
+ 

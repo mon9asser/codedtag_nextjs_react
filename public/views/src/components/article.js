@@ -135,7 +135,7 @@ var ArticleComponent = () => {
 
                                     <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
                                     <i className="modified-date">
-                                    Last updated on <time datetime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
+                                    Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
                                     </i>
                                 </header> 
 
@@ -144,26 +144,39 @@ var ArticleComponent = () => {
                                 </div>
 
                             </div> 
-                            <div className="flexbox space-between pagination">
-                                <a className="flexbox direction-row items-center hover-to-left" href="/godocs/site/style-4/our-features/mac/">
-                                    <i className="left-arrow-pagin">
-                                        
-                                    </i>
-                                    <span>
-                                        <span className="d-none d-sm-block">Mac OS</span> 
-                                        <span className="d-block d-sm-none">Prev</span> 
-                                    </span>
-                                </a>  
-                                <a className="flexbox direction-row items-center hover-to-right" href="/godocs/site/style-4/our-features/ubuntu/">
-                                    <span>
-                                        <span className="d-none d-sm-block">Ubuntu</span> 
-                                        <span className="d-block d-sm-none">Next</span>
-                                    </span>
-                                    <i className="right-arrow-pagin"></i>
-                                </a>
-                            </div>
+
+
+                            <div className="separator-div"></div> 
+                            {
+                                upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
+                                : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
+                            } 
                             <div className="separator-div"></div>
-                            <Helper.FeedBackBlock data_id={''} data_title={''}/>
+
+                            
+                            <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
+                                {
+                                    upcoming.settings.share_social_buttons == '' ? ''
+                                    : 
+                                    <>
+                                        <span>Share <b>{upcoming.post.post_title}</b> on:</span>
+                                        <div className="flexbox gap-15 share-box"> 
+                                        <Helper.SocialShare   
+                                            platforms={upcoming.settings.share_social_buttons} 
+                                            url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/${upcoming.post.slug}/`}
+                                            title={upcoming.post.meta_title}
+                                            size={32} 
+                                            height={'32px'} 
+                                            width={'32px'} 
+                                            radius={!upcoming.settings.circle_buttons} 
+                                        />
+                                        </div>
+                                    </>
+                                }
+                            </div>
+
+                            <Helper.FeedBackBlock data_id={upcoming.post._id} data_title={upcoming.post.post_title}/>
                         </div>
 
                     </div>
