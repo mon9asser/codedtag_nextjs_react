@@ -150,7 +150,7 @@ class wrappedEditPost extends Component {
             deletion_confirm_modal_open: false,
             delete_pressed: false,
 
-            selected_tab: {_id: "root", title: "/Root", slug: ""}, // object
+            selected_tab: null, //{_id: "root", title: "/Root", slug: ""}, // object
             selected_tabs: null, // array  
             post_id: "", 
             meta_title: "",
@@ -576,10 +576,8 @@ class wrappedEditPost extends Component {
         if(request.is_error || ! request.data.length) {
             return; 
         }
-
-        this.setState({
-            tutorials: request.data
-        })
+ 
+        return request.data; 
 
     }
 
@@ -588,8 +586,8 @@ class wrappedEditPost extends Component {
          
 
         // load all tutorials 
-        await this.loadAllTutorials();
-
+        var tutorials = await this.loadAllTutorials();
+         
         // store site name
         this.load_site_settings();
         
@@ -618,11 +616,22 @@ class wrappedEditPost extends Component {
                 _id: post_id,
                 blocks: post.blocks,
             };
-
+           
+            // getting target tutorial 
+            var tabs = {};
+            var tut = tutorials.filter( x => x._id == post?.tutorial.id)
+            if( tut.length ) {
+                tabs = {
+                    selected_tabs: tut[0].tabs
+                }
+            }
             this.setState({
+                ...tabs,
+                tutorials: tutorials,
                 post_id: post_id,
                 initialState: initialState,
                 slug: post.slug,
+                selected_tab: post.selected_tab,
                 keyphrase: post.keyphrase,
                 meta_description: post.meta_description,
                 tutorial: post?.tutorial || {},
@@ -700,7 +709,7 @@ class wrappedEditPost extends Component {
             canonical_url: this.state.canonical_url,
             is_published: this.state.is_published 
         }
-        console.log(this.state.tutorial);
+        
         if( this.state.meta_title == "" || this.state.slug == "" ) {
             
             this.setState({
@@ -712,6 +721,17 @@ class wrappedEditPost extends Component {
 
             return;
 
+        }
+
+        if( this.state.selected_tab == null ) {
+            this.setState({
+                is_pressed: false,
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "Subfolder is required!"
+            });
+
+            return;
         }
         
         if( this.state.post_id != "" ) {
@@ -775,11 +795,16 @@ class wrappedEditPost extends Component {
 
     }
 
-    assign_tutorial_data = (e) => {
+    assign_tutorial_data = (e, is_selected_box = true) => {
 
         // tutorial_title
+        var value = e;
 
-        var index = this.state.tutorials.findIndex( x => x._id == e.target.value);
+        if( is_selected_box ) {
+            value = e.target.value
+        }
+
+        var index = this.state.tutorials.findIndex( x => x._id == value );
         if( index == -1 ) {
             return; 
         }
@@ -917,7 +942,8 @@ class wrappedEditPost extends Component {
                                         <span>
                                             Sub Folder
                                         </span>
-                                        <select value={this.state.selected_tab != null ? this.state.selected_tab._id: "root"} onChange={e => this.selected_tabs_order(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                        <select value={this.state.selected_tab != null ? this.state.selected_tab._id: ""} onChange={e => this.selected_tabs_order(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                            <option value={""}>Select Sub Folder</option>
                                             <option value={"root"}>/Root</option>
                                             {
                                                 this.state.selected_tabs != null ? 

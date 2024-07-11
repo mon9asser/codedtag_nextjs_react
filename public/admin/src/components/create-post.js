@@ -148,7 +148,7 @@ class CreatePost extends Component {
                 ]
             },
             
-            selected_tab: {_id: "root", title: "/Root", slug: ""}, // object
+            selected_tab: null, // {_id: "root", title: "/Root", slug: ""}, // object
             selected_tabs: null, // array  
             post_id: "", 
             meta_title: "",
@@ -564,6 +564,7 @@ class CreatePost extends Component {
             post_title = this.state.initialState.blocks[post_title_index].data.text; 
         }
 
+        
         var object_data = { 
             keyphrase: this.state.keyphrase,
             selected_tab: this.state.selected_tab,
@@ -594,6 +595,19 @@ class CreatePost extends Component {
             return;
 
         }
+
+        if( this.state.selected_tab == null ) {
+            
+            this.setState({
+                is_pressed: false,
+                show_message: "show_message",
+                request_status_class: "error",
+                request_message: "Subfolder is required!"
+            });
+
+            return;
+        }
+
         
         if( this.state.post_id != "" ) {
             object_data.post_id = this.state.post_id;
@@ -627,14 +641,14 @@ class CreatePost extends Component {
 
     selected_tabs_order = (e) => {
 
-        if(this.state.tutorial == null ) {
+        if(this.state.tutorial == null || this.state.tutorial?.id == '' ) {
             return; 
         }
 
-       
+         
         var index = this.state.tutorials.findIndex( x => x._id == this.state.tutorial.id);
         var objx = this.state.tutorials[index];
-        
+         
         var tabs = objx.tabs;
         var tab_index = tabs.findIndex(x => x._id == e.target.value );
 
@@ -798,7 +812,8 @@ class CreatePost extends Component {
                                         <span>
                                             Sub Folder
                                         </span>
-                                        <select value={this.state.selected_tab != null ? this.state.selected_tab._id: "root"} onChange={e => this.selected_tabs_order(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                        <select value={this.state.selected_tab != null ? this.state.selected_tab._id: ""} onChange={e => this.selected_tabs_order(e)} style={{border: "1px solid #dfdfdf", outline: "none", padding: "8px", flexGrow: "1", backgroundColor: "transparent", marginTop: "5px"}}>
+                                            <option value={""}>Select Sub Folder</option>
                                             <option value={"root"}>/Root</option>
                                             {
                                                 this.state.selected_tabs != null ? 

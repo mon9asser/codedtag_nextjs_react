@@ -12,7 +12,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import {PageNotFound} from './404'
   
-var TurorialComponent = () => {
+var TabComponent = () => {
 
     const navigate = useNavigate(); 
 
@@ -23,7 +23,7 @@ var TurorialComponent = () => {
     // tutorial slug
     var params = useParams();
     var tutorial_slug = params.tut_slug;
-
+    var tab_slug = params.tab_slug;
     
     var [ upcoming, upcoming_change ] = React.useState({
         tutorial: null,
@@ -37,9 +37,9 @@ var TurorialComponent = () => {
     
     // Contexts 
     React.useEffect(() => {
-       
+        
         Helper.sendRequest({  
-            api: `tutorial-page/get?tut_name=${tutorial_slug}&tab=root`,
+            api: `tutorial-page/get?tut_name=${tutorial_slug}&tab=${tab_slug}`,
             method: "get",
             data: {}
         }).then( row => { 
@@ -97,7 +97,7 @@ var TurorialComponent = () => {
                                 upcoming.tutorial?.tabs?.length ?
                                 <ul className="no-list-style flexbox gap-50 content-center items-center flex-wrap bold-list tab-lang-categories">
                                     <li><Link to={`/tutorials/${upcoming.tutorial?.slug}/`}>Tutorials</Link></li>
-                                    {upcoming.tutorial?.tabs.map(tb => <li key={tb._id}><Link to={tb?.slug.indexOf('http') == -1 ? `/tutorials/${upcoming.tutorial?.slug}/t/${tb?.slug}/`: tb?.slug }>{tb?.title}</Link></li>)}
+                                    {upcoming.tutorial?.tabs.map(tb => <li key={tb._id}><Link to={tb?.slug.indexOf('http') == -1 ? `/tutorials/${upcoming.tutorial?.slug}/p/${tb?.slug}/`: tb?.slug }>{tb?.title}</Link></li>)}
                                 </ul>
                                 :""
                             } 
@@ -300,4 +300,4 @@ var TurorialComponent = () => {
     );
 }
 
-export { TurorialComponent };
+export { TabComponent };

@@ -45,13 +45,13 @@ sitemapRouter.get( sitemaps.articles, async (req, res) => {
             
             var tab_slash = '';
             if( post.selected_tab?.slug  !== '' && post.selected_tab?.slug !== 'root' ) {
-                tab_slash = `/${post.selected_tab.slug}`;
+                tab_slash = `/t/${post.selected_tab.slug}`;
             }
 
             if ( post.tutorial.slug != undefined && post.updated_date != undefined && post.slug != undefined ) {
                 return `
                     <url>
-                        <loc>${site_url}${Config.redirect_to}${ (post.tutorial.slug == "" ? "" : "/" + post.tutorial.slug) + tab_slash + "/" + post.slug + "/"}</loc>
+                        <loc>${site_url}${Config.redirect_to}${ (post.tutorial.slug == "" ? "" : "/" + post.tutorial.slug)  + tab_slash + "/" + post.slug + "/"}</loc>
                         <lastmod>${new Date(post.updated_date).toISOString()}</lastmod>
                         <changefreq>weekly</changefreq>
                         <priority>0.8</priority>
@@ -194,7 +194,7 @@ sitemapRouter.get( sitemaps.tabs, async (req, res) => {
                 tut_slash = `/${tab.tutorial_slug}`;
             }
 
-            var build_it = `${site_url}${Config.redirect_to}${tut_slash}/p${ tab_slash + "/"}`;
+            var build_it = `${site_url}${Config.redirect_to}${tut_slash}/t${ tab_slash + "/"}`;
             if(tab_slash.indexOf("http") != -1 ) {
                 build_it = tab_slash.replace("/http", "http");
             }

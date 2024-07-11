@@ -91,97 +91,182 @@ var ArticleComponent = () => {
     // getting data 
     var ArticleComponents = () => {
          
+        var image = upcoming.post.blocks.filter(x => x.type == 'image');
+        if( image.length == 0) {
+            image = ''
+        } else {
+            image = image[0].data.file.url 
+        }
+         
         return (
-            <main className="wrapper max-1150 offset-left offset-right ptb-50">
-                    <div className="row mlr--20">
-                        
-                        {
-                            upcoming.tutorial.options.sidebar_content != 'none' ?
-                            <div className="md-4 md-1-half plr-20 main-sidebar flex-order-2-md">
-                                <StickyBox offsetTop={85} offsetBottom={20}>
-                                    
-                                    
-                                    {
-                                        upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                        <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/> 
-                                        : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
+            <>
+                <Helmet>
+                    {console.log(upcoming.post)}
+                    <title>{upcoming.post?.meta_title}</title>
+                    <meta name="description" content={upcoming.post?.meta_description} />
+                    {
+                        upcoming.post?.allow_search_engine == false ?
+                        <meta name="robots" content={"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"} />
+                        : ""
+                    }
+                    
+                    <script type="application/ld+json">
+                    {
+                        `
+                            {
+                                "@context": "https://schema.org",
+                                "@type": "Article",
+                                "headline": "${upcoming.post?.post_title}",   
+                                "author": {
+                                    "@type": "Organization",
+                                    "name": "${upcoming.settings?.site_name}"  
+                                },
+                                "datePublished": "${upcoming.post?.created_date}",  
+                                "dateModified": "${upcoming.post?.updated_date}",   
+                                "description": "${upcoming.post?.meta_description}",   
+                                "publisher": {
+                                    "@type": "Organization",
+                                    "name": "${upcoming.settings?.site_name}",  
+                                    "logo": {
+                                    "@type": "ImageObject",
+                                    "url": "${upcoming.settings?.site_logo}"  
                                     }
-                                    
+                                },
+                                "mainEntityOfPage": {
+                                    "@type": "WebPage",
+                                    "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/"   
+                                },
+                                "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/",  
+                                "articleSection": "${upcoming.tutorial?.tag}",   
+                                "keywords": "${upcoming.post?.keyphrase}",  
+                                "image": "${image}",  
+                                "breadcrumb": {
+                                    "@context": "https://schema.org",
+                                    "@type": "BreadcrumbList",
+                                    "itemListElement": [
+                                        {
+                                            "@type": "ListItem",
+                                            "position": 1,
+                                            "name": "Home",
+                                            "item": "${upcoming.site_url}"
+                                        },
+                                        {
+                                            "@type": "ListItem",
+                                            "position": 2,
+                                            "name": "Tutorials",
+                                            "item": "${upcoming.site_url}tutorials/"
+                                        },
+                                        {
+                                            "@type": "ListItem",
+                                            "position": 3,
+                                            "name": "${upcoming.tutorial?.tutorial_title}",
+                                            "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/"
+                                        },
+                                        {
+                                            "@type": "ListItem",
+                                            "position": 4,
+                                            "name": "${upcoming.tutorial?.post_title}",
+                                            "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/"
+                                        }
+                                    ]
+                                }
+                                }
+                        `
+                    }
+                    </script> 
+                </Helmet>
 
-                                </StickyBox>
-                            </div> : ''
-                        }
-                        
+                <main className="wrapper max-1150 offset-left offset-right ptb-50">
+                        <div className="row mlr--20">
                             
-                        <div className={`plr-20 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
-                            <div className="max-1150 offset-left offset-right">
-                                 
-                                <header className="flexbox content-center column-direction mb-30">
+                            {
+                                upcoming.tutorial.options.sidebar_content != 'none' ?
+                                <div className="md-4 md-1-half plr-20 main-sidebar flex-order-2-md">
+                                    <StickyBox offsetTop={85} offsetBottom={20}>
+                                        
+                                        
+                                        {
+                                            upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                            <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/> 
+                                            : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
+                                        }
+                                        
+
+                                    </StickyBox>
+                                </div> : ''
+                            }
+                            
+                                
+                            <div className={`plr-20 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
+                                <div className="max-1150 offset-left offset-right">
                                     
-                                    <div className="flexbox items-center">
-                                        <Helper.Breadcrumbs
-                                            data={[
-                                                {
-                                                    title: upcoming.tutorial.selected_category.name,
-                                                    url: upcoming.site_url + 'tutorials/',
-                                                },
-                                                {
-                                                    title: upcoming.tutorial.tutorial_title,
-                                                    url: upcoming.site_url + 'tutorials/' + upcoming.tutorial.slug + '/'
-                                                }
-                                            ]}
-                                        /> 
+                                    <header className="flexbox content-center column-direction mb-30">
+                                        
+                                        <div className="flexbox items-center">
+                                            <Helper.Breadcrumbs
+                                                data={[
+                                                    {
+                                                        title: upcoming.tutorial.selected_category.name,
+                                                        url: upcoming.site_url + 'tutorials/',
+                                                    },
+                                                    {
+                                                        title: upcoming.tutorial.tutorial_title,
+                                                        url: upcoming.site_url + 'tutorials/' + upcoming.tutorial.slug + '/'
+                                                    }
+                                                ]}
+                                            /> 
+                                        </div>
+
+                                        <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
+                                        <i className="modified-date">
+                                        Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
+                                        </i>
+                                    </header> 
+
+                                    <div className="lg-2-content tutorial-content content-section">
+                                        <Helper.ArticleContent blocks={upcoming.post.blocks}/>
                                     </div>
 
-                                    <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
-                                    <i className="modified-date">
-                                    Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
-                                    </i>
-                                </header> 
+                                </div> 
 
-                                <div className="lg-2-content tutorial-content content-section">
-                                    <Helper.ArticleContent blocks={upcoming.post.blocks}/>
+
+                                <div className="separator-div"></div> 
+                                {
+                                    upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                    <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
+                                    : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
+                                } 
+                                <div className="separator-div"></div>
+
+                                
+                                <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
+                                    {
+                                        upcoming.settings.share_social_buttons == '' ? ''
+                                        : 
+                                        <>
+                                            <span>Share <b className='share-txt-on'>{upcoming.post.post_title}</b> on:</span>
+                                            <div className="flexbox gap-15 share-box"> 
+                                            <Helper.SocialShare   
+                                                platforms={upcoming.settings.share_social_buttons} 
+                                                url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/${upcoming.post.slug}/`}
+                                                title={upcoming.post.meta_title}
+                                                size={32} 
+                                                height={'32px'} 
+                                                width={'32px'} 
+                                                radius={!upcoming.settings.circle_buttons} 
+                                            />
+                                            </div>
+                                        </>
+                                    }
                                 </div>
 
-                            </div> 
-
-
-                            <div className="separator-div"></div> 
-                            {
-                                upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
-                                : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
-                            } 
-                            <div className="separator-div"></div>
-
-                            
-                            <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
-                                {
-                                    upcoming.settings.share_social_buttons == '' ? ''
-                                    : 
-                                    <>
-                                        <span>Share <b>{upcoming.post.post_title}</b> on:</span>
-                                        <div className="flexbox gap-15 share-box"> 
-                                        <Helper.SocialShare   
-                                            platforms={upcoming.settings.share_social_buttons} 
-                                            url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/${upcoming.post.slug}/`}
-                                            title={upcoming.post.meta_title}
-                                            size={32} 
-                                            height={'32px'} 
-                                            width={'32px'} 
-                                            radius={!upcoming.settings.circle_buttons} 
-                                        />
-                                        </div>
-                                    </>
-                                }
+                                <Helper.FeedBackBlock data_id={upcoming.post._id} data_title={upcoming.post.post_title}/>
                             </div>
 
-                            <Helper.FeedBackBlock data_id={upcoming.post._id} data_title={upcoming.post.post_title}/>
                         </div>
 
-                    </div>
-
-            </main> 
+                </main> 
+            </>
         )
     }
 

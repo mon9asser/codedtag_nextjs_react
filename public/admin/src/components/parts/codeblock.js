@@ -62,8 +62,8 @@ class CustomCodeBlok {
                     </g>
                 </svg>
             </span>
-            <div class='hljs-copy-and-controller'>
-                <div class='hljs-lang-combox'></div>
+            <div className='hljs-copy-and-controller'>
+                <div className='hljs-lang-combox'></div>
             </div>
         `;
 
@@ -71,7 +71,7 @@ class CustomCodeBlok {
         const comboBox = document.createElement('label');
         comboBox.className = 'label-selector';
         comboBox.setAttribute('contenteditable', 'false');
-        comboBox.innerHTML = `<span>Language Code:</span><div class='select-wrapper'><select class='select-language'></select></div>`;
+        comboBox.innerHTML = `<span>Language Code:</span><div className='select-wrapper'><select className='select-language'></select></div>`;
         const selectLanguage = comboBox.querySelector('.select-language');
 
         // Populate select options
@@ -105,7 +105,7 @@ class CustomCodeBlok {
         const codeFooter = document.createElement('div');
         codeFooter.setAttribute('contenteditable', 'false');
         codeFooter.className = 'precode-footer';
-        codeFooter.innerHTML = '<span class="language-type">plaintext</span>';
+        codeFooter.innerHTML = '<span className="language-type">plaintext</span>';
 
         // Append all to main block
         codeContainer.appendChild(codeHeader);

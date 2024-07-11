@@ -25,6 +25,7 @@ import { TutorialsComponent } from './components/tutorials.js'
 import { TurorialComponent } from './components/tutorial.js'
 import {ArticleComponent} from './components/article.js'
 
+import { TabComponent } from "./components/tab.js"
 
 const Wrapper = ({ children }) => {
   const location = useLocation();
@@ -50,7 +51,8 @@ var WrappApplication = () => {
             <Route path="/tutorials/" element={<TutorialsComponent />} />
             <Route path="/tutorials/:tut_slug/" element={<TurorialComponent />} />
             <Route path="/tutorials/:tut_slug/:post_slug/" element={<ArticleComponent/>} />
-            <Route path="/tutorials/:tut_slug/:tab_slug/post/" element={<h1>Slug name</h1>} /> 
+            <Route path="/tutorials/:tut_slug/t/:tab_slug/" element={<TabComponent/>} /> 
+            <Route path="/tutorials/:tut_slug/t/:tab_slug/:post_slug/" element={<h1>Post Of Tab</h1>} /> 
             
             <Route path="*" element={<PageNotFound />} />
           </Routes> 

@@ -702,3 +702,6 @@ ul li a.expanded-a::after{
     margin-left: auto;
 }
  
+ .share-txt-on {
+    color: #f9756e;
+ }

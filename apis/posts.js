@@ -66,8 +66,8 @@ postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
             .toFormat('webp', { quality: 80 })
             .toFile(`${uploadPath}/${new_file_name}`);
           
-        var file_url = `${Config.localhost.site_url}/${Config.uploads.serve}/${year}/${month}/${day}/${new_file_name}`;
-        console.log(file_url);
+        var file_url = `${media_url}/${year}/${month}/${day}/${new_file_name}`;
+        
         //var fileUrl = `${Config.localhost.site_url}/${uploadPath}/${new_file_name}`;
         res.json({ success: 1, file: { url: file_url, width: resizeWidth } });
     } catch (error) {

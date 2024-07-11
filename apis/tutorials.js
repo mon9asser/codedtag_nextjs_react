@@ -139,11 +139,14 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
     
    try {
      
+     
     
-    if( ! req.query.tut_name ) {
+    if( ! req.query.tut_name || ! req.query.tab ) {
         throw new Error("The page could not be found");   
     }
+
     var tutorial_slug = req.query.tut_name;
+    var tab = req.query.tab;
 
     var tutorial = await Tutorial.findOne({slug: tutorial_slug});
     if(tutorial == null) {
@@ -153,9 +156,22 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
     // add counter
     tutorial.views = ( tutorial.views + 1 )
     await tutorial.save();
+    
+    var target_tab = 'root';
+    if( tab != 'root' ) {
+        var tbs = tutorial.tabs.filter( x => x.slug == tab );
+        
+        if( tbs.length ) {
+            target_tab = tbs[0]._id;
+        } else {
+            throw new Error("The page could not be found");
+        }
+    }
 
-    var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": "root" });
-    var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": "root", post_type: 0});
+    // tutorial.tabs
+    var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": target_tab });
+    var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": target_tab, post_type: 0});
+    
     var settings = await Sets.find({})
     if(settings.length) {
         settings = settings[0]
