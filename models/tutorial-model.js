@@ -34,6 +34,11 @@ let tutorialSchema = new Schema({
         type: Number , 
         default: 0 
     },
+    thumbnail_url: {
+        type: String ,
+        trim : true,
+        default: "" 
+    },
     selected_category: {
         type: {
             id:  {

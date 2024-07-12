@@ -1363,7 +1363,7 @@ class HelperData {
     
       // Process the parts to create the appropriate elements
       return (
-        <div>
+        <>
           {parts.map((part, index) => {
             // YouTube shortcode
             if (part.startsWith('[youtube')) {
@@ -1395,7 +1395,7 @@ class HelperData {
               );
             }
           })}
-        </div>
+        </>
       );
     }
 

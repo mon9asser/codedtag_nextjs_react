@@ -191,7 +191,7 @@ var TurorialComponent = () => {
                             "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
                             "articleSection": "${upcoming.tutorial?.tag}",
                             "keywords": "${upcoming.tutorial?.keyphrase}",
-                            "image": ${upcoming.tutorial?.thumbnail_url},
+                            "image": "${upcoming.tutorial?.thumbnail_url}",
                             "breadcrumb": {
                                     "@context": "https://schema.org",
                                     "@type": "BreadcrumbList",

@@ -25,7 +25,7 @@ var CopyIcon = (props) => (
 );
 
 
-var ArticleComponent = () => {
+var TabArticleComponent = () => {
 
     const navigate = useNavigate(); 
     var location = useLocation();
@@ -39,13 +39,13 @@ var ArticleComponent = () => {
     var params = useParams();
     var post_slug = params.post_slug;
     var tutorial_slug = params.tut_slug;
-    
+    var tab_slug = params.tab_slug;
 
     // Effect 
     React.useEffect(() => {
         
         Helper.sendRequest({  
-            api: `post-page/get?tut_name=${tutorial_slug}&post_slug=${post_slug}&tab='root'`,
+            api: `post-page/get?tut_name=${tutorial_slug}&post_slug=${post_slug}&tab=${tab_slug}`,
             method: "get",
             data: {}
         }).then( row => { 
@@ -89,7 +89,7 @@ var ArticleComponent = () => {
     
     
     // getting data 
-    var ArticleComponents = () => {
+    var TabArticleComponents = () => {
          
         var image = upcoming.post.blocks.filter(x => x.type == 'image');
         if( image.length == 0) {
@@ -278,7 +278,7 @@ var ArticleComponent = () => {
                 {
                     upcoming.post == null && upcoming.is_redirect == null ?
                     <Helper.PreLoader type={'article'} /> : (
-                        upcoming.is_redirect ? <PageNotFound parts={false}/>: <ArticleComponents />
+                        upcoming.is_redirect ? <PageNotFound parts={false}/>: <TabArticleComponents />
                     )
                     
                 }
@@ -288,4 +288,4 @@ var ArticleComponent = () => {
     );
 }
 
-export { ArticleComponent }
+export { TabArticleComponent }

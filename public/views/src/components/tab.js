@@ -31,7 +31,8 @@ var TabComponent = () => {
         chapters: null,
         settings: null,
         site_url: null,
-        is_redirect: null
+        is_redirect: null,
+        tab: null
     });
 
     
@@ -53,7 +54,15 @@ var TabComponent = () => {
                 }
             }
             
+            // target tab
+            var tab = null; 
+            var target_tab = row.data?.tutorial?.tabs?.filter(x => x.slug == tab_slug )
+            if(target_tab?.length) {
+                tab = target_tab[0];
+            }
+            console.log(tab);
             response_upcoming_callback({
+                tab: tab,
                 tutorial: row.data.tutorial,
                 posts: row.data.posts,
                 chapters: row.data.chapters,
@@ -85,8 +94,8 @@ var TabComponent = () => {
                             
                             <h1 className="tutorial-headline">
                                 {
-                                    upcoming.tutorial == null ?
-                                    <Helper.PreLoader/>: upcoming.tutorial?.tutorial_title
+                                    upcoming.tab == null ?
+                                    <Helper.PreLoader/>: upcoming.tab?.title
                                 } 
                             </h1>
                             
@@ -97,7 +106,7 @@ var TabComponent = () => {
                                 upcoming.tutorial?.tabs?.length ?
                                 <ul className="no-list-style flexbox gap-50 content-center items-center flex-wrap bold-list tab-lang-categories">
                                     <li><Link to={`/tutorials/${upcoming.tutorial?.slug}/`}>Tutorials</Link></li>
-                                    {upcoming.tutorial?.tabs.map(tb => <li key={tb._id}><Link to={tb?.slug.indexOf('http') == -1 ? `/tutorials/${upcoming.tutorial?.slug}/p/${tb?.slug}/`: tb?.slug }>{tb?.title}</Link></li>)}
+                                    {upcoming.tutorial?.tabs.map(tb => <li key={tb._id}><Link to={tb?.slug.indexOf('http') == -1 ? `/tutorials/${upcoming.tutorial?.slug}/t/${tb?.slug}/`: tb?.slug }>{tb?.title}</Link></li>)}
                                 </ul>
                                 :""
                             } 
@@ -139,7 +148,7 @@ var TabComponent = () => {
                                 upcoming.tutorial == null ?
                                  <Helper.PreLoader type={'text'} lines={5}/>: 
                                     <div className="mt-20 content-elem">
-                                        <Helper.GenerateTutorialContent built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/`} upcoming={upcoming} data={upcoming.tutorial.description} />
+                                        <Helper.GenerateTutorialContent built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/t/${upcoming.tab.slug}/`} upcoming={upcoming} data={upcoming.tab.description} />
                                     </div>
                             } 
 
@@ -154,28 +163,28 @@ var TabComponent = () => {
         return (
             <>
                 <Helmet>
-                <title>{upcoming.tutorial?.meta_title}</title>
-                <meta name="description" content={upcoming.tutorial?.meta_description} />
+                <title>{upcoming.tab?.meta_title}</title>
+                <meta name="description" content={upcoming.tab?.meta_description} />
                 {
-                    upcoming.tutorial?.options?.hide_from_search_engines ?
+                    upcoming.tab?.hide_from_search_engines ?
                     <meta name="robots" content={"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"} />
                     : ""
                 }
-                
+                {console.log(upcoming.tutorial)}
                 <script type="application/ld+json">
                 {
                     `
                         {
                             "@context": "https://schema.org",
                             "@type": "Course",
-                            "headline": "${upcoming.tutorial?.tutorial_title}",
+                            "headline": "${upcoming.tab?.title}",
                             "author": {
                                 "@type": "Organization",
                                 "name": "${upcoming.settings?.site_name}"
                             },
                             "datePublished": "${upcoming.tutorial?.date_published}",   
                             "dateModified": "${upcoming.tutorial?.date_updated}",   
-                            "description": "${upcoming.tutorial?.meta_description}",
+                            "description": "${upcoming.tab?.meta_description}",
                             "publisher": {
                                 "@type": "Organization",
                                 "name": "${upcoming.settings?.site_name}",
@@ -186,12 +195,12 @@ var TabComponent = () => {
                             },
                             "mainEntityOfPage": {
                                 "@type": "WebPage",
-                                "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
+                                "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/",
                             },
-                            "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
+                            "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}",
                             "articleSection": "${upcoming.tutorial?.tag}",
                             "keywords": "${upcoming.tutorial?.keyphrase}",
-                            "image": ${upcoming.tutorial?.thumbnail_url},
+                            "image": "${upcoming.tutorial?.thumbnail_url}",
                             "breadcrumb": {
                                     "@context": "https://schema.org",
                                     "@type": "BreadcrumbList",
@@ -213,6 +222,12 @@ var TabComponent = () => {
                                             "position": 3,
                                             "name": "${upcoming.tutorial?.tutorial_title}",
                                             "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/"
+                                        },
+                                        {
+                                            "@type": "ListItem",
+                                            "position": 4,
+                                            "name": "${upcoming.tab?.title}",
+                                            "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/"
                                         }, 
                                     ]
                             }
@@ -227,24 +242,7 @@ var TabComponent = () => {
 
                 
                 <TutorialHeader />
-                
-                {
-                    upcoming.chapters == null ?
-                        <div className="wrapper max-950 mt-20 mb-20"><Helper.PreLoader type={'text'} lines={3} columns={true}/></div> :
-                        <>
-
-                            {
-                                upcoming.tutorial.content != '' ?
-                                <div className="wrapper ptb-30-50 content-elem max-full text-center mlr--15 chapter-block-hlght">
-                                    <Helper.GenerateTutorialContent built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/`} upcoming={upcoming} data={upcoming.tutorial.content} />
-                                </div>: ''
-                            }   
-
-                        </> 
-                }
-                
-                
-                  
+                 
                 
                 <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
                      
@@ -256,12 +254,12 @@ var TabComponent = () => {
                             upcoming.settings.share_social_buttons == '' ? ''
                             : 
                                 <>
-                                    <span>Share <b className='share-txt-on'>{upcoming.tutorial.tutorial_title}</b> on:</span>
+                                    <span>Share <b className='share-txt-on'>{upcoming.tab.title}</b> on:</span>
                                     <div className="flexbox gap-15 share-box"> 
                                     <Helper.SocialShare   
                                         platforms={upcoming.settings.share_social_buttons} 
-                                        url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/`}
-                                        title={upcoming.tutorial.meta_title}
+                                        url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/t/${upcoming.tab.slug}/`}
+                                        title={upcoming.tab.meta_title}
                                         size={32} 
                                         height={'32px'} 
                                         width={'32px'} 
@@ -276,7 +274,7 @@ var TabComponent = () => {
                 {
                     upcoming.tutorial == null ? 
                     <Helper.PreLoader type={'text'} columns={true} is_full={true} lines={1}/>
-                    : <Helper.FeedBackBlock data_id={upcoming.tutorial._id} data_title={upcoming.tutorial.tutorial_title} feeadback_title="How Would You Like to Rate This Content?"/>  
+                    : <Helper.FeedBackBlock data_id={upcoming.tab._id} data_title={upcoming.tab.title} feeadback_title="How Would You Like to Rate This Content?"/>  
                 }
 
                 
