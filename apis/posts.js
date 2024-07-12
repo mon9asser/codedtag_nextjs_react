@@ -785,7 +785,7 @@ postRouter.get("/post-page/get", async (req, res) => {
         var tutorial_slug = req.query.tut_name;
         var post_slug = req.query.post_slug;
         var tab_slug = req.query.tab;
-        // HERE <===========
+         
 
         var tutorial = await Tutorial.findOne({slug: tutorial_slug}); 
         
@@ -794,6 +794,8 @@ postRouter.get("/post-page/get", async (req, res) => {
             throw new Error("The page could not be found");  
         }
         
+        
+
         // getting tab data
         var to_find = 'root'
         if( tab_slug != 'root') {
@@ -805,12 +807,11 @@ postRouter.get("/post-page/get", async (req, res) => {
         }
          
         var post = await Posts.findOne({slug: post_slug, post_type: 0,  'selected_tab._id': to_find});
-        
+         
         if(post == null ) {
             throw new Error("The page could not be found");  
-        }
+        } 
         
-         
         var posts = await Posts.find({post_type: 0, 'selected_tab._id': to_find });
         
         // add counter

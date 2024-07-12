@@ -461,6 +461,7 @@ textarea:focus {
 .share-box { 
     justify-content: center;
     margin-top: 15px;
+    flex-wrap: wrap;
 }
  
 .max-800 {

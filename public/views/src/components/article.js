@@ -60,6 +60,14 @@ var ArticleComponent = () => {
                 }
             }
 
+            // assign beside title 
+            if( data.settings?.beside_post_title != "") {
+                // row.data.settings?.beside_post_title
+                if( data.post?.meta_title) {
+                    data.post.meta_title = data.post.meta_title + " " + row.data.settings?.beside_post_title;
+                }
+            }
+
             upcoming_change({
                 is_redirect: redirect,
                 post: data.post, // object
