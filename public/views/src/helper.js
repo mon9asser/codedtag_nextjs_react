@@ -1050,7 +1050,7 @@ class HelperData {
       return result;
     }
     
-    ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug}) => {
+    ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, tab_slug}) => {
 
       
       var collapsed_item = (e, id) => {
@@ -1094,7 +1094,10 @@ class HelperData {
 
                 {chapterData.map(chapter => {
                   var link_url = `${site_url}tutorials/${tutorial_slug}/`;
-                  
+                  if( tab_slug != undefined ) {
+                    link_url = `${link_url}t/${tab_slug}/`
+                  }
+                   
                   var is_expaned = chapter.posts.findIndex( x => x.slug == current_post_slug) != -1;
 
                   return (
@@ -1142,11 +1145,14 @@ class HelperData {
               <ul key={index} className="block-list custom-aside-tuts list-items">
                 {
                   x.map(post => {
-                    var link_url =  `${site_url}tutorials/${tutorial_slug}/`;
+                    var link_url =  `${site_url}tutorials/${tutorial_slug}/`; 
+                    if( tab_slug != undefined ) {
+                      link_url = `${link_url}t/${tab_slug}/`
+                    }
                     return (
                       <React.Fragment key={post._id}>
                         <li key={post._id}>
-                          <RouterLink className={current_post_slug == post.slug ? 'selected_tab': ''} to={`/tutorials/${tutorial_slug}/${post.slug}/`}>{post.post_title}</RouterLink>
+                          <RouterLink className={current_post_slug == post.slug ? 'selected_tab': ''} to={`${link_url}${post.slug}/`}>{post.post_title}</RouterLink>
                         </li>
                       </React.Fragment>
                     );

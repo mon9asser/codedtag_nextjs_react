@@ -53,6 +53,14 @@ var TurorialComponent = () => {
                 }
             }
             
+            // assign beside title 
+            if( row.data.settings?.beside_post_title != "") {
+                // row.data.settings?.beside_post_title
+                if( row.data.tutorial?.meta_title) {
+                    row.data.tutorial.meta_title = row.data.tutorial.meta_title + " " + row.data.settings?.beside_post_title;
+                }
+            }
+
             response_upcoming_callback({
                 tutorial: row.data.tutorial,
                 posts: row.data.posts,

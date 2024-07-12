@@ -54,13 +54,30 @@ var TabComponent = () => {
                 }
             }
             
+            
+            
             // target tab
             var tab = null; 
             var target_tab = row.data?.tutorial?.tabs?.filter(x => x.slug == tab_slug )
             if(target_tab?.length) {
                 tab = target_tab[0];
             }
-            console.log(tab);
+            
+            // assign beside title 
+            if( row.data.settings?.beside_post_title != "") {
+                // row.data.settings?.beside_post_title
+                if( tab?.meta_title) {
+                    tab.meta_title = tab.meta_title + " " + row.data.settings?.beside_post_title;
+                }
+            }
+            
+            if( row.data.tutorial?.options ) {
+                var opts = { ...row.data.tutorial?.options };
+                row.data.tutorial.options = {
+                    ...opts, ...tab
+                }
+            } 
+
             response_upcoming_callback({
                 tab: tab,
                 tutorial: row.data.tutorial,

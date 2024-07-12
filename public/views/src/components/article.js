@@ -45,7 +45,7 @@ var ArticleComponent = () => {
     React.useEffect(() => {
         
         Helper.sendRequest({  
-            api: `post-page/get?tut_name=${tutorial_slug}&post_slug=${post_slug}&tab='root'`,
+            api: `post-page/get?tut_name=${tutorial_slug}&post_slug=${post_slug}&tab=root`,
             method: "get",
             data: {}
         }).then( row => { 
@@ -165,7 +165,7 @@ var ArticleComponent = () => {
                                         {
                                             "@type": "ListItem",
                                             "position": 4,
-                                            "name": "${upcoming.tutorial?.post_title}",
+                                            "name": "${upcoming.post?.post_title}",
                                             "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/"
                                         }
                                     ]
@@ -229,14 +229,21 @@ var ArticleComponent = () => {
 
                                 </div> 
 
-
-                                <div className="separator-div"></div> 
                                 {
-                                    upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                    <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
-                                    : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
-                                } 
-                                <div className="separator-div"></div>
+                                    upcoming.posts?.length > 1 ? 
+                                    (
+                                        <>
+                                            <div className="separator-div"></div> 
+                                            {
+                                                upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                                <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
+                                                : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
+                                            } 
+                                            <div className="separator-div"></div>
+                                        </>
+                                    ): ""
+                                }
+                                
 
                                 
                                 <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 

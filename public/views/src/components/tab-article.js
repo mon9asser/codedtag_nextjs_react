@@ -59,6 +59,13 @@ var TabArticleComponent = () => {
                     site_url = site_url + '/';
                 }
             }
+            var tab = null;
+            if( data.tutorial?.tabs && data.tutorial.tabs.length ) {
+                var tab = data.tutorial.tabs.filter( x => x.slug == tab_slug );
+                if( tab.length ) {
+                    tab = tab[0]
+                }
+            }
 
             upcoming_change({
                 is_redirect: redirect,
@@ -67,7 +74,8 @@ var TabArticleComponent = () => {
                 chapters: data.chapters, // array 
                 settings: data.settings, // object
                 posts: data.posts,
-                site_url
+                site_url,
+                tab
             })
         });
 
@@ -84,6 +92,7 @@ var TabArticleComponent = () => {
         settings: null, // object
         posts: null,
         site_url: null,
+        tab: null
     });
 
     
@@ -134,9 +143,9 @@ var TabArticleComponent = () => {
                                 },
                                 "mainEntityOfPage": {
                                     "@type": "WebPage",
-                                    "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/"   
+                                    "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/${upcoming.post?.slug}/"   
                                 },
-                                "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/",  
+                                "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/${upcoming.post?.slug}/",  
                                 "articleSection": "${upcoming.tutorial?.tag}",   
                                 "keywords": "${upcoming.post?.keyphrase}",  
                                 "image": "${image}",  
@@ -165,8 +174,14 @@ var TabArticleComponent = () => {
                                         {
                                             "@type": "ListItem",
                                             "position": 4,
-                                            "name": "${upcoming.tutorial?.post_title}",
-                                            "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/"
+                                            "name": "${upcoming.tab?.title}",
+                                            "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/"
+                                        },
+                                        {
+                                            "@type": "ListItem",
+                                            "position": 5,
+                                            "name": "${upcoming.post?.post_title}",
+                                            "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/${upcoming.post?.slug}/"
                                         }
                                     ]
                                 }
@@ -178,17 +193,17 @@ var TabArticleComponent = () => {
 
                 <main className="wrapper max-1150 offset-left offset-right ptb-50">
                         <div className="row mlr--20">
-                            
+                         
                             {
-                                upcoming.tutorial.options.sidebar_content != 'none' ?
+                                upcoming.tab.sidebar_content != 'none' ?
                                 <div className="md-4 md-1-half plr-20 main-sidebar flex-order-2-md">
                                     <StickyBox offsetTop={85} offsetBottom={20}>
                                         
                                         
                                         {
-                                            upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                            <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/> 
-                                            : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
+                                            upcoming.tab.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                            <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug} tab_slug={upcoming.tab.slug}/> 
+                                            : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug} tab_slug={upcoming.tab.slug}/> 
                                         }
                                         
 
@@ -229,14 +244,21 @@ var TabArticleComponent = () => {
 
                                 </div> 
 
-
-                                <div className="separator-div"></div> 
                                 {
-                                    upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                    <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
-                                    : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
-                                } 
-                                <div className="separator-div"></div>
+                                    upcoming.posts?.length > 1 ? 
+                                    (
+                                        <>
+                                            <div className="separator-div"></div> 
+                                            {
+                                                upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                                <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
+                                                : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
+                                            } 
+                                            <div className="separator-div"></div>
+                                        </>
+                                    ): ""
+                                }
+                                
 
                                 
                                 <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
@@ -248,7 +270,7 @@ var TabArticleComponent = () => {
                                             <div className="flexbox gap-15 share-box"> 
                                             <Helper.SocialShare   
                                                 platforms={upcoming.settings.share_social_buttons} 
-                                                url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/${upcoming.post.slug}/`}
+                                                url={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/${upcoming.post?.slug}/`}
                                                 title={upcoming.post.meta_title}
                                                 size={32} 
                                                 height={'32px'} 

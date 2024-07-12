@@ -785,33 +785,46 @@ postRouter.get("/post-page/get", async (req, res) => {
         var tutorial_slug = req.query.tut_name;
         var post_slug = req.query.post_slug;
         var tab_slug = req.query.tab;
-        console.log(tab_slug); // HERE <===========
+        // HERE <===========
 
         var tutorial = await Tutorial.findOne({slug: tutorial_slug}); 
-        var post = await Posts.findOne({slug: post_slug, post_type: 0 });
         
-        if(post == null || tutorial == null) {
+        
+        if( tutorial == null) {
             throw new Error("The page could not be found");  
         }
         
         // getting tab data
-        var tab = tutorial.tabs.filter( x => x.slug == tab_slug );
-        if( tab.length ) {
-            tab = tab[0]
+        var to_find = 'root'
+        if( tab_slug != 'root') {
+            var tab = tutorial.tabs.filter( x => x.slug == tab_slug ); 
+            if( tab.length ) {
+                tab = tab[0]; 
+                to_find = tab._id.toString(); 
+            }  
         }
-        console.log(tab._id);
-        var posts = await Posts.find({post_type: 0, 'selected_tab.id': tab._id });
-        console.log(posts);
-        console.log(posts.length);
+         
+        var post = await Posts.findOne({slug: post_slug, post_type: 0,  'selected_tab._id': to_find});
+        
+        if(post == null ) {
+            throw new Error("The page could not be found");  
+        }
+        
+         
+        var posts = await Posts.find({post_type: 0, 'selected_tab._id': to_find });
+        
         // add counter
         post.views = ( tutorial.views + 1 )
         await post.save();
     
-        var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": "root" });
+        var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": to_find });
+        
+        
         var settings = await Sets.find({})
         if(settings.length) {
             settings = settings[0]
         }
+        
         var response = {
           tutorial,
           chapters,
@@ -819,7 +832,8 @@ postRouter.get("/post-page/get", async (req, res) => {
           settings,
           posts
         } 
-    
+         
+        
         res.send({
             redirect: false, 
             data: response,
@@ -828,6 +842,7 @@ postRouter.get("/post-page/get", async (req, res) => {
         });
     
        } catch (error) {
+         
             return res.send( {
                 redirect: true, // for only page 404 
                 is_error: true, 
