@@ -27,6 +27,7 @@ import {ArticleComponent} from './components/article.js'
 
 import { TabComponent } from "./components/tab.js"
 import { TabArticleComponent } from "./components/tab-article.js"
+import { HomepageComponents } from './components/home.js';
 
 const Wrapper = ({ children }) => {
   const location = useLocation();
@@ -44,7 +45,7 @@ var WrappApplication = () => {
   return (
     <DataProvider>  
           <Routes>
-            <Route path="/" element={<h1>Hello world</h1>} />
+            <Route path="/" element={<HomepageComponents/>} />
             <Route path="/contact-us/" element={<ContactPage />} /> 
             <Route path="/about-us/" element={<AboutPage />} />
             <Route path="/privacy-policy/" element={<PrivacyPolicyPage />} />
