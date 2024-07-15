@@ -197,7 +197,9 @@ var HomepageComponents = () => {
         return (
             <div className="row content-center">
                 <h2>Why CodedTag ?</h2>
-                
+                <p>
+                    lorem
+                </p>
             </div>
         );
     }
