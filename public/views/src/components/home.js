@@ -12,6 +12,9 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import {PageNotFound} from './404'
 
+import bannerImage from './../assets/img/banner.png';
+import underlineBg from './../assets/img/underline.png';
+
 var HomepageComponents = () => {
 
     var [ upcoming, upcoming_change ] = React.useState({
@@ -22,10 +25,8 @@ var HomepageComponents = () => {
     var SubscriptSection = () => {
         return (
             <>
-                <div className="lg-4 md-12 sm-12 flexbox content-center items-start column-direction p-all-15">
-                    Data +++
-                </div>
-                <div className="lg-8 md-12 sm-12 flexbox content-center items-start column-direction p-all-15"> 
+                
+                <div className="lg-7 md-7 sm-12 flexbox content-center items-start column-direction p-all-30"> 
                     {/*offset-left offset-right*/}
                     <h1 className="custom-headline section-head">Learn to <span>code</span> for free</h1>
                     
@@ -39,6 +40,18 @@ var HomepageComponents = () => {
                     </form>
                     
                 </div>
+                
+                <div className="lg-5 md-5 sm-12 flexbox content-center items-center column-direction p-all-15">
+                    <figure> 
+                        <LazyLoadImage
+                            className={'half'}
+                            alt={"Learn Programming"}
+                            height={'auto'} 
+                            width={'320px'}
+                            src={bannerImage}  
+                        /> 
+                  </figure>
+                </div>
             </>
         )
     }
@@ -46,7 +59,7 @@ var HomepageComponents = () => {
     var TutorialsSection = () => {
         return (
             <>
-                <div className="header-section">
+                <div className="header-section text-center">
                     <h2 className="custom-headline section-head text-center mb-25 mt-25">Check our latest tutorials</h2>
                     <p>
                         Open the door to coding without any cost. Grab the opportunity to learn through free coding lessons. Begin your journey today!
@@ -183,6 +196,7 @@ var HomepageComponents = () => {
     var SiteFeaturesSection = () => {
         return (
             <div className="row content-center">
+                <h2>Why CodedTag ?</h2>
                 
             </div>
         );
@@ -192,19 +206,21 @@ var HomepageComponents = () => {
         return (
             <>
                 <section className="hero white-bg hero">
-                    <div className="wrapper offset-left offset-right">
+                    <div className="wrapper-no-padding offset-left offset-right">
                         <div className="banner-gray">
-                            <div className="row offset-left offset-right max-1172 plr-15 mlr--30 ptb-50 section-subscribe">
+                            <div className="row offset-left offset-right max-1172 mlr--30 ptb-50 section-subscribe">
                                 <SubscriptSection/>
                             </div>
                         </div>
-                        
-                        <div className="row plr-15 mlr--30 ptb-50">
+                        <div className="feature-block">
+                            <div className="max-1172 offset-left offset-right row plr-15 mlr--30 ptb-50 section-tutorials">
+                                <SiteFeaturesSection/>
+                            </div>
+                        </div>
+                        <div className="row offset-left offset-right plr-15 mlr--30 ptb-50 max-1172">
                             <TutorialsSection/>
                         </div>
-                        <div className="row plr-15 mlr--30 ptb-50 section-tutorials">
-                            <SiteFeaturesSection/>
-                        </div>
+                        
                     </div>
                 </section>
 

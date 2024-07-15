@@ -1,5 +1,5 @@
 import React, {Component} from "react"; 
-import logo from './../assets/img/logo-3.png'; 
+import logo from './../assets/img/logo-1.png'; 
 import {Helper} from './../helper';
 import { Link } from "react-router-dom";
 import { DataContext } from "../context";
