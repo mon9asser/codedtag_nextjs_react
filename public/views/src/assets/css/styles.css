@@ -685,7 +685,7 @@ ul li a.expanded-a::after{
     margin-bottom: 25px;
 }
 .codedtag-icon span {
-    display: inline-block;
+    /*display: inline-block;*/
     width: 100px;
     height: 100px;
     line-height: 100px;
@@ -696,6 +696,33 @@ ul li a.expanded-a::after{
     box-shadow: 15px 20px 35px rgba(38, 42, 55, 0.08);
     background: linear-gradient(88.83deg, #ed2775 0, #ff7448 100%);
     color: #fff;  
+}
+
+.center-icons {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20;
+}
+
+.center-icons h5 {
+    font-size: 16px !important;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.codedtag-icon span.bg2 {
+    background: linear-gradient(221.69deg, #868F96 0,  #596164 101.01%);
+}
+
+.codedtag-icon span.bg3 {
+    background: linear-gradient(221.69deg, #1EAE98 0, #D8B5FF 101.01%);
+}
+
+.codedtag-icon span.bg4 {
+    background: linear-gradient(221.69deg, #764BA2 0, #667EEA 101.01%);
 }
  
 .content-table-head-title {
