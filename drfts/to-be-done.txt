@@ -24,6 +24,8 @@
 	- request times and block ips from request
 	- crypt and decrypt functionality 
 
+- Make option in settings for api key of google analytics
+- Make direct request with google analytics
 
 - ad campaing system shuould work for all pages and all ad networks like ad manager and adsense
 
