@@ -19,6 +19,16 @@ let settingsSchema = new Schema({
         trim: true,
         default: ""
     },
+    homepage_section_title: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    homepage_section_description: {
+        type: String,
+        trim: true,
+        default: ""
+    },
     site_name: {
         type: String,
         trim: true,

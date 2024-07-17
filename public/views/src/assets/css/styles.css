@@ -711,6 +711,8 @@ ul li a.expanded-a::after{
     display: block;
     width: 100%;
     text-align: center;
+    font-weight: bold;
+    color: #333;
 }
 
 .codedtag-icon span.bg2 {

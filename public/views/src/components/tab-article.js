@@ -118,7 +118,7 @@ var TabArticleComponent = () => {
         return (
             <>
                 <Helmet>
-                    {console.log(upcoming.post)}
+                     
                     <title>{upcoming.post?.meta_title}</title>
                     <meta name="description" content={upcoming.post?.meta_description} />
                     {

@@ -18,6 +18,8 @@ class Settings extends Component {
             subscribe_title: "",
             contact_email: "",
             subscribe_description: "",
+            homepage_section_title: "",
+            homepage_section_description: "",
             basic_id: -1,
             circle_buttons:false,
             share_social_buttons: '',
@@ -90,6 +92,8 @@ class Settings extends Component {
             script_url_1: settings.script_url_1,
             script_url_2: settings.script_url_2,
             subscribe_description: settings.subscribe_description,
+            homepage_section_title: settings.homepage_section_title,
+            homepage_section_description: settings.homepage_section_description,
             circle_buttons:settings.circle_buttons,
             share_social_buttons: settings.share_social_buttons,
             subscribe_title: settings.subscribe_title,
@@ -154,6 +158,8 @@ class Settings extends Component {
             subscribe_title: this.state.subscribe_title,
             contact_email: this.state.contact_email,
             subscribe_description: this.state.subscribe_description,
+            homepage_section_title: this.state.homepage_section_title,
+            homepage_section_description: this.state.homepage_section_description,
             circle_buttons:this.state.circle_buttons,
             share_social_buttons: this.state.share_social_buttons,
         };
@@ -262,6 +268,20 @@ class Settings extends Component {
                                         <label className="label">Subscribe Description</label>
                                         <div className="control">
                                             <textarea onChange={e => this.setState({ subscribe_description: e.target.value })} value={this.state.subscribe_description} placeholder="Subscribe Description" className="input" style={{ minHeight: "100px" }}></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">Homepage Section Title</label>
+                                        <div className="control">
+                                            <input onChange={e => this.setState({ homepage_section_title: e.target.value })} value={this.state.homepage_section_title} className="input" type="text" placeholder="Homepage Section Title" />
+                                        </div>
+                                    </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">Homepage Section Description</label>
+                                        <div className="control">
+                                            <textarea onChange={e => this.setState({ homepage_section_description: e.target.value })} value={this.state.homepage_section_description} placeholder="Homepage Section Description" className="input" style={{ minHeight: "100px" }}></textarea>
                                         </div>
                                     </div>
                                 </div>

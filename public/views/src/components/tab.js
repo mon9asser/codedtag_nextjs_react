@@ -186,8 +186,7 @@ var TabComponent = () => {
                     upcoming.tab?.hide_from_search_engines ?
                     <meta name="robots" content={"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"} />
                     : ""
-                }
-                {console.log(upcoming.tutorial)}
+                } 
                 <script type="application/ld+json">
                 {
                     `

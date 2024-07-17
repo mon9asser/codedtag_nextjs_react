@@ -1,5 +1,5 @@
 
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { Header } from "../parts/header"; 
 import { Footer } from "../parts/footer";
 import { Link } from "react-router-dom";
@@ -20,175 +20,96 @@ var HomepageComponents = () => {
 
     var [ upcoming, upcoming_change ] = React.useState({
         posts: null,
-        is_redirect: null
+        settings: null,
+        tutorials: null,
+        site_url: null
     });
 
-    var SubscriptSection = () => {
-        return (
-            <>
-                
-                <div className="lg-7 md-7 sm-12 flexbox content-center items-start column-direction p-all-30"> 
-                    {/*offset-left offset-right*/}
-                    <h1 className="custom-headline section-head">Learn to <span>code</span> for free</h1>
-                    
-                    <div>
-                        <p>Open the door to coding without any cost. Grab the opportunity to learn through free coding lessons. Begin your journey today! </p>
-                    </div>
+    // functions  
+    var response_upcoming_callback = (obj) => {
+        var old_objec = {...upcoming};
+        var __keys = Object.keys(obj);
+        __keys.map(x => {
+            old_objec[x] = obj[x]
+        }); 
+        upcoming_change(old_objec);
+    } 
+     
+    // Contexts 
+    React.useEffect(() => {
+       
+        Helper.sendRequest({  
+            api: `home-page/get`,
+            method: "get",
+            data: {}
+        }).then( row => { 
 
-                    <form className="set-center form-group set-focus" action="/" method="get">
-                        <input type="text" placeholder="example@email.com" />
-                        <button className="btn third-btn" type="submit">Subscribe </button>
-                    </form>
-                    
-                </div>
-                
-                <div className="lg-5 md-5 sm-12 flexbox content-center items-center column-direction p-all-15">
-                    <figure> 
-                        <LazyLoadImage
-                            className={'half'}
-                            alt={"Learn Programming"}
-                            height={'auto'} 
-                            width={'320px'}
-                            src={bannerImage}  
-                        /> 
-                  </figure>
-                </div>
-            </>
-        )
-    }
+             
+            var site_url = row.data?.settings?.site_address;
+            if(site_url) {
+                var url_array = site_url.split('/');
+                if( url_array[url_array.length - 1] != '' ) {
+                    site_url = site_url + '/';
+                }
+            } 
+
+            response_upcoming_callback({
+                tutorials: row.data.tutorials,
+                posts: row.data.posts, 
+                settings: row.data.settings,
+                site_url 
+            });
+            
+            
+        });  
+
+    }, []);
+
+    
 
     var TutorialsSection = () => {
         return (
             <>
                 <div className="header-section text-center">
-                    <h2 className="custom-headline section-head text-center mb-25 mt-25">Check our latest tutorials</h2>
-                    <p>
-                        Open the door to coding without any cost. Grab the opportunity to learn through free coding lessons. Begin your journey today!
-                    </p>
+                    <h2 className="custom-headline section-head text-center mb-25 mt-25">{upcoming.settings?.homepage_section_title}</h2>
+                    <p>{upcoming.settings?.homepage_section_description}</p>
                 </div>
 
                 <div className="row content-center">
                     
-                    <div className="sm-6 md-4 lg-4 text-center p-all-15">
-                        <div className="tutorial-box">
-                            <i className="tutorial-thumbs">
-                                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                    <path
-                                        d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                        fill="white"
-                                    />
-                                </svg>
-                            </i>
-                            <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                            <a className="floating-all" href="tutorial.html"></a>
-                        </div>
-                    </div>
-                    <div className="sm-6 md-4 lg-4 text-center p-all-15">
-                        <div className="tutorial-box">
-                            <i className="tutorial-thumbs" style={{background: "#2d4756"}}>
-                                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                    <path
-                                        d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                        fill="white"
-                                    />
-                                </svg>
-                            </i>
-                            <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                            <a className="floating-all" href="tutorial.html"></a>
-                        </div>
-                    </div>
-                    <div className="sm-6 md-4 lg-4 text-center p-all-15">
-                        <div className="tutorial-box">
-                            <i className="tutorial-thumbs" style={{background: "#2d4756"}}>
-                                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                    <path
-                                        d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                        fill="white"
-                                    />
-                                </svg>
-                            </i>
-                            <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                            <a className="floating-all" href="tutorial.html"></a>
-                        </div>
-                    </div>
-                    <div className="sm-6 md-4 lg-4 text-center p-all-15">
-                        <div className="tutorial-box">
-                            <i className="tutorial-thumbs" style={{background: "#2d4756"}}>
-                                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                    <path
-                                        d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                        fill="white"
-                                    />
-                                </svg>
-                            </i>
-                            <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                            <a className="floating-all" href="tutorial.html"></a>
-                        </div>
-                    </div>
-                    <div className="sm-6 md-4 lg-4 text-center p-all-15">
-                        <div className="tutorial-box">
-                            <i className="tutorial-thumbs" style={{background: "#2d4756"}}>
-                                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                    <path
-                                        d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                        fill="white"
-                                    />
-                                </svg>
-                            </i>
-                            <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                            <a className="floating-all" href="tutorial.html"></a>
-                        </div>
-                    </div>
-                    <div className="sm-6 md-4 lg-4 text-center p-all-15">
-                        <div className="tutorial-box">
-                            <i className="tutorial-thumbs" style={{background: "#2d4756"}}>
-                                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                    <path
-                                        d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                        fill="white"
-                                    />
-                                </svg>
-                            </i>
-                            <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                            <a className="floating-all" href="tutorial.html"></a>
-                        </div>
-                    </div>
-                    <div className="sm-6 md-4 lg-4 text-center p-all-15">
-                        <div className="tutorial-box">
-                            <i className="tutorial-thumbs" style={{background: "#2d4756"}}>
-                                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                    <path
-                                        d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                        fill="white"
-                                    />
-                                </svg>
-                            </i>
-                            <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                            <a className="floating-all" href="tutorial.html"></a>
-                        </div>
-                    </div>
-                    <div className="sm-6 md-4 lg-4 text-center p-all-15">
-                        <div className="tutorial-box">
-                            <i className="tutorial-thumbs" style={{background: "#2d4756"}}>
-                                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                    <path
-                                        d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                        fill="white"
-                                    />
-                                </svg>
-                            </i>
-                            <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                            <a className="floating-all" href="tutorial.html"></a>
-                        </div>
-                    </div>
+                    {
+                        upcoming.tutorials?.length ? (
+                            upcoming.tutorials.map(tutorial => {
+                                return (
+                                    <div key={tutorial._id} className="sm-6 md-4 lg-4 text-center p-all-15">
+                                        <div className="tutorial-box">
+                                            
+                                            {
+                                                tutorial?.tutorial_svg_icon != ''? 
+                                                    <i className="tutorial-thumbs" dangerouslySetInnerHTML={{__html: tutorial?.tutorial_svg_icon}}/>
+                                                : ""
+                                            }
+                                            
+                                            <h3>
+                                                <Link target="_blank" to={`${upcoming.site_url}tutorials/${tutorial.slug}/`}>{tutorial.tutorial_title}</Link>
+                                                
+                                                {
+                                                    tutorial?.selected_category?.name != ''? 
+                                                    <span className="subtitle">{tutorial?.selected_category?.name}</span>: 
+                                                    ""
+                                                }
+                                                
+                                            </h3>
+                                            <Link target="_blank" className="floating-all" to={`${upcoming.site_url}tutorials/${tutorial.slug}/`}></Link>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        ): ''
+                    }
+
+                    
+
                 </div>
             </>
         );
@@ -221,8 +142,7 @@ var HomepageComponents = () => {
                         <div className="codedtag-icon">
                             <span width='30px' className='bg3 flexbox items-center content-center'>
                                 <svg className='flexbox' width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7.26022 2H16.7302C17.3802 2 17.9602 2.02003 18.4802 2.09003C21.2502 2.40003 22.0002 3.70001 22.0002 7.26001V13.58C22.0002 17.14 21.2502 18.44 18.4802 18.75C17.9602 18.82 17.3902 18.84 16.7302 18.84H7.26022C6.61022 18.84 6.03022 18.82 5.51022 18.75C2.74022 18.44 1.99023 17.14 1.99023 13.58V7.26001C1.99023 3.70001 2.74022 2.40003 5.51022 2.09003C6.03022 2.02003 6.61022 2 7.26022 2Z" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path opacity="0.4" d="M13.5801 8.31982H17.2601" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path opacity="0.4" d="M6.74023 14.1099H6.76022H17.2702" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path opacity="0.4" d="M7 22H17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path opacity="0.4" d="M7.1947 8.2998H7.20368" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path opacity="0.4" d="M10.4945 8.2998H10.5035" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-                            </span>
-                            
+                            </span> 
                         </div>
                         <h5>Solving Problems</h5>
                     </div>
@@ -230,8 +150,7 @@ var HomepageComponents = () => {
                         <div className="codedtag-icon">
                             <span className='flexbox bg4 items-center content-center'>
                                 <svg className='flexbox' width="40px" height="40px" fill="#f5f5f5" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.002 512.002" xmlSpace="preserve" stroke="#f5f5f5"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <rect x="406.324" y="145.007" transform="matrix(0.9808 -0.1951 0.1951 0.9808 -50.3631 87.2844)" width="23.173" height="308.599"></rect> </g> </g> <g> <g> <rect x="458.948" y="134.53" transform="matrix(0.9808 -0.1951 0.1951 0.9808 -47.3079 97.3498)" width="23.173" height="308.599"></rect> </g> </g> <g> <g> <path d="M0,99.049V457.58h77.646V99.049H0z M54.065,422.886H23.582V133.744h30.482V422.886z"></path> </g> </g> <g> <g> <rect x="108.132" y="219.882" width="98.347" height="237.692"></rect> </g> </g> <g> <g> <path d="M108.128,54.422v14.145v120.837h98.343V60.972v-6.55H108.128z M182.275,160.792h-49.949v-30.482h49.949V160.792z M182.275,113.516h-49.949V83.034h49.949V113.516z"></path> </g> </g> <g> <g> <path d="M236.955,457.58h108.191V91.454H236.955V457.58z M255.335,351.716h71.43v30.482h-71.43V351.716z M255.335,398.99h71.43 v30.482h-71.43V398.99z"></path> </g> </g> </g></svg>
-                            </span>
-                            
+                            </span> 
                         </div>
                         <h5>Books and Resources</h5>
                     </div>
@@ -247,7 +166,28 @@ var HomepageComponents = () => {
                     <div className="wrapper-no-padding offset-left offset-right">
                         <div className="banner-gray">
                             <div className="row offset-left offset-right max-1172 mlr--30 ptb-50 section-subscribe">
-                                <SubscriptSection/>
+                                <div className="lg-7 md-7 sm-12 flexbox content-center items-start column-direction p-all-30">                                      
+
+                                    <Helper.SubscribeComponents 
+                                        is_footer={false}
+                                        title={upcoming.settings?.banner_site_title}
+                                        description={upcoming.settings?.banner_site_description}
+                                    />
+                                    
+                                </div>
+                                
+                                <div className="lg-5 md-5 sm-12 flexbox content-center items-center column-direction p-all-15">
+                                    <figure> 
+                                        <LazyLoadImage
+                                            className={'half'}
+                                            alt={"Learn Programming"}
+                                            height={'auto'} 
+                                            width={'320px'}
+                                            src={bannerImage}  
+                                        /> 
+                                    </figure>
+                                </div> 
+                                
                             </div>
                         </div>
                         <div className="feature-block">
@@ -258,6 +198,8 @@ var HomepageComponents = () => {
                         <div className="row offset-left offset-right plr-15 mlr--30 ptb-50 max-1172">
                             <TutorialsSection/>
                         </div>
+
+                        
                         
                     </div>
                 </section>
@@ -270,8 +212,13 @@ var HomepageComponents = () => {
     return (
         <>
             <Header/>
-                <HomepageComponentsParts />
-                {/*<Helper.PreLoader type={'article'} />*/}
+
+                {
+                    upcoming.tutorials == null ? 
+                    <Helper.PreLoader type={'article'} /> :
+                    <HomepageComponentsParts />
+                } 
+
             <Footer/>
         </>       
     );

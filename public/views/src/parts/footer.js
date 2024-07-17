@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { DataContext } from "../context";
 import { Link } from "react-router-dom";
+import { Helper } from "../helper";
 
 class Footer extends Component {
     static contextType = DataContext;
@@ -108,12 +109,11 @@ class Footer extends Component {
                             </div>: ''
                         } 
                         <div className="lg-4 md-6 plr-15 ptb-15"> 
-                            <h2 className="title">{this.state.subscribe.title}</h2>
-                            <p className="font-16 pb-15">{this.state.subscribe.description}</p>
-                            <form className="form-group set-focus" action="/" method="get"> 
-                            <input type="text" placeholder="example@email.comx" />
-                            <button className="btn primary-btn" type="submit">Subscribe </button>
-                            </form>
+                            <Helper.SubscribeComponents 
+                                is_footer={true}
+                                title={this.state.subscribe.title}
+                                description={this.state.subscribe.description}
+                            /> 
                         </div>
                     </div>
                 </div>

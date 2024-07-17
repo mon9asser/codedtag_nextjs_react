@@ -199,5 +199,43 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
         })
    }
 })
+
+
+
+
+
+tutorialRouter.get("/home-page/get", async (req, res) => {
+    
+    try {
+       
+        var tutorials = await Tutorial.find({}); 
+        var posts = await Posts.find({});
+        var settings = await Sets.find({})
+        if(settings.length) {
+            settings = settings[0]
+        }
+
+        var response = {
+            tutorials,
+            posts,
+            settings, 
+        } 
+    
+        res.send({
+            redirect: false, 
+            data: response,
+            is_error: false, 
+            message: "Fetched successfully!",
+        });
+ 
+    } catch (error) {
+         return res.send( {
+             redirect: true, // for only page 404 
+             is_error: true, 
+             message: error.message || "Something went wrong",
+             data: []
+         })
+    }
+ })
  
 module.exports = { tutorialRouter }

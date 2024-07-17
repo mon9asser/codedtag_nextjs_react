@@ -154,6 +154,28 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
 class HelperData {
     
 
+    SubscribeComponents = ({is_footer, title, description}) => {
+        return (
+          <>
+            {
+              is_footer ?
+              <h2 className="title">{title}</h2> :
+              <h1 className="custom-headline section-head" dangerouslySetInnerHTML={{__html: title}} />  
+            }
+
+            {
+              is_footer ?
+              <p className="font-16 pb-15">{description}</p> :
+              <p>{description}</p>  
+            }
+            
+            <form className="set-center form-group set-focus" action="/" method="get"> 
+                <input type="text" placeholder="example@email.comx" />
+                <button className="btn primary-btn" type="submit">Subscribe </button>
+            </form>
+          </>
+        )
+    }
    
     NextPrevPagination = ({site_url, tutorial_slug, type, data, current_post_slug}) => {
       console.log(site_url, tutorial_slug, type, current_post_slug)
