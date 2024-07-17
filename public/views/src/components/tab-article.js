@@ -224,22 +224,6 @@ var TabArticleComponent = () => {
                                 <div className="max-1150 offset-left offset-right">
                                     
                                     <header className="flexbox content-center column-direction mb-30">
-                                        
-                                        <div className="flexbox items-center">
-                                            <Helper.Breadcrumbs
-                                                data={[
-                                                    {
-                                                        title: upcoming.tutorial.selected_category.name,
-                                                        url: upcoming.site_url + 'tutorials/',
-                                                    },
-                                                    {
-                                                        title: upcoming.tutorial.tutorial_title,
-                                                        url: upcoming.site_url + 'tutorials/' + upcoming.tutorial.slug + '/'
-                                                    }
-                                                ]}
-                                            /> 
-                                        </div>
-
                                         <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
                                         <i className="modified-date">
                                         Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>

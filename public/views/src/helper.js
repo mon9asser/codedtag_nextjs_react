@@ -155,6 +155,36 @@ class HelperData {
     
 
     SubscribeComponents = ({is_footer, title, description}) => {
+
+        var [email, setEmail] = React.useState('')
+        var [result, setRestult] = React.useState({
+            message: '',
+            cls: '', // show
+            type: '',  // error - success
+            is_pressed: false
+        });
+
+        var response_results_callback = (obj) => {
+            var old_objec = {...result};
+            var __keys = Object.keys(obj);
+            __keys.map(x => {
+                old_objec[x] = obj[x]
+            }); 
+            setRestult(old_objec);
+        } 
+       
+        var send_data = () => {
+          
+          
+          response_results_callback({ 
+            is_pressed: true
+          });
+
+          
+
+
+        }
+
         return (
           <>
             {
@@ -169,10 +199,13 @@ class HelperData {
               <p>{description}</p>  
             }
             
-            <form className="set-center form-group set-focus" action="/" method="get"> 
-                <input type="text" placeholder="example@email.comx" />
-                <button className="btn primary-btn" type="submit">Subscribe </button>
-            </form>
+            <div>
+              <div className='response-msg'>this is a result</div>
+              <form className="set-center form-group set-focus" action="/" method="get"> 
+                  <input type="text" placeholder="example@email.comx" />
+                  <button className="btn primary-btn" type="submit">Subscribe </button>
+              </form>
+            </div>
           </>
         )
     }
