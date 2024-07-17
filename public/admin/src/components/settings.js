@@ -3,6 +3,9 @@ import {NavbarContainer} from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { Authentication } from "./helpers/context.js";
 import { Helper } from "../helper.js";
+import {UnControlled as CodeMirror} from 'react-codemirror2'
+import 'codemirror/mode/htmlmixed/htmlmixed.js';
+import 'codemirror/mode/xml/xml'; 
 
 class Settings extends Component {
     static contextType = Authentication;
@@ -198,6 +201,29 @@ class Settings extends Component {
                 <NavbarContainer />
                 <SidebarContainer />
                 <section className="section main-section">
+                    <h1>
+                        Codemirror
+                    </h1>
+                    <CodeMirror
+                        value='<h1>I ♥ react-codemirror2</h1>'
+                        options={{
+                            mode: 'htmlmixed',
+                            theme: 'tomorrow-night-bright',
+                            lineNumbers: true,
+                            indentWithTabs: true,
+                            smartIndent: true,
+                            matchBrackets: true,
+                            autoCloseTags: true,
+                            matchTags: { bothTags: true },
+                            autoCloseBrackets: true,
+                            styleActiveLine: true,
+                            lineWrapping: true,
+
+                        }}
+                        onChange={(editor, data, value) => {
+                            console.log(editor, data, value)
+                        }}
+                    />
                     <div>
                         <div className="container" style={{ textAlign: "left", paddingLeft: "15px" }}>
                             <h1 style={{ fontSize: "30px", marginBottom: "30px", fontWeight: "bold" }}>Settings</h1>
@@ -315,8 +341,11 @@ class Settings extends Component {
                                     </div>
 
                                     <div className="field" style={{ marginTop: "25px" }}>
+                                        
                                         <label className="label">Script Url 1</label>
                                         <div className="control">
+
+                                            
                                             <label>
                                                 <input checked={this.state.script_url_1.enabled} onChange={e => this.setState({ script_url_1: { ...this.state.script_url_1, enabled: e.target.checked } })} type="checkbox" />
                                                 Enable
@@ -324,6 +353,8 @@ class Settings extends Component {
                                             <textarea onChange={e => this.setState({ script_url_1: { ...this.state.script_url_1, url_field: e.target.value } })} value={this.state.script_url_1.url_field} className="input" style={{ minHeight: "100px" }} placeholder="Example: Google AdSense"></textarea>
                                         </div>
                                     </div>
+
+                                    
 
                                     <div className="field" style={{ marginTop: "25px" }}>
                                         <label className="label">Script Url 2</label>

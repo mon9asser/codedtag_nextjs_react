@@ -5,8 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
 const {Config} = require("./../config/options");
-const { Sets } = require("./../models/settings-model");
-const { media_url } = require("./../config/db")
+const { Sets } = require("./../models/settings-model"); 
 /*
  var build_folder = `${Config.uploads.folder}/${Config.uploads.serve}`
         const uploadPath = path.join(build_folder, year, month, day);
@@ -51,7 +50,7 @@ settingsRouter.post("/upload-logo", upload.single('file'), (req, res) => {
         return res.status(400).send({ success: false, message: "No file uploaded" });
     }
     
-    res.send({ success: true, message: "File uploaded successfully", filePath: `${media_url}/${req.file_name}` });
+    res.send({ success: true, message: "File uploaded successfully", filePath: `${Config.media_url}/${req.file_name}` });
 });
 
 settingsRouter.post("/settings/update", async (req, res) => {

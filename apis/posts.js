@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const express = require("express");
-const { name, domain, media_url } = require("./../config/db");
+const { name, domain } = require("./../config/db");
 
 var postRouter = express.Router();
 var path = require("path");
@@ -66,9 +66,9 @@ postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
             .toFormat('webp', { quality: 80 })
             .toFile(`${uploadPath}/${new_file_name}`);
           
-        var file_url = `${media_url}/${year}/${month}/${day}/${new_file_name}`;
+        var file_url = `${Config.media_url}/${year}/${month}/${day}/${new_file_name}`;
         
-        //var fileUrl = `${Config.localhost.site_url}/${uploadPath}/${new_file_name}`;
+        
         res.json({ success: 1, file: { url: file_url, width: resizeWidth } });
     } catch (error) {
         console.error('Error processing image:', error);

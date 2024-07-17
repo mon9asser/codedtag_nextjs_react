@@ -7,15 +7,90 @@ const bcrypt = require('bcrypt');
 
 
 const {Helper} = require("./../config/helper")
-const { domain, admin_url } = require("./../config/db");
+const { domain } = require("./../config/db");
 
 // Models of DB
 const {Usr} = require("./../models/user-model");
 
 // configuration
-const {Config} = require('./../config/options');
-const { dashboard_url } = require("./../config/db.js");
+const {Config} = require('./../config/options'); 
 const { Permissions} =   require('./permissions.js');
+const { PassThrough } = require('form-data');
+
+ 
+userRouters.post("/user/subscribe",  async (req, res) => {
+
+    /* name - email - username */
+
+    var objx = {
+        is_error: true,
+        data: "Something Went Wrong!",
+        success: false
+    }
+
+    var email = req.body.email?req.body.email: null; 
+
+    if( email === null ) {
+        objx.is_error = true;
+        objx.success = false;
+        objx.data = "Email is required";
+
+        return res.send(objx);
+
+    }
+
+    // validation
+    var validate = Helper.validateEmail(email);
+    if( !validate ) {
+        objx.is_error = true;
+        objx.success = false;
+        objx.data = "Invalid Email";
+        return res.send(objx);
+
+    } 
+
+    // Check if this email aready exists
+    try {
+        var user = await Usr.findOne({email: email });
+
+        if( user !== null ) {
+
+            objx.is_error = true;
+            objx.data = "Email already exists";
+            objx.success = false;
+            return res.send(objx);
+
+        }
+
+        var parts = email.split('@');
+          
+        var newUser = await Usr.create({
+            email: sanitizer.sanitize(email),
+            firstname: parts[0]
+        });
+        
+        if( ! newUser ) {
+            return res.send(objx); 
+        }
+
+        objx.data = "Awesome! Thanks for subscribing and joining our community.";
+        objx.is_error = false;
+        objx.success = true;
+
+    } catch (error) {
+
+        console.log(error);
+        objx.data = "Something went wrong, please try later";
+        objx.is_error = true;
+        objx.success = false;
+    }
+
+
+    return res.send(objx);
+
+
+
+});
 
 // Login 
 userRouters.post("/user/login", async (req, res) => {
@@ -65,7 +140,7 @@ userRouters.post("/user/login", async (req, res) => {
                 full_name: user_check.full_name, 
                 idx: user_check.rule,
                 site_name: user_check.domain,
-                dashboard: Config.localhost.dashboard_url == "" ? dashboard_url: Config.localhost.dashboard_url,
+                dashboard: Config.dashboard_url,
                 is_user: user_check.rule === 0 
             }
         }, Config.jwt_secret, { expiresIn: '3h' }); 
@@ -79,7 +154,7 @@ userRouters.post("/user/login", async (req, res) => {
             token,
             site_name: user_check.domain,
             thumbnail: Helper.getGravatarUrl(user_check.email),
-            dashboard: Config.localhost.dashboard_url == "" ? dashboard_url: Config.localhost.dashboard_url,
+            dashboard: Config.dashboard_url,
             is_user: user_check.rule === 0
         };
 
@@ -290,7 +365,7 @@ userRouters.post("/user/register", async (req, res) => {
                             thumbnail: Helper.getGravatarUrl(email),
                             token: token, 
                             site_name: domain,
-                            dashboard: Config.localhost.dashboard_url == "" ? dashboard_url: Config.localhost.dashboard_url,
+                            dashboard: Config.dashboard_url,
                             is_user: (userObject.rule == 0 )? true: false 
                         }, 
                         is_error: false, 
@@ -320,7 +395,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
             data: [],
             message: "Permission denied!",
             is_error: true,
-            redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
+            redirect_to: Config.login_url,
         });
     };  
     
@@ -340,7 +415,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 data: [], 
                 is_error: true, 
                 expired: false,
-                redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
+                redirect_to: Config.login_url,
                 message: ""
             }
 
@@ -367,7 +442,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 data: [], 
                 is_error: true, 
                 expired: false,
-                redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
+                redirect_to: Config.login_url,
                 message: "Permission Denied!"
             })
         }
@@ -380,7 +455,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 data: [], 
                 is_error: false, 
                 expired: false,
-                redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
+                redirect_to: Config.login_url,
                 message: "Permission is allowed"
             })
         } else {
@@ -388,7 +463,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
                 data: [], 
                 is_error: true, 
                 expired: false,
-                redirect_to: Config.localhost.login == ""? admin_url: Config.localhost.login,
+                redirect_to: Config.login_url,
                 message: "Permission Denied!"
             })
         }

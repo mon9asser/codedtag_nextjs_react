@@ -1,7 +1,7 @@
 
 - ✔ Update bread crumbs of tab article
-- Programming subscribe sections
-- make all sites like media.site - site url etc in config file 
+- ✔ Programming subscribe sections
+- ✔ make all sites like media.site - site url etc in config file 
 - We will make header and footer so delete Script Url 1, Script Url 2 from settings 
 
 - make sure what is the main site url you will use ? Site Address (URL) in settings or config file ?
@@ -14,6 +14,7 @@
 - add Header options
 - add Footer options
 
+- Change all admin pages from router param to url arguments
 - add ads.txt options with api 
 - Make option in settings for api key of google analytics
 - Make direct request with google analytics

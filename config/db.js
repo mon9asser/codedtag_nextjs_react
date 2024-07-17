@@ -4,12 +4,7 @@ module.exports = {
     domain:"Codedtag.com",
     name:"CodedTag",
     index:0,
-    property_id:"317812519",
-
-    site_url: "http://localhost:3000",
-    media_url: `http://localhost:5000/uploads`,
-    admin_url: "http://localhost.com:3000",
-    dashboard_url: "http://localhost.com:3000/dashboard",
+    property_id:"317812519", 
 }
 
 

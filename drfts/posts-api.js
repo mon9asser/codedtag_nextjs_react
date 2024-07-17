@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const express = require("express");
-const { name, domain, media_url } = require("./../config/db");
+const { name, domain } = require("./../config/db");
 
 var postRouter = express.Router();
 var path = require("path");
@@ -58,13 +58,9 @@ postRouter.post("/upload-image", upload.single('image'), (req, res) => {
     }
 
     var upload_dir = `${Config.uploads.serve}/`;
+ 
 
-    if( Config.localhost.site_url == "" ) {
-        Config.localhost.site_url = media_url;
-        upload_dir = "";
-    }
-
-    var fileUrl = `${Config.localhost.site_url}/${upload_dir}${req.upload_date}/${req.file.filename}`
+    var fileUrl = `${Config.site_url}/${upload_dir}${req.upload_date}/${req.file.filename}`
      
     res.json({ success: 1, file: {url: fileUrl }  });
 

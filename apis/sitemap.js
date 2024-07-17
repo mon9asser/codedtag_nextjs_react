@@ -3,8 +3,7 @@ var sitemapRouter = express.Router();
 const mongoose = require('mongoose');
 var path = require("path");
 var fs = require("fs");
-
-const { site_url } = require("./../config/db")
+ 
 const {Config} = require("./../config/options")
 // database models 
 const {Usr} = require("./../models/user-model");
@@ -51,7 +50,7 @@ sitemapRouter.get( sitemaps.articles, async (req, res) => {
             if ( post.tutorial.slug != undefined && post.updated_date != undefined && post.slug != undefined ) {
                 return `
                     <url>
-                        <loc>${site_url}${Config.redirect_to}${ (post.tutorial.slug == "" ? "" : "/" + post.tutorial.slug)  + tab_slash + "/" + post.slug + "/"}</loc>
+                        <loc>${Config.site_url}${Config.redirect_to}${ (post.tutorial.slug == "" ? "" : "/" + post.tutorial.slug)  + tab_slash + "/" + post.slug + "/"}</loc>
                         <lastmod>${new Date(post.updated_date).toISOString()}</lastmod>
                         <changefreq>weekly</changefreq>
                         <priority>0.8</priority>
@@ -84,7 +83,7 @@ sitemapRouter.get( sitemaps.pages, async (req, res) => {
             if (  post.updated_date != undefined && post.slug != undefined ) {
                 return `
                     <url>
-                        <loc>${site_url}${ "/" + post.slug + "/"}</loc>
+                        <loc>${Config.site_url}${ "/" + post.slug + "/"}</loc>
                         <lastmod>${new Date(post.updated_date).toISOString()}</lastmod>
                         <changefreq>weekly</changefreq>
                         <priority>0.8</priority>
@@ -118,7 +117,7 @@ sitemapRouter.get( sitemaps.users, async (req, res) => {
             if (user.username != undefined && user.username != "") {
                 return `
                     <url>
-                        <loc>${site_url}/users/${user.username + "/"}</loc>
+                        <loc>${Config.site_url}/users/${user.username + "/"}</loc>
                         <changefreq>monthly</changefreq>
                         <priority>0.7</priority>
                     </url>
@@ -150,7 +149,7 @@ sitemapRouter.get( sitemaps.tutorials, async (req, res) => {
             if (tuts.slug != undefined && tuts.slug != "" && tuts.options.publish) {
                 return `
                     <url>
-                        <loc>${site_url}${Config.redirect_to}/${tuts.slug + "/"}</loc>
+                        <loc>${Config.site_url}${Config.redirect_to}/${tuts.slug + "/"}</loc>
                         <changefreq>monthly</changefreq>
                         <priority>0.7</priority>
                     </url>
@@ -194,7 +193,7 @@ sitemapRouter.get( sitemaps.tabs, async (req, res) => {
                 tut_slash = `/${tab.tutorial_slug}`;
             }
 
-            var build_it = `${site_url}${Config.redirect_to}${tut_slash}/t${ tab_slash + "/"}`;
+            var build_it = `${Config.site_url}${Config.redirect_to}${tut_slash}/t${ tab_slash + "/"}`;
             if(tab_slash.indexOf("http") != -1 ) {
                 build_it = tab_slash.replace("/http", "http");
             }
@@ -269,7 +268,7 @@ sitemapRouter.get("/sitemap_index.xml", async (req, res) => {
             ${generated_sitemap.map(sitemap => 
                 
                 `<sitemap>
-                    <loc>${site_url}${sitemap}</loc>
+                    <loc>${Config.site_url}${sitemap}</loc>
                 </sitemap>`
 
             ).join('')}

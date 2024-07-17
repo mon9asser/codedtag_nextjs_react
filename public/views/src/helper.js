@@ -173,14 +173,44 @@ class HelperData {
             setRestult(old_objec);
         } 
        
-        var send_data = () => {
+        var send_data = (e) => {
           
-          
+          e.preventDefault();
+
           response_results_callback({ 
             is_pressed: true
-          });
+          }); 
 
-          
+          Helper.sendRequest({
+            api: 'user/subscribe',
+            data: {
+              email: email
+            },
+            method: 'post'
+          }).then( res => {
+
+            var to_be_state = {};
+            to_be_state.message= res.data;
+            to_be_state.cls= 'show';
+            to_be_state.is_pressed= false;
+
+            if( res.is_error ) { 
+              to_be_state.type= 'error';
+            } else {
+              to_be_state.type= 'success';
+            }
+            console.log(to_be_state, res)
+            response_results_callback(to_be_state);
+
+            setTimeout(() => {
+              response_results_callback({
+                message: '',
+                cls: '',
+                type: ''
+              });
+            }, 3000)
+
+          });
 
 
         }
@@ -200,10 +230,16 @@ class HelperData {
             }
             
             <div>
-              <div className='response-msg'>this is a result</div>
+              <div className={`response-msg ${result.cls} ${result.type}`}>{result.message}</div>
               <form className="set-center form-group set-focus" action="/" method="get"> 
-                  <input type="text" placeholder="example@email.comx" />
-                  <button className="btn primary-btn" type="submit">Subscribe </button>
+                  <input type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@email.com" />
+                  <button className="btn primary-btn" type="submit" onClick={send_data}>
+                    {
+                      result.is_pressed ?
+                      <span className='loader'></span>: 
+                      'Subscribe'
+                    }
+                  </button>
               </form>
             </div>
           </>
@@ -211,7 +247,7 @@ class HelperData {
     }
    
     NextPrevPagination = ({site_url, tutorial_slug, type, data, current_post_slug}) => {
-      console.log(site_url, tutorial_slug, type, current_post_slug)
+     
       
       var posts = data; 
       if(type == 'chapters') {

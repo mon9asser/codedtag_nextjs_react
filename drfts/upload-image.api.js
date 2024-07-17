@@ -43,12 +43,7 @@ postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
     }
 
     var upload_dir = `${Config.uploads.serve}/`;
-
-    if (Config.localhost.site_url == "") {
-        Config.localhost.site_url = media_url;
-        upload_dir = "";
-    }
-
+    
     // Define paths
     const filePath = req.file.path;
     const outputDir = path.join(path.dirname(filePath));
@@ -73,7 +68,7 @@ postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
             .toFile(outputFilePath);
           
 
-        var fileUrl = `${Config.localhost.site_url}/${upload_dir}${req.upload_date}/${path.basename(outputFilePath)}`;
+        var fileUrl = `${Config.site_url}/${upload_dir}${req.upload_date}/${path.basename(outputFilePath)}`;
          
         res.json({ success: 1, file: { url: fileUrl, width: resizeWidth } });
     } catch (error) {

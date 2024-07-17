@@ -27,9 +27,7 @@ FOR Domains and SubDomains
 		https://freeaccountingtutorial.com
 
 FOR Main SERVER
-
-	1- make sure "config/options"
-		A - localhost.site_url object property has empty value like this ""
+ 
 
 
 */
