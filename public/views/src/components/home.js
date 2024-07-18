@@ -162,6 +162,9 @@ var HomepageComponents = () => {
     var HomepageComponentsParts = () => {
         return (
             <>
+                <Helmet>
+                    <script dangerouslySetInnerHTML={{__html: `<script>alert('Working with fragrment')</script>`}} />
+                </Helmet>
                 <section className="hero white-bg hero">
                     <div className="wrapper-no-padding offset-left offset-right">
                         <div className="banner-gray">

@@ -80,29 +80,17 @@ let settingsSchema = new Schema({
         type: String,
         default: ""
     },
-    script_url_1: {
-        enabled: {
-            type: Boolean,
-            trim: true,
-            default: false
-        },
-        url_field: {
-            type: String,
-            trim: true,
-            default: ""
-        },
+    ads_file_contents: {
+        type: String,
+        default: ""
     },
-    script_url_2: {
-        enabled: {
-            type: Boolean,
-            trim: true,
-            default: false
-        },
-        url_field: {
-            type: String,
-            trim: true,
-            default: ""
-        },
+    footer: {
+        type: String,
+        default: ""
+    },
+    header: {
+        type: String,
+        default: ""
     },
     site_logo: {
         type: String,

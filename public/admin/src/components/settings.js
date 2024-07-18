@@ -16,6 +16,10 @@ class Settings extends Component {
         this.fileInputRef = React.createRef();
 
         this.state = {
+            footer_value: '',
+            header_value: '',
+            footer: '',
+            header: '',
             page_name: "settings",
             selectedFile: null,
             subscribe_title: "",
@@ -38,19 +42,14 @@ class Settings extends Component {
                 field: "",
             },
             robots_file_contents: "",
-            script_url_1: {
-                enabled: false,
-                url_field: ""
-            },
-            script_url_2: {
-                enabled: false,
-                url_field: ""
-            },
+            ads_file_contents: '',
             is_pressed: false,
             show_message: "",
             request_status_class: "",
             request_message: ""
         };
+
+
     }
 
     handleFileChange = (event) => {
@@ -91,9 +90,10 @@ class Settings extends Component {
             site_meta_title: settings.site_meta_title,
             site_meta_description: settings.site_meta_description,
             robots_file_contents: settings.robots_file_contents,
+            ads_file_contents: settings.ads_file_contents,
             google_analytics: settings.google_analytics,
-            script_url_1: settings.script_url_1,
-            script_url_2: settings.script_url_2,
+            footer: settings.footer,
+            header: settings.header,
             subscribe_description: settings.subscribe_description,
             homepage_section_title: settings.homepage_section_title,
             homepage_section_description: settings.homepage_section_description,
@@ -155,9 +155,10 @@ class Settings extends Component {
             site_meta_title: this.state.site_meta_title,
             site_meta_description: this.state.site_meta_description,
             robots_file_contents: this.state.robots_file_contents,
+            ads_file_contents: this.state.ads_file_contents,
             google_analytics: this.state.google_analytics,
-            script_url_1: this.state.script_url_1,
-            script_url_2: this.state.script_url_2,
+            header: this.state.header_value,
+            footer: this.state.footer_value,
             subscribe_title: this.state.subscribe_title,
             contact_email: this.state.contact_email,
             subscribe_description: this.state.subscribe_description,
@@ -200,30 +201,7 @@ class Settings extends Component {
             <div id="app">
                 <NavbarContainer />
                 <SidebarContainer />
-                <section className="section main-section">
-                    <h1>
-                        Codemirror
-                    </h1>
-                    <CodeMirror
-                        value='<h1>I ♥ react-codemirror2</h1>'
-                        options={{
-                            mode: 'htmlmixed',
-                            theme: 'tomorrow-night-bright',
-                            lineNumbers: true,
-                            indentWithTabs: true,
-                            smartIndent: true,
-                            matchBrackets: true,
-                            autoCloseTags: true,
-                            matchTags: { bothTags: true },
-                            autoCloseBrackets: true,
-                            styleActiveLine: true,
-                            lineWrapping: true,
-
-                        }}
-                        onChange={(editor, data, value) => {
-                            console.log(editor, data, value)
-                        }}
-                    />
+                <section className="section main-section"> 
                     <div>
                         <div className="container" style={{ textAlign: "left", paddingLeft: "15px" }}>
                             <h1 style={{ fontSize: "30px", marginBottom: "30px", fontWeight: "bold" }}>Settings</h1>
@@ -339,40 +317,22 @@ class Settings extends Component {
                                             <input onChange={e => this.setState({ google_analytics: { ...this.state.google_analytics, field: e.target.value } })} value={this.state.google_analytics.field} className="input" type="text" placeholder="Google Analytics" />
                                         </div>
                                     </div>
-
-                                    <div className="field" style={{ marginTop: "25px" }}>
-                                        
-                                        <label className="label">Script Url 1</label>
-                                        <div className="control">
-
-                                            
-                                            <label>
-                                                <input checked={this.state.script_url_1.enabled} onChange={e => this.setState({ script_url_1: { ...this.state.script_url_1, enabled: e.target.checked } })} type="checkbox" />
-                                                Enable
-                                            </label>
-                                            <textarea onChange={e => this.setState({ script_url_1: { ...this.state.script_url_1, url_field: e.target.value } })} value={this.state.script_url_1.url_field} className="input" style={{ minHeight: "100px" }} placeholder="Example: Google AdSense"></textarea>
-                                        </div>
-                                    </div>
-
-                                    
-
-                                    <div className="field" style={{ marginTop: "25px" }}>
-                                        <label className="label">Script Url 2</label>
-                                        <div className="control">
-                                            <label>
-                                                <input checked={this.state.script_url_2.enabled} onChange={e => this.setState({ script_url_2: { ...this.state.script_url_2, enabled: e.target.checked } })} type="checkbox" />
-                                                Enable
-                                            </label>
-                                            <textarea onChange={e => this.setState({ script_url_2: { ...this.state.script_url_2, url_field: e.target.value } })} value={this.state.script_url_2.url_field} className="input" style={{ minHeight: "100px" }} placeholder="Example: Google Adx"></textarea>
-                                        </div>
-                                    </div>
-
+            
                                     <div className="field" style={{ marginTop: "25px" }}>
                                         <label className="label">Robots File</label>
                                         <div className="control">
                                             <textarea onChange={e => this.setState({ robots_file_contents: e.target.value })} value={this.state.robots_file_contents} className="input" style={{ minHeight: "100px" }} placeholder="Robots Content"></textarea>
                                         </div>
                                     </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">Ads.txt File</label>
+                                        <div className="control">
+                                            <textarea onChange={e => this.setState({ ads_file_contents: e.target.value })} value={this.state.ads_file_contents} className="input" style={{ minHeight: "100px" }} placeholder="Ads.txt Content"></textarea>
+                                        </div>
+                                    </div>
+
+                                    
 
                                     <div className="field" style={{ marginTop: "25px" }}>
                                         
@@ -390,6 +350,63 @@ class Settings extends Component {
                                             <textarea onChange={e => this.setState({ share_social_buttons:  e.target.value })} value={this.state.share_social_buttons} className="input" style={{ minHeight: "100px" }} placeholder="Example: facebook, twitter, tumblr"></textarea>
                                         </div>
                                     </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div style={{display: 'flex', marginTop: "10px", paddingLeft: '15px', paddingRight: '15px'}}>
+                            <div className="block-container" style={{flex: '1'}}>
+                                <div className="field" style={{ marginTop: "25px" }}>
+                                    <label className="label">Header</label>
+                                    <CodeMirror
+                                        style={{padding: '20px'}}
+                                        value={this.state.header}
+                                        options={{
+                                            mode: 'htmlmixed',
+                                            theme: 'eclipse',
+                                            lineNumbers: true,
+                                            indentWithTabs: true,
+                                            smartIndent: true,
+                                            matchBrackets: true,
+                                            autoCloseTags: true,
+                                            matchTags: { bothTags: true },
+                                            autoCloseBrackets: true,
+                                            styleActiveLine: true,
+                                            lineWrapping: true,
+
+                                        }}
+                                        onChange={(editor, data, value) => {
+                                            this.setState({
+                                                header_value: value
+                                            })
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="field" style={{ marginTop: "25px" }}>
+                                    <label className="label">Footer</label>
+                                    <CodeMirror
+                                        className='codemirror-block'
+                                        value={this.state.footer}
+                                        options={{
+                                            mode: 'htmlmixed',
+                                            theme: 'eclipse',
+                                            lineNumbers: true,
+                                            indentWithTabs: true,
+                                            smartIndent: true,
+                                            matchBrackets: true,
+                                            autoCloseTags: true,
+                                            matchTags: { bothTags: true },
+                                            autoCloseBrackets: true,
+                                            styleActiveLine: true,
+                                            lineWrapping: true,
+
+                                        }}
+                                        onChange={(editor, data, value) => {
+                                            this.setState({
+                                                footer_value: value
+                                            })
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -411,7 +428,7 @@ class Settings extends Component {
                             </button>
                         </div>
                     </div>
-                </section>
+                </section> 
 
                 <footer className="footer">
                     <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
