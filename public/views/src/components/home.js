@@ -159,11 +159,38 @@ var HomepageComponents = () => {
         );
     }
 
+    const parseHelmetContent = (content) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, 'text/html');
+        const elements = Array.from(doc.body.children).map((element, index) => {
+            const { tagName, attributes, innerHTML } = element;
+            const props = { key: index };
+            console.log(tagName, attributes, innerHTML);
+            Array.from(attributes).forEach(attr => {
+                props[attr.name] = attr.value;
+            });
+
+            if (innerHTML) {
+                props.dangerouslySetInnerHTML = { __html: innerHTML };
+            }
+
+            return React.createElement(tagName.toLowerCase(), props);
+        });
+
+        return elements.map((element, index) => {
+            console.log(element);
+            const { type, props } = element;
+            return React.createElement(type, { ...props, key: index });
+        }); 
+    };
+
+    
     var HomepageComponentsParts = () => {
+         
         return (
             <>
                 <Helmet>
-                    <script dangerouslySetInnerHTML={{__html: `<script>alert('Working with fragrment')</script>`}} />
+                    {parseHelmetContent(`<script>alert('this is script')</script><title>Home changed</title>`)}
                 </Helmet>
                 <section className="hero white-bg hero">
                     <div className="wrapper-no-padding offset-left offset-right">
