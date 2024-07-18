@@ -78,8 +78,7 @@ class Settings extends Component {
             return;
         }
 
-        var settings = getter.data[0];
-
+        var settings = getter.data[0]; 
         this.setState({
             basic_id: settings.id,
             banner_site_title: settings.banner_site_title,
@@ -135,6 +134,39 @@ class Settings extends Component {
         }
     }
 
+    convert_to_elems_array = (html) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+
+        function elementToObject(element) {
+            const obj = { type: element.tagName.toLowerCase(), props: {} };
+
+            // Convert attributes to props
+            Array.from(element.attributes).forEach(attr => {
+                obj.props[attr.name] = attr.value;
+            });
+
+            // Handle child nodes as a single string
+            if (element.childNodes.length > 0) {
+                obj.props.children = Array.from(element.childNodes).map(child => {
+                    if (child.nodeType === Node.TEXT_NODE || child.nodeType === Node.CDATA_SECTION_NODE) {
+                        return child.nodeValue;
+                    } else if (child.nodeType === Node.ELEMENT_NODE) {
+                        return child.outerHTML;
+                    }
+                }).join('').trim(); // Join and trim to create a single string
+            }
+
+            return obj;
+        }
+
+        return Array.from(tempDiv.childNodes).map(child => {
+            if (child.nodeType === Node.ELEMENT_NODE) {
+                return elementToObject(child);
+            }
+        }).filter(Boolean);
+    }
+
     updateSiteSetting = async () => {
         this.setState({
             is_pressed: true,
@@ -145,7 +177,14 @@ class Settings extends Component {
 
         let fileUrl = await this.uploadFile();
 
+        var header_elms, footer_elms;
+
+        header_elms = this.convert_to_elems_array(this.state.header_value)
+        footer_elms = this.convert_to_elems_array(this.state.footer_value)
+        
         var data_object = {
+            header_elms,
+            footer_elms,
             basic_id: this.state.basic_id,
             banner_site_title: this.state.banner_site_title,
             site_name: this.state.site_name,

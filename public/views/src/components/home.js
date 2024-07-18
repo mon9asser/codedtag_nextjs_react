@@ -20,9 +20,10 @@ var HomepageComponents = () => {
 
     var [ upcoming, upcoming_change ] = React.useState({
         posts: null,
-        settings: null,
         tutorials: null,
-        site_url: null
+        site_url: null,
+        settings: null,
+        menus: null
     });
 
     // functions  
@@ -57,7 +58,8 @@ var HomepageComponents = () => {
                 tutorials: row.data.tutorials,
                 posts: row.data.posts, 
                 settings: row.data.settings,
-                site_url 
+                site_url,
+                menus: row.data.menus,
             });
             
             
@@ -159,39 +161,16 @@ var HomepageComponents = () => {
         );
     }
 
-    const parseHelmetContent = (content) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(content, 'text/html');
-        const elements = Array.from(doc.body.children).map((element, index) => {
-            const { tagName, attributes, innerHTML } = element;
-            const props = { key: index };
-            console.log(tagName, attributes, innerHTML);
-            Array.from(attributes).forEach(attr => {
-                props[attr.name] = attr.value;
-            });
-
-            if (innerHTML) {
-                props.dangerouslySetInnerHTML = { __html: innerHTML };
-            }
-
-            return React.createElement(tagName.toLowerCase(), props);
-        });
-
-        return elements.map((element, index) => {
-            console.log(element);
-            const { type, props } = element;
-            return React.createElement(type, { ...props, key: index });
-        }); 
-    };
-
+     
     
+     
+    /*header_elms,
+            footer_elms,*/
     var HomepageComponentsParts = () => {
-         
+          
         return (
             <>
-                <Helmet>
-                    {parseHelmetContent(`<script>alert('this is script')</script><title>Home changed</title>`)}
-                </Helmet>
+                
                 <section className="hero white-bg hero">
                     <div className="wrapper-no-padding offset-left offset-right">
                         <div className="banner-gray">
@@ -232,17 +211,15 @@ var HomepageComponents = () => {
                         
                         
                     </div>
-                </section>
-
-
+                </section> 
             </>
         );
     }
 
     return (
         <>
-            <Header/>
-
+            <Header menus={upcoming.menus} settings={upcoming.settings}/> 
+            
                 {
                     upcoming.tutorials == null ? 
                     <Helper.PreLoader type={'article'} /> :

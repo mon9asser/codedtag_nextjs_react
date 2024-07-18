@@ -4,6 +4,7 @@ const  {Tutorial} = require("./../models/tutorial-model")
 const  {Chapters} = require("./../models/chapter-model")
 const  {Posts} = require("./../models/posts-model")
 const {Sets} = require("./../models/settings-model");
+const {Menus} = require("./../models/menus-model");
 
 var tutorialRouter = express.Router(); 
 var path = require("path");
@@ -211,6 +212,8 @@ tutorialRouter.get("/home-page/get", async (req, res) => {
         var tutorials = await Tutorial.find({}); 
         var posts = await Posts.find({});
         var settings = await Sets.find({})
+        var menus = await Menus.find({});
+
         if(settings.length) {
             settings = settings[0]
         }
@@ -219,6 +222,7 @@ tutorialRouter.get("/home-page/get", async (req, res) => {
             tutorials,
             posts,
             settings, 
+            menus
         } 
     
         res.send({

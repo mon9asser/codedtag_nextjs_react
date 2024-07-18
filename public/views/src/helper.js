@@ -6,6 +6,9 @@ import Highlight from 'react-highlight'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link, Element, animateScroll as scroll } from 'react-scroll';
 import { Link as RouterLink} from 'react-router-dom';
+
+import { Helmet } from 'react-helmet';
+
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -152,8 +155,48 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
 
 
 class HelperData {
-    
+  
+  
+  renderElements = (elements) => {
 
+    return elements.map((element, index) => {
+        const { type, props } = element;
+        
+        // Handle script elements separately
+        if (type === 'script') {
+            const script = document.createElement('script');
+            Object.keys(props).forEach(key => {
+                script.setAttribute(key, props[key]);
+            });
+            script.textContent = props.children;
+            document.body.appendChild(script);
+            return null; // Return null to not render script as React element
+        }
+
+        // If children exist and is a string, wrap it in an array
+        if (props.children && typeof props.children === 'string') {
+            props.children = [props.children];
+        }
+
+        return React.createElement(type, { ...props, key: index });
+    });
+
+  }
+
+  renderHelmetElements = (elements) => {
+      return elements.map((element, index) => {
+          const { type, props } = element;
+          return React.createElement(type, { ...props, key: index });
+      });
+  };
+
+  DynamicHelmet = ({ elements }) => {
+      return (
+          <Helmet>
+              {this.renderHelmetElements(elements)}
+          </Helmet>
+      );    
+  };
     SubscribeComponents = ({is_footer, title, description}) => {
 
         var [email, setEmail] = React.useState('')

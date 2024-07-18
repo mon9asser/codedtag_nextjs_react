@@ -84,6 +84,8 @@ let settingsSchema = new Schema({
         type: String,
         default: ""
     },
+    header_elms: { type: [] },
+    footer_elms: { type: [] },
     footer: {
         type: String,
         default: ""
