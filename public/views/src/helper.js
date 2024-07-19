@@ -540,7 +540,7 @@ class HelperData {
           else 
             element = <div className="mt-20">{elementLines}</div>;
       } else if ('article') {
-        return <div style={{maxWidth: '95%', margin: '25px auto 55px auto'}}>
+        return <div className='max-1172' style={{margin: '25px auto 55px auto'}}>
         
           <div className="mt-20 columns-loader flexbox content-center gap-20 flex-wrap" style={{flexBasis: full ? "100%": "30%"}}>
             <div className="placeholder-text-loader mt-13" style={{flexBasis: "20%", height:"20px"}}></div>

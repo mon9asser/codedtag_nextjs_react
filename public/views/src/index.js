@@ -29,36 +29,23 @@ import { TabComponent } from "./components/tab.js"
 import { TabArticleComponent } from "./components/tab-article.js"
 import { HomepageComponents } from './components/home.js';
 
-const Wrapper = ({ children }) => {
-  const location = useLocation();
-
-  React.useEffect(() => {
-    Helper.initMethods();
-  }, [location]);
-
-  return children;
-};
-
-
+  
 var WrappApplication = () => {
   
   return (
-    <DataProvider>  
-          <Routes>
-            <Route path="/" element={<HomepageComponents/>} />
-            <Route path="/contact-us/" element={<ContactPage />} /> 
-            <Route path="/about-us/" element={<AboutPage />} />
-            <Route path="/privacy-policy/" element={<PrivacyPolicyPage />} />
-            <Route path="/terms-and-conditions/" element={<TermsConditionsPage />} />
-            <Route path="/tutorials/" element={<TutorialsComponent />} />
-            <Route path="/tutorials/:tut_slug/" element={<TurorialComponent />} />
-            <Route path="/tutorials/:tut_slug/:post_slug/" element={<ArticleComponent/>} />
-            <Route path="/tutorials/:tut_slug/t/:tab_slug/" element={<TabComponent/>} /> 
-            <Route path="/tutorials/:tut_slug/t/:tab_slug/:post_slug/" element={<TabArticleComponent/>} /> 
-            
-            <Route path="*" element={<PageNotFound />} />
-          </Routes> 
-      </DataProvider>
+    <Routes>
+        <Route path="/" element={<HomepageComponents/>} />
+        <Route path="/contact-us/" element={<ContactPage />} /> 
+        <Route path="/about-us/" element={<AboutPage />} />
+        <Route path="/privacy-policy/" element={<PrivacyPolicyPage />} />
+        <Route path="/terms-and-conditions/" element={<TermsConditionsPage />} />
+        <Route path="/tutorials/" element={<TutorialsComponent />} />
+        <Route path="/tutorials/:tut_slug/" element={<TurorialComponent />} />
+        <Route path="/tutorials/:tut_slug/:post_slug/" element={<ArticleComponent/>} />
+        <Route path="/tutorials/:tut_slug/t/:tab_slug/" element={<TabComponent/>} /> 
+        <Route path="/tutorials/:tut_slug/t/:tab_slug/:post_slug/" element={<TabArticleComponent/>} /> 
+        <Route path="*" element={<PageNotFound />} />
+    </Routes> 
   );
 }
 
@@ -66,9 +53,7 @@ var WrappApplication = () => {
 const App = () => {
   return (
     <BrowserRouter>
-      <Wrapper>
-        <WrappApplication />
-      </Wrapper>
+       <WrappApplication />
     </BrowserRouter>
   );
 }

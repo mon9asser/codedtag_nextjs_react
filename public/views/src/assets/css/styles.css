@@ -815,3 +815,42 @@ ul li a.expanded-a::after{
     background-position: center;
  }
 
+ .header-preloaders { 
+    height: 70px;
+    width: 100%;
+ }
+
+ .default-height {
+    min-height: 70px;
+ }
+
+ .header-preloaders .logo-preloader {
+    animation-duration:4s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right,  #eeeeee 0%, #dddddd 40%, #eeeeee 80%);
+    height: 30px;
+    width: 180px;
+    border-radius: 50px;
+ }
+ .header-preloaders ul li {
+    padding-left: 10px;
+    padding-right: 10px;
+ }
+
+ .header-preloaders ul li .item-preloader {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 50%, #b9355f38 80%);
+    background-size: 1000px 104px;
+    height: 10px;
+    width: 70px;
+    display: block;
+    border-radius: 50px;
+ }

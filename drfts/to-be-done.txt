@@ -23,7 +23,7 @@
 	redius sidebar width and mak it fixed display 
 	add media center for crud access like delete, add, updated, upload for images and urls
 
-
+- Search action with search page
 - secure all apis
 	- api keys
 	- request times and block ips from request
