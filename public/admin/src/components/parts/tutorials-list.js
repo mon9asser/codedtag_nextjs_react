@@ -50,7 +50,7 @@ class tutorialsList {
         });
 
         // Set initial value again after options are loaded
-        if (this.data.selectedValue) {
+        if (this.data.selectedValue) { 
           select.value = this.data.selectedValue;
         }
       }
@@ -61,6 +61,7 @@ class tutorialsList {
 
   save(blockContent) {
     const select = blockContent.querySelector('select');
+    console.log(select)
     return {
       selectedValue: select.value,
     };

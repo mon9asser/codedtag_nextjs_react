@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import { Header } from "../parts/header"; 
 import { Footer } from "../parts/footer";
@@ -9,13 +10,22 @@ import { Settings } from "../settings";
 import ReCAPTCHA from "react-google-recaptcha"; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-var PrivacyPolicyPage = () => {
 
+
+
+
+
+
+
+
+var TutorialsComponent = () => {
+
+    
     // states  df
     var [ upcoming, upcoming_change ] = React.useState({
         blocks: [], 
-        post_title: 'Privacy Policy', 
-        meta_title: 'Privacy Policy', 
+        post_title: 'Tutorials', 
+        meta_title: 'Tutorials', 
         description: '',
         meta_description: '',
         allow_search_engine: false,
@@ -24,11 +34,12 @@ var PrivacyPolicyPage = () => {
         updated_date: '', 
         page_template: '', 
         slug: '',  
+        menus: null,
         settings: {
             site_address: ''
         },
-        menus: null,
-        social_links: []
+        social_links: [],
+        tutorials: []
     });
     
     // refs 
@@ -36,9 +47,9 @@ var PrivacyPolicyPage = () => {
 
     // Contexts 
     React.useEffect(() => {
-        
-        Helper.sendRequest({ // privacy-policy
-            api: "post/get?post_type=1&page_template=privacy_policy",
+         
+        Helper.sendRequest({  
+            api: "tutorials-page/get?post_type=1&page_template=all_tutorials_by_categories",
             method: "get",
             data: {}
         }).then( row => {
@@ -47,7 +58,11 @@ var PrivacyPolicyPage = () => {
             var settings = row?.settings?.length ? row.settings[0]: null;
             var social_links = row?.social_links || [];
             
+            var all_tutorials = row.tutorials?.filter( x => x.selected_category != null )
+           
+
             var object_to_change = {
+                menus: row.menus,
                 blocks: this_page?.blocks, 
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
                 meta_title: this_page.meta_title ? (this_page.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ) ): upcoming.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ), 
@@ -60,9 +75,10 @@ var PrivacyPolicyPage = () => {
                 slug: this_page.slug ? this_page.slug: upcoming.slug, 
                 updated_date: this_page.updated_date ? this_page.updated_date: upcoming.updated_date, 
                 settings: settings,
-                menus: row?.menus,
-                social_links: social_links?.map(x => `"${x.social_link}"`)
+                social_links: social_links?.map(x => `"${x.social_link}"`),
+                tutorials: all_tutorials
             };
+             
 
             var site_url = object_to_change.settings?.site_address;
             var last_char = site_url?.length ? site_url[site_url.length - 1]: "";
@@ -76,8 +92,7 @@ var PrivacyPolicyPage = () => {
 
     }, []);
     
-    // functions 
-
+    // functions  
     var response_upcoming_callback = (obj) => {
         var old_objec = {...upcoming};
         var __keys = Object.keys(obj);
@@ -86,10 +101,10 @@ var PrivacyPolicyPage = () => {
         }); 
         upcoming_change(old_objec);
     }
-    
+
+
     return (
         <>
-
             <Helmet>
                 <title>{upcoming.meta_title}</title>
                 <meta name="description" content={upcoming.meta_description} />
@@ -100,40 +115,38 @@ var PrivacyPolicyPage = () => {
                 <script type="application/ld+json">
                     {
                         `
-                        {
-                            "@context": "https://schema.org",
-                            "@type": "WebSite",
-                            "url": "${upcoming.settings?.site_address}${upcoming.slug}/", 
-                            "name": "${upcoming.meta_title}",
-                            "description": "${upcoming.meta_description}"
-                            "mainEntity": {
-                                    "@type": "Organization",
-                                    "name": "${upcoming.settings?.site_name}",
-                                    "url": "${upcoming.settings?.site_address}",
-                                    "description": "This privacy policy document outlines the types of personal information that is received and collected by ${upcoming.settings?.site_name} and how it is used.",
-                                    "about": {
-                                        "@type": "Thing",
-                                        "name": "${upcoming.post_title}",
-                                    },
-                                    "creator": {
-                                        "@type": "Organization",
-                                        "name": "${upcoming.settings?.site_name}",
-                                        "url": "${upcoming.settings?.site_address}",
-                                    },
-                                    "datePublished": "${upcoming.created_date}",
-                                    "dateModified":  "${upcoming.updated_date}",
+                            {
+                                "@context": "https://schema.org",
+                                "@type": "WebPage",
+                                "name": "${upcoming.post_title}",
+                                "description": "${upcoming.meta_description}",
+                                "url": "${upcoming.settings?.site_address}tutorials/",
+                                "breadcrumb": {
+                                    "@type": "BreadcrumbList",
+                                    "itemListElement": [
+                                        {
+                                            "@type": "ListItem",
+                                            "position": 1,
+                                            "name": "Home",
+                                            "item": "${upcoming.settings?.site_address}"
+                                        },
+                                        {
+                                            "@type": "ListItem",
+                                            "position": 2,
+                                            "name": "${upcoming.post_title}",
+                                            "item": "${upcoming.settings?.site_address}tutorials/"
+                                        }
+                                    ]
+                                }
                             }
-                        } 
                         `
                     }
                 </script>
-            </Helmet>
-
-            <Header menus={upcoming.menus} settings={upcoming.settings}/> 
-            
-            <div className="max-850 offset-left offset-right mt-space-long plr-block"> 
+            </Helmet> 
+            <Header/>
+            <div className="max-1050 offset-left offset-right mt-space-long plr-block ptb-60"> 
                 <header className="flexbox content-center column-direction mb-30">
-                        
+                    
                     <h1 className="tutorial-headline mt-h">{upcoming.post_title}</h1>
                     <div className="flexbox items-center author-section mt-5"> 
                         <div className="flexbox content-center auth-name">
@@ -141,16 +154,20 @@ var PrivacyPolicyPage = () => {
                         </div>
                     </div>
                 </header> 
-
                 <div className="lg-2-content tutorial-content content-section">
-                    <Helper.ArticleContent blocks={upcoming.blocks}/>
+                    <Helper.TutorialsContent blocks={upcoming.blocks} tutorials={upcoming.tutorials}/>
                 </div> 
-
             </div>
-            <Footer menus={upcoming.menus} settings={upcoming.settings}/> 
+            <Footer/>
         </>
     );
 }
- 
 
-export { PrivacyPolicyPage }
+
+export { TutorialsComponent };
+
+
+
+
+<Header menus={upcoming.menus} settings={upcoming.settings}/> 
+<Footer menus={upcoming.menus} settings={upcoming.settings}/> 

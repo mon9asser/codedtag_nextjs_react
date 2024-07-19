@@ -17,6 +17,7 @@ var TermsConditionsPage = () => {
         post_title: 'Terms and Conditions', 
         meta_title: 'Terms and Conditions', 
         description: '',
+        menus: null,
         meta_description: '',
         allow_search_engine: false,
         canonical_url: '',
@@ -47,6 +48,7 @@ var TermsConditionsPage = () => {
             var social_links = row?.social_links || [];
             
             var object_to_change = {
+                menus: row?.menus,
                 blocks: this_page?.blocks, 
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
                 meta_title: this_page.meta_title ? (this_page.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ) ): upcoming.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ), 
@@ -137,7 +139,7 @@ var TermsConditionsPage = () => {
                 </script>
             </Helmet>
 
-            <Header/>
+            <Header menus={upcoming.menus} settings={upcoming.settings}/>
             
             <div className="max-850 offset-left offset-right mt-space-long plr-block"> 
                 <header className="flexbox content-center column-direction mb-30">
@@ -155,7 +157,8 @@ var TermsConditionsPage = () => {
                 </div> 
 
             </div>
-            <Footer/>
+            
+            <Footer menus={upcoming.menus} settings={upcoming.settings}/> 
         </>
     );
 }

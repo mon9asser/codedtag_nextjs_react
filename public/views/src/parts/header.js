@@ -45,9 +45,7 @@ var Header = ({menus, settings}) => {
             site_url: site_url
         })
     }, [menus, settings]);
-    // <Helper.PreLoader type="text" lines="2" />
-
-    console.log(upcoming);
+    // <Helper.PreLoader type="text" lines="2" /> 
     
     var ItemElement = ({text}) => {
         
@@ -124,6 +122,21 @@ var Header = ({menus, settings}) => {
             }, 300);
         }
 
+        var expand_collapse_item = (e, id) => {
+            e.preventDefault();
+            var doc_id = document.querySelector(`#collapsed-item-${id}`); 
+            var anchor = document.querySelector(`#nav-anchor-${id}`); 
+
+            if( doc_id.classList.contains('expanded') ) {
+                anchor.classList.remove('expanded-a')
+                doc_id.classList.remove('expanded'); 
+            } else {
+                doc_id.classList.add('expanded');
+                anchor.classList.add('expanded-a')
+            }
+            
+        }
+
         return (
             <>
                 <Helper.DynamicHelmet elements={upcoming.settings?.header_elms} />
@@ -163,8 +176,8 @@ var Header = ({menus, settings}) => {
                                         if(x.subitems.length) {
                                             _return = (
                                                 <li className="has-slideitem" key={x._id}> 
-                                                    <Link target={x.openInNewTab?"_blank": ""} to={x.link}><ItemElement text={x.title}/></Link>
-                                                    <ul className="slideitem">
+                                                    <Link id={`nav-anchor-${x._id}`} onClick={(e) => expand_collapse_item(e, x._id)} target={x.openInNewTab?"_blank": ""} to={x.link}><ItemElement text={x.title}/></Link>
+                                                    <ul className="slideitem collapsible" id={`collapsed-item-${x._id}`}>
                                                         {x.subitems.map(y => <li key={y._id}><Link target={y.openInNewTab?"_blank": ""} to={y.link}>{y.title}</Link></li>)}
                                                     </ul>
                                                 </li>

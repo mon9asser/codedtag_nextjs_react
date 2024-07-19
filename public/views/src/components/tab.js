@@ -32,7 +32,8 @@ var TabComponent = () => {
         settings: null,
         site_url: null,
         is_redirect: null,
-        tab: null
+        tab: null,
+        menus: null
     });
 
     
@@ -85,6 +86,7 @@ var TabComponent = () => {
                 chapters: row.data.chapters,
                 settings: row.data.settings,
                 site_url,
+                menus: row.data.menus,
                 is_redirect: row.redirect
             });
             
@@ -301,7 +303,7 @@ var TabComponent = () => {
     
     return (
         <>
-            <Header/>
+            <Header menus={upcoming.menus} settings={upcoming.settings}/>
                 {
                     upcoming.post == null && upcoming.is_redirect == null ?
                     <Helper.PreLoader type={'article'} /> : (
@@ -309,7 +311,7 @@ var TabComponent = () => {
                     )
                     
                 }
-            <Footer/>
+            <Footer menus={upcoming.menus} settings={upcoming.settings}/> 
         </>       
     );
 }

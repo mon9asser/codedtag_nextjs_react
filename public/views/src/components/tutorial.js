@@ -30,6 +30,7 @@ var TurorialComponent = () => {
         posts: null,
         chapters: null,
         settings: null,
+        menus: null,
         site_url: null,
         is_redirect: null
     });
@@ -67,6 +68,7 @@ var TurorialComponent = () => {
                 chapters: row.data.chapters,
                 settings: row.data.settings,
                 site_url,
+                menus: row.data.menus,
                 is_redirect: row.redirect
             });
             
@@ -295,15 +297,14 @@ var TurorialComponent = () => {
     
     return (
         <>
-            <Header/>
-                {
-                    upcoming.post == null && upcoming.is_redirect == null ?
-                    <Helper.PreLoader type={'article'} /> : (
-                        upcoming.is_redirect ? <PageNotFound parts={false}/>: <TutorialContentComponents/>
-                    )
-                    
-                }
-            <Footer/>
+            <Header menus={upcoming.menus} settings={upcoming.settings}/> 
+            {
+                upcoming.post == null && upcoming.is_redirect == null ?
+                <Helper.PreLoader type={'article'} /> : (
+                    upcoming.is_redirect ? <PageNotFound parts={false}/>: <TutorialContentComponents/>
+                )
+            }
+            <Footer menus={upcoming.menus} settings={upcoming.settings}/>
         </>       
     );
 }

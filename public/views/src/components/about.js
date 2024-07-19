@@ -27,6 +27,7 @@ var AboutPage = () => {
         settings: {
             site_address: ''
         },
+        menus: null,
         social_links: []
     });
     
@@ -59,6 +60,7 @@ var AboutPage = () => {
                 slug: this_page.slug ? this_page.slug: upcoming.slug, 
                 updated_date: this_page.updated_date ? this_page.updated_date: upcoming.updated_date, 
                 settings: settings,
+                menus: row?.menus,
                 social_links: social_links?.map(x => `"${x.social_link}"`)
             };
 
@@ -134,7 +136,7 @@ var AboutPage = () => {
                 </script>
             </Helmet>
 
-            <Header/>
+            <Header menus={upcoming.menus} settings={upcoming.settings}/> 
             
             <div className="max-850 offset-left offset-right mt-space-long plr-block"> 
                 <header className="flexbox content-center column-direction mb-30">
@@ -154,7 +156,7 @@ var AboutPage = () => {
                 {/**/}
 
             </div>
-            <Footer/>
+            <Footer menus={upcoming.menus} settings={upcoming.settings}/>
         </>
     );
 }

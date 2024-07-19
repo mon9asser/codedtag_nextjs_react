@@ -40,7 +40,8 @@ var ContactPage = () => {
         slug: '',  
         settings: {
             site_address: ''
-        }
+        },
+        menus: null
     });
     
     // refs 
@@ -71,7 +72,8 @@ var ContactPage = () => {
                 page_template: this_page.page_template ? this_page.page_template: upcoming.page_template, 
                 slug: this_page.slug ? this_page.slug: upcoming.slug, 
                 updated_date: this_page.updated_date ? this_page.updated_date: upcoming.updated_date, 
-                settings: settings
+                settings: settings,
+                menus: row?.menus
             };
             
             response_upcoming_callback(object_to_change);
@@ -216,7 +218,7 @@ var ContactPage = () => {
                 </script>
             </Helmet>
 
-            <Header/>
+            <Header menus={upcoming.menus} settings={upcoming.settings}/> 
             <div className="container ptb-50">
 
                 <div className="wrapper max-960 offset-left offset-right mt-20 mb-10">
@@ -260,7 +262,7 @@ var ContactPage = () => {
                 </div>
 
             </div>
-            <Footer/>
+            <Footer menus={upcoming.menus} settings={upcoming.settings}/>
         </>
     );
 }

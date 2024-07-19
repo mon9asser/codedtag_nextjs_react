@@ -172,7 +172,7 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
     // tutorial.tabs
     var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": target_tab });
     var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": target_tab, post_type: 0});
-    
+    var menus = await Menus.find({})
     var settings = await Sets.find({})
     if(settings.length) {
         settings = settings[0]
@@ -181,7 +181,8 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
       tutorial,
       chapters,
       posts,
-      settings
+      settings,
+      menus
     } 
 
     res.send({

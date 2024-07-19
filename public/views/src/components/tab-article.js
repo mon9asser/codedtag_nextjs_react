@@ -74,13 +74,14 @@ var TabArticleComponent = () => {
                     data.post.meta_title = data.post.meta_title + " " + row.data.settings?.beside_post_title;
                 }
             }
-            
+             
             upcoming_change({
                 is_redirect: redirect,
                 post: data.post, // object
                 tutorial: data.tutorial, // object
                 chapters: data.chapters, // array 
                 settings: data.settings, // object
+                menus: data.menus,
                 posts: data.posts,
                 site_url,
                 tab
@@ -98,6 +99,7 @@ var TabArticleComponent = () => {
         tutorial: null, // object
         chapters: null, // array 
         settings: null, // object
+        menus: null, // object
         posts: null,
         site_url: null,
         tab: null
@@ -288,7 +290,7 @@ var TabArticleComponent = () => {
 
     return (
         <>
-            <Header/>
+            <Header menus={upcoming.menus} settings={upcoming.settings}/> 
                 {
                     upcoming.post == null && upcoming.is_redirect == null ?
                     <Helper.PreLoader type={'article'} /> : (
@@ -296,8 +298,7 @@ var TabArticleComponent = () => {
                     )
                     
                 }
-                
-            <Footer/>
+            <Footer menus={upcoming.menus} settings={upcoming.settings}/> 
         </>
     );
 }

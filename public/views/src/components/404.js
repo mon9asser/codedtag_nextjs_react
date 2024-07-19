@@ -13,7 +13,9 @@ class PageNotFoundComponents extends Component {
         super(props);
         this.state = {
             content: null,
-            load_parts: true 
+            load_parts: true,
+            settings: null,
+            menus: null
         };
     }
 
@@ -39,7 +41,7 @@ class PageNotFoundComponents extends Component {
         if( pages.length ) {
             
             var not_found = pages[pages.length - 1]; 
-            this.setState({ content: not_found })
+            this.setState({ content: not_found, settings: reqs.settings, menus: reqs.menus})
             
         }
 
@@ -58,7 +60,7 @@ class PageNotFoundComponents extends Component {
                 </Helmet>
 
                 {
-                    this.state.load_parts? <Header/>: ''
+                    this.state.load_parts? <Header menus={this.state.menus} settings={this.state.settings}/>: ''
                 }
                 
 
@@ -105,7 +107,7 @@ class PageNotFoundComponents extends Component {
                 </section>
                 
                 {
-                    this.state.load_parts? <Footer/>: ''
+                    this.state.load_parts? <Footer menus={this.state.menus} settings={this.state.settings}/>: ''
                 }
                 
                 

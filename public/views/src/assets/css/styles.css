@@ -820,6 +820,11 @@ ul li a.expanded-a::after{
     width: 100%;
  }
 
+ .footer-preloaders {
+    width: 100%;
+ }
+
+
  .default-height {
     min-height: 70px;
  }
@@ -836,6 +841,21 @@ ul li a.expanded-a::after{
     width: 180px;
     border-radius: 50px;
  }
+
+ .footer-preloaders .prloader-items-data {
+    animation-duration:4s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right,  #eeeeee 0%, #dddddd 40%, #eeeeee 80%);
+    height: 20px;
+    width: 100%; 
+    display: block;
+    margin-top: 20px;
+ }
+
  .header-preloaders ul li {
     padding-left: 10px;
     padding-right: 10px;

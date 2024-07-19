@@ -75,6 +75,7 @@ var ArticleComponent = () => {
                 chapters: data.chapters, // array 
                 settings: data.settings, // object
                 posts: data.posts,
+                menus: data.menus,
                 site_url
             })
         });
@@ -92,6 +93,7 @@ var ArticleComponent = () => {
         settings: null, // object
         posts: null,
         site_url: null,
+        menus: null
     });
 
     
@@ -289,7 +291,7 @@ var ArticleComponent = () => {
 
     return (
         <>
-            <Header/>
+            <Header menus={upcoming.menus} settings={upcoming.settings}/> 
                 {
                     upcoming.post == null && upcoming.is_redirect == null ?
                     <Helper.PreLoader type={'article'} /> : (
@@ -297,8 +299,7 @@ var ArticleComponent = () => {
                     )
                     
                 }
-                
-            <Footer/>
+            <Footer menus={upcoming.menus} settings={upcoming.settings}/>
         </>
     );
 }

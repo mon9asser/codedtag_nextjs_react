@@ -219,14 +219,13 @@ var HomepageComponents = () => {
     return (
         <>
             <Header menus={upcoming.menus} settings={upcoming.settings}/> 
+            {
+                upcoming.tutorials == null ? 
+                <Helper.PreLoader type={'article'} /> :
+                <HomepageComponentsParts />
+            } 
+            <Footer menus={upcoming.menus} settings={upcoming.settings}/> 
             
-                {
-                    upcoming.tutorials == null ? 
-                    <Helper.PreLoader type={'article'} /> :
-                    <HomepageComponentsParts />
-                } 
-
-            <Footer/>
         </>       
     );
 }

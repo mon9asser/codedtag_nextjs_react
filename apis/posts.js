@@ -16,8 +16,8 @@ const { Sets } = require('./../models/settings-model');
 const { Usr } = require('../models/user-model');
 const { Chapters } = require("../models/chapter-model");
 const { Tutorial } = require('../models/tutorial-model');
-
-
+const { Menus } = require('../models/menus-model');
+ 
 
 // Handle Upload images of posts 
 const storage = multer.memoryStorage();
@@ -668,7 +668,8 @@ postRouter.get("/post/get", async (req, res) => {
         const posts = await Posts.find(query_object);
         const settings = await Sets.find({});
         const users = await Usr.find({email: "moun2030@gmail.com"});
-       
+        const menus = await Menus.find({});
+
         var social_links = [];
 
         if(users.length) {
@@ -682,6 +683,7 @@ postRouter.get("/post/get", async (req, res) => {
                 data: posts,
                 message: "Posts retrieved successfully",
                 settings: settings,
+                menus,
                 social_links: social_links
             });
         } else {
@@ -690,6 +692,7 @@ postRouter.get("/post/get", async (req, res) => {
                 data: [],
                 message: "No posts found for the given post_type",
                 settings: settings,
+                menus,
                 social_links: social_links
             });
         }
@@ -728,6 +731,7 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
         }
 
         // Fetch posts based on the post_type
+        var menus = await Menus.find({});
         const posts = await Posts.find(query_object);
         const settings = await Sets.find({});
         const users = await Usr.find({email: "moun2030@gmail.com"});
@@ -744,6 +748,7 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
             res.status(200).send({
                 is_error: false,
                 data: posts,
+                menus: menus,
                 message: "Posts retrieved successfully",
                 settings: settings,
                 social_links: social_links,
@@ -755,6 +760,7 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
                 data: [],
                 message: "No posts found for the given post_type",
                 settings: settings,
+                menus: menus,
                 social_links: social_links,
                 tutorials: tutorials
             });
@@ -819,7 +825,7 @@ postRouter.get("/post-page/get", async (req, res) => {
         await post.save();
     
         var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": to_find });
-        
+        var menus = await Menus.find({})
         
         var settings = await Sets.find({})
         if(settings.length) {
@@ -831,7 +837,8 @@ postRouter.get("/post-page/get", async (req, res) => {
           chapters,
           post,
           settings,
-          posts
+          posts,
+          menus
         } 
          
         

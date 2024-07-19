@@ -687,123 +687,112 @@ class HelperData {
     }
 
 
-    TutorialsContent = ({blocks, tutorials}) => {
-       
-      return(
-        <>
-          {blocks?.map(x => { 
-            if(x.id != 'header-level-1') {
- 
-              if( x.type == 'paragraph') {
-                return (<p style={{textAlign:x?.data?.alignment}} key={x.id} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>)
-              } else if (x.type == 'code' ) {
-                return (
-                  <Highlight key={x.id} className={x?.data?.language_type}>
-                    {x?.data?.value}
-                  </Highlight>
-                )
-              } else if (x.type == 'image') {
-                return (
-                  <figure key={x.id}> 
-                        <LazyLoadImage
-                            className={x?.data?.stretched ? 'full': 'half'}
-                            alt={x?.data?.caption}
-                            height={'auto'}
-                            src={x?.data?.file?.url} // use normal <img> attributes as props
-                            width={x?.data?.file?.width} /> 
-                  </figure>
-                )
-              } else if (x.type == 'header') {
-                 
-                return (
-                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, style:{textAlign: x?.data?.alignment }}, x?.data?.text)
-                )
-              } else if (x.type == 'youtubeEmbed') {
-                return (<LazyLoadYouTube key={x.id} url={x.data?.url}/>);
-              } else if (x.type == 'delimiter') {
-                return (<hr key={x.id} />)
-              } else if (x.type == 'raw') {
-                return (
-                  <Highlight key={x.id} className={'html'}>
-                    {x?.data?.html}
-                  </Highlight>
-                )
-              } else if (x.type == 'table') {
-                return <ResponsiveTable key={x.id} data={x.data} />
-              } else if (x.type == 'list') {
-                return <StyledList key={x.id} data={x.data} />
-              } else if (x.type == 'tutorialsList') {
-                
-                
-                if( x.data.selectedValue == '' ) {
-                  return; 
-                }
-                
-                var filtered = tutorials.filter(tut => tut.selected_category._id == x.data.selectedValue);
-                if( filtered.length ) {
-                   
+    TutorialsContent = ({ blocks, tutorials }) => {
+      return (
+        <React.Fragment>
+          {blocks?.map(x => {
+            if (x.id !== 'header-level-1') {
+              switch (x.type) {
+                case 'paragraph':
                   return (
-                    <div className="row content-center">
-                        {
-                            filtered.map(item => {  
-                                return (
-                                  <div key={item._id} className="sm-6 md-4 lg-4 text-center p-all-15">
-                                      <div className="tutorial-box">
-                                            {
-                                              item.tutorial_svg_icon != "" ?
-                                              <i className="tutorial-thumbs" style={{background: "#2d4756"}} dangerouslySetInnerHTML={{__html: item.tutorial_svg_icon}} /> : ""
-                                            }
-                                            
-                                            <h3>
-                                              <a>{item.tutorial_title}</a>
-                                              {
-                                                item.duration != "" ?
-                                                <span className="subtitle">Duration:- {item.duration}</span> : ""
-                                              }                                              
-                                            </h3>
-                                            <RouterLink className="floating-all" to="/tutorials"></RouterLink>
-                                      </div>
-                                  </div>
-                              );
-                            })
-                        }
-                    </div>
-                  )
-                  
-                  
-                    
-                }
-
-               // var target_tutorials = tutorials?.filter(tut => )
-                /*
-                <div className="row content-center">
-                
-                        <div className="sm-6 md-4 lg-4 text-center p-all-15">
+                    <p
+                      key={x.id}
+                      style={{ textAlign: x?.data?.alignment }}
+                      dangerouslySetInnerHTML={{ __html: x?.data?.text }}
+                    />
+                  );
+                case 'code':
+                  return (
+                    <Highlight key={x.id} className={x?.data?.language_type}>
+                      {x?.data?.value}
+                    </Highlight>
+                  );
+                case 'image':
+                  return (
+                    <figure key={x.id}>
+                      <LazyLoadImage
+                        className={x?.data?.stretched ? 'full' : 'half'}
+                        alt={x?.data?.caption}
+                        height={'auto'}
+                        src={x?.data?.file?.url}
+                        width={x?.data?.file?.width}
+                      />
+                    </figure>
+                  );
+                case 'header':
+                  return React.createElement(
+                    `h${Math.min(Math.max(x?.data?.level, 1), 6)}`,
+                    { key: x.id, style: { textAlign: x?.data?.alignment } },
+                    x?.data?.text
+                  );
+                case 'youtubeEmbed':
+                  return <LazyLoadYouTube key={x.id} url={x.data?.url} />;
+                case 'delimiter':
+                  return <hr key={x.id} />;
+                case 'raw':
+                  return (
+                    <Highlight key={x.id} className={'html'}>
+                      {x?.data?.html}
+                    </Highlight>
+                  );
+                case 'table':
+                  return <ResponsiveTable key={x.id} data={x.data} />;
+                case 'list':
+                  return <StyledList key={x.id} data={x.data} />;
+                case 'tutorialsList':
+                  if (x.data.selectedValue === '') {
+                    return null;
+                  }
+                  const filtered = tutorials.filter(
+                    tut => tut.selected_category.id === x.data.selectedValue
+                  );
+                  if (filtered.length) {
+                    return (
+                      <div className="row content-center" key={x.id}>
+                        {filtered.map(item => (
+                          <div
+                            key={item._id}
+                            className="sm-6 md-4 lg-4 text-center p-all-15"
+                          >
                             <div className="tutorial-box">
-                                <i className="tutorial-thumbs" style={{background: "#2d4756"}}>
-                                    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect className="fill-color" width="50" height="50" fill="#2D4756" />
-                                        <path
-                                            d="M12.5625 30V21.2727H16.3295C16.9773 21.2727 17.544 21.4006 18.0298 21.6562C18.5156 21.9119 18.8935 22.2713 19.1634 22.7344C19.4332 23.1974 19.5682 23.7386 19.5682 24.358C19.5682 24.983 19.429 25.5241 19.1506 25.9815C18.875 26.4389 18.4872 26.7912 17.9872 27.0384C17.4901 27.2855 16.9091 27.4091 16.2443 27.4091H13.9943V25.5682H15.767C16.0455 25.5682 16.2827 25.5199 16.4787 25.4233C16.6776 25.3239 16.8295 25.1832 16.9347 25.0014C17.0426 24.8196 17.0966 24.6051 17.0966 24.358C17.0966 24.108 17.0426 23.8949 16.9347 23.7188C16.8295 23.5398 16.6776 23.4034 16.4787 23.3097C16.2827 23.2131 16.0455 23.1648 15.767 23.1648H14.9318V30H12.5625ZM20.4375 30V21.2727H22.8068V24.6818H25.9432V21.2727H28.3125V30H25.9432V26.5909H22.8068V30H20.4375ZM29.4375 30V21.2727H33.2045C33.8523 21.2727 34.419 21.4006 34.9048 21.6562C35.3906 21.9119 35.7685 22.2713 36.0384 22.7344C36.3082 23.1974 36.4432 23.7386 36.4432 24.358C36.4432 24.983 36.304 25.5241 36.0256 25.9815C35.75 26.4389 35.3622 26.7912 34.8622 27.0384C34.3651 27.2855 33.7841 27.4091 33.1193 27.4091H30.8693V25.5682H32.642C32.9205 25.5682 33.1577 25.5199 33.3537 25.4233C33.5526 25.3239 33.7045 25.1832 33.8097 25.0014C33.9176 24.8196 33.9716 24.6051 33.9716 24.358C33.9716 24.108 33.9176 23.8949 33.8097 23.7188C33.7045 23.5398 33.5526 23.4034 33.3537 23.3097C33.1577 23.2131 32.9205 23.1648 32.642 23.1648H31.8068V30H29.4375Z"
-                                            fill="white"
-                                        />
-                                    </svg>
-                                </i>
-                                <h3><a href="#">PHP Tutorials</a><span className="subtitle">Programming Lanuage</span></h3>
-                                <a className="floating-all" href="tutorial.html"></a>
+                              {item.tutorial_svg_icon !== '' && (
+                                <i
+                                  className="tutorial-thumbs"
+                                  style={{ background: '#2d4756' }}
+                                  dangerouslySetInnerHTML={{
+                                    __html: item.tutorial_svg_icon,
+                                  }}
+                                />
+                              )}
+                              <h3>
+                                <span>{item.tutorial_title}</span>
+                                {item.duration !== '' && (
+                                  <span className="subtitle">
+                                    Duration:- {item.duration}
+                                  </span>
+                                )}
+                              </h3>
+                              <RouterLink
+                                className="floating-all"
+                                to={`/tutorials/${item.slug}/`}
+                              ></RouterLink>
                             </div>
-                        </div>
-                        
-                    </div>
-                */
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return null;
+                default:
+                  return null;
               }
-
-            } 
-
+            }
+            return null;
           })}
-        </>
-      );     
-    }
+        </React.Fragment>
+      );
+    };
+    
 
     validateEmail(email){
        // var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
