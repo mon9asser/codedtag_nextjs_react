@@ -159,6 +159,9 @@ class HelperData {
   
   renderElements = (elements) => {
 
+    if( elements == undefined ) {
+      return [];
+    }
     return elements.map((element, index) => {
         const { type, props } = element;
         
@@ -184,10 +187,15 @@ class HelperData {
   }
 
   renderHelmetElements = (elements) => {
-      return elements.map((element, index) => {
-          const { type, props } = element;
-          return React.createElement(type, { ...props, key: index });
-      });
+      
+    if( elements == undefined ) {
+      return []
+    }
+
+    return elements.map((element, index) => {
+        const { type, props } = element;
+        return React.createElement(type, { ...props, key: index });
+    });
   };
 
   DynamicHelmet = ({ elements }) => {
