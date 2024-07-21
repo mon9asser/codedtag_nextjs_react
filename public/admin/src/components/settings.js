@@ -30,6 +30,7 @@ class Settings extends Component {
             basic_id: -1,
             circle_buttons:false,
             share_social_buttons: '',
+            site_thumbnail_url: '',
             banner_site_title: "",
             site_name: "",
             banner_site_description: "",
@@ -98,6 +99,7 @@ class Settings extends Component {
             homepage_section_description: settings.homepage_section_description,
             circle_buttons:settings.circle_buttons,
             share_social_buttons: settings.share_social_buttons,
+            site_thumbnail_url: settings.site_thumbnail_url,
             subscribe_title: settings.subscribe_title,
             contact_email: settings.contact_email
         })
@@ -205,6 +207,7 @@ class Settings extends Component {
             homepage_section_description: this.state.homepage_section_description,
             circle_buttons:this.state.circle_buttons,
             share_social_buttons: this.state.share_social_buttons,
+            site_thumbnail_url: this.state.site_thumbnail_url,
         };
 
         if(this.state.selectedFile != null ) {
@@ -388,7 +391,18 @@ class Settings extends Component {
                                             </div>
                                             <textarea onChange={e => this.setState({ share_social_buttons:  e.target.value })} value={this.state.share_social_buttons} className="input" style={{ minHeight: "100px" }} placeholder="Example: facebook, twitter, tumblr"></textarea>
                                         </div>
+
+
+                                        
                                     </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">Site Thumbnail URL</label>
+                                        <div className="control"> 
+                                            <input onChange={e => this.setState({ site_thumbnail_url:  e.target.value  })} value={this.state.site_thumbnail_url} className="input" type="text" placeholder="Site Thumbnail URL" />
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div> 
                         </div>

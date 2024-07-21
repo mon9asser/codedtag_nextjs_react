@@ -10,6 +10,7 @@
 - sanitize all form between user and end of database like contact page or subscribe box 
 - dont forget the tutroials/ page make sure all links work
 
+- Search page 
 - posts | Tutorials public or publish actions
 - add Header options
 - add Footer options

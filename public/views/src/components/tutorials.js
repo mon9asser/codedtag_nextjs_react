@@ -136,6 +136,20 @@ var TutorialsComponent = () => {
                             `
                         }
                     </script>
+
+                    <link rel="canonical" href={upcoming.site_url}/>
+                    <meta property="og:locale" content="en_US"/>
+                    <meta property="og:type" content="website"/>
+                    <meta property="og:title" content={upcoming.settings.site_meta_title}/>
+                    <meta property="og:description" content={upcoming.settings.site_meta_description}/>
+                    <meta property="og:url" content={upcoming.site_url}/>
+                    <meta property="og:site_name" content={upcoming.settings.site_name}/> 
+
+                    
+                    <meta property="og:image" content={upcoming.settings.site_thumbnail_url} />
+                    <meta name="twitter:card" content="summary_large_image"/> 
+                    <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
+                        
                 </Helmet> 
                 
                 <div className="max-1050 offset-left offset-right mt-space-long plr-block ptb-60"> 

@@ -86,6 +86,10 @@ let settingsSchema = new Schema({
     },
     header_elms: { type: [] },
     footer_elms: { type: [] },
+    site_thumbnail_url:  {
+        type: String,
+        default: ""
+    },
     footer: {
         type: String,
         default: ""

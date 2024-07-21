@@ -5,6 +5,7 @@ const  {Chapters} = require("./../models/chapter-model")
 const  {Posts} = require("./../models/posts-model")
 const {Sets} = require("./../models/settings-model");
 const {Menus} = require("./../models/menus-model");
+const {Usr} = require("./../models/user-model");
 
 var tutorialRouter = express.Router(); 
 var path = require("path");
@@ -214,15 +215,18 @@ tutorialRouter.get("/home-page/get", async (req, res) => {
         var posts = await Posts.find({});
         var settings = await Sets.find({})
         var menus = await Menus.find({});
-
-        if(settings.length) {
-            settings = settings[0]
-        }
-
+        var user = await Usr.find({email: 'moun2030@gmail.com'});
+        var _settings = settings.length ? settings[0].toObject() : {};
+         
+        if(settings.length && user.length) { 
+            var slinks = user[0].social_links.map( x => `"${x.social_link}"`)
+            _settings = {..._settings, social_links: slinks};
+        } 
+        
         var response = {
             tutorials,
             posts,
-            settings, 
+            settings:_settings, 
             menus
         } 
     
@@ -234,6 +238,7 @@ tutorialRouter.get("/home-page/get", async (req, res) => {
         });
  
     } catch (error) {
+        console.log(error)
          return res.send( {
              redirect: true, // for only page 404 
              is_error: true, 

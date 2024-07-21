@@ -44,8 +44,7 @@ var HomepageComponents = () => {
             method: "get",
             data: {}
         }).then( row => { 
-
-             
+ 
             var site_url = row.data?.settings?.site_address;
             if(site_url) {
                 var url_array = site_url.split('/');
@@ -53,6 +52,10 @@ var HomepageComponents = () => {
                     site_url = site_url + '/';
                 }
             } 
+            
+            if( row.data?.settings?.site_meta_title != '' ) {
+                row.data.settings.site_meta_title = `${row.data.settings.site_meta_title} ${row.data.settings.beside_post_title}`;
+            }
 
             response_upcoming_callback({
                 tutorials: row.data.tutorials,
@@ -167,10 +170,58 @@ var HomepageComponents = () => {
     /*header_elms,
             footer_elms,*/
     var HomepageComponentsParts = () => {
-          
+        
+        console.log(upcoming)
+
         return (
             <>
-                
+                <Helmet>
+                    <title>{upcoming.settings.site_meta_title}</title>
+                    <meta name="description" content={upcoming.settings.site_meta_description}/>
+                    <script type="application/ld+json">
+                        {
+                            `
+                            {
+                                "@context": "https://schema.org",
+                                "@type": "WebSite",
+                                "name": "CodedTag",
+                                "url": "${upcoming.site_url}",
+                                "potentialAction": {
+                                    "@type": "SearchAction",
+                                    "target": "${upcoming.site_url}search?q={search_result}",
+                                    "query-input": "required name=search_result"
+                                },
+                                "sameAs": [${upcoming.settings.social_links}],
+                                "author": {
+                                    "@type": "Person",
+                                    "name": "Montasser Mossallem"
+                                },
+                                "description": "${upcoming.settings.site_meta_description}",
+                                "publisher": {
+                                    "@type": "Organization",
+                                    "name": "${upcoming.settings.site_name}",
+                                    "logo": {
+                                        "@type": "ImageObject",
+                                        "url": "${upcoming.settings.site_logo}"
+                                    }
+                                }
+                            }
+                            `
+                        }
+                    </script>
+
+                    <link rel="canonical" href={upcoming.site_url}/>
+                    <meta property="og:locale" content="en_US"/>
+                    <meta property="og:type" content="website"/>
+                    <meta property="og:title" content={upcoming.settings.site_meta_title}/>
+                    <meta property="og:description" content={upcoming.settings.site_meta_description}/>
+                    <meta property="og:url" content={upcoming.site_url}/>
+                    <meta property="og:site_name" content={upcoming.settings.site_name}/> 
+                    <meta property="og:image" content={upcoming.settings.site_thumbnail_url} />
+                    <meta name="twitter:card" content="summary_large_image"/> 
+                    <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
+                        
+                </Helmet>
                 <section className="hero white-bg hero">
                     <div className="wrapper-no-padding offset-left offset-right">
                         <div className="banner-gray">
