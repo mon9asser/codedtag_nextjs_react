@@ -81,6 +81,11 @@ let postsSchema = new Schema({
         type: Number, 
         default: 0
     },
+    article_thumbnail_url: {
+        type: String, 
+        trim: true,
+        default: ""
+    },
     selected_tab: {
         title: {
             type: String, 

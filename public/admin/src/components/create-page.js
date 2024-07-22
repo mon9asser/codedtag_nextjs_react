@@ -149,6 +149,7 @@ class CreatePage extends Component {
             meta_title: "",
             slug: "",
             keyphrase: "",
+            article_thumbnail_url: "",
             meta_description: "",
             tutorials: [],
             tutorial: {
@@ -557,6 +558,7 @@ class CreatePage extends Component {
 
         var object_data = { 
             keyphrase: this.state.keyphrase,
+            article_thumbnail_url: this.state.article_thumbnail_url,
             post_type: this.state.post_type,
             post_title: post_title,
             total_words: this.state.initialState.total_words,
@@ -765,6 +767,19 @@ class CreatePage extends Component {
                                         />
                                     </label>
                                     
+                                    <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <span style={{flexBasis: '120px'}}>
+                                            Page Thumbnail URL
+                                        </span>
+                                        <input 
+                                            placeholder="Page Thumbnail URL" 
+                                            style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} 
+                                            type="text" 
+                                            onChange={(e) => this.setState({ article_thumbnail_url: e.target.value })}
+                                            value={this.state.article_thumbnail_url}
+                                        />
+                                    </label>
+
                                     <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>
                                             Allow search engines to show this Article in search results?

@@ -157,6 +157,7 @@ class wrappedEditPost extends Component {
             slug: "",
             keyphrase: "",
             meta_description: "",
+            article_thumbnail_url: "",
             tutorials: [],
             tutorial: {
                 name: "",
@@ -634,6 +635,7 @@ class wrappedEditPost extends Component {
                 selected_tab: post.selected_tab,
                 keyphrase: post.keyphrase,
                 meta_description: post.meta_description,
+                article_thumbnail_url: post.article_thumbnail_url,
                 tutorial: post?.tutorial || {},
                 allow_search_engine: post.allow_search_engine,
                 enable_ads: post.enable_ads, 
@@ -703,6 +705,7 @@ class wrappedEditPost extends Component {
             meta_title: this.state.meta_title,
             slug: this.state.slug,
             meta_description: this.state.meta_description,
+            article_thumbnail_url: this.state.article_thumbnail_url,
             tutorial: this.state.tutorial,
             allow_search_engine: this.state.allow_search_engine,
             enable_ads: this.state.enable_ads,
@@ -926,7 +929,18 @@ class wrappedEditPost extends Component {
                                         ></textarea>
                                     </label> 
                                     
-                                    
+                                    <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <span style={{flexBasis: '120px'}}>
+                                            Article Thumbnail URL
+                                        </span>
+                                        <input 
+                                            placeholder="Article Thumbnail URL" 
+                                            style={{border: "1px solid #dfdfdf", outline: "none", marginLeft: "10px", padding: "8px", flexGrow: "1", backgroundColor: "transparent"}} 
+                                            type="text" 
+                                            onChange={(e) => this.setState({ article_thumbnail_url: e.target.value })}
+                                            value={this.state.article_thumbnail_url}
+                                        />
+                                    </label>
 
                                     <label style={{display:"flex",  flexDirection: "column", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span>

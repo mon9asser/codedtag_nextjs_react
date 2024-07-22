@@ -177,7 +177,7 @@ var TurorialComponent = () => {
                     `
                         {
                             "@context": "https://schema.org",
-                            "@type": "Course",
+                            "@type": "Article",
                             "headline": "${upcoming.tutorial?.tutorial_title}",
                             "author": {
                                 "@type": "Organization",
@@ -230,6 +230,20 @@ var TurorialComponent = () => {
                     `
                 }
                 </script> 
+
+                <link rel="canonical" href={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/`}/>
+                <meta property="og:locale" content="en_US"/>
+                <meta property="og:type" content="article"/>
+                <meta property="og:title" content={upcoming.tutorial?.meta_title}/>
+                <meta property="og:description" content={upcoming.tutorial?.meta_description}/>
+                <meta property="og:url" content={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/`}/>
+                <meta property="og:site_name" content={upcoming.settings.site_name}/> 
+
+                 
+                <meta property="og:image" content={upcoming.tutorial?.thumbnail_url}/>
+                <meta name="twitter:card" content="summary_large_image"/> 
+                <meta name="twitter:image" content={upcoming.tutorial?.thumbnail_url}/>
+                
             </Helmet>
  
 

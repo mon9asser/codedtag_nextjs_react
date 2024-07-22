@@ -34,7 +34,8 @@ var TutorialsComponent = () => {
         menus: null,
         settings: null,
         social_links: [],
-        tutorials: null
+        tutorials: null,
+        article_thumbnail_url: ''
     });
     
 
@@ -74,7 +75,8 @@ var TutorialsComponent = () => {
             response_upcoming_callback({
                 site_url,
                 menus: row.menus,
-                blocks: this_page?.blocks, 
+                blocks: this_page?.blocks,
+                article_thumbnail_url:  this_page?.article_thumbnail_url,
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
                 meta_title: this_page.meta_title ? (this_page.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ) ): upcoming.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ), 
                 description: this_page.description ? this_page.description: upcoming.description, 
@@ -137,18 +139,18 @@ var TutorialsComponent = () => {
                         }
                     </script>
 
-                    <link rel="canonical" href={upcoming.site_url}/>
+                    <link rel="canonical" href={`${upcoming.site_url}tutorials/`}/>
                     <meta property="og:locale" content="en_US"/>
-                    <meta property="og:type" content="website"/>
-                    <meta property="og:title" content={upcoming.settings.site_meta_title}/>
-                    <meta property="og:description" content={upcoming.settings.site_meta_description}/>
-                    <meta property="og:url" content={upcoming.site_url}/>
+                    <meta property="og:type" content="article"/>
+                    <meta property="og:title" content={upcoming.meta_title}/>
+                    <meta property="og:description" content={upcoming.meta_description}/>
+                    <meta property="og:url" content={`${upcoming.site_url}tutorials/`}/>
                     <meta property="og:site_name" content={upcoming.settings.site_name}/> 
 
                     
-                    <meta property="og:image" content={upcoming.settings.site_thumbnail_url} />
+                    <meta property="og:image" content={upcoming.article_thumbnail_url}/>
                     <meta name="twitter:card" content="summary_large_image"/> 
-                    <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
+                    <meta name="twitter:image" content={upcoming.article_thumbnail_url}/>
                         
                 </Helmet> 
                 

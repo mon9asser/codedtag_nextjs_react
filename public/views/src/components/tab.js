@@ -182,77 +182,91 @@ var TabComponent = () => {
         return (
             <>
                 <Helmet>
-                <title>{upcoming.tab?.meta_title}</title>
-                <meta name="description" content={upcoming.tab?.meta_description} />
-                {
-                    upcoming.tab?.hide_from_search_engines ?
-                    <meta name="robots" content={"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"} />
-                    : ""
-                } 
-                <script type="application/ld+json">
-                {
-                    `
-                        {
-                            "@context": "https://schema.org",
-                            "@type": "Course",
-                            "headline": "${upcoming.tab?.title}",
-                            "author": {
-                                "@type": "Organization",
-                                "name": "${upcoming.settings?.site_name}"
-                            },
-                            "datePublished": "${upcoming.tutorial?.date_published}",   
-                            "dateModified": "${upcoming.tutorial?.date_updated}",   
-                            "description": "${upcoming.tab?.meta_description}",
-                            "publisher": {
-                                "@type": "Organization",
-                                "name": "${upcoming.settings?.site_name}",
-                                "logo": {
-                                    "@type": "ImageObject",
-                                    "url": "${upcoming.settings?.site_logo}"  
+                    <title>{upcoming.tab?.meta_title}</title>
+                    <meta name="description" content={upcoming.tab?.meta_description} />
+                    {
+                        upcoming.tab?.hide_from_search_engines ?
+                        <meta name="robots" content={"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"} />
+                        : ""
+                    } 
+                    <script type="application/ld+json">
+                    {
+                        `
+                            {
+                                "@context": "https://schema.org",
+                                "@type": "Article",
+                                "headline": "${upcoming.tab?.title}",
+                                "author": {
+                                    "@type": "Organization",
+                                    "name": "${upcoming.settings?.site_name}"
+                                },
+                                "datePublished": "${upcoming.tutorial?.date_published}",   
+                                "dateModified": "${upcoming.tutorial?.date_updated}",   
+                                "description": "${upcoming.tab?.meta_description}",
+                                "publisher": {
+                                    "@type": "Organization",
+                                    "name": "${upcoming.settings?.site_name}",
+                                    "logo": {
+                                        "@type": "ImageObject",
+                                        "url": "${upcoming.settings?.site_logo}"  
+                                    }
+                                },
+                                "mainEntityOfPage": {
+                                    "@type": "WebPage",
+                                    "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/",
+                                },
+                                "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}",
+                                "articleSection": "${upcoming.tutorial?.tag}",
+                                "keywords": "${upcoming.tutorial?.keyphrase}",
+                                "image": "${upcoming.tutorial?.thumbnail_url}",
+                                "breadcrumb": {
+                                        "@context": "https://schema.org",
+                                        "@type": "BreadcrumbList",
+                                        "itemListElement": [
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 1,
+                                                "name": "Home",
+                                                "item": "${upcoming.site_url}"
+                                            },
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 2,
+                                                "name": "Tutorials",
+                                                "item": "${upcoming.site_url}tutorials/"
+                                            },
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 3,
+                                                "name": "${upcoming.tutorial?.tutorial_title}",
+                                                "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/"
+                                            },
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 4,
+                                                "name": "${upcoming.tab?.title}",
+                                                "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/"
+                                            }, 
+                                        ]
                                 }
-                            },
-                            "mainEntityOfPage": {
-                                "@type": "WebPage",
-                                "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/",
-                            },
-                            "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}",
-                            "articleSection": "${upcoming.tutorial?.tag}",
-                            "keywords": "${upcoming.tutorial?.keyphrase}",
-                            "image": "${upcoming.tutorial?.thumbnail_url}",
-                            "breadcrumb": {
-                                    "@context": "https://schema.org",
-                                    "@type": "BreadcrumbList",
-                                    "itemListElement": [
-                                        {
-                                            "@type": "ListItem",
-                                            "position": 1,
-                                            "name": "Home",
-                                            "item": "${upcoming.site_url}"
-                                        },
-                                        {
-                                            "@type": "ListItem",
-                                            "position": 2,
-                                            "name": "Tutorials",
-                                            "item": "${upcoming.site_url}tutorials/"
-                                        },
-                                        {
-                                            "@type": "ListItem",
-                                            "position": 3,
-                                            "name": "${upcoming.tutorial?.tutorial_title}",
-                                            "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/"
-                                        },
-                                        {
-                                            "@type": "ListItem",
-                                            "position": 4,
-                                            "name": "${upcoming.tab?.title}",
-                                            "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/"
-                                        }, 
-                                    ]
                             }
-                        }
-                    `
-                }
-                </script> 
+                        `
+                    }
+                    </script> 
+
+
+                <link rel="canonical" href={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/`}/>
+                <meta property="og:locale" content="en_US"/>
+                <meta property="og:type" content="article"/>
+                <meta property="og:title" content={upcoming.tab?.meta_title}/>
+                <meta property="og:description" content={upcoming.tab?.meta_description}/>
+                <meta property="og:url" content={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/`}/>
+                <meta property="og:site_name" content={upcoming.settings.site_name}/> 
+
+                 
+                <meta property="og:image" content={upcoming.tutorial?.thumbnail_url}/>
+                <meta name="twitter:card" content="summary_large_image"/> 
+                <meta name="twitter:image" content={upcoming.tutorial?.thumbnail_url}/>
             </Helmet>
  
 
