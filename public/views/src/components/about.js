@@ -48,6 +48,7 @@ var AboutPage = () => {
             var social_links = row?.social_links || [];
             
             var object_to_change = {
+                article_thumbnail_url: this_page?.article_thumbnail_url, 
                 blocks: this_page?.blocks, 
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
                 meta_title: this_page.meta_title ? (this_page.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ) ): upcoming.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ), 
@@ -134,6 +135,18 @@ var AboutPage = () => {
                         `
                     }
                 </script>
+
+                <link rel="canonical" href={`${upcoming.settings?.site_address}${upcoming.slug}/`}/>
+                <meta property="og:locale" content="en_US"/>
+                <meta property="og:type" content="article"/>
+                <meta property="og:title" content={upcoming.meta_title}/>
+                <meta property="og:description" content={upcoming.meta_description}/>
+                <meta property="og:url" content={`${upcoming.settings?.site_address}${upcoming.slug}/`}/>
+                <meta property="og:site_name" content={upcoming.settings.site_name}/>
+                    
+                <meta property="og:image" content={upcoming?.article_thumbnail_url}/>
+                <meta name="twitter:card" content="summary_large_image"/> 
+                <meta name="twitter:image" content={upcoming?.article_thumbnail_url}/>
             </Helmet>
 
             <Header menus={upcoming.menus} settings={upcoming.settings}/> 

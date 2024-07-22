@@ -184,6 +184,18 @@ var ArticleComponent = () => {
                         `
                     }
                     </script> 
+
+                    <link rel="canonical" href={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/`}/>
+                    <meta property="og:locale" content="en_US"/>
+                    <meta property="og:type" content="article"/>
+                    <meta property="og:title" content={upcoming.post?.meta_title}/>
+                    <meta property="og:description" content={upcoming.post?.meta_description}/>
+                    <meta property="og:url" content={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/${upcoming.post?.slug}/`}/>
+                    <meta property="og:site_name" content={upcoming.settings.site_name}/>
+
+                    <meta property="og:image" content={upcoming.post?.article_thumbnail_url}/>
+                    <meta name="twitter:card" content="summary_large_image"/> 
+                    <meta name="twitter:image" content={upcoming.post?.article_thumbnail_url}/>
                 </Helmet>
 
                 <main className="wrapper max-1150 offset-left offset-right ptb-50">

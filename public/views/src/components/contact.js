@@ -58,9 +58,11 @@ var ContactPage = () => {
             
             var this_page = row.data.length? row.data[0]: {}; 
             var settings = row?.settings?.length ? row.settings[0]: null;
-             
+            
+
             var paragraphs = this_page?.blocks?.filter(x => x.type == 'paragraph') || [];
             var object_to_change = {
+                article_thumbnail_url: this_page?.article_thumbnail_url,
                 paragraphs: paragraphs.length ? paragraphs: upcoming.paragraphs, 
                 post_title: this_page.post_title ? this_page.post_title: upcoming.post_title, 
                 meta_title: this_page.meta_title ? (this_page.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ) ): upcoming.meta_title + ( settings?.beside_post_title ? " "+ settings.beside_post_title: "" ), 
@@ -75,6 +77,13 @@ var ContactPage = () => {
                 settings: settings,
                 menus: row?.menus
             };
+
+            var site_url = object_to_change.settings?.site_address;
+            var last_char = site_url?.length ? site_url[site_url.length - 1]: "";
+            if(last_char != "/" && last_char != "") {
+                object_to_change.settings.site_address = object_to_change.settings?.site_address + "/";
+            }
+            
             
             response_upcoming_callback(object_to_change);
 
@@ -207,15 +216,26 @@ var ContactPage = () => {
                             "@type": "ContactPage",
                             "mainEntityOfPage": {
                                 "@type": "WebPage",
-                                "@id": "${upcoming.settings?.site_address.site_address}/${upcoming.slug}/"
+                                "@id": "${upcoming.settings?.site_address}${upcoming.slug}/"
                             },
-                            "url": "${upcoming.settings?.site_address.site_address}/${upcoming.slug}/",
+                            "url": "${upcoming.settings?.site_address}${upcoming.slug}/",
                             "name": "${upcoming.meta_title}",
                             "description": "${upcoming.meta_description}"
                         }
                         `
                     }
                 </script>
+                <link rel="canonical" href={`${upcoming.settings?.site_address}${upcoming.slug}/`}/>
+                <meta property="og:locale" content="en_US"/>
+                <meta property="og:type" content="article"/>
+                <meta property="og:title" content={upcoming.meta_title}/>
+                <meta property="og:description" content={upcoming.meta_description}/>
+                <meta property="og:url" content={`${upcoming.settings?.site_address}${upcoming.slug}/`}/>
+                <meta property="og:site_name" content={upcoming.settings.site_name}/>
+                    
+                <meta property="og:image" content={upcoming?.article_thumbnail_url}/>
+                <meta name="twitter:card" content="summary_large_image"/> 
+                <meta name="twitter:image" content={upcoming?.article_thumbnail_url}/>
             </Helmet>
 
             <Header menus={upcoming.menus} settings={upcoming.settings}/> 
