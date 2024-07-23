@@ -66,17 +66,14 @@ var PageNotFound = ({parts}) => {
                 {
                     upcoming.load_parts? <Header menus={upcoming.menus} settings={upcoming.settings}/>: ''
                 }
-                <section className="page-not-found-section">
+                <section className="page-block-section">
 
                     <span className="error-code">404</span>
                     <h1 className="page-not-found-msg">{upcoming.content?.post_title || "We couldn’t find that page."}</h1>
 
                     <div className="error-message-container">
-                        
-                        <form className="search-form">
-                            <input type="text" placeholder="What are you looking for?" />
-                            <button className="btn third-btn radius-5 custom-header-btn">Search</button>
-                        </form>
+                         
+                        <Helper.SearchComponent/> 
 
                         {
                             (upcoming.content == null || !upcoming.content?.blocks?.filter(x => x.type === 'paragraph').length) ? (
@@ -121,9 +118,7 @@ var PageNotFound = ({parts}) => {
                 <Helper.PreLoader type={'article'} /> :
                 <NotFoundComponentsParts />
             } 
-            
             <Footer menus={upcoming.menus} settings={upcoming.settings}/> 
-            
         </>       
     );
 }

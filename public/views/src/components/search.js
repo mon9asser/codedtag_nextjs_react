@@ -5,6 +5,7 @@ import { Helper } from '../helper';
 import { Helmet } from 'react-helmet';
 import { Header } from '../parts/header';
 import { Footer } from '../parts/footer';
+import { Link } from 'react-router-dom';
 
 var SearchComponents = () => {
     
@@ -84,39 +85,64 @@ var SearchComponents = () => {
 
     var SearchFormComponent = () => {
         return (
-            <section className="hero white-bg hero">
-                    <div className="wrapper-no-padding offset-left offset-right">
-                        <div className="banner-gray">
-                            <div className="row offset-left offset-right max-1172 mlr--30 ptb-50">
-                                <h1>Search in our tutorials</h1>
-                                <form className="form-group form-1" action="/" method="get">
-                                    <input type="text" placeholder="Search in our tutorials" />
-                                    <button type="submit">
-                                        <span className="flexbox">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <circle cx="11" cy="11" r="7" className="stroke-color" stroke="#33363F" strokeWidth="2" />
-                                                <path d="M20 20L17 17" className="stroke-color" stroke="#33363F" strokeWidth="2" strokeLinecap="round" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-            </section>
-            
+            <div className="error-message-container">
+                
+                <h1 className='custom-headline section-head'>Find What You're Looking For!</h1>
+
+                <p>
+                    Welcome to our search page! Here, you can find exactly what you're looking for in just a few clicks.
+                </p>
+
+                <Helper.SearchComponent/>
+                
+                <p>
+                    Simply type your keywords into the search bar above, then hit on the search button and we'll show you the most relevant results. 
+                </p>
+                <p>
+                Whether you're searching for articles, tutorials, or products, our search tool makes it easy to discover the information you need.
+                </p>
+            </div>          
         )
     }
 
     var SearchResultComponents = () => {
-        return <b>Start setup result here</b>
+        return (
+            <>
+                <div className='text-left search-block-header'>
+                    <h1 className='custom-headline section-head ssreash'>Search results for <b>{upcoming.result_title}</b></h1>
+                    <span className='search-result-row'>{upcoming.results?.length} results found</span>
+                </div>
+
+                <div className='search-block-body'>
+
+                    {
+                        upcoming.results?.length ? (
+                            <ul className='searched-items'> 
+                                {upcoming.results?.map( x => { 
+
+                                    var link = `${upcoming.site_url}tutorials/${x.tutorial.slug}/`;
+                                    if( x.selected_tab.slug != '' ) {
+                                        link = `${link}t/${x.selected_tab.slug}/`
+                                    }
+                                    link = `${link}${x.slug}/`;
+
+                                    return <li key={x._id}><Link to={link}>{x.post_title}</Link><span className='tutorial-name-searched'>{x.tutorial.name}</span></li>
+                                
+                                })} 
+                            </ul>
+                        ): <p className='text-left'>No results found!</p>
+                    }
+                    
+                </div>
+            </>
+        ); 
     }
       
     var SearchContentComponents = () => {
         return (<>
              <Helmet>
                         
-                <title>{`${upcoming.settings?.site_name} Search: ${upcoming?.result_title != null ? upcoming?.result_title: upcoming.settings?.site_name}`}</title>
+                <title>{`Search on ${upcoming.settings?.site_name}`}</title>
                 <meta name="description" content={upcoming.settings?.site_meta_description} />
                 
                 <script type="application/ld+json">
@@ -125,7 +151,7 @@ var SearchComponents = () => {
                     {
                         "@context": "https://schema.org",
                         "@type": "WebPage",
-                        "name": "${`${upcoming.settings?.site_name} Search: ${upcoming?.result_title != null ? upcoming?.result_title: upcoming.settings?.site_name}`}",
+                        "name": "${`Search on ${upcoming.settings?.site_name}`}",
                         "url": "${upcoming.site_url}search",
                         "description": "${upcoming.settings?.site_meta_description}",
                         "publisher": {
@@ -153,9 +179,9 @@ var SearchComponents = () => {
                 <meta property="og:locale" content="en_US"/>
                 <meta property="og:type" content="article"/>
 
-                <meta property="og:title" content={`${upcoming.settings?.site_name} Search: ${upcoming?.result_title != null ? upcoming?.result_title: upcoming.settings?.site_name}`}/>
+                <meta property="og:title" content={`Search on ${upcoming.settings?.site_name}`}/>
                 <meta property="og:description" content={upcoming.settings?.site_meta_description}/>
-                <meta property="og:url" content={`${upcoming.site_url}search?q=${upcoming.result_title}`}/>
+                <meta property="og:url" content={`${upcoming.site_url}search`}/>
                 <meta property="og:site_name" content={upcoming.settings?.site_name}/>
 
                 <meta property="og:image" content={upcoming.settings?.site_thumbnail_url}/>
@@ -163,12 +189,14 @@ var SearchComponents = () => {
                 <meta name="twitter:image" content={upcoming.settings?.site_thumbnail_url}/>
             </Helmet>
             
-
-            {
-                upcoming.result_title == null ?
-                <SearchFormComponent />: 
-                <SearchResultComponents />
-            }
+            <section className="page-block-section hero">
+                {
+                    upcoming.result_title == null ?
+                    <SearchFormComponent />: 
+                    <SearchResultComponents />
+                }
+            </section>
+            
         </>);
     }
 

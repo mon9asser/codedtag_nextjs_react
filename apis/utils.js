@@ -47,7 +47,7 @@ utillRouter.get('/search', async (req, res) => {
         const query = req.query.q;
 
         // Use $text for full-text search
-        const response = await Posts.find({ $text: { $search: query } });
+        const response = await Posts.find({ $text: { $search: query }, post_type: 0 });
          
 
         return res.send({

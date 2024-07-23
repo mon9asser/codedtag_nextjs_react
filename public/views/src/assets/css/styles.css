@@ -28,7 +28,7 @@
 }
  
 
-.page-not-found-section {
+.page-block-section {
     margin: 50px auto;
     padding: 20px;
     text-align: center;
@@ -165,6 +165,19 @@ textarea:focus {
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
+}
+
+
+.ssreash {
+     color: #0a0a23;
+}
+.ssreash b {
+    color: #0a0a23;
+    border-bottom: 1px solid #0a0a23;
+}
+.black-loader {
+    border-color: #000;
+    border-bottom-color: transparent;
 }
 
 
@@ -842,6 +855,84 @@ ul li a.expanded-a::after{
     border-radius: 50px;
  }
 
+ .text-left {
+    text-align: left;
+ }
+
+ .tutorial-name-searched {
+    font-size: 11px;
+    background: #b9355f2c;
+    padding: 2px 10px;
+    border-radius: 14px;
+    color: #fff;
+    margin-left: auto;
+    color: #b9355e;
+}
+
+ .searched-items {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+}
+
+/* Style for each list item */
+.searched-items li {
+    text-align: left;
+    flex: 1 1 calc(33.333% - 10px); /* Three columns */
+    margin: 5px;
+    background-color: #f9f9f9; /* Background color for list items */
+    padding: 10px;
+    
+    border: 1px solid #eee; /* Border for rectangle effect */
+    border-left: 2px solid #b9355e;
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+
+    display: flex;
+    align-items: center;
+    height: auto;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.searched-items li a {
+    font-size: 12px;
+    color: #333;
+    font-weight: bold;  
+}
+ 
+.searched-items li a:hover {
+    color: #b9355e;
+} 
+
+/* Responsive design */
+@media (max-width: 900px) {
+    .searched-items li {
+        flex: 1 1 calc(50% - 10px); /* Two columns for medium screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .searched-items li {
+        flex: 1 1 100%; /* Single column for small screens */
+    }
+}
+
+ .searched-items li a {
+    display: block;
+ }
+
+ .search-block-header {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e9e9e9;
+ }
+ .search-block-header h1 {
+    margin-bottom: 0px;
+ }
+ .search-block-header span {
+    font-size: 13px;
+ }
  .footer-preloaders .prloader-items-data {
     animation-duration:4s;
     animation-fill-mode: forwards;

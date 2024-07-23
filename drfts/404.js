@@ -57,7 +57,7 @@ class PageNotFoundComponents extends Component {
                 }
                 
 
-                <section className="page-not-found-section">
+                <section className="page-block-section">
 
                     <span className="error-code">404</span>
                     <h1 className="page-not-found-msg">{this.state.content?.post_title || "We couldn’t find that page."}</h1>

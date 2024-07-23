@@ -12,6 +12,10 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 var Header = ({menus, settings}) => {
      
+    var session = JSON.parse(localStorage.getItem("session"));
+    console.log({
+        _____sess: session
+    })
 
     var [upcoming, upcoming_change] = React.useState({
         nav_left: null,
@@ -153,19 +157,11 @@ var Header = ({menus, settings}) => {
                         <div className="flexbox items-center content-center site-logo-container">
                             <a className="site-logo" href="#"><img src={logo} alt="Logo Site" width="135" height="36" /></a>
                         </div>
+                        
                         <div className="wrapper side-wrapper">
-                            <form className="form-group form-1" action="/" method="get">
-                                <input type="text" placeholder="Search in our tutorials" />
-                                <button type="submit">
-                                    <span className="flexbox">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <circle cx="11" cy="11" r="7" className="stroke-color" stroke="#33363F" strokeWidth="2" />
-                                            <path d="M20 20L17 17" className="stroke-color" stroke="#33363F" strokeWidth="2" strokeLinecap="round" />
-                                        </svg>
-                                    </span>
-                                </button>
-                            </form>
+                            <Helper.SearchComponent searchType='sidebar'/> 
                         </div>
+
                         <div className="wrapper side-wrapper">
                             <ul className="block-list">
                                 {
