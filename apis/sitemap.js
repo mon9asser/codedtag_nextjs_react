@@ -10,6 +10,8 @@ const {Usr} = require("./../models/user-model");
 const {Tutorial} = require("./../models/tutorial-model");
 const {Posts} = require("./../models/posts-model");
 const {Sets} = require("./../models/settings-model"); 
+const { check, validationResult } = require('express-validator');
+
 /**
  * main sitemap => sitemap_index.xml
  * posts sitemap => sitemap_articles.xml
@@ -317,5 +319,8 @@ sitemapRouter.get("/robots.txt", async (req, res) => {
 
      
 });
+
+
+// Search Query  
 
 module.exports = { sitemapRouter }

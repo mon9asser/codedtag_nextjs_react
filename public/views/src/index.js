@@ -45,7 +45,7 @@ var WrappApplication = () => {
         <Route path="/tutorials/:tut_slug/:post_slug/" element={<ArticleComponent/>} />
         <Route path="/tutorials/:tut_slug/t/:tab_slug/" element={<TabComponent/>} /> 
         <Route path="/tutorials/:tut_slug/t/:tab_slug/:post_slug/" element={<TabArticleComponent/>} /> 
-        <Route path="/search/" element={<SearchComponents/>} /> 
+        <Route path="/search" element={<SearchComponents/>} /> 
         
         <Route path="*" element={<PageNotFound />} />
     </Routes> 

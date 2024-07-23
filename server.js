@@ -71,6 +71,7 @@ const { analyticsRouter2 } = require("./apis/analytics-report");
 
 // sitemaps and robots files 
 const { sitemapRouter } = require("./apis/sitemap");
+const { utillRouter } = require("./apis/utils");
 
 // middlewares 
 app.use( Config.server.api, userRouters );
@@ -86,7 +87,7 @@ app.use( Config.server.api, contactRouter);
 app.use( Config.server.api, commentsRouter);
 app.use( Config.server.api, analyticsRouter);
 app.use( Config.server.api, analyticsRouter2);
-
+app.use( Config.server.api, utillRouter);
 
 // update in server
 app.use( Config.server.sitemap, sitemapRouter);

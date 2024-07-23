@@ -1,5 +1,5 @@
-const {mongoose, connection} = require("./../config/connection");
-const { Helper } = require("./../config/helper")
+const { mongoose, connection } = require("./../config/connection");
+const { Helper } = require("./../config/helper");
 
 // Create Schema 
 const Schema = mongoose.Schema;
@@ -32,7 +32,7 @@ let postsSchema = new Schema({
     blocks: {
         type: Array,  
         default: []
-    },	
+    },
     meta_title: {
         type: String, 
         trim: true,
@@ -52,7 +52,7 @@ let postsSchema = new Schema({
         type: {},  
         default: {}
     },
-    enable_ads : {
+    enable_ads: {
         type: Boolean,  
         default: true
     },
@@ -106,11 +106,10 @@ let postsSchema = new Schema({
     ...Helper.defaultSchema
 });
 
-
+// Create text index on post_title field
+postsSchema.index({ post_title: 'text' });
 
 // Create Collection
-var Posts = mongoose.model("posts" , postsSchema );
+var Posts = mongoose.model("posts", postsSchema);
 
-
-
-module.exports = {Posts};
+module.exports = { Posts };
