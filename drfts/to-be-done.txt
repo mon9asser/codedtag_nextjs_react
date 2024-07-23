@@ -8,12 +8,12 @@
 - ✔ Add all social meta tags for helmet 
 - ✔ Make sure helmet is working in all pages properly 
 - sanitize all form between user and end of database like contact page or subscribe box 
-- dont forget the tutroials/ page make sure all links work
+- ✔ dont forget the tutroials/ page make sure all links work
 
 - Search page 
 - posts | Tutorials public or publish actions
-- add Header options
-- add Footer options
+- ✔ add Header options
+- ✔ add Footer options
 - Working with google analytics fields
 
 - Change all admin pages from router param to url arguments
