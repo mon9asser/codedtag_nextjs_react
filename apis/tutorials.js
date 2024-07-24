@@ -241,7 +241,7 @@ tutorialRouter.get("/home-page/get", async (req, res) => {
         });
  
     } catch (error) {
-        console.log(error)
+         
          return res.send( {
              redirect: true, // for only page 404 
              is_error: true, 

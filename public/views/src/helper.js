@@ -254,7 +254,7 @@ class HelperData {
           </Helmet>
       );    
   };
-    SubscribeComponents = ({is_footer, title, description}) => {
+    SubscribeComponents = ({is_footer, title, description, ad_component }) => {
 
         var [email, setEmail] = React.useState('')
         var [result, setRestult] = React.useState({
@@ -329,18 +329,21 @@ class HelperData {
               <p>{description}</p>  
             }
             
+            
             <div>
               <div className={`response-msg ${result.cls} ${result.type}`}>{result.message}</div>
-              <form className="set-center form-group set-focus" action="/" method="get"> 
-                  <input type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@email.com" />
-                  <button className="btn primary-btn" type="submit" onClick={send_data}>
-                    {
-                      result.is_pressed ?
-                      <span className='loader'></span>: 
-                      'Subscribe'
-                    }
-                  </button>
-              </form>
+                <div className="ad-box">Before Subscribe Box</div>
+                <form className="set-center form-group set-focus" action="/" method="get"> 
+                    <input type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@email.com" />
+                    <button className="btn primary-btn" type="submit" onClick={send_data}>
+                      {
+                        result.is_pressed ?
+                        <span className='loader'></span>: 
+                        'Subscribe'
+                      }
+                    </button>
+                </form>
+                <div className="ad-box">After Subscribe Box</div>
             </div>
           </>
         )

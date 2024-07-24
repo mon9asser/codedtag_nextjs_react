@@ -55,6 +55,8 @@ function validateAndSanitize(data) {
     return sanitizedData;
 }
 
+
+
 // Create or Update Contact
 contactRouter.post('/contact-message', async (req, res) => {
     try {

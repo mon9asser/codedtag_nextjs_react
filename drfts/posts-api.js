@@ -377,7 +377,7 @@ postRouter.post("/post/update-link", async (req, res) => {
 
                 // table
                 if( x.type == 'table' ) { 
-                    console.log(x.data.content);
+                     
 
                     const processedData = x.data.content.map(array => {
                         return array.map(htmlString => {
@@ -535,7 +535,7 @@ postRouter.get("/post-links/get", async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        
         res.status(400).send({
             is_error: true,
             data: null,
@@ -628,7 +628,7 @@ postRouter.get("/post-links/get/v1", async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+         
         res.status(400).send({
             is_error: true,
             data: null,
@@ -689,7 +689,7 @@ postRouter.get("/post/get", async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+         
         res.status(400).send({
             is_error: true,
             data: null,

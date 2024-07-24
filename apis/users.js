@@ -5,7 +5,7 @@ var sanitizer = require('sanitizer');
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-
+const validator = require('validator');
 const {Helper} = require("./../config/helper")
 const { domain } = require("./../config/db");
 
@@ -46,12 +46,11 @@ userRouters.post("/user/subscribe",  async (req, res) => {
         objx.success = false;
         objx.data = "Invalid Email";
         return res.send(objx);
-
     } 
 
     // Check if this email aready exists
     try {
-        var user = await Usr.findOne({email: email });
+        var user = await Usr.findOne({email: sanitizer.sanitize(email) });
 
         if( user !== null ) {
 
@@ -79,7 +78,7 @@ userRouters.post("/user/subscribe",  async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+         
         objx.data = "Something went wrong, please try later";
         objx.is_error = true;
         objx.success = false;
@@ -95,7 +94,7 @@ userRouters.post("/user/subscribe",  async (req, res) => {
 // Login 
 userRouters.post("/user/login", async (req, res) => {
     try {
-        const { password, email_username } = req.body;
+        var { password, email_username } = req.body;
 
         if (!password || !email_username) {
             return res.status(400).send({
@@ -103,6 +102,12 @@ userRouters.post("/user/login", async (req, res) => {
                 data: [],
                 is_error: true
             });
+        }
+
+        if (validator.isEmail(email_username)) {
+            email_username = validator.normalizeEmail(email_username);
+        } else {
+            throw new Error('Invalid email');
         }
 
         // Check if the email or username exists in the database
@@ -165,6 +170,7 @@ userRouters.post("/user/login", async (req, res) => {
         });
 
     } catch (error) { 
+         
         res.status(500).send({
             is_error: true,
             data: [],
@@ -185,6 +191,12 @@ userRouters.post("/user/create-update", async (req, res) => {
 
         if( body.email != undefined ) {
             body.email = body.email.toLowerCase(); 
+        }
+
+        if (validator.isEmail(body.email)) {
+            body.email = validator.normalizeEmail(body.email);
+        } else {
+            throw new Error('Invalid email');
         }
 
         // Validate the request body

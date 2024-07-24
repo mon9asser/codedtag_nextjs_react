@@ -1,5 +1,7 @@
 - ✖ Working with google analytics fields
 - ✖ Make option in settings for api key of google analytics
+- ✖ making options for site features (texts and svg)
+- ✖ making image of banner as reading url from db ( media uploader )
 
 - ✔ Update bread crumbs of tab article
 - ✔ Programming subscribe sections
@@ -18,15 +20,15 @@
 - ✔ add Footer options
 - ✔ Search action with search page 
 - ✔ add ads.txt options with api 
+- ✔ posts | Tutorials public or publish actions
 
 
 
-- posts | Tutorials public or publish actions
-- sanitize all form between user and end of database like contact page or subscribe box 
-- making options for site features (texts and svg)
+- ✔ sanitize all form between user and end of database like login/register and contact page or subscribe box 
 
 
-- making image of banner as reading url from db ( media uploader )
+
+- ad campaing system shuould work for all pages and all ad networks like ad manager and adsense
 - Change all admin pages from router param to url arguments
 - Make direct request with google analytics
 
@@ -40,8 +42,6 @@
 	- api keys
 	- request times and block ips from request
 	- crypt and decrypt functionality 
-
-- ad campaing system shuould work for all pages and all ad networks like ad manager and adsense
 
 
 

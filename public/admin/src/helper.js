@@ -164,7 +164,7 @@ class HelperData {
           }
     
         } catch (error) { 
-          console.log(error?.response?.data?.message);
+           
           return  {
               data: [],
               message: error?.response?.data?.message || "Something went wrong, try later",

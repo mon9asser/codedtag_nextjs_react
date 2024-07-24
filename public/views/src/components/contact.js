@@ -175,8 +175,7 @@ var ContactPage = () => {
         }
 
         var res = await Helper.sendRequest({ api: "contact-message", method: "post", data: form_object })
-
-        
+ 
         if( res.is_error) {
             
             response_res_change_callback({

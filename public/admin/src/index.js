@@ -50,10 +50,7 @@ var WrappApplication = () => (
         <Routes> 
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/dashboard/settings" element={<Settings/>} /> 
-            
-            
-            
-            
+             
             <Route path="/dashboard/chapters" element={<Chapters/>} /> 
             <Route path="/dashboard/menus" element={<Menus/>} /> 
             <Route path="/dashboard/campaigns" element={<AdCampaigns/>} /> 

@@ -46,7 +46,7 @@ var HomepageComponents = () => {
         }).then( row => { 
             
             console.log(row);
-
+            
             var site_url = row.data?.settings?.site_address;
             if(site_url) {
                 var url_array = site_url.split('/');
@@ -78,10 +78,11 @@ var HomepageComponents = () => {
         return (
             <>
                 <div className="header-section text-center">
+                    
                     <h2 className="custom-headline section-head text-center mb-25 mt-25">{upcoming.settings?.homepage_section_title}</h2>
                     <p>{upcoming.settings?.homepage_section_description}</p>
                 </div>
-
+                
                 <div className="row content-center">
                     
                     {
@@ -229,8 +230,9 @@ var HomepageComponents = () => {
                         <div className="banner-gray">
                             <div className="row offset-left offset-right max-1172 mlr--30 ptb-50 section-subscribe">
                                 <div className="lg-7 md-7 sm-12 flexbox content-center items-start column-direction p-all-30">                                      
-
-                                    <Helper.SubscribeComponents 
+                                    <div className="ad-box">Before Title</div>
+                                    <Helper.SubscribeComponents  
+                                        
                                         is_footer={false}
                                         title={upcoming.settings?.banner_site_title}
                                         description={upcoming.settings?.banner_site_description}
@@ -254,11 +256,15 @@ var HomepageComponents = () => {
                         </div>
                         <div className="feature-block">
                             <div className="max-1172 offset-left offset-right row plr-15 mlr--30 ptb-50 section-tutorials">
+                                <div className="ad-box">Before Section 2</div>
                                 <SiteFeaturesSection/>
+                                <div className="ad-box">After Section 2</div>
                             </div>
                         </div>
                         <div className="row offset-left offset-right plr-15 mlr--30 ptb-50 max-1172">
+                            <div className="ad-box">Before Section 3</div>
                             <TutorialsSection/>
+                            <div className="ad-box">Before Section 3</div>
                         </div>
 
                         

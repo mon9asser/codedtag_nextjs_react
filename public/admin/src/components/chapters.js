@@ -43,8 +43,7 @@ class Chapters extends Component {
 
         if(request.is_error || ! request.data.length ) {
             return; 
-        }
-        console.log(request.data);
+        } 
         this.setState({
             tutorials: request.data
         }); 
@@ -154,12 +153,7 @@ class Chapters extends Component {
         var selected_tutorial = this.state.tutorials.filter( x => x._id == tutorial_id);
         var selected_chapters = this.state.chapters == null ? []: this.state.chapters.filter( x => x.tutorial.id == tutorial_id && x.tab._id == this.state.selected_tab._id);
         
-        /*
-        console.log(selected_chapters);
-
-        if(! selected_posts.length) {
-            return; 
-        }*/ 
+        
 
         if(selected_tutorial.length){
             selected_tutorial = selected_tutorial[0];
@@ -217,7 +211,7 @@ class Chapters extends Component {
     }
 
     post_added_to_list = () => {
-        console.log("data +++")
+        
     }
 
 
@@ -304,7 +298,7 @@ class Chapters extends Component {
     }
 
     delete_post_from_chapter = (post_id, chapter_id) => {
-        console.log(post_id, chapter_id);
+        
         
 
         // get post object 
@@ -372,7 +366,7 @@ class Chapters extends Component {
         selected_chapters[chapterIndex].posts = posts;
     
         this.setState({ chapters, selected_chapters, updateKey: Math.random() }, () => {
-            console.log("State updated:", this.state); // Debugging
+            
         });
     
 
@@ -607,7 +601,7 @@ class Chapters extends Component {
 
                                                         animation={200}
                                                         onAdd={(evt) => {
-                                                            console.log(evt)
+                                                            
                                                         }}
                                                         //onAdd={(evt) => this.add_post(evt.item.getAttribute("data-id"), evt)}
                                                         // onRemove={(evt) => console.log('Removed item:', evt.item)}

@@ -99,7 +99,7 @@ app.use( Config.server.sitemap, sitemapRouter);
 app.get(Config.server.api + '/proxy', async (req, res) => {
     try {
         const url = decodeURIComponent(req.query.url); 
-        console.log(url);
+         
         const response = await axios.get(url, {
             maxRedirects: 0,
             validateStatus: function (status) {

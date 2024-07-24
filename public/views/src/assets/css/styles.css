@@ -968,3 +968,12 @@ ul li a.expanded-a::after{
     display: block;
     border-radius: 50px;
  }
+
+ .ad-box {
+    width: 100%;
+    display: block;
+    background-color: red; 
+    min-height: 50px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+ }

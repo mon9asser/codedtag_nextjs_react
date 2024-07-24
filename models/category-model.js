@@ -21,8 +21,6 @@ let CategoriesSchema = new Schema({
 // Create Collection
 var Categories = mongoose.model("categories" , CategoriesSchema );
 
-
-
-console.log(mongoose.model.name);
+ 
 
 module.exports = {Categories};
