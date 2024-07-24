@@ -717,7 +717,7 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
         const post_id = req.query.post_id;
         const page_template = req.query.page_template;
 
-        var query_object = {};
+        var query_object = {is_published: true};
         if( post_type != undefined ) {
             query_object = { ...query_object, post_type: post_type };
         }
@@ -735,7 +735,7 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
         const posts = await Posts.find(query_object);
         const settings = await Sets.find({});
         const users = await Usr.find({email: "moun2030@gmail.com"});
-        const tutorials = await Tutorial.find()
+        const tutorials = await Tutorial.find({"options.publish": true })
 
         var social_links = [];
 

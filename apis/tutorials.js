@@ -150,7 +150,7 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
     var tutorial_slug = req.query.tut_name;
     var tab = req.query.tab;
 
-    var tutorial = await Tutorial.findOne({slug: tutorial_slug});
+    var tutorial = await Tutorial.findOne({slug: tutorial_slug, "options.publish": true});
     if(tutorial == null) {
         throw new Error("The page could not be found");  
     }
@@ -172,7 +172,7 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
 
     // tutorial.tabs
     var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": target_tab });
-    var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": target_tab, post_type: 0});
+    var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": target_tab, post_type: 0, is_published: true});
     var menus = await Menus.find({})
     var settings = await Sets.find({})
     if(settings.length) {
@@ -210,12 +210,15 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
 tutorialRouter.get("/home-page/get", async (req, res) => {
     
     try {
-       
-        var tutorials = await Tutorial.find({}); 
-        var posts = await Posts.find({});
+        
+
+
+        var tutorials = await Tutorial.find({ "options.publish": true }); 
+        var posts = await Posts.find({is_published: true });
         var settings = await Sets.find({})
         var menus = await Menus.find({});
         var user = await Usr.find({email: 'moun2030@gmail.com'});
+
         var _settings = settings.length ? settings[0].toObject() : {};
          
         if(settings.length && user.length) { 
