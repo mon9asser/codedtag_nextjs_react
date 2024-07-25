@@ -260,15 +260,15 @@ var HomepageComponents = () => {
                         </div>
                         <div className="feature-block">
                             <div className="max-1172 offset-left offset-right row plr-15 mlr--30 ptb-50 section-tutorials">
-                                <Helper.AdCompaignBox position="before_section_2" data={upcoming.ads}/> 
+                                <div className="ad-box">Before Section 2</div>
                                 <SiteFeaturesSection/>
-                                <Helper.AdCompaignBox position="after_section_2" data={upcoming.ads}/> 
+                                <div className="ad-box">After Section 2</div>
                             </div>
                         </div>
                         <div className="row offset-left offset-right plr-15 mlr--30 ptb-50 max-1172">
-                            <Helper.AdCompaignBox position="before_section_3" data={upcoming.ads}/> 
+                            <div className="ad-box">Before Section 3</div>
                             <TutorialsSection/>
-                            <Helper.AdCompaignBox position="after_section_3" data={upcoming.ads}/>
+                            <div className="ad-box">Before Section 3</div>
                         </div>
 
                         

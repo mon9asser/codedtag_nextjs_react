@@ -1,0 +1,12 @@
+1- Enable google analytics 
+2- download the api credential from google at the below line
+    ( https://developers.google.com/analytics/devguides/reporting/data/v1/quickstart-client-libraries#node.js_1 )
+3- export GOOGLE_APPLICATION_CREDENTIALS="/path/to/credentials.json
+4- get the email from credentials.json file and add it to analytics with permission 
+5- get the property id and paste it to the nodejs code
+6- use the api 
+
+
+export GOOGLE_APPLICATION_CREDENTIALS="D:\\projects\\dashboard-codedtag\\apis\\config\\credentials.json"
+export GOOGLE_APPLICATION_CREDENTIALS="D:/projects/dashboard-codedtag/apis/config/credentials.json"
+

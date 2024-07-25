@@ -159,33 +159,18 @@ class HelperData {
 
   AdCompaignBox = ({ position, data }) => {
     const adRef = React.useRef(null); 
+    var [ads, setAds] = React.useState(null);
 
-    if( !data ) {
-      return null;
-    }
-
-    
     useEffect(() => {
       if (!adRef.current) return;
-      
-     
+  
       const index = data.findIndex(x => x.position === position);
-      if (index === -1 ) { 
-        adRef.current.remove();
-        return;
-      };
- 
+      if (index === -1) return;
   
-  
-      const box = data[index].code;  
+      const box = data[index].code; 
+      setAds(data[index]);
       adRef.current.innerHTML = box;
-
-      if( data[index]?.is_enabled != undefined && ! data[index]?.is_enabled ) {
-        adRef.current.remove();
-        return;
-      }
-      
-
+  
       const scripts = adRef.current.querySelectorAll('script');
       scripts.forEach(script => {
         const newScript = document.createElement('script');
@@ -196,9 +181,15 @@ class HelperData {
         script.parentNode.replaceChild(newScript, script);
       });
     }, [data, position]);
-
      
+    if( ads?.is_enabled != undefined && ! ads?.is_enabled) {
+      return null;
+    }
     
+    if (!data) {
+      return null;
+    } 
+
     return <div className='ad-box' ref={adRef}></div>;
   };
   
