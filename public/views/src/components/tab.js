@@ -33,7 +33,8 @@ var TabComponent = () => {
         site_url: null,
         is_redirect: null,
         tab: null,
-        menus: null
+        menus: null,
+        ads: null
     });
 
     
@@ -80,6 +81,7 @@ var TabComponent = () => {
             } 
 
             response_upcoming_callback({
+                ads: row.data.ads,
                 tab: tab,
                 tutorial: row.data.tutorial,
                 posts: row.data.posts,
@@ -106,11 +108,15 @@ var TabComponent = () => {
     
 
     var TutorialHeader = () => {
+         
+
         return (
             <header className="wrapper max-1150 offset-left offset-right">
                     <div className="row mlr--15">
                         <div className="md-9 text-center offset-left offset-right p-all-15 flexbox content-center column-direction tutorial-header-block"> 
                             
+                            <Helper.AdCompaignBox data={upcoming.ads} position={'before_title'}/>
+
                             <h1 className="tutorial-headline">
                                 {
                                     upcoming.tab == null ?
@@ -118,6 +124,7 @@ var TabComponent = () => {
                                 } 
                             </h1>
                             
+                            <Helper.AdCompaignBox data={upcoming.ads} position={'after_title'}/>
                             
                             <span className="sub-title">{upcoming.tutorial?.selected_category.name} </span>
                                 
@@ -129,6 +136,9 @@ var TabComponent = () => {
                                 </ul>
                                 :""
                             } 
+
+                            <Helper.AdCompaignBox data={upcoming.ads} position={'after_tab_links'}/>
+
                             <ul className="content-center no-list-style flexbox gap-50 items-center flex-wrap list-in-tuts">
 
                                 <li>
@@ -162,12 +172,13 @@ var TabComponent = () => {
                                 </li>   
                             </ul>
                             
-                             
+                            <Helper.AdCompaignBox data={upcoming.ads} position={'after_tutorial_statistics'}/>
+
                             {
                                 upcoming.tutorial == null ?
                                  <Helper.PreLoader type={'text'} lines={5}/>: 
                                     <div className="mt-20 content-elem">
-                                        <Helper.GenerateTutorialContent built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/t/${upcoming.tab.slug}/`} upcoming={upcoming} data={upcoming.tab.description} />
+                                        <Helper.GenerateTutorialContent_tab ad_camp={upcoming.ads} built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/t/${upcoming.tab.slug}/`} upcoming={upcoming} data={upcoming.tab.description} />
                                     </div>
                             } 
 

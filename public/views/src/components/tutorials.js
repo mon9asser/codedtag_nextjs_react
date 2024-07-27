@@ -35,7 +35,8 @@ var TutorialsComponent = () => {
         settings: null,
         social_links: [],
         tutorials: null,
-        article_thumbnail_url: ''
+        article_thumbnail_url: '',
+        ads: null
     });
     
 
@@ -74,6 +75,7 @@ var TutorialsComponent = () => {
 
             response_upcoming_callback({
                 site_url,
+                ads: row.ads,
                 menus: row.menus,
                 blocks: this_page?.blocks,
                 article_thumbnail_url:  this_page?.article_thumbnail_url,
@@ -164,7 +166,7 @@ var TutorialsComponent = () => {
                         </div>
                     </header> 
                     <div className="lg-2-content tutorial-content content-section">
-                        <Helper.TutorialsContent blocks={upcoming.blocks} tutorials={upcoming.tutorials}/>
+                        <Helper.TutorialsContent ad_camp={upcoming.ads} blocks={upcoming.blocks} tutorials={upcoming.tutorials}/>
                     </div> 
                 </div>
             </>

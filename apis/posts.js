@@ -17,7 +17,7 @@ const { Usr } = require('../models/user-model');
 const { Chapters } = require("../models/chapter-model");
 const { Tutorial } = require('../models/tutorial-model');
 const { Menus } = require('../models/menus-model');
- 
+const { AdCampaign } = require('../models/ad_campaign-model')
 
 // Handle Upload images of posts 
 const storage = multer.memoryStorage();
@@ -736,6 +736,7 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
         const settings = await Sets.find({});
         const users = await Usr.find({email: "moun2030@gmail.com"});
         const tutorials = await Tutorial.find({"options.publish": true })
+        const ads = await AdCampaign.find({page: 'tutorial_page', is_enabled: true });
 
         var social_links = [];
 
@@ -752,7 +753,8 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
                 message: "Posts retrieved successfully",
                 settings: settings,
                 social_links: social_links,
-                tutorials: tutorials
+                tutorials: tutorials, 
+                ads
             });
         } else {
             res.send({
@@ -762,7 +764,8 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
                 settings: settings,
                 menus: menus,
                 social_links: social_links,
-                tutorials: tutorials
+                tutorials: tutorials,
+                ads
             });
         }
 

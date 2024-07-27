@@ -176,11 +176,15 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
     var posts = await Posts.find({'tutorial.id': tutorial._id.toString(), "selected_tab._id": target_tab, post_type: 0, is_published: true});
     var menus = await Menus.find({})
     var settings = await Sets.find({})
+
+    var ads = await AdCampaign.find({ is_enabled: true, page: target_tab == 'root'? 'tutorial_page': 'tab_page' });
+
     if(settings.length) {
         settings = settings[0]
     }
     var response = {
       tutorial,
+      ads,
       chapters,
       posts,
       settings,
@@ -219,7 +223,7 @@ tutorialRouter.get("/home-page/get", async (req, res) => {
         var settings = await Sets.find({})
         var menus = await Menus.find({});
         var user = await Usr.find({email: 'moun2030@gmail.com'});
-        var ads = await AdCampaign.find({page:"homepage"});
+        var ads = await AdCampaign.find({page:"homepage", is_enabled: true});
 
         var _settings = settings.length ? settings[0].toObject() : {};
          

@@ -157,13 +157,12 @@ var LazyLoadYouTube = ({ url, width = '560', height = '315', cls='' }) => {
 class HelperData {
   
 
-  AdCompaignBox = ({ position, data }) => {
+  AdCompaignBox = ({ position, data, classes }) => {
     const adRef = React.useRef(null); 
 
     if( !data ) {
       return null;
     }
-
     
     useEffect(() => {
       if (!adRef.current) return;
@@ -174,9 +173,7 @@ class HelperData {
         adRef.current.remove();
         return;
       };
- 
-  
-  
+      
       const box = data[index].code;  
       adRef.current.innerHTML = box;
 
@@ -198,8 +195,12 @@ class HelperData {
     }, [data, position]);
 
      
-    
-    return <div className='ad-box' ref={adRef}></div>;
+    if( classes == undefined ) {
+      classes= ''
+    }else {
+      classes = ` ${classes}`
+    }
+    return <div className={`ad-box${classes}`} ref={adRef}></div>;
   };
   
   
@@ -794,11 +795,16 @@ class HelperData {
     }
 
 
-    TutorialsContent = ({ blocks, tutorials }) => {
+    TutorialsContent = ({ blocks, tutorials, ad_camp }) => {
+      console.log(ad_camp);
+      var header_count = 0;
+      var end_section = 0;
+
       return (
         <React.Fragment>
-          {blocks?.map(x => {
-            if (x.id !== 'header-level-1') {
+          {blocks?.map(( x, ind ) => {
+            if (x.id !== 'header-level-1') { 
+               
               switch (x.type) {
                 case 'paragraph':
                   return (
@@ -827,11 +833,25 @@ class HelperData {
                     </figure>
                   );
                 case 'header':
-                  return React.createElement(
+                  header_count += 1;
+
+                  return <React.Fragment key={`${x.id}-block-header`}>
+                  <this.AdCompaignBox
+                    key={`${x.id}-ad-before`}
+                    position={`before_section_title_${header_count}`}
+                    data={ad_camp}
+                  />
+                  {React.createElement(
                     `h${Math.min(Math.max(x?.data?.level, 1), 6)}`,
-                    { key: x.id, style: { textAlign: x?.data?.alignment } },
+                    { key: `${x.id}-heading`, style: { textAlign: x?.data?.alignment } },
                     x?.data?.text
-                  );
+                  )}
+                  <this.AdCompaignBox
+                    key={`${x.id}-ad-after`}
+                    position={`after_section_title_${header_count}`}
+                    data={ad_camp}
+                  />
+                </React.Fragment>;
                 case 'youtubeEmbed':
                   return <LazyLoadYouTube key={x.id} url={x.data?.url} />;
                 case 'delimiter':
@@ -854,45 +874,60 @@ class HelperData {
                     tut => tut.selected_category.id === x.data.selectedValue
                   );
                   if (filtered.length) {
+                    end_section += 1;
                     return (
-                      <div className="row content-center" key={x.id}>
-                        {filtered.map(item => (
-                          <div
-                            key={item._id}
-                            className="sm-6 md-4 lg-4 text-center p-all-15"
-                          >
-                            <div className="tutorial-box">
-                              {item.tutorial_svg_icon !== '' && (
-                                <i
-                                  className="tutorial-thumbs"
-                                  style={{ background: '#2d4756' }}
-                                  dangerouslySetInnerHTML={{
-                                    __html: item.tutorial_svg_icon,
-                                  }}
-                                />
-                              )}
-                              <h3>
-                                <span>{item.tutorial_title}</span>
-                                {item.duration !== '' && (
-                                  <span className="subtitle">
-                                    Duration:- {item.duration}
-                                  </span>
+                      <React.Fragment key={`frage-box-${x.id}`}>
+
+                        <div className="row content-center" key={x.id}>
+                          {filtered.map(item => (
+                            <div
+                              key={item._id}
+                              className="sm-6 md-4 lg-4 text-center p-all-15"
+                            >
+                              <div className="tutorial-box">
+                                {item.tutorial_svg_icon !== '' && (
+                                  <i
+                                    className="tutorial-thumbs"
+                                    style={{ background: '#2d4756' }}
+                                    dangerouslySetInnerHTML={{
+                                      __html: item.tutorial_svg_icon,
+                                    }}
+                                  />
                                 )}
-                              </h3>
-                              <RouterLink
-                                className="floating-all"
-                                to={`/tutorials/${item.slug}/`}
-                              ></RouterLink>
+                                <h3>
+                                  <span>{item.tutorial_title}</span>
+                                  {item.duration !== '' && (
+                                    <span className="subtitle">
+                                      Duration:- {item.duration}
+                                    </span>
+                                  )}
+                                </h3>
+                                <RouterLink
+                                  className="floating-all"
+                                  to={`/tutorials/${item.slug}/`}
+                                ></RouterLink>
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
+                          ))}
+                        </div>
+
+                        <this.AdCompaignBox
+                          key={`${x.id}-ad-end-of-section`}
+                          position={`end_of_category_section_${end_section}`}
+                          data={ad_camp}
+                        />
+
+                      </React.Fragment>
                     );
                   }
                   return null;
                 default:
                   return null;
               }
+
+
+              
+
             }
             return null;
           })}
@@ -1593,7 +1628,7 @@ class HelperData {
 
     }
 
-    GenerateTutorialContent = ({ data, upcoming, built_url }) => {
+    GenerateTutorialContent_1 = ({ data, upcoming, built_url, ad_camp }) => {
       // Split the data by the delimiter "|"
       const parts = data.split('|').map(part => part.trim());
     
@@ -1605,9 +1640,13 @@ class HelperData {
             if (part.startsWith('[youtube')) {
               const src = part.match(/src="([^"]+)"/)[1];
               return (
-                <div key={index} className="mt-25">
-                  <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
-                </div>
+                <React.Fragment key={index}>
+                    <div className="mt-25">
+                      <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
+                    </div>
+
+                    <this.AdCompaignBox data={ad_camp} position={'after_youtube_video_content_1'}/> 
+                </React.Fragment>
               );
             }
             // Headline shortcodes from h1 to h6
@@ -1620,7 +1659,7 @@ class HelperData {
             // Chapters and posts shortcode
             else if (part.startsWith('[chapters-posts]')) {
               if(upcoming != undefined )
-                return <this.TutorialLinks key={index} built_url={built_url} upcoming={upcoming} />;
+                return <this.TutorialLinks key={index} ad_camp={ad_camp} built_url={built_url} upcoming={upcoming} />;
             } 
             // Default case: plain paragraph
             else {
@@ -1631,11 +1670,108 @@ class HelperData {
               );
             }
           })}
+ 
+          <this.AdCompaignBox data={ad_camp} position={'after_tutorial_description_1'}/>
         </>
       );
     }
 
-    TutorialLinks = ({upcoming, built_url}) => {
+    GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
+      // Split the data by the delimiter "|"
+      const parts = data.split('|').map(part => part.trim());
+    
+      // Process the parts to create the appropriate elements
+      return (
+        <>
+          {parts.map((part, index) => {
+            // YouTube shortcode
+            if (part.startsWith('[youtube')) {
+              const src = part.match(/src="([^"]+)"/)[1];
+              return (
+                <React.Fragment key={index}>
+                    <div className="mt-25">
+                      <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
+                    </div> 
+                    <this.AdCompaignBox data={ad_camp} position={'after_youtube_video_content_2'}/>
+                </React.Fragment>
+              );
+            }
+            // Headline shortcodes from h1 to h6
+            else if (part.match(/^\[h[1-6]/)) {
+              const tag = part.match(/^\[h([1-6])/)[1];
+              const content = part.replace(/^\[h[1-6]\]/, '').trim();
+              const TagName = `h${tag}`;
+              return <TagName key={index} className="tutorial-subheadline">{content}</TagName>;
+            }
+            // Chapters and posts shortcode
+            else if (part.startsWith('[chapters-posts]')) {
+              if(upcoming != undefined )
+                return <this.TutorialLinks ad_camp={ad_camp} key={index} built_url={built_url} upcoming={upcoming} />;
+            } 
+            // Default case: plain paragraph
+            else {
+              return (
+                <p key={index} className="tutorial-description text-center">
+                  {part}
+                </p>
+              );
+            }
+          })} 
+          
+          <this.AdCompaignBox classes='wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center' data={ad_camp} position={'after_tutorial_description_2'}/>
+        </>
+      );
+    }
+
+    GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
+      // Split the data by the delimiter "|"
+      const parts = data.split('|').map(part => part.trim());
+    
+      // Process the parts to create the appropriate elements
+      return (
+        <>
+          {parts.map((part, index) => {
+            // YouTube shortcode
+            if (part.startsWith('[youtube')) {
+              const src = part.match(/src="([^"]+)"/)[1];
+              return (
+                <React.Fragment key={index}>
+                    <div className="mt-25">
+                      <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
+                    </div>
+
+                    <this.AdCompaignBox data={ad_camp} position={'after_youtube_video_content_1'}/> 
+                </React.Fragment>
+              );
+            }
+            // Headline shortcodes from h1 to h6
+            else if (part.match(/^\[h[1-6]/)) {
+              const tag = part.match(/^\[h([1-6])/)[1];
+              const content = part.replace(/^\[h[1-6]\]/, '').trim();
+              const TagName = `h${tag}`;
+              return <TagName key={index} className="tutorial-subheadline">{content}</TagName>;
+            }
+            // Chapters and posts shortcode
+            else if (part.startsWith('[chapters-posts]')) {
+              if(upcoming != undefined )
+                return <this.TutorialLinks key={index} ad_camp={ad_camp} built_url={built_url} upcoming={upcoming} />;
+            } 
+            // Default case: plain paragraph
+            else {
+              return (
+                <p key={index} className="tutorial-description text-center">
+                  {part}
+                </p>
+              );
+            }
+          })}
+ 
+          <this.AdCompaignBox data={ad_camp} position={'after_tutorial_description_1'}/>
+        </>
+      );
+    }
+
+    TutorialLinks = ({upcoming, built_url, ad_camp}) => {
       return (
           <div className="wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center"> 
                           
@@ -1644,13 +1780,25 @@ class HelperData {
                   upcoming.chapters.length ?
                   (
                       upcoming.chapters.map(( chapter, k) => {
-                          return ( <this.TutorialsList built_url={built_url} key={chapter._id} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/> );
+                          return ( 
+                            <React.Fragment key={chapter._id} >
+                              <this.TutorialsList built_url={built_url} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/>
+                               
+                              { k % 3 == 2 && <this.AdCompaignBox data={ad_camp} position={`between_row_ad_${ (k + 1) / 3  }`}/>}
+                            </React.Fragment>
+                           );
                       })
                   ) :
                   (
                       upcoming.posts.length ?
                           Helper.chunkArray(upcoming.posts, 3 ).map(( posts, k) => {
-                              return ( <this.TutorialsList built_url={built_url} key={k} data={posts} index={k}/> );
+                             
+                              return ( 
+                              <React.Fragment key={k} >
+                                  <this.TutorialsList built_url={built_url} data={posts} index={k}/>
+                                  { k % 3 == 2 && <this.AdCompaignBox data={ad_camp} position={`between_row_ad_${ (k + 1) / 3  }`}/>}
+                               </React.Fragment>
+                            );
                           })
                       : ""
                   )

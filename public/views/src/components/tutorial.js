@@ -32,6 +32,7 @@ var TurorialComponent = () => {
         settings: null,
         menus: null,
         site_url: null,
+        ads: null, 
         is_redirect: null
     });
 
@@ -68,6 +69,7 @@ var TurorialComponent = () => {
                 chapters: row.data.chapters,
                 settings: row.data.settings,
                 site_url,
+                ads: row.data.ads,
                 menus: row.data.menus,
                 is_redirect: row.redirect
             });
@@ -93,6 +95,9 @@ var TurorialComponent = () => {
                     <div className="row mlr--15">
                         <div className="md-9 text-center offset-left offset-right p-all-15 flexbox content-center column-direction tutorial-header-block"> 
                             
+                            
+                            <Helper.AdCompaignBox data={upcoming.ads} position={'before_title'} />
+
                             <h1 className="tutorial-headline">
                                 {
                                     upcoming.tutorial == null ?
@@ -100,17 +105,23 @@ var TurorialComponent = () => {
                                 } 
                             </h1>
                             
+                            <Helper.AdCompaignBox data={upcoming.ads} position={'after_title'} />
                             
                             <span className="sub-title">{upcoming.tutorial?.selected_category.name} </span>
                                 
                             {
                                 upcoming.tutorial?.tabs?.length ?
-                                <ul className="no-list-style flexbox gap-50 content-center items-center flex-wrap bold-list tab-lang-categories">
-                                    <li><Link to={`/tutorials/${upcoming.tutorial?.slug}/`}>Tutorials</Link></li>
-                                    {upcoming.tutorial?.tabs.map(tb => <li key={tb._id}><Link to={tb?.slug.indexOf('http') == -1 ? `/tutorials/${upcoming.tutorial?.slug}/t/${tb?.slug}/`: tb?.slug }>{tb?.title}</Link></li>)}
-                                </ul>
+                                <>
+                                    <ul className="no-list-style flexbox gap-50 content-center items-center flex-wrap bold-list tab-lang-categories">
+                                        <li><Link to={`/tutorials/${upcoming.tutorial?.slug}/`}>Tutorials</Link></li>
+                                        {upcoming.tutorial?.tabs.map(tb => <li key={tb._id}><Link to={tb?.slug.indexOf('http') == -1 ? `/tutorials/${upcoming.tutorial?.slug}/t/${tb?.slug}/`: tb?.slug }>{tb?.title}</Link></li>)}
+                                    </ul>
+                                    <Helper.AdCompaignBox data={upcoming.ads} position={'after_tab_links'} />
+                                </>
                                 :""
                             } 
+
+                            
                             <ul className="content-center no-list-style flexbox gap-50 items-center flex-wrap list-in-tuts">
 
                                 <li>
@@ -144,12 +155,13 @@ var TurorialComponent = () => {
                                 </li>   
                             </ul>
                             
+                            <Helper.AdCompaignBox data={upcoming.ads} position={'after_tutorial_statistics'} />
                              
                             {
                                 upcoming.tutorial == null ?
                                  <Helper.PreLoader type={'text'} lines={5}/>: 
                                     <div className="mt-20 content-elem">
-                                        <Helper.GenerateTutorialContent built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/`} upcoming={upcoming} data={upcoming.tutorial.description} />
+                                        <Helper.GenerateTutorialContent_1 ad_camp={upcoming.ads} built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/`} upcoming={upcoming} data={upcoming.tutorial.description} />
                                     </div>
                             } 
 
@@ -260,7 +272,7 @@ var TurorialComponent = () => {
                             {
                                 upcoming.tutorial.content != '' ?
                                 <div className="wrapper ptb-30-50 content-elem max-full text-center mlr--15 chapter-block-hlght">
-                                    <Helper.GenerateTutorialContent built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/`} upcoming={upcoming} data={upcoming.tutorial.content} />
+                                    <Helper.GenerateTutorialContent_2 ad_camp={upcoming.ads} built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/`} upcoming={upcoming} data={upcoming.tutorial.content} />
                                 </div>: ''
                             }   
 

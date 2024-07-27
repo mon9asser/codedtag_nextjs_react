@@ -431,7 +431,7 @@ textarea:focus {
     background-color: #fff;
     border-radius: 15px; 
     border: 1px dashed #d9d9d9;
-    flex-basis: 333px;  
+    flex-basis: 250px;  
     align-self: flex-start;
 }
 
@@ -979,4 +979,10 @@ ul li a.expanded-a::after{
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+ }
+
+ .chapter-elements .ad-box {
+    flex-basis: 100%;
+    margin-left: 40px;
+    margin-right: 40px;
  }
