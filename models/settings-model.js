@@ -103,7 +103,14 @@ let settingsSchema = new Schema({
         trim: true,
         default: ""
     },
-
+    ads_between_texts_every_words: {
+        type: Number, 
+        default: 400
+    },
+    ads_between_navs_every_lis: {
+        type: Number, 
+        default: 8
+    },
     circle_buttons:{
         type: Boolean, 
         default: false

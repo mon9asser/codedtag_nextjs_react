@@ -986,3 +986,7 @@ ul li a.expanded-a::after{
     margin-left: 40px;
     margin-right: 40px;
  }
+
+ .demove-ads .ad-box { 
+    margin-top: 0px;
+ }

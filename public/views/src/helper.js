@@ -795,6 +795,94 @@ class HelperData {
     }
 
 
+
+    ArticleContentSingle = ({blocks, helper}) => {
+      
+      var subheadings = blocks.filter(x => x.type == 'header' && x.id != 'header-level-1' ).map(x => ({
+        href: this.generate_slugs(x?.data?.text),
+        title: x?.data?.text
+      }));
+
+      var settings = null, ads = null; 
+      if( helper != undefined ) {
+        settings = helper.settings;
+        ads = helper.ads;
+      }
+
+      var paragraphs = blocks.filter( x => x.type == 'paragraph');
+      console.log(blocks);
+
+      return(
+        <>
+          {blocks?.map((x, index) => {
+
+            if(x.id != 'header-level-1') {
+               
+              // return <this.TableOfContent/>
+
+              if( x.type == 'paragraph') { 
+
+                return (
+                  <React.Fragment key={x.id}>
+
+                    
+                      
+                    <p style={{textAlign:x?.data?.alignment}} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>
+                    
+                    {
+                      index == 1 && subheadings.length ? <this.TableOfContent data={subheadings}/>: ""
+                    }
+                    
+                  </React.Fragment>
+                )
+              } else if (x.type == 'code' ) {
+                return (
+                  <Highlight key={x.id} className={x?.data?.language_type}>
+                    {x?.data?.value}
+                  </Highlight>
+                )
+              } else if (x.type == 'image') {
+                return (
+                  <figure key={x.id}> 
+                        <LazyLoadImage
+                            className={x?.data?.stretched ? 'full': 'half'}
+                            alt={x?.data?.caption}
+                            height={'auto'}
+                            src={x?.data?.file?.url} // use normal <img> attributes as props
+                            width={x?.data?.file?.width} /> 
+                  </figure>
+                )
+              } else if (x.type == 'header') { 
+
+                return ( 
+                  React.createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, name:this.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, x?.data?.text)
+                )
+
+              } else if (x.type == 'youtubeEmbed') {
+                return (<LazyLoadYouTube key={x.id} url={x.data?.url} height='500'/>);
+              } else if (x.type == 'delimiter') {
+                return (<hr key={x.id} />)
+              } else if (x.type == 'raw') {
+                return (
+                  <Highlight key={x.id} className={'html'}>
+                    {x?.data?.html}
+                  </Highlight>
+                )
+              } else if (x.type == 'table') {
+                return <ResponsiveTable key={x.id} data={x.data} />
+              } else if (x.type == 'list') {
+                return <StyledList key={x.id} data={x.data} />
+              } 
+
+            } 
+
+          })}
+        </>
+      );     
+    }
+
+
+
     TutorialsContent = ({ blocks, tutorials, ad_camp }) => {
       console.log(ad_camp);
       var header_count = 0;

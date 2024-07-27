@@ -50,7 +50,7 @@ var ArticleComponent = () => {
             data: {}
         }).then( row => { 
             var {data, redirect, is_error} = row 
-            
+             
             // working with site_url 
             var site_url = row.data?.settings?.site_address;
             if(site_url) {
@@ -75,6 +75,7 @@ var ArticleComponent = () => {
                 chapters: data.chapters, // array 
                 settings: data.settings, // object
                 posts: data.posts,
+                ads: data.ads,
                 menus: data.menus,
                 site_url
             })
@@ -93,7 +94,8 @@ var ArticleComponent = () => {
         settings: null, // object
         posts: null,
         site_url: null,
-        menus: null
+        menus: null,
+        ads: null
     });
 
     
@@ -220,10 +222,14 @@ var ArticleComponent = () => {
                             
                                 
                             <div className={`plr-20 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
-                                <div className="max-1150 offset-left offset-right">
+                                <div className="max-1150 offset-left offset-right demove-ads">
                                     
+                                    <Helper.AdCompaignBox data={upcoming.ads} position={'before_title'}/>
+
                                     <header className="flexbox content-center column-direction mb-30">
                                         
+                                        
+
                                         <div className="flexbox items-center">
                                             <Helper.Breadcrumbs
                                                 data={[
@@ -238,15 +244,17 @@ var ArticleComponent = () => {
                                                 ]}
                                             /> 
                                         </div>
-
+                                        
                                         <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
                                         <i className="modified-date">
                                         Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
                                         </i>
                                     </header> 
 
+                                    <Helper.AdCompaignBox data={upcoming.ads} position={'after_title'}/>
+
                                     <div className="lg-2-content tutorial-content content-section">
-                                        <Helper.ArticleContent blocks={upcoming.post.blocks}/>
+                                        <Helper.ArticleContentSingle helper={{ads: upcoming.ads, settings: upcoming.settings}} blocks={upcoming.post.blocks}/>
                                     </div>
 
                                 </div> 

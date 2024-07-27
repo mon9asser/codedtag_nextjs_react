@@ -22,11 +22,23 @@ class AdCampaigns extends Component {
                     { text: "Inside Content 2", value: "inside_content_2" },
                     { text: "Inside Content 3", value: "inside_content_3" },
                     { text: "Inside Content 4", value: "inside_content_4" },
+                    { text: "Inside Content 5", value: "inside_content_5" },
+                    { text: "Inside Content 6", value: "inside_content_6" },
+                    { text: "Inside Content 7", value: "inside_content_7" },
+                    { text: "Inside Content 8", value: "inside_content_8" },
+                    { text: "Inside Content 9", value: "inside_content_9" },
+                    { text: "Inside Content 10", value: "inside_content_10" },
                     { text: "After Contents", value: "after_contents" },
                     { text: "In Sidebar 1", value: "in_sidebar_1" },
                     { text: "In Sidebar 2", value: "in_sidebar_2" },
                     { text: "In Sidebar 3", value: "in_sidebar_3" },
-                    { text: "In Sidebar 4", value: "in_sidebar_4" }
+                    { text: "In Sidebar 4", value: "in_sidebar_4" },
+                    { text: "In Sidebar 5", value: "in_sidebar_5" },
+                    { text: "In Sidebar 6", value: "in_sidebar_6" },
+                    { text: "In Sidebar 7", value: "in_sidebar_7" },
+                    { text: "In Sidebar 8", value: "in_sidebar_8" },
+                    { text: "In Sidebar 9", value: "in_sidebar_9" },
+                    { text: "In Sidebar 10", value: "in_sidebar_10" }
                 ]
             },
             { 
@@ -128,7 +140,7 @@ class AdCampaigns extends Component {
             ]
           }
         ],    
-
+        settings: null,
         filtered_campaign_pages: [],
         filter_ad_campaign: "",
         on_filter_mode: false, 
@@ -152,7 +164,16 @@ class AdCampaigns extends Component {
         method: 'GET',
         data: {}
       });
-      this.setState({ campaigns: response.data });
+
+      const settings = await Helper.sendRequest({
+        api: 'settings/get',
+        method: 'GET',
+        data: {}
+      });
+
+      var setopts = settings.data.length ? settings.data[0]: {};
+
+      this.setState({ campaigns: response.data, settings: setopts });
     } catch (error) {
       console.error('Error fetching campaigns:', error);
     }
@@ -211,6 +232,10 @@ class AdCampaigns extends Component {
 
   saveCampaigns = async () => {
     
+
+    // console.log(this.state.settings);
+    
+
     if (!this.validateCampaigns()) {
       this.setState({
         request_status_class: 'error',
@@ -222,6 +247,17 @@ class AdCampaigns extends Component {
 
     this.setState({ is_pressed: true });
     try {
+      
+      const saveSettings = await Helper.sendRequest({
+        api: 'settings/update',
+        method: 'POST',
+        data: {...this.state.settings}  
+      });
+
+      if (saveSettings.is_error) {
+        throw new Error(saveSettings.message);
+      }
+
       const response = await Helper.sendRequest({
         api: 'ad_campaign/create-update',
         method: 'POST',
@@ -260,14 +296,33 @@ class AdCampaigns extends Component {
   }
 
   render() { 
-    const positions = ["Header", "Footer", "Sidebar", "Body"];
+    
+    
 
     return (
       <div id="app">
         <NavbarContainer />
         <SidebarContainer />
         <section className="section main-section">
-          <div style={{ margin: "20px" }}>
+          <div style={{ margin: "20px", border: '3px solid #dfdfdf', padding: '20px' }}>
+            
+            <div style={{display: 'flex', justifyContent:'space-between', alignItems: 'center', marginBottom: '10px'}}>
+              <label>
+                How many words inside article to show ads between ?
+              </label>
+              <input value={this.state.settings == null ?'':this.state.settings?.ads_between_texts_every_words} onChange={e => this.setState({settings: {...this.state.settings, ads_between_texts_every_words: parseInt(e.target.value) } })} style={{padding:'5px', border: '1px solid #ddd'}} type="number" />
+            </div>
+
+            <div style={{display: 'flex', justifyContent:'space-between', alignItems: 'center', marginBottom: '10px'}}>
+              <label>
+                How many li elements inside sidebar(nav) to show ads between ?
+              </label>
+              <input value={this.state.settings == null ?'':this.state.settings?.ads_between_navs_every_lis} onChange={e => this.setState({settings: {...this.state.settings, ads_between_navs_every_lis: parseInt(e.target.value) } })} style={{padding:'5px', border: '1px solid #ddd'}} type="number" />
+            </div>
+
+          </div>
+
+          <div style={{ margin: "20px", border: '3px solid #dfdfdf', padding: '20px' }}>
             
             <div style={{display: "flex"}}>
               <button onClick={this.addCampaign} style={styles.addButton}>Add Campaign</button>

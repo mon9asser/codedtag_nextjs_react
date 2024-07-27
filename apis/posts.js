@@ -829,7 +829,8 @@ postRouter.get("/post-page/get", async (req, res) => {
     
         var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": to_find });
         var menus = await Menus.find({})
-        
+        var ads = await AdCampaign.find({page: 'single_page', is_enabled: true});
+
         var settings = await Sets.find({})
         if(settings.length) {
             settings = settings[0]
@@ -841,10 +842,10 @@ postRouter.get("/post-page/get", async (req, res) => {
           post,
           settings,
           posts,
-          menus
+          menus,
+          ads
         } 
-         
-        
+          
         res.send({
             redirect: false, 
             data: response,
