@@ -808,10 +808,13 @@ class HelperData {
         settings = helper.settings;
         ads = helper.ads;
       }
+      
+      if( ads == null ) ads = [];
 
-      var paragraphs = blocks.filter( x => x.type == 'paragraph');
-      console.log(blocks);
+      var words_every = settings?.ads_between_texts_every_words? settings.ads_between_texts_every_words: 500;
 
+      var text_counter = 0;
+      var ad_counter = 0;
       return(
         <>
           {blocks?.map((x, index) => {
@@ -821,14 +824,21 @@ class HelperData {
               // return <this.TableOfContent/>
 
               if( x.type == 'paragraph') { 
+                
+                text_counter += x.words_counts
+                
 
+                var ad_campaign_element = '';
+                if( text_counter >= words_every ) {
+                  ad_counter++; 
+                  ad_campaign_element = <Helper.AdCompaignBox data={ads} position={`inside_content_${ad_counter}`}/>;
+                  text_counter = 0;
+                }
+                
                 return (
-                  <React.Fragment key={x.id}>
-
-                    
-                      
+                  <React.Fragment key={x.id}> 
                     <p style={{textAlign:x?.data?.alignment}} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>
-                    
+                    { ad_campaign_element }
                     {
                       index == 1 && subheadings.length ? <this.TableOfContent data={subheadings}/>: ""
                     }
@@ -1403,9 +1413,14 @@ class HelperData {
       return result;
     }
     
-    ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, tab_slug}) => {
+    ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, tab_slug, helper}) => {
 
-      
+      var settings = null, ads = []; 
+      if( helper != undefined ) {
+        ads = helper.ads
+        settings = helper.settings
+      } 
+
       var collapsed_item = (e, id) => {
         
         e.preventDefault();
@@ -1494,25 +1509,36 @@ class HelperData {
           {/* Posts */} 
           {
             (type == 'posts') ?
-            posts.map( (x, index) => (
-              <ul key={index} className="block-list custom-aside-tuts list-items">
-                {
-                  x.map(post => {
-                    var link_url =  `${site_url}tutorials/${tutorial_slug}/`; 
-                    if( tab_slug != undefined ) {
-                      link_url = `${link_url}t/${tab_slug}/`
+            posts.map( (x, index) =>{
+              
+              return  (
+                <React.Fragment key={index} >
+                  <ul className="block-list custom-aside-tuts list-items">
+                    {
+                      x.map(post => {
+
+                        var link_url =  `${site_url}tutorials/${tutorial_slug}/`; 
+                        if( tab_slug != undefined ) {
+                          link_url = `${link_url}t/${tab_slug}/`
+                        }
+                        
+                        return (
+                          <React.Fragment key={post._id}>
+                            <li key={post._id}>
+                              <RouterLink className={current_post_slug == post.slug ? 'selected_tab': ''} to={`${link_url}${post.slug}/`}>{post.post_title}</RouterLink>
+                            </li>
+                          </React.Fragment>
+                        );
+                      })
                     }
-                    return (
-                      <React.Fragment key={post._id}>
-                        <li key={post._id}>
-                          <RouterLink className={current_post_slug == post.slug ? 'selected_tab': ''} to={`${link_url}${post.slug}/`}>{post.post_title}</RouterLink>
-                        </li>
-                      </React.Fragment>
-                    );
-                  })
-                }
-              </ul>
-            )): ''
+                  </ul>
+  
+                  {
+                    x.length == 5 ? <b>Ad here .++++++++</b>: ''
+                  }
+                </React.Fragment>
+              )
+            }): ''
           }
         </>
       );

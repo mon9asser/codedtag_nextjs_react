@@ -29,6 +29,7 @@ class AdCampaigns extends Component {
                     { text: "Inside Content 9", value: "inside_content_9" },
                     { text: "Inside Content 10", value: "inside_content_10" },
                     { text: "After Contents", value: "after_contents" },
+                    { text: "Before Sidebar", value: "before_sidebar" },
                     { text: "In Sidebar 1", value: "in_sidebar_1" },
                     { text: "In Sidebar 2", value: "in_sidebar_2" },
                     { text: "In Sidebar 3", value: "in_sidebar_3" },

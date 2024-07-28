@@ -201,107 +201,111 @@ var ArticleComponent = () => {
                 </Helmet>
 
                 <main className="wrapper max-1150 offset-left offset-right ptb-50">
-                        <div className="row mlr--20">
-                            
-                            {
-                                upcoming.tutorial.options.sidebar_content != 'none' ?
-                                <div className="md-4 md-1-half plr-20 main-sidebar flex-order-2-md">
-                                    <StickyBox offsetTop={85} offsetBottom={20}>
-                                        
-                                        
-                                        {
-                                            upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                            <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/> 
-                                            : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
-                                        }
-                                        
-
-                                    </StickyBox>
-                                </div> : ''
-                            }
-                            
-                                
-                            <div className={`plr-20 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
-                                <div className="max-1150 offset-left offset-right demove-ads">
+                    <div className="row mlr--20">
+                        
+                        {
+                            upcoming.tutorial.options.sidebar_content != 'none' ?
+                            <div className="md-4 md-1-half plr-20 main-sidebar flex-order-2-md">
+                                <StickyBox offsetTop={85} offsetBottom={20}>
                                     
-                                    <Helper.AdCompaignBox data={upcoming.ads} position={'before_title'}/>
-
-                                    <header className="flexbox content-center column-direction mb-30">
-                                        
-                                        
-
-                                        <div className="flexbox items-center">
-                                            <Helper.Breadcrumbs
-                                                data={[
-                                                    {
-                                                        title: upcoming.tutorial.selected_category.name,
-                                                        url: upcoming.site_url + 'tutorials/',
-                                                    },
-                                                    {
-                                                        title: upcoming.tutorial.tutorial_title,
-                                                        url: upcoming.site_url + 'tutorials/' + upcoming.tutorial.slug + '/'
-                                                    }
-                                                ]}
-                                            /> 
-                                        </div>
-                                        
-                                        <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
-                                        <i className="modified-date">
-                                        Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
-                                        </i>
-                                    </header> 
-
-                                    <Helper.AdCompaignBox data={upcoming.ads} position={'after_title'}/>
-
-                                    <div className="lg-2-content tutorial-content content-section">
-                                        <Helper.ArticleContentSingle helper={{ads: upcoming.ads, settings: upcoming.settings}} blocks={upcoming.post.blocks}/>
-                                    </div>
-
-                                </div> 
-
-                                {
-                                    upcoming.posts?.length > 1 ? 
-                                    (
-                                        <>
-                                            <div className="separator-div"></div> 
-                                            {
-                                                upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                                <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
-                                                : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
-                                            } 
-                                            <div className="separator-div"></div>
-                                        </>
-                                    ): ""
-                                }
-                                
-
-                                
-                                <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
+                                    <Helper.AdCompaignBox data={upcoming.ads} position={'before_sidebar'} />
+                                    
                                     {
-                                        upcoming.settings.share_social_buttons == '' ? ''
-                                        : 
-                                        <>
-                                            <span>Share <b className='share-txt-on'>{upcoming.post.post_title}</b> on:</span>
-                                            <div className="flexbox gap-15 share-box"> 
-                                            <Helper.SocialShare   
-                                                platforms={upcoming.settings.share_social_buttons} 
-                                                url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/${upcoming.post.slug}/`}
-                                                title={upcoming.post.meta_title}
-                                                size={32} 
-                                                height={'32px'} 
-                                                width={'32px'} 
-                                                radius={!upcoming.settings.circle_buttons} 
-                                            />
-                                            </div>
-                                        </>
+                                        upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                        <Helper.ArticleSidebar helper={{ads: upcoming.ads, settings:upcoming.settings}} site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/> 
+                                        : <Helper.ArticleSidebar helper={{ads: upcoming.ads, settings:upcoming.settings}} site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
                                     }
+                                    
+                                    
+                                </StickyBox>
+                            </div> : ''
+                        }
+                        
+                            
+                        <div className={`plr-20 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
+                            <div className="max-1150 offset-left offset-right demove-ads">
+                                
+                                <Helper.AdCompaignBox data={upcoming.ads} position={'before_title'}/>
+
+                                <header className="flexbox content-center column-direction mb-30">
+                                    
+                                    
+
+                                    <div className="flexbox items-center">
+                                        <Helper.Breadcrumbs
+                                            data={[
+                                                {
+                                                    title: upcoming.tutorial.selected_category.name,
+                                                    url: upcoming.site_url + 'tutorials/',
+                                                },
+                                                {
+                                                    title: upcoming.tutorial.tutorial_title,
+                                                    url: upcoming.site_url + 'tutorials/' + upcoming.tutorial.slug + '/'
+                                                }
+                                            ]}
+                                        /> 
+                                    </div>
+                                    
+                                    <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
+                                    <i className="modified-date">
+                                    Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
+                                    </i>
+                                </header> 
+
+                                <Helper.AdCompaignBox data={upcoming.ads} position={'after_title'}/>
+
+                                <div className="lg-2-content tutorial-content content-section">
+                                    <Helper.ArticleContentSingle helper={{ads: upcoming.ads, settings: upcoming.settings}} blocks={upcoming.post.blocks}/>
                                 </div>
 
-                                <Helper.FeedBackBlock data_id={upcoming.post._id} data_title={upcoming.post.post_title}/>
-                            </div>
+                            </div> 
+                            
+                            
 
+                            {
+                                upcoming.posts?.length > 1 ? 
+                                (
+                                    <>
+                                        <div className="separator-div"></div> 
+                                        {
+                                            upcoming.tutorial.options.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
+                                            <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug}/>
+                                            : <Helper.NextPrevPagination site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug}/> 
+                                        } 
+                                        <div className="separator-div"></div>
+                                    </>
+                                ): ""
+                            }
+                            
+                            
+                            
+                            <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
+                                {
+                                    upcoming.settings.share_social_buttons == '' ? ''
+                                    : 
+                                    <>
+                                        <span>Share <b className='share-txt-on'>{upcoming.post.post_title}</b> on:</span>
+                                        <div className="flexbox gap-15 share-box"> 
+                                        <Helper.SocialShare   
+                                            platforms={upcoming.settings.share_social_buttons} 
+                                            url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/${upcoming.post.slug}/`}
+                                            title={upcoming.post.meta_title}
+                                            size={32} 
+                                            height={'32px'} 
+                                            width={'32px'} 
+                                            radius={!upcoming.settings.circle_buttons} 
+                                        />
+                                        </div>
+                                    </>
+                                }
+                            </div>
+                            
+                            <Helper.AdCompaignBox data={upcoming.ads} position={`after_contents`}/>
+
+                            <Helper.FeedBackBlock data_id={upcoming.post._id} data_title={upcoming.post.post_title}/>
                         </div>
 
+                    </div>
                 </main> 
             </>
         )

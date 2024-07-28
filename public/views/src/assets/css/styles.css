@@ -981,10 +981,19 @@ ul li a.expanded-a::after{
     text-align: center;
  }
 
+
  .chapter-elements .ad-box {
     flex-basis: 100%;
     margin-left: 40px;
     margin-right: 40px;
+ }
+
+ .box-vote-block ~ .ad-box {
+    margin-top: 50px;
+ }
+
+ .tutorial-content  .ad-box {
+    margin-bottom: 30px;
  }
 
  .demove-ads .ad-box { 
