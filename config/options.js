@@ -21,7 +21,8 @@ const Config = {
         serve: "uploads",   // https://example.com/uploads/... fetch image
         folder: `public`, // public/uploads upload image to folder
     }, 
-    jwt_secret: "__Coded__Tag__",   
+    api_keys: 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132',
+    jwt_secret: "codedtag_t1y4u5236985471zasde!gfh@qwe#$%hoj^ytu&*tu(ib)ib~gfhrytuibonphojlkmlbkxzasqwe",   
     database: {
         name: db_name,
         host: "mongodb://127.0.0.1",
