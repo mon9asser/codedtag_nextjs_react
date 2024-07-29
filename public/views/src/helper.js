@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {Fragment, useEffect, useRef, useState} from 'react'
 import {Settings} from "./settings"; 
 import axios from 'axios';
 import CryptoJS, { RabbitLegacy } from 'crypto-js';
@@ -1442,67 +1442,86 @@ class HelperData {
       var posts = [];
       if( type == 'posts' ) {
         if(data.length)
-          posts = this.chunkArray(data, 5 ) 
+          posts = this.chunkArray(data, settings.ads_between_navs_every_list ) 
       }
 
       var chapters = []; 
       if( type == 'chapters' ) {
         if(data.length)
-          chapters = this.chunkArray(data, 5 ) 
+          chapters = this.chunkArray(data, settings.ads_between_navs_every_list ) 
       } 
 
+      var elem_list = 0;
+
+
+      
       var itemComponents = (
         <>
 
           {/* Chapters */}
           {type === 'chapters' ? 
-            chapters.map( (chapterData, indexer) => (
+            // split chapters according to ads 
+             
 
-              <ul key={indexer} className="block-list custom-aside-tuts">
+            chapters.map( (chapterData, indexer) => {
+              
+              elem_list++;
 
-                {chapterData.map(chapter => {
-                  var link_url = `${site_url}tutorials/${tutorial_slug}/`;
-                  if( tab_slug != undefined ) {
-                    link_url = `${link_url}t/${tab_slug}/`
-                  }
-                   
-                  var is_expaned = chapter.posts.findIndex( x => x.slug == current_post_slug) != -1;
+              return (
+                <React.Fragment key={indexer}>
+                  <ul key={indexer} className="block-list custom-aside-tuts">
 
-                  return (
-                    <React.Fragment key={chapter._id}>
-                      {chapter.chapter_title !== "" ? (
+                    {chapterData.map(chapter => {
+                      var link_url = `${site_url}tutorials/${tutorial_slug}/`;
+                      if( tab_slug != undefined ) {
+                        link_url = `${link_url}t/${tab_slug}/`
+                      }
+                      
+                      var is_expaned = chapter.posts.findIndex( x => x.slug == current_post_slug) != -1;
 
-                          <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
-                            <RouterLink className={` ${is_expaned ? 'expanded-a': ''}`} id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} to="#">{chapter.chapter_title}</RouterLink>
-                            {chapter.posts.length ? (
-                              <ul id={`item-${chapter._id}`} className={`collapsible list-items ${is_expaned ? 'expanded': ''}`}>
+                      return (
+                        <React.Fragment key={chapter._id}>
+                          {chapter.chapter_title !== "" ? (
+
+                            <>
+                              <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
+                                <RouterLink className={` ${is_expaned ? 'expanded-a': ''}`} id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} to="#">{chapter.chapter_title}</RouterLink>
+                                {chapter.posts.length ? (
+                                  <ul id={`item-${chapter._id}`} className={`collapsible list-items ${is_expaned ? 'expanded': ''}`}>
+                                    {chapter.posts.map(x => (
+                                      <li key={x._id}>
+                                        <RouterLink className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</RouterLink>
+                                      </li>
+                                    ))} 
+                                    
+                                  </ul>
+                                ) : null}
+                              </li> 
+                            </>
+                            
+                          ) : (
+                            <li>
+                              <ul className="block-list custom-aside-tuts list-items">
                                 {chapter.posts.map(x => (
                                   <li key={x._id}>
                                     <RouterLink className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</RouterLink>
                                   </li>
-                                ))} 
+                                ))}
                               </ul>
-                            ) : null}
-                          </li>
-                        
-                      ) : (
-                        <li>
-                          <ul className="block-list custom-aside-tuts list-items">
-                            {chapter.posts.map(x => (
-                              <li key={x._id}>
-                                <RouterLink className={current_post_slug == x.slug ? 'selected_tab': ''} to={`${link_url}${x.slug}/`}>{x.post_title}</RouterLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </li>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
+                            </li>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
 
-              </ul>
+                  </ul>
+                   
+                  <this.AdCompaignBox data={ads} position={`in_sidebar_${elem_list}`}/>
+                    
+                </React.Fragment>
+              )
 
-            ))
+            })
            
           : ''}
           
@@ -1511,6 +1530,9 @@ class HelperData {
             (type == 'posts') ?
             posts.map( (x, index) =>{
               
+              if(  x.length >= settings.ads_between_navs_every_list )
+                elem_list++;
+
               return  (
                 <React.Fragment key={index} >
                   <ul className="block-list custom-aside-tuts list-items">
@@ -1534,7 +1556,7 @@ class HelperData {
                   </ul>
   
                   {
-                    x.length == 5 ? <b>Ad here .++++++++</b>: ''
+                    x.length >= settings.ads_between_navs_every_list ? <this.AdCompaignBox data={ads} position={`in_sidebar_${elem_list}`}/>: ''
                   }
                 </React.Fragment>
               )
@@ -1886,6 +1908,9 @@ class HelperData {
     }
 
     TutorialLinks = ({upcoming, built_url, ad_camp}) => {
+
+      var counter_ads = 0;
+      var ads_every = upcoming.settings?.ads_between_navs_in_chapters ?upcoming.settings.ads_between_navs_in_chapters: 4;
       return (
           <div className="wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center"> 
                           
@@ -1894,11 +1919,16 @@ class HelperData {
                   upcoming.chapters.length ?
                   (
                       upcoming.chapters.map(( chapter, k) => {
+
+                          //counter_ads
+                          if( k % ads_every == 0) {
+                            counter_ads++;
+                          }
+                           
                           return ( 
-                            <React.Fragment key={chapter._id} >
+                            <React.Fragment key={chapter._id} > 
+                              { (k % ads_every == 0 ) && <this.AdCompaignBox data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
                               <this.TutorialsList built_url={built_url} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/>
-                               
-                              { k % 3 == 2 && <this.AdCompaignBox data={ad_camp} position={`between_row_ad_${ (k + 1) / 3  }`}/>}
                             </React.Fragment>
                            );
                       })
@@ -1906,11 +1936,14 @@ class HelperData {
                   (
                       upcoming.posts.length ?
                           Helper.chunkArray(upcoming.posts, 3 ).map(( posts, k) => {
-                             
+                              //counter_ads
+                              if( k % ads_every == 0) {
+                                counter_ads++;
+                              }
                               return ( 
                               <React.Fragment key={k} >
+                                  { (k % ads_every == 0 ) && <this.AdCompaignBox data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
                                   <this.TutorialsList built_url={built_url} data={posts} index={k}/>
-                                  { k % 3 == 2 && <this.AdCompaignBox data={ad_camp} position={`between_row_ad_${ (k + 1) / 3  }`}/>}
                                </React.Fragment>
                             );
                           })

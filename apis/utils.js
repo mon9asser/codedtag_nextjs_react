@@ -12,7 +12,7 @@ const {Posts} = require("./../models/posts-model");
 const {Menus} = require("./../models/menus-model"); 
 const {Sets} = require("./../models/settings-model"); 
 const { check, validationResult } = require('express-validator');
-
+const {AdCampaign} = require("./../models/ad_campaign-model"); 
 
 
 // search 
@@ -20,6 +20,7 @@ utillRouter.get('/search', async (req, res) => {
 
     var settings = await Sets.find({});
     var menus = await Menus.find({});
+    var ads = await AdCampaign.find({page: 'search_page', is_enabled: true })
 
     await check('q')
         .trim()
@@ -48,13 +49,14 @@ utillRouter.get('/search', async (req, res) => {
 
         // Use $text for full-text search
         const response = await Posts.find({ $text: { $search: query }, post_type: 0 });
-         
-
+        
+        
         return res.send({
             is_error: false,
             data: response,
             settings,
             menus,
+            ads,
             message: 'Fetched successfully!'
         });
 
@@ -64,6 +66,7 @@ utillRouter.get('/search', async (req, res) => {
             data: [],
             settings,
             menus,
+            ads,
             message: error.message || 'Something went wrong!'
         });
     }

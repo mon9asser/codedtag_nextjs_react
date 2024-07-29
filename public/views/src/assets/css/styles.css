@@ -646,7 +646,7 @@ li a.selected_tab:hover {
 }
   
 .collapsible.expanded {
-    max-height: 200px; /* Adjust based on the content height */
+    max-height: 550px; /* Adjust based on the content height */
     -o-transition: max-height 0.3s ease-in; 
     -webkit-transition:max-height 0.3s ease-in; 
     transition: max-height 0.3s ease-in;
@@ -863,13 +863,11 @@ ul li a.expanded-a::after{
  }
 
  .tutorial-name-searched {
-    font-size: 11px;
-    background: #b9355f2c;
-    padding: 2px 10px;
+    font-size: 12px; 
+    padding: 2px 0px;
     border-radius: 14px;
-    color: #fff;
-    margin-left: auto;
-    color: #b9355e;
+    color: #474747; 
+    display: block;
 }
 
  .searched-items {
@@ -884,29 +882,36 @@ ul li a.expanded-a::after{
 .searched-items li {
     text-align: left;
     flex: 1 1 calc(33.333% - 10px); /* Three columns */
-    margin: 5px;
-    background-color: #f9f9f9; /* Background color for list items */
-    padding: 10px;
-    
-    border: 1px solid #eee; /* Border for rectangle effect */
-    border-left: 2px solid #b9355e;
+    margin: 5px; 
+    padding: 10px; 
     box-sizing: border-box; /* Ensure padding and border are included in the width */
-
-    display: flex;
-    align-items: center;
-    height: auto;
-    gap: 10px;
-    flex-wrap: wrap;
+    flex-direction: column; 
+    height: auto; 
+    
+    display: inline-block;
 }
+.searched-items li:not(.contain-li-ads) {
+    border: 1px solid #17182c;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+.searched-items li:not(.contain-li-ads):before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background-color: rgb(95, 95, 95);
+}
+
 .searched-items li a {
     font-size: 12px;
-    color: #333;
+    color: #1d2031;
     font-weight: bold;  
 }
  
-.searched-items li a:hover {
+.searched-items li:hover a {
     color: #b9355e;
 } 
+
 
 /* Responsive design */
 @media (max-width: 900px) {
@@ -995,7 +1000,16 @@ ul li a.expanded-a::after{
  .tutorial-content  .ad-box {
     margin-bottom: 30px;
  }
-
+ ul li.contain-li-ads {
+    flex-basis: 100%;
+ }
+ ul li.contain-li-ads .ad-box {
+    margin: 0;
+ }
  .demove-ads .ad-box { 
     margin-top: 0px;
+ }
+
+ .main-sidebar .ad-box {
+    margin-bottom: 30px;
  }

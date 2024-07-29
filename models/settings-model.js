@@ -107,9 +107,13 @@ let settingsSchema = new Schema({
         type: Number, 
         default: 400
     },
-    ads_between_navs_every_lis: {
+    ads_between_navs_every_list: {
         type: Number, 
         default: 8
+    },
+    ads_between_navs_in_chapters: {
+        type: Number, 
+        default: 4
     },
     circle_buttons:{
         type: Boolean, 

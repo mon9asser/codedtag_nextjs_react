@@ -14,7 +14,8 @@ var SearchComponents = () => {
         settings: null,
         menus: null, 
         site_url: null,
-        result_title: null
+        result_title: null,
+        ads: null
     });
 
     const [query, setQuery] = React.useState('');
@@ -49,7 +50,8 @@ var SearchComponents = () => {
                     settings: res.settings,
                     menus: res.menus, 
                     site_url: site_url,
-                    result_title: searchQuery
+                    result_title: searchQuery,
+                    ads: res.ads
                 }) 
             })
         } else {
@@ -76,7 +78,8 @@ var SearchComponents = () => {
                     settings: res.settings,
                     menus: res.menus, 
                     site_url: site_url,
-                    result_title: searchQuery
+                    result_title: searchQuery,
+                    ads: res.ads
                 }) 
             })
         }
@@ -87,20 +90,23 @@ var SearchComponents = () => {
         return (
             <div className="error-message-container">
                 
+                <Helper.AdCompaignBox data={upcoming.ads} position={'before_title'} />
                 <h1 className='custom-headline section-head'>Find What You're Looking For!</h1>
-
+                <Helper.AdCompaignBox data={upcoming.ads} position={'after_title'} />
                 <p>
                     Welcome to our search page! Here, you can find exactly what you're looking for in just a few clicks.
                 </p>
 
                 <Helper.SearchComponent/>
-                
+                <Helper.AdCompaignBox data={upcoming.ads} position={'before_search_results'} />
                 <p>
                     Simply type your keywords into the search bar above, then hit on the search button and we'll show you the most relevant results. 
                 </p>
+                <Helper.AdCompaignBox data={upcoming.ads} position={'inside_content'} />
                 <p>
                 Whether you're searching for articles, tutorials, or products, our search tool makes it easy to discover the information you need.
                 </p>
+                <Helper.AdCompaignBox data={upcoming.ads} position={'after_search_results'} />
             </div>          
         )
     }
@@ -108,17 +114,20 @@ var SearchComponents = () => {
     var SearchResultComponents = () => {
         return (
             <>
+
                 <div className='text-left search-block-header'>
+                    <Helper.AdCompaignBox data={upcoming.ads} position={'before_title'} />
                     <h1 className='custom-headline section-head ssreash'>Search results for <b>{upcoming.result_title}</b></h1>
                     <span className='search-result-row'>{upcoming.results?.length} results found</span>
+                    <Helper.AdCompaignBox data={upcoming.ads} position={'after_title'} />
                 </div>
 
                 <div className='search-block-body'>
-
+                    <Helper.AdCompaignBox data={upcoming.ads} position={'before_search_results'} />
                     {
                         upcoming.results?.length ? (
                             <ul className='searched-items'> 
-                                {upcoming.results?.map( x => { 
+                                {upcoming.results?.map( (x, key_value) => { 
 
                                     var link = `${upcoming.site_url}tutorials/${x.tutorial.slug}/`;
                                     if( x.selected_tab.slug != '' ) {
@@ -126,13 +135,24 @@ var SearchComponents = () => {
                                     }
                                     link = `${link}${x.slug}/`;
 
-                                    return <li key={x._id}><Link to={link}>{x.post_title}</Link><span className='tutorial-name-searched'>{x.tutorial.name}</span></li>
+                                    return (
+                                        <React.Fragment key={x._id}>
+                                            <li><Link to={link}>{x.post_title}</Link><span className='tutorial-name-searched'>{x.tutorial.name}</span></li>
+                                            {
+                                                ( key_value == 12 && upcoming.results.length >= 21 ) &&
+                                                <li className='contain-li-ads'>
+                                                    <Helper.AdCompaignBox data={upcoming.ads} position={'inside_content'} />
+                                                </li>
+                                            }
+                                        </React.Fragment>
+                                    )
                                 
                                 })} 
                             </ul>
                         ): <p className='text-left'>No results found!</p>
                     }
                     
+                    <Helper.AdCompaignBox data={upcoming.ads} position={'after_search_results'} />
                 </div>
             </>
         ); 

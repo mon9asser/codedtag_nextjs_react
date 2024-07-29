@@ -84,7 +84,8 @@ var TabArticleComponent = () => {
                 menus: data.menus,
                 posts: data.posts,
                 site_url,
-                tab
+                tab,
+                ads: data.ads
             })
         });
 
@@ -102,7 +103,8 @@ var TabArticleComponent = () => {
         menus: null, // object
         posts: null,
         site_url: null,
-        tab: null
+        tab: null,
+        ads: null
     });
 
     
@@ -116,6 +118,8 @@ var TabArticleComponent = () => {
         } else {
             image = image[0].data.file.url 
         }
+
+        
          
         return (
             <>
@@ -219,13 +223,15 @@ var TabArticleComponent = () => {
                             {
                                 upcoming.tab.sidebar_content != 'none' ?
                                 <div className="md-4 md-1-half plr-20 main-sidebar flex-order-2-md">
+
                                     <StickyBox offsetTop={85} offsetBottom={20}>
                                         
-                                        
+                                        <Helper.AdCompaignBox data={upcoming.ads} position={'before_sidebar'} />
+
                                         {
                                             upcoming.tab.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
-                                            <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug} tab_slug={upcoming.tab.slug}/> 
-                                            : <Helper.ArticleSidebar site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug} tab_slug={upcoming.tab.slug}/> 
+                                            <Helper.ArticleSidebar helper={{ads: upcoming.ads, settings: upcoming.settings}} site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='chapters' data={upcoming.chapters} current_post_slug={upcoming.post.slug} tab_slug={upcoming.tab.slug}/> 
+                                            : <Helper.ArticleSidebar helper={{ads: upcoming.ads, settings: upcoming.settings}} site_url={upcoming.site_url} tutorial_slug={upcoming.tutorial.slug} type='posts' data={upcoming.posts} current_post_slug={upcoming.post.slug} tab_slug={upcoming.tab.slug}/> 
                                         }
                                         
 
@@ -237,6 +243,8 @@ var TabArticleComponent = () => {
                             <div className={`plr-20 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
                                 <div className="max-1150 offset-left offset-right">
                                     
+                                    <Helper.AdCompaignBox data={upcoming.ads} position={'before_title'}/>
+
                                     <header className="flexbox content-center column-direction mb-30">
                                         <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
                                         <i className="modified-date">
@@ -244,8 +252,10 @@ var TabArticleComponent = () => {
                                         </i>
                                     </header> 
 
+                                    <Helper.AdCompaignBox data={upcoming.ads} position={'after_title'}/>
+
                                     <div className="lg-2-content tutorial-content content-section">
-                                        <Helper.ArticleContent blocks={upcoming.post.blocks}/>
+                                        <Helper.ArticleContentSingle helper={{ads: upcoming.ads, settings: upcoming.settings}} blocks={upcoming.post.blocks}/>
                                     </div>
 
                                 </div> 
@@ -287,7 +297,7 @@ var TabArticleComponent = () => {
                                         </>
                                     }
                                 </div>
-
+                                <Helper.AdCompaignBox data={upcoming.ads} position={`after_contents`}/>
                                 <Helper.FeedBackBlock data_id={upcoming.post._id} data_title={upcoming.post.post_title}/>
                             </div>
 

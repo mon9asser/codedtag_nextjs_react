@@ -12,6 +12,17 @@ class AdCampaigns extends Component {
         campaigns: [],
         deletedIds: [], // Track deleted IDs
         campaign_pages: [
+              { 
+                text: "Search Page", 
+                value: "search_page", 
+                positions: [
+                    { text: "Before Title", value: "before_title" },
+                    { text: "After Title", value: "after_title" },
+                    { text: "Inside Content", value: "inside_content" },
+                    { text: "Before Search Result", value: "before_search_results" },
+                    { text: "After Search Result", value: "after_search_results" }
+                ]
+            },
             { 
                 text: "Single Page", 
                 value: "single_page", 
@@ -28,6 +39,11 @@ class AdCampaigns extends Component {
                     { text: "Inside Content 8", value: "inside_content_8" },
                     { text: "Inside Content 9", value: "inside_content_9" },
                     { text: "Inside Content 10", value: "inside_content_10" },
+                    { text: "Inside Content 11", value: "inside_content_11" },
+                    { text: "Inside Content 12", value: "inside_content_12" },
+                    { text: "Inside Content 13", value: "inside_content_13" },
+                    { text: "Inside Content 14", value: "inside_content_14" },
+                    { text: "Inside Content 15", value: "inside_content_15" },
                     { text: "After Contents", value: "after_contents" },
                     { text: "Before Sidebar", value: "before_sidebar" },
                     { text: "In Sidebar 1", value: "in_sidebar_1" },
@@ -39,7 +55,13 @@ class AdCampaigns extends Component {
                     { text: "In Sidebar 7", value: "in_sidebar_7" },
                     { text: "In Sidebar 8", value: "in_sidebar_8" },
                     { text: "In Sidebar 9", value: "in_sidebar_9" },
-                    { text: "In Sidebar 10", value: "in_sidebar_10" }
+                    { text: "In Sidebar 10", value: "in_sidebar_10" },
+                    { text: "In Sidebar 11", value: "in_sidebar_11" },
+                    { text: "In Sidebar 12", value: "in_sidebar_12" },
+                    { text: "In Sidebar 13", value: "in_sidebar_13" },
+                    { text: "In Sidebar 14", value: "in_sidebar_14" },
+                    { text: "In Sidebar 15", value: "in_sidebar_15" },
+
                 ]
             },
             { 
@@ -309,18 +331,25 @@ class AdCampaigns extends Component {
             
             <div style={{display: 'flex', justifyContent:'space-between', alignItems: 'center', marginBottom: '10px'}}>
               <label>
-                How many words inside article to show ads between ?
+                Single Page - How many words inside article to show ads between ?
               </label>
               <input value={this.state.settings == null ?'':this.state.settings?.ads_between_texts_every_words} onChange={e => this.setState({settings: {...this.state.settings, ads_between_texts_every_words: parseInt(e.target.value) } })} style={{padding:'5px', border: '1px solid #ddd'}} type="number" />
             </div>
 
             <div style={{display: 'flex', justifyContent:'space-between', alignItems: 'center', marginBottom: '10px'}}>
               <label>
-                How many li elements inside sidebar(nav) to show ads between ?
+                Single Page - How many li elements inside sidebar(nav) to show ads between ?
               </label>
-              <input value={this.state.settings == null ?'':this.state.settings?.ads_between_navs_every_lis} onChange={e => this.setState({settings: {...this.state.settings, ads_between_navs_every_lis: parseInt(e.target.value) } })} style={{padding:'5px', border: '1px solid #ddd'}} type="number" />
+              <input value={this.state.settings == null ?'':this.state.settings?.ads_between_navs_every_list} onChange={e => this.setState({settings: {...this.state.settings, ads_between_navs_every_list: parseInt(e.target.value) } })} style={{padding:'5px', border: '1px solid #ddd'}} type="number" />
             </div>
-
+            
+            <div style={{display: 'flex', justifyContent:'space-between', alignItems: 'center', marginBottom: '10px'}}>
+              <label>
+                Tutorial Page ( Chapters ) - Ads between every lists of chapters or posts 
+              </label>
+              <input value={this.state.settings == null ?'':this.state.settings?.ads_between_navs_in_chapters} onChange={e => this.setState({settings: {...this.state.settings, ads_between_navs_in_chapters: parseInt(e.target.value) } })} style={{padding:'5px', border: '1px solid #ddd'}} type="number" />
+            </div>
+            
           </div>
 
           <div style={{ margin: "20px", border: '3px solid #dfdfdf', padding: '20px' }}>
