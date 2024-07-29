@@ -3,10 +3,12 @@ const { Config } = require("./options");
 
 const dbLink = Config.database.link();
 
+mongoose.set('debug', true); // Enable debugging for more detailed logs
+
 mongoose.connect(dbLink, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  connectTimeoutMS: 30000, // 30 seconds
+  serverSelectionTimeoutMS: 30000 // Increase timeout to 30 seconds
 })
 .then(() => {
   console.log('Successfully connected to the database');
@@ -17,8 +19,5 @@ mongoose.connect(dbLink, {
 });
 
 mongoose.Promise = global.Promise;
-
-// Optionally enable debugging
-// mongoose.set('debug', true);
 
 module.exports = { mongoose };

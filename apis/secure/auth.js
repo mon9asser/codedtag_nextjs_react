@@ -1,12 +1,12 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
-
-var secretKey = 'thiciscodeaasdsad5550';
+const {Config} = require("./../../config/options") 
 
 // Middleware to verify token
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
+    
     if (!token) {
         return res.status(403).send({
             message: 'Token is required.',
@@ -15,20 +15,27 @@ const verifyToken = (req, res, next) => {
         });
     }
     
-    jwt.verify(token, secretKey, (err, decoded) => {
+    try {
+      jwt.verify(token, Config.jwt_secret, (err, decoded) => {
 
-      if (err) {
-        return res.status(401).send({
-            message: 'Invalid token.',
-            is_error: true, 
-            data: []
-        });
-      }
-
-      req.crypted_usr = decoded;
-      next();
-
+        if (err) { 
+          return res.status(401).send({
+              message: 'Invalid token.',
+              is_error: true, 
+              data: []
+          });
+        } 
+        req.crypted_usr = decoded;
+        next();
+  
+      });
+    } catch (error) {
+      return res.status(401).send({
+        message: 'Invalid token.',
+        is_error: true, 
+        data: []
     });
+    }
 };
 
 

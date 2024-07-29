@@ -1219,7 +1219,7 @@ class HelperData {
         }
 
         var token = generate_token.data;
-
+         
         if( headers === undefined ) {
             headers = {};
         }
@@ -1232,9 +1232,10 @@ class HelperData {
 
         data["Secret-codedtag-api-key"] = Settings.keys.secret ;
          
-        try {
+        
+       
            
-           
+          
           var session = localStorage.getItem("session"); 
            
           var additional = {}; 
@@ -1276,6 +1277,7 @@ class HelperData {
             data = {...data, ...additional}
           }
 
+          
           var reqs = await axios({
             method: method,
             url: `${Settings.server.api}/${api}`,
@@ -1285,7 +1287,8 @@ class HelperData {
               ...headers
             }
           });
-    
+          
+          try {
           if( reqs.status === 200 ) {
               return reqs.data;
           } else { 
@@ -1297,6 +1300,7 @@ class HelperData {
           }
     
         } catch (error) {  
+          
           return  {
               data: [],
               message: error?.response?.data?.message || "Something went wrong, try later",
