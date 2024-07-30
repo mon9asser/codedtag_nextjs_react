@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 const express = require("express"); 
 const  {Categories} = require("./../models/category-model")
+const {middlewareTokens} = require("./../apis/secure/middlewares")
+
 var categoryRouter = express.Router(); 
 var path = require("path");
 var fs = require("fs");
 
 
-categoryRouter.post("/category/blk-create-update", async (req, res) => {
+categoryRouter.post("/category/blk-create-update", middlewareTokens, async (req, res) => {
     
     if (!req.body.data_array) {
         return res.send({
@@ -57,7 +59,7 @@ categoryRouter.post("/category/blk-create-update", async (req, res) => {
 });
 
  
-categoryRouter.post("/category/blk-delete", async (req, res) => {
+categoryRouter.post("/category/blk-delete", middlewareTokens, async (req, res) => {
     if (!req.body.data_array) {
       return res.send({
         data: [],
@@ -107,7 +109,7 @@ categoryRouter.post("/category/blk-delete", async (req, res) => {
 });
 
 
-categoryRouter.get("/categories", async (req, res) => {
+categoryRouter.get("/categories", middlewareTokens, async (req, res) => {
     try {
       const categories = await Categories.find({});
       res.send({

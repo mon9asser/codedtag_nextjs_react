@@ -7,7 +7,7 @@ const helmet = require('helmet');
 
 const { Config } = require("./config/options");
 const axios = require("axios");
-const { verifyToken } = require('./apis/secure/auth');
+
 
 // cron jobs => google analytics 
 require("./apis/anlytics");
@@ -20,21 +20,7 @@ const corsOptions = {
     optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
-// Middleware for hash request (token and API)
-app.use((req, res, next) => {
-    /*const notAuthed = ['/api/hash-request', '.xml', '.txt'];
-    const isNotAuthed = notAuthed.some(path => req.path.includes(path));
-
-    if (!isNotAuthed) {
-        return verifyToken(req, res, next);
-    }*/
-
-    console.log(req.path);
-
-    next();
-});
-
+ 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(helmet());
@@ -63,6 +49,7 @@ const { commentsRouter } = require("./apis/comments");
 const { analyticsRouter } = require("./apis/google-analytics");
 const { analyticsRouter2 } = require("./apis/analytics-report");
 const { sitemapRouter } = require("./apis/sitemap");
+const { redirectsRouter }  = require("./apis/redirects");
 const { utillRouter } = require("./apis/utils");
 
 // Serve static files for React app
@@ -87,6 +74,7 @@ app.use(Config.server.api, utillRouter);
 
 // Sitemap and robots files
 app.use(Config.server.sitemap, sitemapRouter);
+app.use(Config.server.redirects, redirectsRouter)
 
 // Proxy route
 app.get(Config.server.api + '/proxy', async (req, res) => {

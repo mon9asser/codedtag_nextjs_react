@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const {Helper} = require("./../config/helper")
 const { domain } = require("./../config/db");
+const {middlewareTokens} = require("./../apis/secure/middlewares")
 
 // Models of DB
 const {Usr} = require("./../models/user-model");
@@ -18,7 +19,7 @@ const { Permissions} =   require('./permissions.js');
 const { PassThrough } = require('form-data');
 
  
-userRouters.post("/user/subscribe",  async (req, res) => {
+userRouters.post("/user/subscribe", middlewareTokens,  async (req, res) => {
 
     /* name - email - username */
 
@@ -92,7 +93,7 @@ userRouters.post("/user/subscribe",  async (req, res) => {
 });
 
 // Login 
-userRouters.post("/user/login", async (req, res) => {
+userRouters.post("/user/login", middlewareTokens, async (req, res) => {
     try {
         var { password, email_username } = req.body;
 
@@ -181,7 +182,7 @@ userRouters.post("/user/login", async (req, res) => {
 
 
 // create user 
-userRouters.post("/user/create-update", async (req, res) => {
+userRouters.post("/user/create-update", middlewareTokens, async (req, res) => {
     try {
         const body = req.body;
 
@@ -262,7 +263,7 @@ userRouters.post("/user/create-update", async (req, res) => {
 
 
 // Register
-userRouters.post("/user/register", async (req, res) => {
+userRouters.post("/user/register", middlewareTokens, async (req, res) => {
     
     var {
         username, 
@@ -400,7 +401,7 @@ userRouters.post("/user/register", async (req, res) => {
 
 
 // Check user permission
-userRouters.post("/user/capabilities", async (req, res) => {
+userRouters.post("/user/capabilities", middlewareTokens, async (req, res) => {
     
     if( (req.body.token == undefined || req.body.token == "") && (req.body.page == undefined || req.body.page == "") ) {
         return res.send({
@@ -489,7 +490,7 @@ userRouters.post("/user/capabilities", async (req, res) => {
 }); 
 
 // get 
-userRouters.get("/user/get", async (req, res) => { 
+userRouters.get("/user/get", middlewareTokens, async (req, res) => { 
     
     var user_id = req.query.user_id; 
     
@@ -519,7 +520,7 @@ userRouters.get("/user/get", async (req, res) => {
 });
 
 
-userRouters.post("/user/delete", async (req, res) => { 
+userRouters.post("/user/delete", middlewareTokens, async (req, res) => { 
     
     var user_id = req.body.user_id;
 

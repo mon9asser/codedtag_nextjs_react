@@ -7,13 +7,14 @@ const {Sets} = require("./../models/settings-model");
 const {Menus} = require("./../models/menus-model");
 const {Usr} = require("./../models/user-model");
 const {AdCampaign} = require("./../models/ad_campaign-model");
+const {middlewareTokens} = require("./../apis/secure/middlewares")
 
 var tutorialRouter = express.Router(); 
 var path = require("path");
 var fs = require("fs");
 
 
-tutorialRouter.post("/tutorial/create-update", async (req, res) => {
+tutorialRouter.post("/tutorial/create-update", middlewareTokens, async (req, res) => {
     try {
         var body = req.body;
 
@@ -73,7 +74,7 @@ tutorialRouter.post("/tutorial/create-update", async (req, res) => {
  * localhost:5000/api/tutorials => for all 
  * localhost:5000/api/tutorials?tutorial_id=665f7ac49d84a1b651c0fae2 => for spesific id
  */
-tutorialRouter.get("/tutorials", async (req, res) => {
+tutorialRouter.get("/tutorials", middlewareTokens, async (req, res) => {
     try {
         const { tutorial_id } = req.query;
 
@@ -108,7 +109,7 @@ tutorialRouter.get("/tutorials", async (req, res) => {
 });
 
 
-tutorialRouter.post("/tutorial/delete", async (req, res) => {
+tutorialRouter.post("/tutorial/delete", middlewareTokens, async (req, res) => {
     try {
         const { tutorial_id } = req.body;
          
@@ -138,7 +139,7 @@ tutorialRouter.post("/tutorial/delete", async (req, res) => {
 });
 
 
-tutorialRouter.get("/tutorial-page/get", async (req, res) => {
+tutorialRouter.get("/tutorial-page/get", middlewareTokens, async (req, res) => {
     
    try {
      
@@ -212,7 +213,7 @@ tutorialRouter.get("/tutorial-page/get", async (req, res) => {
 
 
 
-tutorialRouter.get("/home-page/get", async (req, res) => {
+tutorialRouter.get("/home-page/get", middlewareTokens, async (req, res) => {
     
     try {
         

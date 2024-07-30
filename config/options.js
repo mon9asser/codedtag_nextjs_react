@@ -10,6 +10,7 @@ const Config = {
     redirect_to: "/tutorials",
 
     server: {
+        redirects: "",
         sitemap: "", // slug shuould be started with slash /
         robots: "", // slug shuould be started with slash /
         api: "/api",

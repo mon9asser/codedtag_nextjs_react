@@ -3,6 +3,7 @@ const { Contact } = require('./../models/contact-model');
 var contactRouter = express.Router();
 const crypto = require('crypto');
 const validator = require('validator');
+const {middlewareTokens} = require("./../apis/secure/middlewares")
 
 // Encryption setup
 const algorithm = 'aes-256-cbc';
@@ -58,7 +59,7 @@ function validateAndSanitize(data) {
 
 
 // Create or Update Contact
-contactRouter.post('/contact-message', async (req, res) => {
+contactRouter.post('/contact-message',middlewareTokens, async (req, res) => {
     try {
 
         const body = req.body;
@@ -93,7 +94,7 @@ contactRouter.post('/contact-message', async (req, res) => {
 });
 
 // Get Contacts with Pagination
-contactRouter.get('/contacts', async (req, res) => {
+contactRouter.get('/contacts',middlewareTokens, async (req, res) => {
     try {
         const { page = 1, limit = 10 } = req.query;
         
@@ -124,7 +125,7 @@ contactRouter.get('/contacts', async (req, res) => {
 });
 
 // Delete Contact
-contactRouter.delete('/contacts', async (req, res) => {
+contactRouter.delete('/contacts',middlewareTokens, async (req, res) => {
     try {
         const { contact_id } = req.body;
         if (!contact_id) throw new Error('Contact ID is required');

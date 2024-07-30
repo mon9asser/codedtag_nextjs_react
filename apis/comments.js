@@ -1,7 +1,8 @@
 const express = require('express');
 const { Comments } = require('../models/comments-model');
 const { body, validationResult } = require('express-validator');
- 
+const {middlewareTokens} = require("./../apis/secure/middlewares")
+
 
 var commentsRouter = express.Router();
 
@@ -13,7 +14,7 @@ const commentValidation = [
 ];
  
 // Create or Update Review
-commentsRouter.post('/comments/create-update', async (req, res) => {
+commentsRouter.post('/comments/create-update', middlewareTokens, async (req, res) => {
     try {
 
 
@@ -70,7 +71,7 @@ commentsRouter.post('/comments/create-update', async (req, res) => {
 });
 
 
-commentsRouter.get('/comments', async (req, res) => {
+commentsRouter.get('/comments', middlewareTokens, async (req, res) => {
     try {
         
         const { page = 1, limit = 10 } = req.query;
@@ -102,7 +103,7 @@ commentsRouter.get('/comments', async (req, res) => {
 });
 
 // Get All comments without Pagination
-commentsRouter.get('/comments/all', async (req, res) => {
+commentsRouter.get('/comments/all', middlewareTokens, async (req, res) => {
     try {
         const comments = await Comments.find({});
         res.status(200).send({
@@ -120,7 +121,7 @@ commentsRouter.get('/comments/all', async (req, res) => {
 });
 
 // Delete Review
-commentsRouter.delete('/comments', async (req, res) => {
+commentsRouter.delete('/comments', middlewareTokens, async (req, res) => {
     try {
         const { _id } = req.body;
         if (!_id) throw new Error('Review ID is required');

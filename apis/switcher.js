@@ -4,6 +4,7 @@ const {name, domain} = require("./../config/db")
 var switcherRouter = express.Router(); 
 var path = require("path");
 var fs = require("fs");
+const {middlewareTokens} = require("./../apis/secure/middlewares")
 
 var sites = [
     { 
@@ -24,7 +25,7 @@ var sites = [
 
 
 // switch 
-switcherRouter.post("/switcher", (req, res) => {
+switcherRouter.post("/switcher", middlewareTokens, (req, res) => {
 
     
     var objx = {
@@ -73,7 +74,7 @@ switcherRouter.post("/switcher", (req, res) => {
 
 
 // get current site
-switcherRouter.get("/current-site", (req, res) => {
+switcherRouter.get("/current-site", middlewareTokens, (req, res) => {
     try {
 
         var index = -1;

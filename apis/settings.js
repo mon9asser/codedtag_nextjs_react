@@ -6,6 +6,8 @@ const fs = require("fs");
 const multer = require("multer");
 const {Config} = require("./../config/options");
 const { Sets } = require("./../models/settings-model"); 
+const {middlewareTokens} = require("./../apis/secure/middlewares")
+
 /*
  var build_folder = `${Config.uploads.folder}/${Config.uploads.serve}`
         const uploadPath = path.join(build_folder, year, month, day);
@@ -44,7 +46,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // File upload endpoint
-settingsRouter.post("/upload-logo", upload.single('file'), (req, res) => {
+settingsRouter.post("/upload-logo", [middlewareTokens, upload.single('file')], (req, res) => {
       
     if (!req.file) {
         return res.status(400).send({ success: false, message: "No file uploaded" });
@@ -53,7 +55,7 @@ settingsRouter.post("/upload-logo", upload.single('file'), (req, res) => {
     res.send({ success: true, message: "File uploaded successfully", filePath: `${Config.media_url}/${req.file_name}` });
 });
 
-settingsRouter.post("/settings/update", async (req, res) => {
+settingsRouter.post("/settings/update", middlewareTokens, async (req, res) => {
     var { basic_id, ...objx } = req.body;
 
     var finder = await Sets.find({});
@@ -85,7 +87,7 @@ settingsRouter.post("/settings/update", async (req, res) => {
     }
 });
 
-settingsRouter.get("/settings/get", async (req, res) => {
+settingsRouter.get("/settings/get", middlewareTokens, async (req, res) => {
     try {
         var get = await Sets.find({});
         return res.send({

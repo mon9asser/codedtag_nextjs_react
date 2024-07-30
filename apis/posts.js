@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const express = require("express");
 const { name, domain } = require("./../config/db");
+const {middlewareTokens} = require("./../apis/secure/middlewares")
 
 var postRouter = express.Router();
 var path = require("path");
@@ -31,7 +32,7 @@ const ensureDirectoryExistence = (dirPath) => {
     }
 };
 
-postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
+postRouter.post("/upload-image", [middlewareTokens, upload.single('image')], async (req, res) => {
     
     const filePath = req.file.buffer;
 
@@ -77,7 +78,7 @@ postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
 });
 
 
-postRouter.post("/post/create-update", async (req, res) => {
+postRouter.post("/post/create-update", middlewareTokens, async (req, res) => {
     try {
         const body = req.body;
 
@@ -175,7 +176,7 @@ postRouter.post("/post/create-update", async (req, res) => {
 });
 
 
-postRouter.post("/post/create-update/v2", async (req, res) => {
+postRouter.post("/post/create-update/v2", middlewareTokens, async (req, res) => {
     try {
         const body = req.body;
 
@@ -250,7 +251,7 @@ postRouter.post("/post/create-update/v2", async (req, res) => {
 
 
 
-postRouter.post("/post/create-update/v1", async (req, res) => {
+postRouter.post("/post/create-update/v1", middlewareTokens, async (req, res) => {
     try {
         const body = req.body;
 
@@ -308,7 +309,7 @@ postRouter.post("/post/create-update/v1", async (req, res) => {
 
 
 
-postRouter.post("/post/update-link", async (req, res) => {
+postRouter.post("/post/update-link", middlewareTokens, async (req, res) => {
      
     try {
          
@@ -472,7 +473,7 @@ postRouter.post("/post/update-link", async (req, res) => {
     //res.send({post_id, paragraph_id, keyword, target, url, updated_url, updated_target, updated_keyword})
 });
 
-postRouter.get("/post-links/get", async (req, res) => {
+postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
     try {
         const post_type = req.query.post_type;
         const query_object = post_type ? { post_type: post_type } : {};
@@ -550,7 +551,7 @@ postRouter.get("/post-links/get", async (req, res) => {
     }
 });
 
-postRouter.get("/post-links/get/v1", async (req, res) => {
+postRouter.get("/post-links/get/v1", middlewareTokens, async (req, res) => {
     
     try {
         const post_type = req.query.post_type;
@@ -643,7 +644,7 @@ postRouter.get("/post-links/get/v1", async (req, res) => {
     }
 })
 
-postRouter.get("/post/get", async (req, res) => {
+postRouter.get("/post/get", middlewareTokens, async (req, res) => {
     
     try {
         
@@ -709,7 +710,7 @@ postRouter.get("/post/get", async (req, res) => {
 
 
 
-postRouter.get("/tutorials-page/get", async (req, res) => {
+postRouter.get("/tutorials-page/get", middlewareTokens, async (req, res) => {
     
     try {
         
@@ -781,7 +782,7 @@ postRouter.get("/tutorials-page/get", async (req, res) => {
 
 
 
-postRouter.get("/post-page/get", async (req, res) => {
+postRouter.get("/post-page/get", middlewareTokens, async (req, res) => {
    
     // post-page/get?tut_name=${tutorial_slug}&post_slug=${post_slug}
     try {
@@ -866,7 +867,7 @@ postRouter.get("/post-page/get", async (req, res) => {
 });
 
 // Delete a post by its post_id
-postRouter.post("/post/delete", async (req, res) => {
+postRouter.post("/post/delete", middlewareTokens, async (req, res) => {
     try {
         const postId = req.body.object_data.post_id;
 

@@ -14,11 +14,11 @@ const {Sets} = require("./../models/settings-model");
 const { check, validationResult } = require('express-validator');
 const {AdCampaign} = require("./../models/ad_campaign-model"); 
 
-
+const {middlewareTokens} = require("./../apis/secure/middlewares")
 
 
 // search 
-utillRouter.get('/search', async (req, res) => {
+utillRouter.get('/search', middlewareTokens, async (req, res) => {
 
     var settings = await Sets.find({});
     var menus = await Menus.find({});

@@ -1,5 +1,6 @@
 //chapters/bulk_insert_update
 
+const {middlewareTokens} = require("./../apis/secure/middlewares")
 
 const mongoose = require('mongoose');
 const express = require("express"); 
@@ -11,7 +12,7 @@ var path = require("path");
 var fs = require("fs");
 
 
-chapterRouter.post("/chapters/bulk_insert_update", async (req, res) => {
+chapterRouter.post("/chapters/bulk_insert_update", middlewareTokens, async (req, res) => {
     
     try {
 
@@ -66,7 +67,7 @@ chapterRouter.post("/chapters/bulk_insert_update", async (req, res) => {
 
 
 
-chapterRouter.get('/chapters', async (req, res) => {
+chapterRouter.get('/chapters', middlewareTokens, async (req, res) => {
     try {
         const chapters = await Chapters.find({});
         

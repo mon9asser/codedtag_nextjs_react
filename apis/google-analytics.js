@@ -1,10 +1,12 @@
 const express = require('express');   
 const {Analytics} = require("./../models/analytics-model")
+const {middlewareTokens} = require("./../apis/secure/middlewares")
+
 const analyticsRouter = express.Router();
 
 
 // Define the API endpoint to run the report.
-analyticsRouter.get('/reports/by-countries', async (req, res) => {
+analyticsRouter.get('/reports/by-countries',middlewareTokens, async (req, res) => {
   try {
     var report = await Analytics.find();
 
@@ -72,7 +74,7 @@ analyticsRouter.get('/reports/by-countries', async (req, res) => {
   }
 });
 
-analyticsRouter.get('/reports/by-pages', async (req, res) => {
+analyticsRouter.get('/reports/by-pages',middlewareTokens, async (req, res) => {
   try {
     var report = await Analytics.find();
 
@@ -136,7 +138,7 @@ analyticsRouter.get('/reports/by-pages', async (req, res) => {
   }
 });
 
-analyticsRouter.get('/reports/total', async (req, res) => {
+analyticsRouter.get('/reports/total',middlewareTokens, async (req, res) => {
    
   try {
     var report = await Analytics.find();

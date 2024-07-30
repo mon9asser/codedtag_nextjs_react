@@ -1,8 +1,9 @@
 const express = require('express');
 const { Menus } = require('./../models/menus-model');
+const {middlewareTokens} = require("./../apis/secure/middlewares")
 var menuRouter = express.Router();
 
-menuRouter.post('/menu/create-update', async (req, res) => {
+menuRouter.post('/menu/create-update', middlewareTokens, async (req, res) => {
     try {
         const { menus, deletedIds } = req.body;
 
@@ -60,7 +61,7 @@ menuRouter.post('/menu/create-update', async (req, res) => {
  * localhost:5000/api/menus => for all
  * localhost:5000/api/menus?menu_id=665f7ac49d84a1b651c0fae2 => for specific id
  */
-menuRouter.get('/menus', async (req, res) => {
+menuRouter.get('/menus', middlewareTokens, async (req, res) => {
      
     try {
         const { menu_id } = req.query;

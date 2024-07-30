@@ -1,8 +1,10 @@
 const express = require('express');
 const { AdCampaign } = require('../models/ad_campaign-model');
+const {middlewareTokens} = require("./../apis/secure/middlewares")
+
 var adCampaignRouter = express.Router();
 
-adCampaignRouter.post('/ad_campaign/create-update', async (req, res) => {
+adCampaignRouter.post('/ad_campaign/create-update', middlewareTokens, async (req, res) => {
 
     
     try {
@@ -61,7 +63,7 @@ adCampaignRouter.post('/ad_campaign/create-update', async (req, res) => {
  * localhost:5000/api/ad_campaigns => for all
  * localhost:5000/api/ad_campaigns?campaign_id=665f7ac49d84a1b651c0fae2 => for specific id
  */
-adCampaignRouter.get('/ad_campaigns', async (req, res) => {
+adCampaignRouter.get('/ad_campaigns', middlewareTokens, async (req, res) => {
     try {
         const { campaign_id } = req.query;
 
