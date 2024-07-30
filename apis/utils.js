@@ -14,12 +14,11 @@ const {Sets} = require("./../models/settings-model");
 const { check, validationResult } = require('express-validator');
 const {AdCampaign} = require("./../models/ad_campaign-model"); 
 
-const jwt = require('jsonwebtoken');
-const { verifyToken } = require("./secure/auth");
+
 
 
 // search 
-utillRouter.get('/search', verifyToken, async (req, res) => {
+utillRouter.get('/search', async (req, res) => {
 
     var settings = await Sets.find({});
     var menus = await Menus.find({});
@@ -51,7 +50,7 @@ utillRouter.get('/search', verifyToken, async (req, res) => {
         const query = req.query.q;
 
         // Use $text for full-text search
-        const response = await Posts.find({ $text: { $search: query }, post_type: 0 });
+        const response = await Posts.find({ $text: { $search: query }, post_type: 0, is_published: true });
         
         
         return res.send({
@@ -64,7 +63,7 @@ utillRouter.get('/search', verifyToken, async (req, res) => {
         });
 
     } catch (error) {
-        res.send({
+        return res.send({
             is_error: true,
             data: [],
             settings,
@@ -75,57 +74,5 @@ utillRouter.get('/search', verifyToken, async (req, res) => {
     }
 }); 
 
-// generate token 
-utillRouter.get("/hash-request", async(req, res) => {
-
-    if( ! req.headers.agent || ! req.headers.api_keys ) {
-        return res.send({
-            is_error: true, 
-            message: 'Invalid credentials or api keys',
-            data: []
-        })
-    }
-
-    // validate api keys 
-    if( req.headers.api_keys !== Config.api_keys ) {
-        return res.send({
-            is_error: true, 
-            message: 'Invalid credentials or api keys',
-            data: []
-        })
-    }
-
-    const payload = {
-        agent: req.headers.agent,
-        // other payload data
-    };
-    
-    // Secret key
-    const secretKey = Config.jwt_secret;
-      
-    // Options
-    const options = {
-        expiresIn: '1m' // Token will expire in 5 minutes
-    };
-      
-    try {
-        // Generating the token
-        const token = jwt.sign(payload, secretKey, options);
-
-        
-        res.send({
-            data: token,
-            is_error: false, 
-            message: 'token fetched successfully!'
-        });
-    } catch (error) {
-        return res.send({
-            is_error: true, 
-            message: 'Invalid credentials or api keys',
-            data: []
-        })
-    }
-
-})
-
+ 
 module.exports = { utillRouter }

@@ -19,7 +19,7 @@ class Login extends Component {
 
         this.state = {
 
-            captcha: 'null', // dev mode
+            captcha: null, // dev mode
 
             user_name_or_email: "", 
             password: "", 

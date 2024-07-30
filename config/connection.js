@@ -3,7 +3,7 @@ const { Config } = require("./options");
 
 const dbLink = Config.database.link();
 
-mongoose.set('debug', true); // Enable debugging for more detailed logs
+// mongoose.set('debug', true); // Enable debugging for more detailed logs
 
 mongoose.connect(dbLink, {
   useNewUrlParser: true,
