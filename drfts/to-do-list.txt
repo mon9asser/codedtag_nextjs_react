@@ -23,9 +23,9 @@
 	- ✔ api keys
 	- ✔ request times and block ips from request 
 - ✔ Add Redirect section to admain and routers 
+- ✔ make sure from styles of ads box 
 
 
-- make sure from styles of ads box 
 - admin panel 
 	redius sidebar width and make it fixed display 
 	add media center for crud access like delete, add, updated, upload for images and urls

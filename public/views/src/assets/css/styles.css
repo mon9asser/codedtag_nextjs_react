@@ -976,9 +976,7 @@ ul li a.expanded-a::after{
 
  .ad-box {
     width: 100%;
-    display: block;
-    background-color: yellow; 
-    min-height: 50px;
+    display: block;  
     margin-bottom: 20px;
     margin-top: 20px;
     margin-left: auto;

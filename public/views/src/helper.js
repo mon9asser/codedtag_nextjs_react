@@ -158,31 +158,23 @@ class HelperData {
   
 
   AdCompaignBox = ({ position, data, classes }) => {
-    const adRef = React.useRef(null); 
-
-    if( !data ) {
+    const adRef = useRef(null);
+  
+    if (!data) {
       return null;
     }
-    
+  
+    const index = data.findIndex(x => x.position === position);
+    if (index === -1) {
+      return null;
+    }
+  
     useEffect(() => {
       if (!adRef.current) return;
-      
-     
-      const index = data.findIndex(x => x.position === position);
-      if (index === -1 ) { 
-        adRef.current.remove();
-        return;
-      };
-      
-      const box = data[index].code;  
+  
+      const box = data[index].code;
       adRef.current.innerHTML = box;
-
-      if( data[index]?.is_enabled != undefined && ! data[index]?.is_enabled ) {
-        adRef.current.remove();
-        return;
-      }
       
-
       const scripts = adRef.current.querySelectorAll('script');
       scripts.forEach(script => {
         const newScript = document.createElement('script');
@@ -192,16 +184,13 @@ class HelperData {
         });
         script.parentNode.replaceChild(newScript, script);
       });
-    }, [data, position]);
-
-     
-    if( classes == undefined ) {
-      classes= ''
-    }else {
-      classes = ` ${classes}`
-    }
-    return <div className={`ad-box${classes}`} ref={adRef}></div>;
+    }, [data, index]);
+  
+    const combinedClasses = classes ? `ad-box ${classes}` : 'ad-box';
+  
+    return <div className={combinedClasses} ref={adRef}></div>;
   };
+  
   
   
   SearchComponent = ({searchType}) => {
