@@ -98,6 +98,12 @@ class SidebarContainer extends Component {
                                 </Link>
                             </li> 
                             <li>
+                                <Link to="/dashboard/redirects"> 
+                                    <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
+                                    <span className="menu-item-label">Manage Redirects</span>
+                                </Link>
+                            </li> 
+                            <li>
                                 <Link to="/dashboard/messages"> 
                                     <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
                                     <span className="menu-item-label">Messages</span>

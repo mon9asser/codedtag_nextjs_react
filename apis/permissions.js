@@ -53,6 +53,7 @@ var Permissions = [
             "pages",
             "posts",
             "tutorials",
+            "redirects"
         ]
     }
 ]; 

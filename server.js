@@ -50,12 +50,14 @@ const { analyticsRouter } = require("./apis/google-analytics");
 const { analyticsRouter2 } = require("./apis/analytics-report");
 const { sitemapRouter } = require("./apis/sitemap");
 const { redirectsRouter }  = require("./apis/redirects");
+const { redirectRouter }  = require("./apis/redirect");
 const { utillRouter } = require("./apis/utils");
 
 // Serve static files for React app
 app.use(express.static(path.join(__dirname, 'public/views/build')));
 
 // API Routes
+app.use(Config.server.api, redirectRouter);
 app.use(Config.server.api, tokenRouter);
 app.use(Config.server.api, userRouters);
 app.use(Config.server.api, switcherRouter);
