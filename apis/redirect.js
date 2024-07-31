@@ -1,6 +1,6 @@
 const express = require('express');
 const { Redirect } = require('../models/redirect-model');
-const { middlewareTokens } = require("./../apis/secure/middlewares");
+const { middlewareTokens } = require("./secure/middlewares");
 
 var redirectRouter = express.Router();
 

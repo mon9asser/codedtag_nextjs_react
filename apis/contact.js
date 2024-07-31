@@ -3,7 +3,7 @@ const { Contact } = require('./../models/contact-model');
 var contactRouter = express.Router();
 const crypto = require('crypto');
 const validator = require('validator');
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 // Encryption setup
 const algorithm = 'aes-256-cbc';

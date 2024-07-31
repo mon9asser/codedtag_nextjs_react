@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const express = require("express");
 const { name, domain } = require("./../config/db");
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 var postRouter = express.Router();
 var path = require("path");

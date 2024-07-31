@@ -34,8 +34,8 @@ import { Posts} from './components/posts.js';
 import { Pages} from './components/pages.js';
 import { Tutorials} from './components/tutorials.js';
 import { Redirects } from './components/redirects.js'
-
-import {Users} from './components/users.js';
+import { MediaUploader } from './components/media.js';
+import { Users } from './components/users.js';
 
 var WrappApplication = () => (
   
@@ -74,6 +74,8 @@ var WrappApplication = () => (
             <Route path="/dashboard/create-user" element={<CreateUser/>} /> 
             <Route path="/dashboard/edit-user" element={<EditUser/>} />  
             
+            <Route path='/dashboard/media' element={<MediaUploader/>} />
+
             <Route path="/dashboard/redirects" element={<Redirects/>} />  
             
             

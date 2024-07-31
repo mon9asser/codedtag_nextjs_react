@@ -6,7 +6,7 @@ const fs = require("fs");
 const multer = require("multer");
 const {Config} = require("./../config/options");
 const { Sets } = require("./../models/settings-model"); 
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 /*
  var build_folder = `${Config.uploads.folder}/${Config.uploads.serve}`

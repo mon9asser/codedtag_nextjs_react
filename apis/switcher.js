@@ -4,7 +4,7 @@ const {name, domain} = require("./../config/db")
 var switcherRouter = express.Router(); 
 var path = require("path");
 var fs = require("fs");
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 var sites = [
     { 

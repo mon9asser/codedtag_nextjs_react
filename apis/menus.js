@@ -1,6 +1,6 @@
 const express = require('express');
 const { Menus } = require('./../models/menus-model');
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 var menuRouter = express.Router();
 
 menuRouter.post('/menu/create-update', middlewareTokens, async (req, res) => {

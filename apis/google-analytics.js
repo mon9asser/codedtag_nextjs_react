@@ -1,6 +1,6 @@
 const express = require('express');   
 const {Analytics} = require("./../models/analytics-model")
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 const analyticsRouter = express.Router();
 

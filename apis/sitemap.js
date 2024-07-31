@@ -3,7 +3,7 @@ var sitemapRouter = express.Router();
 const mongoose = require('mongoose');
 var path = require("path");
 var fs = require("fs");
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 const {Config} = require("./../config/options")
 // database models 

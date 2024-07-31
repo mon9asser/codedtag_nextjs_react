@@ -1,6 +1,6 @@
 //chapters/bulk_insert_update
 
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 const mongoose = require('mongoose');
 const express = require("express"); 

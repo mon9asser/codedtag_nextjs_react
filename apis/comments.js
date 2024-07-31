@@ -1,7 +1,7 @@
 const express = require('express');
 const { Comments } = require('../models/comments-model');
 const { body, validationResult } = require('express-validator');
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 
 var commentsRouter = express.Router();

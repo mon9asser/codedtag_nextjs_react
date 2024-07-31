@@ -3,7 +3,7 @@ const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 const path = require('path');
 const mongoose = require('mongoose');
 const cron = require('node-cron');
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 
 const {Analytics} = require('./../models/analytics-model'); 

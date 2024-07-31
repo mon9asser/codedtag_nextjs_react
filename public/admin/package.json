@@ -26,6 +26,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@uiw/react-codemirror": "^4.23.0",
     "axios": "^1.7.2",
+    "bootstrap": "^5.3.3",
     "buffer": "^6.0.3",
     "codemirror": "^5.65.16",
     "crypto": "^1.0.1",
@@ -43,6 +44,7 @@
     "react-editor-js": "^2.1.0",
     "react-google-recaptcha": "^3.1.0",
     "react-highlight": "^0.15.0",
+    "react-media-library": "^2.0.3",
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
     "react-sortablejs": "^6.1.4",
@@ -74,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@hammaadhrasheedh/editorjs-iframe": "^1.0.21"
   }
 }

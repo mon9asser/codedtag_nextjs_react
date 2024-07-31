@@ -14,7 +14,7 @@ const {Sets} = require("./../models/settings-model");
 const { check, validationResult } = require('express-validator');
 const {AdCampaign} = require("./../models/ad_campaign-model"); 
 
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 
 // search 

@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const {Helper} = require("./../config/helper")
 const { domain } = require("./../config/db");
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 // Models of DB
 const {Usr} = require("./../models/user-model");

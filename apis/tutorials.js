@@ -7,7 +7,7 @@ const {Sets} = require("./../models/settings-model");
 const {Menus} = require("./../models/menus-model");
 const {Usr} = require("./../models/user-model");
 const {AdCampaign} = require("./../models/ad_campaign-model");
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 
 var tutorialRouter = express.Router(); 
 var path = require("path");

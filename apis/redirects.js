@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const express = require("express"); 
 const  {Categories} = require("./../models/category-model")
-const {middlewareTokens} = require("./../apis/secure/middlewares")
+const {middlewareTokens} = require("./secure/middlewares")
 const { check, validationResult } = require('express-validator');
 var redirectsRouter = express.Router(); 
 var path = require("path");
