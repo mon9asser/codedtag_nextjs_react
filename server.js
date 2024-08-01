@@ -16,11 +16,12 @@ const app = express();
 
 const corsOptions = {
     origin: "*",
-    credentials: true, //access-control-allow-credentials:true
+    credentials: true,  
     optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
  
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(helmet());
@@ -33,8 +34,9 @@ const apiLimiter = rateLimit({
 });
 app.use(apiLimiter);
 
-// Routers 
+// Routers  
 const { tokenRouter } = require("./apis/secure/token");
+const { mediaRouter } = require("./apis/media");
 const { userRouters } = require("./apis/users");
 const { switcherRouter } = require("./apis/switcher");
 const { categoryRouter } = require("./apis/category");
@@ -56,7 +58,11 @@ const { utillRouter } = require("./apis/utils");
 // Serve static files for React app
 app.use(express.static(path.join(__dirname, 'public/views/build')));
 
+// Serve static files for uploads ( media )
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+
 // API Routes
+app.use(Config.server.api, mediaRouter);
 app.use(Config.server.api, redirectRouter);
 app.use(Config.server.api, tokenRouter);
 app.use(Config.server.api, userRouters);

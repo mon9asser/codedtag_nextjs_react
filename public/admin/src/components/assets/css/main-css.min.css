@@ -608,7 +608,17 @@ h1.ce-header {
     z-index: 2012;
     border-radius: 5px;
 }
-
+.media-block {
+    border: 2px solid #dfdcdc;
+}
+.media-block:hover {
+    border-color: #222;
+}
+.media-block img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .loader {
     width: 20px;
     height: 20px;

@@ -1,45 +1,67 @@
 const multer = require("multer");
+const express = require('express');
+const sharp = require('sharp');
 const { Media } = require("./../models/media-model");
 const { middlewareTokens } = require("./secure/middlewares");
 const { Config } = require("./../config/options");
 const { Helper } = require("./../config/helper");
 var mediaRouter = express.Router();
 
-// Multer Configuration
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-    var build_folder = `${Config.uploads.folder}/${Config.uploads.serve}/`;
-      cb(null, build_folder);
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + "-" + file.originalname);
-    },
-});
+const storage = multer.memoryStorage(); // Use memory storage to process the file in memory
 
 const upload = multer({ storage: storage });
 
-
-// Routes with middlewareTokens applied
-mediaRouter.post("/media/upload", middlewareTokens, upload.single("file"), async (req, res) => {
+mediaRouter.post("/media/upload", middlewareTokens, upload.single("image"), async (req, res) => {
     try {
+        if (!req.file) {
+            return res.status(400).send({ error: 'No file uploaded' });
+        }
+
+        var image_name = req.body.name.toLowerCase().replace(/\s+/g, "-");
+
+        const filename = `${image_name}.webp`;
+        const outputPath = `${Config.uploads.folder}/${Config.uploads.serve}/${filename}`;
+        
+        
+        await sharp(req.file.buffer)
+            .resize(800)  
+            .toFormat('webp')
+            .toFile(outputPath);
+
         const newMedia = new Media({
             title: req.body.title,
-            name: req.file.filename,
-            url: `/uploads/${req.file.filename}`,
+            description: req.body.description,
+            name: filename,
+            url: `${Config.media_url}/${filename}`,
         });
+
         await newMedia.save();
-        res.status(201).send(newMedia);
-    } catch (error) {
-      res.status(400).send(error);
+        return res.send({
+          data: newMedia, is_error: false, message: 'Fetched succssfully!'
+        });
+
+    } catch (error) { 
+        return res.send({
+          is_error: true,
+          data: [], 
+          message: (error.message || 'Something went wrong')
+        });
     }
-  });
+});
   
 mediaRouter.get("/media/all", middlewareTokens, async (req, res) => {
     try {
+
       const media = await Media.find();
-      res.status(200).send(media);
+      
+      return res.send({
+        data: media, is_error: false, message: 'Fetched succssfully!'
+      })
+
     } catch (error) {
-      res.status(500).send(error);
+      return res.send({
+        data: [], is_error: true, message: error.message || 'Something went wrong'
+      });
     }
   });
   
