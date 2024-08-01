@@ -707,3 +707,92 @@ body {
     padding: 5px;
 }
 
+.media-library-modal {
+    display: block; /* Show the modal */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.media-library {
+    min-height: 200px;
+    width: 100%; 
+    display: flex;
+    margin-top: 15px;
+    gap: 15px;
+    flex-wrap: wrap;  
+}
+
+.media-library .media-block {
+    width: calc(25% - 15px);
+    background-color: yellowgreen;
+    height: 200px;
+    width: 200px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.paging-block {
+    display: flex; 
+    list-style: none;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.paging-block li a{
+    background-color: #fff;
+    border: 1px solid #999;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+.paging-block li a:hover {
+    background-color: #999;
+}
+
+.modal-card-body textarea, 
+.modal-card-body input {
+    border: 1px solid #dddddd;
+    width: 100%;
+    padding: 10px;
+}
+
+.uploadImageBox {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    width: 100%;
+    height: 100px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+}

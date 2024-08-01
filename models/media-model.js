@@ -9,6 +9,7 @@ let mediaSchema = new Schema({
 
     title: String,
     name: String,
+    description: String,
     url: String,
     createdAt: {
         type: Date,
