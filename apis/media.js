@@ -4,6 +4,8 @@ const sharp = require('sharp');
 const { Media } = require("./../models/media-model");
 const { middlewareTokens } = require("./secure/middlewares");
 const { Config } = require("./../config/options");
+const {Posts} = require("./../models/posts-model");
+
 const { Helper } = require("./../config/helper");
 const fs = require('fs');
 const path = require('path');
@@ -16,22 +18,37 @@ const upload = multer({ storage: storage });
 mediaRouter.post("/media/upload", middlewareTokens, upload.single("image"), async (req, res) => {
   try {
       if (req.body.id) {
-          // Update existing media information without uploading a new file
-          const existingMedia = await Media.findById(req.body.id);
+            // Update existing media information without uploading a new file
+            const existingMedia = await Media.findById(req.body.id);
 
-          if (!existingMedia) {
-              return res.status(404).send({ error: 'Media not found' });
-          }
+            if (!existingMedia) {
+                return res.status(404).send({ error: 'Media not found' });
+            }
+            
+            existingMedia.title = req.body.title;
+            existingMedia.description = req.body.description;
+            if( existingMedia.model_name == 'post') {
+                var post = await Posts.findOne({_id: existingMedia.model_id})
+                if( post != null ) {
+                    var blocks = [...post.blocks].map(x => {
+                       if(x.id == existingMedia.block_id ) {
+                            x.data.caption = req.body.title
+                       }
+                       return x;
+                    });
+                    post.blocks = blocks;
+                    post.markModified('blocks');
+                    await post.save();
+                }
+            }
 
-          existingMedia.title = req.body.title;
-          existingMedia.description = req.body.description;
 
-          await existingMedia.save();
-          return res.send({
-              data: existingMedia,
-              is_error: false,
-              message: 'Updated successfully!'
-          });
+            await existingMedia.save();
+            return res.send({
+                data: existingMedia,
+                is_error: false,
+                message: 'Updated successfully!'
+            });
       } else {
           // Upload a new image
           if (!req.file) {
@@ -97,10 +114,27 @@ mediaRouter.delete("/media/:id", middlewareTokens, async (req, res) => {
           return res.status(404).send({ error: 'Media not found' });
       }
 
+      var media_name = media.name;
+      if( media.model_name == 'post' ) {
+        var media_name = media.url.replace(Config.media_url, "").replace(/\//g, '\\');
+      }
+
       // Delete the image file from the server
-      const filePath = path.join(Config.uploads.folder, Config.uploads.serve, media.name);
+      const filePath = path.join(Config.uploads.folder, Config.uploads.serve, media_name);
+        
       if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
+      }
+
+      // delete block of image from post 
+      if( media.model_name == 'post' ) {
+        var post = await Posts.findOne({_id: media.model_id})
+        if( post != null ) {
+            var blocks = [...post.blocks].filter(x => x.id !== media.block_id);
+            post.blocks = blocks;
+            post.markModified('blocks');
+            await post.save();
+        }
       }
 
       // Delete the image record from the database

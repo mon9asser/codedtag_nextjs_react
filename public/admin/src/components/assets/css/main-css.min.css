@@ -14,6 +14,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 .ce-block a {color: #ff7272; }
 .modal-card-update-css {
     width: 70%;
+    margin:0px auto;
 }
 .modal-card-body-update-css {
     flex-direction: row;

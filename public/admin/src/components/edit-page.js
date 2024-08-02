@@ -5,7 +5,7 @@ import {YouTubeEmbed} from "./parts/embed-iframe.js"
 import { tutorialsList } from "./parts/tutorials-list.js"
 import { createReactEditorJS } from 'react-editor-js';
 import StickyBox from "react-sticky-box";
-
+import { CustomImageTool } from "./parts/image-class.js"
 
 // tools.js 
 
@@ -82,7 +82,7 @@ var Tools = {
         inlineToolbar: ["bold", "hyperlink", "italic", "marker", "inlineCode"],
     }, 
     image: {
-        class: Image,
+        class: CustomImageTool,
         config: {
             endpoints: {
                 byFile: `${Settings.server.api}/upload-image`

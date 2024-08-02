@@ -6,7 +6,7 @@ import { createReactEditorJS } from 'react-editor-js';
 import { Settings } from "../settings.js";
 import {CustomCodeBlok} from "./parts/codeblock.js"
 import { Helper } from "../helper.js";
-
+import { CustomImageTool } from "./parts/image-class.js"
 
 import StickyBox from "react-sticky-box";
 
@@ -73,7 +73,7 @@ var Tools = {
         inlineToolbar: ["bold", "hyperlink", "italic", "marker", "inlineCode"],
     }, 
     image: {
-        class: Image,
+        class: CustomImageTool,
         config: {
             endpoints: {
                 byFile: `${Settings.server.api}/upload-image`,  

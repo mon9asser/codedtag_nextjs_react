@@ -81,6 +81,13 @@ class SidebarContainer extends Component {
                                     <span className="menu-item-label">Create User</span>
                                 </Link>
                             </li>
+
+                            <li>
+                                <Link to="/dashboard/media"> 
+                                    <span className="icon"><i className="mdi mdi-arrow-right"></i></span>
+                                    <span className="menu-item-label">Media</span>
+                                </Link>
+                            </li>
                         </ul>
                         
                         <p className="menu-label">Utils</p>
