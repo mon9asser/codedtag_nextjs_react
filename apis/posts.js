@@ -19,6 +19,7 @@ const { Chapters } = require("../models/chapter-model");
 const { Tutorial } = require('../models/tutorial-model');
 const { Menus } = require('../models/menus-model');
 const { AdCampaign } = require('../models/ad_campaign-model')
+const { updateImageDetails, bulkUpdateInsertMedia } = require('./media');
 
 // Handle Upload images of posts 
 const storage = multer.memoryStorage();
@@ -32,7 +33,7 @@ const ensureDirectoryExistence = (dirPath) => {
     }
 };
 
-postRouter.post("/upload-image", [middlewareTokens, upload.single('image')], async (req, res) => {
+postRouter.post("/upload-image",  upload.single('image'), async (req, res) => {
     
     const filePath = req.file.buffer;
 
@@ -69,8 +70,24 @@ postRouter.post("/upload-image", [middlewareTokens, upload.single('image')], asy
           
         var file_url = `${Config.media_url}/${year}/${month}/${day}/${new_file_name}`;
         
-        
-        res.json({ success: 1, file: { url: file_url, width: resizeWidth } });
+        // Call updateImageDetails to store the image information in the Media model
+        const updateResult = await updateImageDetails({
+            title: new_file_name,
+            description: '',
+            name: new_file_name,
+            url: file_url,
+
+            is_model: true, // if releate another model not direct
+            model_name: '', // like post, settings 
+            model_id: '', // post id or setting id 
+            block_id: '' // block of image id inside post
+        }); 
+         
+        if( updateResult.is_error ) {
+            return; 
+        }
+
+        res.json({ success: 1, file: { url: file_url, width: resizeWidth, media_id: updateResult.data._id } });
     } catch (error) {
         console.error('Error processing image:', error);
         res.status(500).send('Error processing image.');
@@ -99,9 +116,15 @@ postRouter.post("/post/create-update", middlewareTokens, async (req, res) => {
             body.keyphrase = keyphrase.toLowerCase();
         }
 
+       
+
         let savedPost;
 
+        var post_id_string = '';
+
         if (body.post_id) {
+
+            post_id_string = body.post_id;
             // Update the existing post data
             const existingPost = await Posts.findById(body.post_id);
             if (existingPost) {
@@ -154,7 +177,32 @@ postRouter.post("/post/create-update", middlewareTokens, async (req, res) => {
 
             // Create a new post
             savedPost = await new Posts(body).save();
+
+            post_id_string = savedPost._id;
+            
         }
+
+
+        // saving information related post on media 
+        if( post_id_string !== '' ) {
+
+            var mediaArray = body.blocks.filter(x => x.type == "image").map(img => {
+                return {
+                    id: img.data.file.media_id, 
+                    title: img.data.caption, 
+                    
+                    is_model: true, 
+                    model_name: 'post', 
+                    model_id: post_id_string, 
+                    block_id: img.id 
+                };
+            });
+
+            // storing data into the media model 
+            await bulkUpdateInsertMedia(mediaArray);
+
+        }
+
 
         if (savedPost) {
             res.status(200).send({

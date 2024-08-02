@@ -544,7 +544,7 @@ class CreatePost extends Component {
       
     save_post = async (e) => {
 
-        
+       //  console.log(this.state.initialState.blocks)
         e.preventDefault(); 
 
         this.setState({ 
@@ -616,7 +616,7 @@ class CreatePost extends Component {
         }
         var request = await Helper.sendRequest({
             api: "post/create-update",
-            method: "post",
+            method: "post", 
             data: {...object_data},
             is_create: object_data.post_id != undefined ? false: true 
         });

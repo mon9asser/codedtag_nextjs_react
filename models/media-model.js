@@ -11,6 +11,27 @@ let mediaSchema = new Schema({
     name: String,
     description: String,
     url: String,
+    
+    is_model: { // if releate another model not direct
+        type: Boolean, 
+        default: false
+    }, 
+    model_name: { // like post, settings 
+        type: String,
+        trim: true,
+        default: ''
+    }, 
+    model_id:  {  // post id or setting id 
+        type: String,
+        trim: true,
+        default: ''
+    },
+    block_id: { // block of image id inside post
+        type: String,
+        trim: true,
+        default: ''
+    }, 
+
     createdAt: {
         type: Date,
         default: Date.now,

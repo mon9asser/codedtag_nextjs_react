@@ -12,8 +12,7 @@ class Settings extends Component {
 
     constructor(props) {
         super(props);
-        this.request_result_ref = React.createRef();
-        this.fileInputRef = React.createRef();
+        this.request_result_ref = React.createRef(); 
 
         this.state = {
             footer_value: '',
@@ -33,6 +32,7 @@ class Settings extends Component {
             site_thumbnail_url: '',
             banner_site_title: "",
             site_name: "",
+            site_logo: "",
             banner_site_description: "",
             site_address: "",
             beside_post_title: "",
@@ -56,11 +56,7 @@ class Settings extends Component {
     handleFileChange = (event) => {
         this.setState({ selectedFile: event.target.files[0] });
     };
-
-    resetFileInput = () => {
-        this.fileInputRef.current.value = '';
-        this.setState({ selectedFile: null });
-    };
+ 
 
     async componentDidMount() {
         // load data 
@@ -84,6 +80,7 @@ class Settings extends Component {
             basic_id: settings.id,
             banner_site_title: settings.banner_site_title,
             site_name: settings.site_name,
+            site_logo: settings.site_logo,
             banner_site_description: settings.banner_site_description,
             site_address: settings.site_address,
             beside_post_title: settings.beside_post_title,
@@ -190,6 +187,7 @@ class Settings extends Component {
             basic_id: this.state.basic_id,
             banner_site_title: this.state.banner_site_title,
             site_name: this.state.site_name,
+            site_logo: this.state.site_logo,
             banner_site_description: this.state.banner_site_description,
             site_address: this.state.site_address,
             beside_post_title: this.state.beside_post_title,
@@ -259,12 +257,13 @@ class Settings extends Component {
                                     </div>
 
                                     <div className="field" style={{ marginTop: "25px" }}>
-                                        <label className="label">Site Logo</label>
+                                        <label className="label">Site Logo URL</label>
                                         <div className="control">
-                                            <input
-                                                ref={this.fileInputRef}
-                                                onChange={this.handleFileChange}
-                                                className="input" type="file" />
+                                            <input 
+                                                value={this.state.site_logo}
+                                                placeholder="Site Logo URL"
+                                                onChange={e => this.setState({ site_logo: e.target.value })}
+                                                className="input" type="text" />
                                         </div>
                                     </div>
 

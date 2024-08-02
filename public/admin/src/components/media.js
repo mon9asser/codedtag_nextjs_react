@@ -6,12 +6,23 @@ import { Helper } from "../helper";
 var MediaUploader = () => {
     var [uploadModal, setOpenUploadModal] = React.useState(false);
     var [media, setMedia] = React.useState([]);
+    var [imageData, setImageDataObject] = React.useState(null);
     var [currentPage, setCurrentPage] = React.useState(1);
-    var mediaPerPage = 12;
+    var mediaPerPage = 15;
 
     var toggleModal = () => {
         setOpenUploadModal(!uploadModal);
     }
+
+    var resetImageObject = () => {
+        setImageDataObject({
+            url: '',
+            title: '',
+            name: '',
+            description: '',
+            id: ''
+        });
+    };
 
     var ModalOfUploadImage = ({ uploadModal, toggleModal, imageData }) => {
         var uploadImageElement = React.useRef('');
@@ -40,22 +51,40 @@ var MediaUploader = () => {
             id: ''
         });
 
+        React.useEffect(() => {
+            if (imageData) {
+                setImageObject({
+                    url: imageData.url,
+                    title: imageData.title,
+                    name: imageData.name,
+                    description: imageData.description,
+                    id: imageData._id,
+                });
+            }
+        }, [imageData]);
+         
         var uploadMediaToServer = (e) => {
             e.preventDefault();
-            setPreloader(true)
-
+            setPreloader(true);
+        
             if (imageObject.title === '' || imageObject.name === '') {
                 alert("Name and title of image should not be empty!");
-                setPreloader(false)
+                setPreloader(false);
                 return;
             }
-
+        
             const formData = new FormData();
-            formData.append('image', selectedFile);
+            if (!imageObject.id) {
+                // Only append the file if it's a new upload
+                formData.append('image', selectedFile);
+                formData.append('name', imageObject.name);
+            }
             formData.append('title', imageObject.title);
-            formData.append('name', imageObject.name);
             formData.append('description', imageObject.description);
-
+            if (imageObject.id) {
+                formData.append('id', imageObject.id);
+            }
+        
             Helper.sendRequest({
                 is_file: true,
                 api: "media/upload",
@@ -65,15 +94,23 @@ var MediaUploader = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(res => {
-                setPreloader(false)
+                setPreloader(false);
                 if (res.is_error) {
                     return;
                 }
+                 
+                setImageObjectCallback({
+                    title: res.data.title,
+                    name: res.data.name,
+                    url: res.data.url,
+                    description: res.data.description
+                });
 
                 fetchAllMedia();
+                toggleModal(); // Close the modal after saving
             });
-
         }
+        
 
         var handleFileChange = (event) => {
             const file = event.target.files[0];
@@ -94,10 +131,26 @@ var MediaUploader = () => {
             }
         }
 
+        var deleteImageFromServer = (id) => {
+            Helper.sendRequest({
+                api: `media/${id}`,
+                method: "delete",
+                data: {}
+            }).then(res => {
+                if (res.is_error) {
+                    alert(res.message);
+                    return;
+                }
+
+                fetchAllMedia();
+                toggleModal(); // Close the modal after deleting
+            });
+        }
+
         return (
             <div className={`modal ${uploadModal ? "open_this_modal" : ""}`}>
                 <div className="modal-background" onClick={toggleModal}></div>
-                <form className="modal-card modal-card-update-css">
+                <div className="modal-card modal-card-update-css">
                     <header className="modal-card-head">
                         <p className="modal-card-title">{imageObject.name === '' ? "Upload Image" : imageObject.name}</p>
                     </header>
@@ -108,7 +161,7 @@ var MediaUploader = () => {
                                 <button onClick={triggerFileUploader} className="uploadImageBox">
                                     <span>Upload Image</span>
                                 </button>
-                                : <img src={imageObject.url} alt={imageObject.title} className="image-responsive" />}
+                                : <img crossOrigin="anonymous" src={imageObject.url} alt={imageObject.title} className="image-responsive" />}
                         </div>
                         <div>
                             <input placeholder="url ( Full Image URL )" value={imageObject.url} onChange={e => setImageObjectCallback({ url: e.target.value })} type="text" readOnly={true} />
@@ -120,15 +173,17 @@ var MediaUploader = () => {
                     <footer className="modal-card-foot">
                         <button onClick={toggleModal} className="button">Close</button>
                         <div style={{ marginLeft: "auto" }}>
-                            <button onClick={toggleModal} className="button red">Delete</button>
+                            
                             {
-                                imageObject.id === '' ? <button onClick={uploadMediaToServer} type="submit" className="button blue">
-                                    {preloader ? <span className='loader'></span> : 'Save Media'}
-                                </button> : ''
+                                imageObject.id !== '' ?  <button onClick={e => deleteImageFromServer(imageObject.id)} className="button red">Delete</button>: ''
                             }
+                           
+                           <button onClick={uploadMediaToServer} type="submit" className="button blue">
+                                {preloader ? <span className='loader'></span> : 'Save Media'}
+                            </button>
                         </div>
                     </footer>
-                </form>
+                </div>
             </div>
         )
     }
@@ -172,18 +227,29 @@ var MediaUploader = () => {
     var indexOfFirstMedia = indexOfLastMedia - mediaPerPage;
     var currentMedia = media.slice(indexOfFirstMedia, indexOfLastMedia);
 
+    var restoreObjectData = (imgObject) => {
+        setImageDataObject(imgObject);
+        setOpenUploadModal(true);
+    }
+
+    var handleUploadImageClick = () => {
+        setImageDataObject(null);
+        resetImageObject();
+        setOpenUploadModal(true);
+    }
+
     return (
         <div id="app">
             <NavbarContainer />
             <SidebarContainer />
-            <ModalOfUploadImage uploadModal={uploadModal} toggleModal={toggleModal} />
+            <ModalOfUploadImage uploadModal={uploadModal} toggleModal={toggleModal} imageData={imageData} />
             <section className="section main-section" style={{ width: '95%', marginLeft: 'auto', marginRight: 'auto' }}>
-                <button onClick={e => setOpenUploadModal(true)} className="button red">Upload Image</button>
+                <button onClick={handleUploadImageClick} className="button red">Upload Image</button>
                 <div className="media-library">
                     {
                         currentMedia.map((x, k) => {
                             return (
-                                <div className="media-block" key={k}>
+                                <div onClick={e => restoreObjectData(x)} className="media-block" key={k}>
                                     <img crossOrigin="anonymous" src={x.url} alt={x.title}/>
                                 </div>
                             );

@@ -5,6 +5,8 @@ const { Media } = require("./../models/media-model");
 const { middlewareTokens } = require("./secure/middlewares");
 const { Config } = require("./../config/options");
 const { Helper } = require("./../config/helper");
+const fs = require('fs');
+const path = require('path');
 var mediaRouter = express.Router();
 
 const storage = multer.memoryStorage(); // Use memory storage to process the file in memory
@@ -12,42 +14,62 @@ const storage = multer.memoryStorage(); // Use memory storage to process the fil
 const upload = multer({ storage: storage });
 
 mediaRouter.post("/media/upload", middlewareTokens, upload.single("image"), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).send({ error: 'No file uploaded' });
-        }
+  try {
+      if (req.body.id) {
+          // Update existing media information without uploading a new file
+          const existingMedia = await Media.findById(req.body.id);
 
-        var image_name = req.body.name.toLowerCase().replace(/\s+/g, "-");
+          if (!existingMedia) {
+              return res.status(404).send({ error: 'Media not found' });
+          }
 
-        const filename = `${image_name}.webp`;
-        const outputPath = `${Config.uploads.folder}/${Config.uploads.serve}/${filename}`;
-        
-        
-        await sharp(req.file.buffer)
-            .resize(800)  
-            .toFormat('webp')
-            .toFile(outputPath);
+          existingMedia.title = req.body.title;
+          existingMedia.description = req.body.description;
 
-        const newMedia = new Media({
-            title: req.body.title,
-            description: req.body.description,
-            name: filename,
-            url: `${Config.media_url}/${filename}`,
-        });
+          await existingMedia.save();
+          return res.send({
+              data: existingMedia,
+              is_error: false,
+              message: 'Updated successfully!'
+          });
+      } else {
+          // Upload a new image
+          if (!req.file) {
+              return res.status(400).send({ error: 'No file uploaded' });
+          }
 
-        await newMedia.save();
-        return res.send({
-          data: newMedia, is_error: false, message: 'Fetched succssfully!'
-        });
+          var image_name = req.body.name.toLowerCase().replace(/\s+/g, "-");
+          const filename = `${image_name}.webp`;
+          const outputPath = `${Config.uploads.folder}/${Config.uploads.serve}/${filename}`;
+          
+          await sharp(req.file.buffer)
+              .resize(800)
+              .toFormat('webp')
+              .toFile(outputPath);
 
-    } catch (error) { 
-        return res.send({
+          const newMedia = new Media({
+              title: req.body.title,
+              description: req.body.description,
+              name: filename,
+              url: `${Config.media_url}/${filename}`,
+          });
+
+          await newMedia.save();
+          return res.send({
+              data: newMedia,
+              is_error: false,
+              message: 'Uploaded successfully!'
+          });
+      }
+  } catch (error) { 
+      return res.send({
           is_error: true,
           data: [], 
           message: (error.message || 'Something went wrong')
-        });
-    }
+      });
+  }
 });
+
   
 mediaRouter.get("/media/all", middlewareTokens, async (req, res) => {
     try {
@@ -65,33 +87,178 @@ mediaRouter.get("/media/all", middlewareTokens, async (req, res) => {
     }
   });
   
-  mediaRouter.post("/media/:id", middlewareTokens, async (req, res) => {
-    try {
-      const media = await Media.findByIdAndDelete(req.params.id);
+mediaRouter.delete("/media/:id", middlewareTokens, async (req, res) => {
+   
+  try {
+      const mediaId = req.params.id;
+      const media = await Media.findById(mediaId);
+
       if (!media) {
-        return res.status(404).send();
+          return res.status(404).send({ error: 'Media not found' });
       }
-      res.status(200).send(media);
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  });
+
+      // Delete the image file from the server
+      const filePath = path.join(Config.uploads.folder, Config.uploads.serve, media.name);
+      if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+      }
+
+      // Delete the image record from the database
+      await Media.findByIdAndDelete(mediaId);
+
+      return res.send({
+          is_error: false,
+          message: 'Deleted successfully!'
+      });
+  } catch (error) {
+      return res.send({
+          is_error: true,
+          message: (error.message || 'Something went wrong')
+      });
+  }
+});
   
-  mediaRouter.post("/media/:id", middlewareTokens, async (req, res) => {
+ 
+const updateImageDetails = async ({ id, title, description, name, url, is_model, model_name, model_id, block_id}) => {
     try {
-      const media = await Media.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true, runValidators: true }
-      );
-      if (!media) {
-        return res.status(404).send();
-      }
-      res.status(200).send(media);
+        let response;
+
+        if (id) {
+
+            // Update existing media details
+            const existingMedia = await Media.findById(id);
+
+            if (!existingMedia) {
+                response = { error: 'Media not found', is_error: true };
+                return response;
+            }
+
+            existingMedia.title = title;
+            existingMedia.description = description;
+            existingMedia.name = name;
+            existingMedia.url = url;
+
+            if(  is_model != undefined )
+            existingMedia.is_model = is_model 
+            
+            if(  model_name != undefined )
+            existingMedia.model_name = model_name 
+            
+            if(  model_id != undefined )
+            existingMedia.model_id = model_id 
+            
+            if(  block_id != undefined )
+            existingMedia.block_id = block_id
+
+            await existingMedia.save();
+            response = {
+                data: existingMedia,
+                is_error: false,
+                message: 'Updated successfully!'
+            };
+        } else {
+            // Create new media entry without uploading an image
+                var tobesaved = {
+                    title,
+                    description,
+                    name,
+                    url
+                };
+
+                if(  is_model != undefined )
+                    tobesaved.is_model = is_model 
+                
+                if(  model_name != undefined )
+                    tobesaved.model_name = model_name 
+                
+                if(  model_id != undefined )
+                    tobesaved.model_id = model_id 
+                
+                if(  block_id != undefined )
+                    tobesaved.block_id = block_id
+
+            const newMedia = new Media(tobesaved);
+
+            await newMedia.save();
+            response = {
+                data: newMedia,
+                is_error: false,
+                message: 'Created successfully!'
+            };
+        }
+
+        return response;
     } catch (error) {
-      res.status(400).send(error);
+        return {
+            is_error: true,
+            message: error.message || 'Something went wrong'
+        };
     }
-  });
+};
    
 
-  module.exports = {mediaRouter};
+
+// Bulk update and insert 
+const bulkUpdateInsertMedia = async (mediaArray) => {
+    try {
+        const bulkOps = mediaArray.map(media => {
+            const { id, title, description, name, url, is_model, model_name, model_id, block_id } = media;
+            
+            // Create an object with fields to be updated/inserted
+            const mediaFields = { };
+            
+            if( title != undefined ) {
+                mediaFields.title = title
+            }
+            if( description != undefined ) {
+                mediaFields.description = description
+            }
+            if( name != undefined ) {
+                mediaFields.name = name
+            }
+            if( url != undefined ) {
+                mediaFields.url = url
+            }
+             
+
+            if (is_model !== undefined) mediaFields.is_model = is_model;
+            if (model_name !== undefined) mediaFields.model_name = model_name;
+            if (model_id !== undefined) mediaFields.model_id = model_id;
+            if (block_id !== undefined) mediaFields.block_id = block_id;
+
+            if (id) {
+                // Update existing media
+                return {
+                    updateOne: {
+                        filter: { _id: id },
+                        update: { $set: mediaFields }
+                    }
+                };
+            } else {
+                // Insert new media
+                return {
+                    insertOne: {
+                        document: mediaFields
+                    }
+                };
+            }
+        });
+
+        // Execute bulk operations
+        const result = await Media.bulkWrite(bulkOps);
+
+        return {
+            data: result,
+            is_error: false,
+            message: 'Bulk operation completed successfully!'
+        };
+    } catch (error) {
+        return {
+            is_error: true,
+            message: error.message || 'Something went wrong'
+        };
+    }
+};
+
+
+  module.exports = {mediaRouter, updateImageDetails, bulkUpdateInsertMedia};
