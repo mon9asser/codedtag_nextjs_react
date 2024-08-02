@@ -18,11 +18,7 @@ class NavbarContainer extends Component {
     }
 
     async componentDidMount() {
-
-        // load user data 
-        this.setState({
-            
-        });
+ 
  
 
         var request = await Helper.sendRequest({
@@ -92,11 +88,7 @@ class NavbarContainer extends Component {
         return (
             <>
                 <nav id="navbar-main" className="navbar is-fixed-top">
-                    <div className="navbar-brand">
-                        <span className="navbar-item mobile-aside-button">
-                            <span className="icon"><i className="mdi mdi-forwardburger mdi-24px"></i></span>
-                        </span>
-                    </div>
+                    
                     <div className="navbar-brand is-right">
                         <span className="navbar-item --jb-navbar-menu-toggle" data-target="navbar-menu">
                             <span className="icon"><i className="mdi mdi-dots-vertical mdi-24px"></i></span>
@@ -108,11 +100,7 @@ class NavbarContainer extends Component {
 
                                 <Link target="_blank" to={"https://" + this.state.domain.toLowerCase()} className="button light">
                                     <span>Visit Site</span>
-                                </Link>
-
-                                <span data-target="manage-sites" style={{marginLeft: "10px"}} className="button tan --jb-modal">
-                                    <span>Manage Sites</span>
-                                </span> 
+                                </Link> 
 
                                 <label style={{marginLeft: "50px"}}>
                                     Current Site is: <b id="current-site-name">{this.state.name}</b>

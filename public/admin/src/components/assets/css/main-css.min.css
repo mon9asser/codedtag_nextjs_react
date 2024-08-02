@@ -836,3 +836,12 @@ body {
     margin-bottom: 10px;
     justify-content: center;
 }
+
+
+.aside {
+    left: -13em; 
+}
+ 
+.aside:hover {
+    left: 0em;
+}

@@ -592,6 +592,8 @@ class wrappedEditPost extends Component {
         // store site name
         this.load_site_settings();
         
+        //post_id
+
         // location
         if (this.props?.location?.state?.post_id) {
             var post_id = this.props.location.state.post_id;

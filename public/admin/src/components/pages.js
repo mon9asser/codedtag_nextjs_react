@@ -377,7 +377,8 @@ class pageWrapped extends Component {
     }
 
     navigateToEdit = (post_id) => {
-        this.props.navigate("/dashboard/edit-page", {state: {post_id: post_id }});
+        //, {state: {post_id: post_id }}
+        this.props.navigate(`/dashboard/edit-page/${post_id}`);
     }
 
     renderPostsTable() {

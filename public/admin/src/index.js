@@ -68,7 +68,7 @@ var WrappApplication = () => (
 
             <Route path="/dashboard/pages" element={<Pages/>} /> 
             <Route path="/dashboard/create-page" element={<CreatePage/>} />
-            <Route path="/dashboard/edit-page" element={<EditPage/>} />
+            <Route path="/dashboard/edit-page/:post_id" element={<EditPage/>} />
 
             <Route path="/dashboard/users" element={<Users/>} /> 
             <Route path="/dashboard/create-user" element={<CreateUser/>} /> 

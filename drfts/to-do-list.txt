@@ -28,7 +28,7 @@
 
 - admin panel 
 	redius sidebar width and make it fixed display 
-	add media center for crud access like delete, add, updated, upload for images and urls
+	- ✔ add media center for crud access like delete, add, updated, upload for images and urls
 
 - Change all admin pages from router param to url arguments
 - Make direct request with google analytics
