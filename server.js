@@ -116,4 +116,4 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/views/build', 'index.html'));
 });
 
-app.listen(5000, () => console.log(`The server is running on port 5000`));
+app.listen(Config.server.port, () => console.log(`The server is running on port ${Config.server.port}`));
