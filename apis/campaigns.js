@@ -58,11 +58,7 @@ adCampaignRouter.post('/ad_campaign/create-update', middlewareTokens, async (req
     }
 });
 
-/**
- * Example:-
- * localhost:5000/api/ad_campaigns => for all
- * localhost:5000/api/ad_campaigns?campaign_id=665f7ac49d84a1b651c0fae2 => for specific id
- */
+
 adCampaignRouter.get('/ad_campaigns', middlewareTokens, async (req, res) => {
     try {
         const { campaign_id } = req.query;

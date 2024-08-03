@@ -3,10 +3,10 @@ const { db_name } = require("./db")
  
 const Config = { 
 
-    dashboard_url: "http://localhost.com:3000/dashboard",
-    media_url: `http://localhost:5000/uploads`,
-    site_url: "http://localhost:3000",
-    login_url: "http://localhost:3000/login", 
+    dashboard_url: "https://admin.freeaccountingtutorial.com/dashboard",
+    media_url: `https://freeaccountingtutorial.com/uploads`,
+    site_url: "https://freeaccountingtutorial.com",
+    login_url: "https://admin.freeaccountingtutorial.com/login", 
     redirect_to: "/tutorials",
 
     server: {
@@ -14,7 +14,7 @@ const Config = {
         sitemap: "", // slug shuould be started with slash /
         robots: "", // slug shuould be started with slash /
         api: "/api",
-        port: process.env.port || 5000 
+        port: process.env.port || 1000 
     },
     
     // serve image uploads on server

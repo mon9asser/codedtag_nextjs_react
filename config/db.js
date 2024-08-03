@@ -1,10 +1,10 @@
   
 module.exports = {
-    db_name:"aaa_codedtag",
-    domain:"Codedtag.com",
-    name:"CodedTag",
-    index:0,
-    property_id:"317812519", 
+    db_name:"freeaccountingtutorial",
+    domain:"freeaccountingtutorial.com",
+    name:"freeaccountingtutorial",
+    index:1,
+    property_id:"446426355", 
 }
 
 

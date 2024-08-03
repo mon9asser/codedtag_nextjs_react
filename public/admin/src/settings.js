@@ -1,7 +1,7 @@
 const Settings = {
 
     server: {
-        api: "http://localhost:5000/api"
+        api: "https://api.freeaccountingtutorial.com"
     },
 
     google: {

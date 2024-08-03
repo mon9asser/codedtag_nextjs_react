@@ -56,11 +56,6 @@ menuRouter.post('/menu/create-update', middlewareTokens, async (req, res) => {
 });
 
 
-/**
- * Example:-
- * localhost:5000/api/menus => for all
- * localhost:5000/api/menus?menu_id=665f7ac49d84a1b651c0fae2 => for specific id
- */
 menuRouter.get('/menus', middlewareTokens, async (req, res) => {
      
     try {

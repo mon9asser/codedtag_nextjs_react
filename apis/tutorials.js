@@ -67,13 +67,6 @@ tutorialRouter.post("/tutorial/create-update", middlewareTokens, async (req, res
     }
 });
 
-
-
-/**
- * Example:-
- * localhost:5000/api/tutorials => for all 
- * localhost:5000/api/tutorials?tutorial_id=665f7ac49d84a1b651c0fae2 => for spesific id
- */
 tutorialRouter.get("/tutorials", middlewareTokens, async (req, res) => {
     try {
         const { tutorial_id } = req.query;
