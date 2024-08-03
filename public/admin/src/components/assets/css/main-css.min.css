@@ -840,6 +840,7 @@ body {
 
 .aside {
     left: -13em; 
+    z-index: 10000;
 }
  
 .aside:hover {

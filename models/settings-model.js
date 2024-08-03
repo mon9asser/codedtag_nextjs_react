@@ -115,6 +115,11 @@ let settingsSchema = new Schema({
         type: Number, 
         default: 4
     },
+    banner_image_url:{
+        type: String,
+        trim: true,
+        default: ""
+    },
     circle_buttons:{
         type: Boolean, 
         default: false

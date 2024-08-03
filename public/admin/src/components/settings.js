@@ -34,6 +34,7 @@ class Settings extends Component {
             site_name: "",
             site_logo: "",
             banner_site_description: "",
+            banner_image_url: "",
             site_address: "",
             beside_post_title: "",
             site_meta_title: "",
@@ -82,6 +83,7 @@ class Settings extends Component {
             site_name: settings.site_name,
             site_logo: settings.site_logo,
             banner_site_description: settings.banner_site_description,
+            banner_image_url: settings.banner_image_url,
             site_address: settings.site_address,
             beside_post_title: settings.beside_post_title,
             site_meta_title: settings.site_meta_title,
@@ -189,6 +191,7 @@ class Settings extends Component {
             site_name: this.state.site_name,
             site_logo: this.state.site_logo,
             banner_site_description: this.state.banner_site_description,
+            banner_image_url: this.state.banner_image_url,
             site_address: this.state.site_address,
             beside_post_title: this.state.beside_post_title,
             site_meta_title: this.state.site_meta_title,
@@ -278,6 +281,13 @@ class Settings extends Component {
                                         <label className="label">Banner Description</label>
                                         <div className="control">
                                             <textarea onChange={e => this.setState({ banner_site_description: e.target.value })} value={this.state.banner_site_description} placeholder="Banner Description" className="input" style={{ minHeight: "100px" }}></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">Banner Image URL</label>
+                                        <div className="control">
+                                            <input onChange={e => this.setState({ banner_image_url: e.target.value })} value={this.state.banner_image_url} className="input" type="text" placeholder="Banner Image URL" />
                                         </div>
                                     </div>
 

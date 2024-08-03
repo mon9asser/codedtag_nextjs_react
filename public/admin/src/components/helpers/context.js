@@ -11,6 +11,22 @@ const withNavigation = (Component) => {
     };
 };
 
+const isMongoDBObjectId = (value) => {
+    if (typeof value !== 'string') {
+      return false;
+    }
+  
+    // Check if the string is exactly 24 characters long
+    if (value.length !== 24) {
+      return false;
+    }
+  
+    // Check if the string contains only hexadecimal characters
+    const hexRegEx = /^[0-9a-fA-F]{24}$/;
+    return hexRegEx.test(value);
+};
+
+
 // Create the context
 const Authentication = createContext();
 
@@ -43,14 +59,20 @@ class AuthWrapperContext extends Component {
             if( cutted === "/" || cutted === "" ) {
                 cutted = lens[lens.length - 2];
             } 
-
+            
             page = cutted;
+        }
+        
+        if( isMongoDBObjectId(page) ) {
+            var slugs = location.pathname.split("/");
+            page = slugs[slugs.length - 2];
         }
 
         if( page === "register" || page === "login" ) {
             return;
         }
-
+        // check if the passname already variable 
+        
         
         var session = JSON.parse(localStorage.getItem("session"));
         
@@ -58,9 +80,10 @@ class AuthWrapperContext extends Component {
             setTimeout(() => {
                 navigate('/login');
             }, 0)
-        } 
-       
-        Helper.checkUserCapabilities( page ).then(result => {
+        }
+         
+        Helper.checkUserCapabilities( page ).then(result => { 
+
             if( result.is_accessed === false || result.is_accessed === undefined ) {
                 navigate('/login');
             }

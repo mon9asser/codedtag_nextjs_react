@@ -1,7 +1,8 @@
 - ✖ Working with google analytics fields
 - ✖ Make option in settings for api key of google analytics
-- ✖ making options for site features (texts and svg)
-- ✖ making image of banner as reading url from db ( media uploader )
+
+
+- ✖ Make direct request with google analytics
 
 - ✔ Update bread crumbs of tab article
 - ✔ Programming subscribe sections
@@ -29,10 +30,10 @@
 	- ✔ add media center for crud access like delete, add, updated, upload for images and urls
 
 - ✔ Change all admin pages from router param to url arguments
-- Make direct request with google analytics
 
 
 
 
 
-
+- ✔ making image of banner as reading url from db ( media uploader )
+- ✔ making options for site features (texts and svg)
