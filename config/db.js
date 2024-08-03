@@ -1,6 +1,6 @@
   
 module.exports = {
-    db_name:"freeaccountingtutorial",
+    db_name:"freeaccountingtutorial_datab",
     domain:"freeaccountingtutorial.com",
     name:"freeaccountingtutorial",
     index:1,
