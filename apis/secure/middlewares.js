@@ -8,8 +8,8 @@ var middlewareTokens = (req, res, next) => {
 
     if (!isNotAuthed) {
         return verifyToken(req, res, next);
-    }
-
+    } 
+    
     next();
 
 };

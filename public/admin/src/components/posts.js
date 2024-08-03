@@ -53,7 +53,7 @@ class postsWrap extends Component {
   }
 
   navigateToEdit = (post_id) => { 
-    this.props.navigate("/dashboard/edit-post", {state: {post_id: post_id }});
+    this.props.navigate(`/dashboard/edit-post/${post_id}`);
   }
 
   toggleCommentsModal = (postTitle, comments) => {

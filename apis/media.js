@@ -9,11 +9,23 @@ const {Posts} = require("./../models/posts-model");
 const { Helper } = require("./../config/helper");
 const fs = require('fs');
 const path = require('path');
-var mediaRouter = express.Router();
+var mediaRouter = express.Router(); 
 
-const storage = multer.memoryStorage(); // Use memory storage to process the file in memory
-
-const upload = multer({ storage: storage });
+const storage = multer.memoryStorage();
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|gif/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only images are allowed'));
+        }
+    }
+});
 
 mediaRouter.post("/media/upload", middlewareTokens, upload.single("image"), async (req, res) => {
   try {

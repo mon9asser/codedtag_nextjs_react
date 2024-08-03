@@ -23,7 +23,20 @@ const { updateImageDetails, bulkUpdateInsertMedia } = require('./media');
 
 // Handle Upload images of posts 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|gif/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only images are allowed'));
+        }
+    }
+});
 
 
 // Function to ensure directory exists
@@ -33,7 +46,10 @@ const ensureDirectoryExistence = (dirPath) => {
     }
 };
 
-postRouter.post("/upload-image",  upload.single('image'), async (req, res) => {
+ 
+ 
+
+postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
     
     const filePath = req.file.buffer;
 

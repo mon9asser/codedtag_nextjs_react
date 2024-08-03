@@ -4,7 +4,7 @@ import { SidebarContainer } from "./parts/sidebar.js";
 import { Helper } from "../helper.js";
 
 
-import withLocation from "./parts/with-location.js";
+import withRouter from "./parts/with-router.js";
 import withNavigate from "./parts/with-navigate.js";
 
 
@@ -243,13 +243,13 @@ class EditTutorialWrap extends Component {
         await this.loadCategories();
 
         // => get data 
-        if( this.props.location.state == null ) {
+        if( this.props.params == undefined || this.props.params.tutorial_id == undefined ) {
             this.props.navigate("/dashboard/tutorials");
             return;
         }
             
 
-        var tutorial_id = this.props.location.state.tutorial_id; 
+        var tutorial_id = this.props.params.tutorial_id; 
         var request = await Helper.sendRequest({api: `tutorials?tutorial_id=${tutorial_id}`, method: "get", data: {}})
         
         if( request.is_error ) {
@@ -1114,7 +1114,7 @@ class EditTutorialWrap extends Component {
     
 } 
 
-var LocationWrap = withLocation(EditTutorialWrap);
+var LocationWrap = withRouter(EditTutorialWrap);
 var EditTutorial  = withNavigate(LocationWrap);
 
 export { EditTutorial };

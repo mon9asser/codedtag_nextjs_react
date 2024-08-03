@@ -5,7 +5,7 @@ import {YouTubeEmbed} from "./parts/embed-iframe.js"
 import { createReactEditorJS } from 'react-editor-js';
 import StickyBox from "react-sticky-box";
 import { CustomImageTool } from "./parts/image-class.js"
-import withLocation from "./parts/with-location.js";
+import withRouter from "./parts/with-router.js";
 import withNavigate from "./parts/with-navigate.js";
 
 // tools.js 
@@ -590,68 +590,69 @@ class wrappedEditPost extends Component {
         var tutorials = await this.loadAllTutorials();
          
         // store site name
-        this.load_site_settings();
+        this.load_site_settings(); 
         
         //post_id
-
+        if( this.props.params == undefined || this.props.params.post_id == undefined ) {
+            this.props.navigate( "/dashboard/posts" );
+            return; 
+        } 
         // location
-        if (this.props?.location?.state?.post_id) {
-            var post_id = this.props.location.state.post_id;
+        var post_id = this.props.params.post_id;
 
-            var request = await Helper.sendRequest({
-                api: `post/get?post_id=${post_id}&post_type=${this.state.post_type}`,
-                method: "get",
-                data: {}
-            });
+        var request = await Helper.sendRequest({
+            api: `post/get?post_id=${post_id}&post_type=${this.state.post_type}`,
+            method: "get",
+            data: {}
+        });
 
-            if (request.is_error || !request.data.length) {
-                return;
-            }
-
-            var post = request.data[0];
-
-            this.set_meta_title(post.meta_title);
-
-            var initialState = {
-                total_words: post.total_words,
-                total_chars: post.total_charachters,
-                links: post.links,
-                _id: post_id,
-                blocks: post.blocks,
-            };
-           
-            // getting target tutorial 
-            var tabs = {};
-            var tut = tutorials.filter( x => x._id == post?.tutorial.id)
-            if( tut.length ) {
-                tabs = {
-                    selected_tabs: tut[0].tabs
-                }
-            }
-            this.setState({
-                ...tabs,
-                tutorials: tutorials,
-                post_id: post_id,
-                initialState: initialState,
-                slug: post.slug,
-                selected_tab: post.selected_tab,
-                keyphrase: post.keyphrase,
-                meta_description: post.meta_description,
-                article_thumbnail_url: post.article_thumbnail_url,
-                tutorial: post?.tutorial || {},
-                allow_search_engine: post.allow_search_engine,
-                enable_ads: post.enable_ads, 
-                canonical_url: post.canonical_url,
-                is_published: post.is_published
-            }, () => {
-                
-                // Re-initialize the editor with the new data
-                setTimeout(() => { 
-                    this.editorInstance.render(initialState);
-                }, 1000);
-
-            });
+        if (request.is_error || !request.data.length) {
+            return;
         }
+
+        var post = request.data[0];
+
+        this.set_meta_title(post.meta_title);
+
+        var initialState = {
+            total_words: post.total_words,
+            total_chars: post.total_charachters,
+            links: post.links,
+            _id: post_id,
+            blocks: post.blocks,
+        };
+        
+        // getting target tutorial 
+        var tabs = {};
+        var tut = tutorials.filter( x => x._id == post?.tutorial.id)
+        if( tut.length ) {
+            tabs = {
+                selected_tabs: tut[0].tabs
+            }
+        }
+        this.setState({
+            ...tabs,
+            tutorials: tutorials,
+            post_id: post_id,
+            initialState: initialState,
+            slug: post.slug,
+            selected_tab: post.selected_tab,
+            keyphrase: post.keyphrase,
+            meta_description: post.meta_description,
+            article_thumbnail_url: post.article_thumbnail_url,
+            tutorial: post?.tutorial || {},
+            allow_search_engine: post.allow_search_engine,
+            enable_ads: post.enable_ads, 
+            canonical_url: post.canonical_url,
+            is_published: post.is_published
+        }, () => {
+            
+            // Re-initialize the editor with the new data
+            setTimeout(() => { 
+                this.editorInstance.render(initialState);
+            }, 1000);
+
+        });
         
     }   
 
@@ -1077,7 +1078,7 @@ class wrappedEditPost extends Component {
 
 }
  
-var wrappedLocation = withLocation(wrappedEditPost);
+var wrappedLocation = withRouter(wrappedEditPost);
 var EditPost = withNavigate(wrappedLocation);
 
 export { EditPost }; 

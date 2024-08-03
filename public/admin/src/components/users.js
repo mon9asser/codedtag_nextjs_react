@@ -268,7 +268,7 @@ class UsersWrapper extends Component {
     }
 
     edit_data = (obx) => { 
-        this.props.navigate("/dashboard/edit-user", {state: { user_data: obx }})
+        this.props.navigate(`/dashboard/edit-user/${obx._id}`)
     }
 
     RenderUserRows = () => {

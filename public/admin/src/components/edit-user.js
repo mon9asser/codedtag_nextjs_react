@@ -3,7 +3,7 @@ import { NavbarContainer } from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { Helper } from "../helper.js";
 
-import withLocation from "./parts/with-location.js"; 
+import withRouter from "./parts/with-router.js"; 
 import withNavigate from "./parts/with-navigate.js";
 
 class EditUserWrapper extends Component {
@@ -36,9 +36,14 @@ class EditUserWrapper extends Component {
 
     load_user_data = async ( by_id = true ) => {
 
-        var user_object = this.props?.location?.state?.user_data;
+        if(this.props.pramas == undefined || this.props.pramas.user_id == undefined ) {
+            this.props.navigate("/dashboard/users")
+            return; 
+        }
 
-        var user_id = by_id?user_object._id: this.state.user_id;
+        var user_object = null;
+
+        var user_id = this.props.pramas.user_id;
 
         var request = await Helper.sendRequest({
             api: `user/get?user_id=${user_id}`,
@@ -49,8 +54,8 @@ class EditUserWrapper extends Component {
         if (!request.is_error && request.data.length === 1) {
             user_object = request.data[0];
         }
-        console.log(user_object)
-        if (user_object) {
+         
+        if (user_object != null ) {
             this.setState({
                 user_id: user_object._id || "",
                 firstname: user_object.firstname || "",
@@ -472,6 +477,6 @@ class EditUserWrapper extends Component {
 }
 
 var EditUserNavigationWrapper = withNavigate(EditUserWrapper);
-var EditUser = withLocation(EditUserNavigationWrapper);
+var EditUser = withRouter(EditUserNavigationWrapper);
 
 export { EditUser };

@@ -60,11 +60,11 @@ var WrappApplication = () => (
             
             <Route path="/dashboard/tutorials" element={<Tutorials/>} /> 
             <Route path="/dashboard/create-tutorial" element={<CreateTutorial/>} />
-            <Route path="/dashboard/edit-tutorial" element={<EditTutorial/>} />
+            <Route path="/dashboard/edit-tutorial/:tutorial_id" element={<EditTutorial/>} />
             
             <Route path="/dashboard/posts" element={<Posts/>} /> 
             <Route path="/dashboard/create-post" element={<CreatePost/>} />
-            <Route path="/dashboard/edit-post" element={<EditPost/>} />
+            <Route path="/dashboard/edit-post/:post_id" element={<EditPost/>} />
 
             <Route path="/dashboard/pages" element={<Pages/>} /> 
             <Route path="/dashboard/create-page" element={<CreatePage/>} />
@@ -72,7 +72,7 @@ var WrappApplication = () => (
 
             <Route path="/dashboard/users" element={<Users/>} /> 
             <Route path="/dashboard/create-user" element={<CreateUser/>} /> 
-            <Route path="/dashboard/edit-user" element={<EditUser/>} />  
+            <Route path="/dashboard/edit-user/:user_id" element={<EditUser/>} />  
             
             <Route path='/dashboard/media' element={<MediaUploader/>} />
 

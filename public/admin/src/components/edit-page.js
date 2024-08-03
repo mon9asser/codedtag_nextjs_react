@@ -34,7 +34,7 @@ import { Settings } from "../settings.js";
 import {CustomCodeBlok} from "./parts/codeblock.js"
 import { Helper } from "../helper.js";
 
-import withLocation from "./parts/with-location.js";
+import withRouter from "./parts/with-router.js";
 import withNavigate from "./parts/with-navigate.js";
 
 import {page_templates} from "./parts/templates_options.js";
@@ -595,55 +595,57 @@ class wrappedEditPage extends Component {
 
     // store site name
     await this.load_site_settings();
-
-    // => Load variables  
-    if (this.props?.location?.state?.post_id) {
-        var post_id = this.props.location.state.post_id;
-
-        var request = await Helper.sendRequest({
-            api: `post/get?post_id=${post_id}&post_type=${this.state.post_type}`,
-            method: "get",
-            data: {}
-        });
-
-        if (request.is_error || !request.data.length) {
-            return;
-        }
-
-        var post = request.data[0];
-
-        this.set_meta_title(post.meta_title);
-
-        var initialState = {
-            total_words: post.total_words,
-            total_chars: post.total_charachters,
-            links: post.links,
-            _id: post_id,
-            blocks: post.blocks,
-        };
-
-        this.setState({
-            post_id: post_id,
-            initialState: initialState,
-            slug: post.slug,
-            keyphrase: post.keyphrase,
-            article_thumbnail_url: post.article_thumbnail_url,
-            meta_description: post.meta_description,
-            tutorials: post?.tutorials || {},
-            allow_search_engine: post.allow_search_engine,
-            canonical_url: post.canonical_url,
-            is_published: post.is_published,
-            enable_ads:post.enable_ads,
-            page_template: post.page_template,
-        }, () => {
-            
-            // Re-initialize the editor with the new data
-            setTimeout(() => { 
-                this.editorInstance.render(initialState);
-            }, 1000)
-
-        });
+     
+    
+    if( this.props.params == undefined || this.props.params.post_id == undefined ) {
+        this.props.navigate( "/dashboard/pages" );
+        return; 
     }
+    var post_id = this.props.params.post_id;
+
+    var request = await Helper.sendRequest({
+        api: `post/get?post_id=${post_id}&post_type=${this.state.post_type}`,
+        method: "get",
+        data: {}
+    });
+
+    if (request.is_error || !request.data.length) {
+        return;
+    }
+
+    var post = request.data[0];
+
+    this.set_meta_title(post.meta_title);
+
+    var initialState = {
+        total_words: post.total_words,
+        total_chars: post.total_charachters,
+        links: post.links,
+        _id: post_id,
+        blocks: post.blocks,
+    };
+
+    this.setState({
+        post_id: post_id,
+        initialState: initialState,
+        slug: post.slug,
+        keyphrase: post.keyphrase,
+        article_thumbnail_url: post.article_thumbnail_url,
+        meta_description: post.meta_description,
+        tutorials: post?.tutorials || {},
+        allow_search_engine: post.allow_search_engine,
+        canonical_url: post.canonical_url,
+        is_published: post.is_published,
+        enable_ads:post.enable_ads,
+        page_template: post.page_template,
+    }, () => {
+        
+        // Re-initialize the editor with the new data
+        setTimeout(() => { 
+            this.editorInstance.render(initialState);
+        }, 1000)
+
+    });
         
         
     }   
@@ -1016,7 +1018,7 @@ class wrappedEditPage extends Component {
 }
 
  
-var wrappedLocation = withLocation(wrappedEditPage);
+var wrappedLocation = withRouter(wrappedEditPage);
 var EditPage = withNavigate(wrappedLocation);
 
 export { EditPage };

@@ -2,6 +2,7 @@ import { Component } from "react";
 import { NavbarContainer } from "./parts/navbar.js";
 import { SidebarContainer } from "./parts/sidebar.js";
 import { Helper } from "../helper.js";
+import withRouter from "./parts/with-router.js";
 import withNavigate from "./parts/with-navigate.js";
 
 
@@ -425,7 +426,7 @@ class tutorialWrapper extends Component {
     }
 
     navigateToEdit = (tutorial_id) => { 
-        this.props.navigate("/dashboard/edit-tutorial", {state: {tutorial_id: tutorial_id }});
+        this.props.navigate(`/dashboard/edit-tutorial/${tutorial_id}`);
     }
 
     render() {
@@ -628,6 +629,6 @@ class tutorialWrapper extends Component {
 }
 
 
-var Tutorials = withNavigate(tutorialWrapper);
+var Tutorials = withNavigate(withRouter(tutorialWrapper));
 
 export { Tutorials };
