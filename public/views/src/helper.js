@@ -1277,7 +1277,6 @@ class HelperData {
           
           try {
           if( reqs.status === 200 ) {
-              console.log(reqs.data);
               return reqs.data;
           } else { 
               return {
