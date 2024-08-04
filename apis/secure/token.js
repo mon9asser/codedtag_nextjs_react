@@ -8,9 +8,9 @@ const jwt = require('jsonwebtoken');
 // generate token 
 tokenRouter.get("/hash-request", async(req, res) => {
 
-    console.log(req.headers.agent)
-    console.log('=======================')
-    console.log(req.headers.api_keys)
+    console.log('API Key:', req.headers['api-keys']); // or req.headers['api_keys']
+    console.log('Agent:', req.headers['agent']);
+
 
     if( ! req.headers.agent || ! req.headers.api_keys ) {
         
