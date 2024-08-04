@@ -131,7 +131,7 @@ app.get(Config.server.api + '/proxy', async (req, res) => {
 app.get('*', (req, res) => {
 
     var public_folder = 'public/views/build';
-    
+    console.log(req.hostname);
     if ( req.hostname.indexOf(Config.admin) != -1 )  
         public_folder = 'public/admin/build';
 
