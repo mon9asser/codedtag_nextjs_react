@@ -115,7 +115,7 @@ app.use( Config.server.sitemap, sitemapRouter);
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE'); // => OPTIONS, PUT,
-    res.header('Access-Control-Allow-Headers', 'Content-Type , ct-public-api-key, X-api-keys , X-api-app-name , X-app-token'); // X-Requested-With
+    res.header('Access-Control-Allow-Headers', 'Content-Type , ct-public-api-key, X-api-keys , api_keys, X-api-app-name , X-app-token'); // X-Requested-With
     res.header('Access-Control-Allow-Credentials', true);
     next();
 });
