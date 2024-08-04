@@ -1187,7 +1187,7 @@ class HelperData {
     }
     
     async generateToken(user_browser) {
-      console.log(`${Settings.server.api}/hash-request`);
+       
       var request = await axios({
         method: 'get',
         url: `${Settings.server.api}/hash-request`, 
@@ -1208,10 +1208,7 @@ class HelperData {
         }
 
         var token = generate_token.data;
-         
-        console.log(api);
-        console.log(token);
-
+          
         if( headers === undefined ) {
             headers = {};
         }
@@ -1280,6 +1277,7 @@ class HelperData {
           
           try {
           if( reqs.status === 200 ) {
+              console.log(reqs.data);
               return reqs.data;
           } else { 
               return {
