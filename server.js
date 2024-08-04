@@ -134,15 +134,13 @@ app.get('*', (req, res) => {
 
 
 app.use((req, res, next) => {
-
-    const adminDomains = [Config.admin];
-
-    if (adminDomains.some(domain => req.hostname.includes(domain))) {
+    
+    if ( req.hostname.indexOf(Config.admin) != -1 ) {
         res.sendFile(path.join(__dirname, 'public/admin/build', 'index.html'));
     } else {
         next();
     }
-    
+
 });
 
 
