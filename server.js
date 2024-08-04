@@ -129,20 +129,13 @@ app.get(Config.server.api + '/proxy', async (req, res) => {
 
 // Handle all other routes with the React app
 app.get('*', (req, res) => {
-    let public_folder = 'public/views/build';
-    console.log(`Request received for hostname: ${req.hostname}`);
 
-    if (req.hostname.indexOf(Config.admin) !== -1) {
+    var public_folder = 'public/views/build';
+    if ( req.hostname.indexOf(Config.admin) != -1 )  
         public_folder = 'public/admin/build';
-    }
 
-    console.log(`Serving from folder: ${public_folder}`);
-    res.sendFile(path.join(__dirname, public_folder, 'index.html'), (err) => {
-        if (err) {
-            console.error('Error sending file:', err);
-            res.status(err.status).end();
-        }
-    });
+    res.sendFile(path.join(__dirname, public_folder, 'index.html'));
+
 });
 
  
