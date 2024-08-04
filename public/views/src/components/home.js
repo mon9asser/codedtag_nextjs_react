@@ -140,7 +140,7 @@ var HomepageComponents = () => {
                         <h5>Free Tutorials</h5>
                     </div>
                     {
-                        ( upcoming.settings.site_name != "" && upcoming.settings.site_name.toLowerCase().indexOf("codedtag") != -1 ) ?
+                        ( upcoming.settings.site_name != "" && upcoming.settings?.site_name?.toLowerCase()?.indexOf("codedtag") != -1 ) ?
                         <div className='center-icons sm-6 md-3 lg-3 text-center p-all-15'>
                             <div className="codedtag-icon">
                                 <span className='flexbox bg2 items-center content-center'>
