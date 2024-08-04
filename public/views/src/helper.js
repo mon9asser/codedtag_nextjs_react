@@ -1187,7 +1187,7 @@ class HelperData {
     }
     
     async generateToken(user_browser) {
-       
+       console.log(`${Settings.server.api}/hash-request`);
       var request = await axios({
         method: 'get',
         url: `${Settings.server.api}/hash-request`, 
@@ -1196,12 +1196,12 @@ class HelperData {
           'agent': user_browser
         }
       });
-
+      console.log(request);
       return request.data;
     }
     
     async sendRequest ({api, method, data, headers, is_create } = null) {
-        console.log("trace of code here ++++")
+        
         var generate_token = await this.generateToken(navigator.userAgent)
         if( generate_token.is_error ) {
           return; 
