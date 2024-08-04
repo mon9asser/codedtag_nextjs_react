@@ -1187,18 +1187,24 @@ class HelperData {
     }
     
     async generateToken(user_browser) {
-       console.log(`${Settings.server.api}/hash-request`);
-      var request = await axios({
-        method: 'get',
-        url: `${Settings.server.api}/hash-request`, 
-        headers: {
-          'api_keys': 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132', 
-          'agent': user_browser
-        }
-      });
-      console.log(request);
-      return request.data;
+      try {
+        console.log(`${Settings.server.api}/hash-request`);
+        var request = await axios({
+          method: 'get',
+          url: `${Settings.server.api}/hash-request`,
+          headers: {
+            'api_keys': 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132', 
+            'agent': user_browser
+          }
+        });
+        console.log(request);
+        return request.data;
+      } catch (error) {
+        console.error('Error making the request:', error);
+        throw error;
+      }
     }
+    
     
     async sendRequest ({api, method, data, headers, is_create } = null) {
         
