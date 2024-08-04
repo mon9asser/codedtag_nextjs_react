@@ -192,7 +192,7 @@ var Header = ({menus, settings}) => {
                                 alt={upcoming.settings.site_name}
                                 width="135" 
                                 height="36"
-                                src={logo}  
+                                src={(upcoming.settings != null && upcoming.settings?.site_logo != "")? upcoming.settings.site_logo: logo}  
                             /> 
                         </Link>
 
