@@ -72,7 +72,7 @@ const { redirectRouter } = require("./apis/redirect");
 const { utillRouter } = require("./apis/utils");
 
 // Serve static files for React app
-app.use(express.static(path.join(__dirname, 'public/views/build')));
+// app.use(express.static(path.join(__dirname, 'public/views/build')));
 
 // Serve static files for uploads (media)
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
