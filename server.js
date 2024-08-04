@@ -129,19 +129,17 @@ app.get(Config.server.api + '/proxy', async (req, res) => {
 
 // Handle all other routes with the React app
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/views/build', 'index.html'));
-});
 
-
-app.use((req, res, next) => {
+    var public_folder = 'public/views/build';
     
-    if ( req.hostname.indexOf(Config.admin) != -1 ) {
-        res.sendFile(path.join(__dirname, 'public/admin/build', 'index.html'));
-    } else {
-        next();
-    }
+    if ( req.hostname.indexOf(Config.admin) != -1 )  
+        public_folder = 'public/admin/build';
+
+    res.sendFile(path.join(__dirname, public_folder, 'index.html'));
 
 });
+
+ 
 
 
 // Load SSL certificate and key
