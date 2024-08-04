@@ -133,7 +133,7 @@ app.get('*', (req, res) => {
 });
 
 app.use((req, res, next) => {
-    if (req.hostname === 'admin.freeaccountingtutorial.com') {
+    if (req.hostname === 'admin.freeaccountingtutorial.com' || req.hostname === 'admin.eratags.com' || req.hostname === 'admin.codedtag.com') {
         res.sendFile(path.join(__dirname, 'public/admin/build', 'index.html'));
     } else {
         next();
