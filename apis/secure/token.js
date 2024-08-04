@@ -8,8 +8,12 @@ const jwt = require('jsonwebtoken');
 // generate token 
 tokenRouter.get("/hash-request", async(req, res) => {
 
+    console.log(req.headers.agent)
+    console.log('=======================')
+    console.log(req.headers.api_keys)
+
     if( ! req.headers.agent || ! req.headers.api_keys ) {
-        console.log('tract 1')
+        
         return res.send({
             is_error: true, 
             message: 'Invalid credentials',
