@@ -133,12 +133,14 @@ app.get('*', (req, res) => {
 });
 
 app.use((req, res, next) => {
-    if (req.hostname === 'admin.freeaccountingtutorial.com' || req.hostname === 'admin.eratags.com' || req.hostname === 'admin.codedtag.com') {
+    const adminDomains = ['admin.freeaccountingtutorial.com', 'admin.eratags.com', 'admin.codedtag.com'];
+    if (adminDomains.includes(req.hostname)) {
         res.sendFile(path.join(__dirname, 'public/admin/build', 'index.html'));
     } else {
         next();
     }
 });
+
 
 // Load SSL certificate and key
 const sslOptions = {
