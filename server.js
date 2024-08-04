@@ -30,7 +30,7 @@ app.use(
     helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: ["'self'"],
-        connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com'],
+        connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com', 'https://admin.freeaccountingtutorial.com'],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
@@ -133,11 +133,7 @@ app.get(Config.server.api + '/proxy', async (req, res) => {
 
 // Handle all other routes with the React app
 app.get('*', (req, res) => {
-
-    var public_folder = 'public/views/build';
-    if ( req.hostname.indexOf(Config.admin) != -1 )  
-        public_folder = 'public/admin/build';
-
+    var public_folder = 'public/views/build'; 
     res.sendFile(path.join(__dirname, public_folder, 'index.html'));
 
 });
