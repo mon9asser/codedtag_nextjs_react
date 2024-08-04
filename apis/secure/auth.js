@@ -7,7 +7,7 @@ const {Config} = require("./../../config/options")
 const verifyToken = (req, res, next) => {
     
   var token = req.headers['authorization'];
-  var api_keys = req.headers['api_keys'];
+  var api_keys = req.headers['x-api-key'];
   
   if( api_keys == undefined  ) {
     return res.send({

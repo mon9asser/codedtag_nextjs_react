@@ -1187,24 +1187,18 @@ class HelperData {
     }
     
     async generateToken(user_browser) {
-      try {
-        console.log(`${Settings.server.api}/hash-request`);
-        var request = await axios({
-          method: 'get',
-          url: `${Settings.server.api}/hash-request`,
-          headers: {
-            'x-api-key': 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132', 
-            'agent': user_browser
-          }
-        });
-        console.log(request);
-        return request.data;
-      } catch (error) {
-        console.error('Error making the request:', error);
-        throw error;
-      }
+       
+      var request = await axios({
+        method: 'get',
+        url: `${Settings.server.api}/hash-request`, 
+        headers: {
+          'x-api-key': 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132', 
+          'agent': user_browser
+        }
+      });
+
+      return request.data;
     }
-    
     
     async sendRequest ({api, method, data, headers, is_create } = null) {
         
@@ -1220,7 +1214,7 @@ class HelperData {
         }
          
         headers["authorization"] = token;
-        headers["api_keys"] = 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132';
+        headers["x-api-key"] = 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132';
         
         if( is_create === undefined ) {
           is_create = false; 

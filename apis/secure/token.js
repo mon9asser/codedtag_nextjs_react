@@ -8,11 +8,10 @@ const jwt = require('jsonwebtoken');
 // generate token 
 tokenRouter.get("/hash-request", async(req, res) => {
 
-    console.log('API Key:', req.headers['x-api-key']); // or req.headers['api_keys']
-    console.log('Agent:', req.headers['agent']);
-
-
-    if( ! req.headers.agent || ! req.headers.api_keys ) {
+ 
+    var api_keys = req.headers['x-api-key'];
+    var agent = req.headers['agent'];
+    if( ! agent || ! api_keys ) {
         
         return res.send({
             is_error: true, 
@@ -22,7 +21,7 @@ tokenRouter.get("/hash-request", async(req, res) => {
     }
 
     // validate api keys 
-    if( req.headers.api_keys !== Config.api_keys ) {
+    if( api_keys !== Config.api_keys ) {
         console.log('tract 2')
         return res.send({
             is_error: true, 
@@ -32,7 +31,7 @@ tokenRouter.get("/hash-request", async(req, res) => {
     }
 
     const payload = {
-        agent: req.headers.agent,
+        agent: agent,
         site_name: 'c_o_d_e_d_t_a_g_for_t_u_t_o_r_i_a_l_s'
     };
     
