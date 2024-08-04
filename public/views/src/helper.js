@@ -1264,7 +1264,7 @@ class HelperData {
             data = {...data, ...additional}
           }
 
-          
+          console.log(`${Settings.server.api}/${api}`);
           var reqs = await axios({
             method: method,
             url: `${Settings.server.api}/${api}`,
@@ -1274,7 +1274,7 @@ class HelperData {
               ...headers
             }
           });
-          
+          console.log(reqs);
           try {
           if( reqs.status === 200 ) {
               return reqs.data;
