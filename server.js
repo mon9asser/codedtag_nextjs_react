@@ -32,12 +32,14 @@ app.use(
         defaultSrc: ["'self'"],
         connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com'],
         scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         imgSrc: ["'self'", 'data:'],
         // You can add other directives as needed
       },
     })
-);
+  );
 
   
 // Rate limiting configuration
