@@ -132,13 +132,17 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/views/build', 'index.html'));
 });
 
+
 app.use((req, res, next) => {
-    const adminDomains = ['admin.freeaccountingtutorial.com', 'admin.eratags.com', 'admin.codedtag.com'];
-    if (adminDomains.includes(req.hostname)) {
+
+    const adminDomains = [Config.admin];
+
+    if (adminDomains.some(domain => req.hostname.includes(domain))) {
         res.sendFile(path.join(__dirname, 'public/admin/build', 'index.html'));
     } else {
         next();
     }
+    
 });
 
 
