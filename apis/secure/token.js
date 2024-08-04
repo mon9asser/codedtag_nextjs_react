@@ -9,11 +9,11 @@ const jwt = require('jsonwebtoken');
 tokenRouter.get("/hash-request", async(req, res) => {
 
     if( ! req.headers.agent || ! req.headers.api_keys ) {
-        console.log("trace 1")
+ 
         return res.send({
             is_error: true, 
             message: 'Invalid credentials',
-            data: []
+            data: "trace 1"
         })
     }
 
@@ -23,7 +23,7 @@ tokenRouter.get("/hash-request", async(req, res) => {
         return res.send({
             is_error: true, 
             message: 'Invalid credentials',
-            data: []
+            data: "trace 2"
         })
     }
 
@@ -51,12 +51,12 @@ tokenRouter.get("/hash-request", async(req, res) => {
         });
 
     } catch (error) {
-        console.log("trace 3") 
+       
 
         return res.send({
             is_error: true, 
             message: 'Invalid credentials',
-            data: error
+            data: "trace 3"
         })
     }
 
