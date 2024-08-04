@@ -30,7 +30,7 @@ app.use(
     helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: ["'self'"],
-        connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com', 'https://admin.freeaccountingtutorial.com'],
+        connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com', 'https://admin.freeaccountingtutorial.com', 'https://freeaccountingtutorial.com/admin/'],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
