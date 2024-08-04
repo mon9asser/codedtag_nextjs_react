@@ -71,7 +71,7 @@ class Contacts extends Component {
 
     handleReply = (contactId) => {
         // Implement reply functionality
-        console.log('Reply to contact:', contactId);
+       // console.log('Reply to contact:', contactId);
     }
 
     handleDelete = (contactId) => {

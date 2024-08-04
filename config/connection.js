@@ -11,10 +11,10 @@ mongoose.connect(dbLink, {
   serverSelectionTimeoutMS: 30000 // Increase timeout to 30 seconds
 })
 .then(() => {
-  console.log('Successfully connected to the database');
+ // console.log('Successfully connected to the database');
 })
 .catch((err) => {
-  console.error('Error connecting to the database', err);
+  //console.error('Error connecting to the database', err);
   process.exit(1);
 });
 

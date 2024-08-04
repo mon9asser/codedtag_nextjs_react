@@ -46,7 +46,7 @@ var TurorialComponent = () => {
             data: {}
         }).then( row => { 
 
-            console.log(row);
+            
             var site_url = row.data?.settings?.site_address;
             if(site_url) {
                 var url_array = site_url.split('/');

@@ -58,7 +58,7 @@ var TutorialsComponent = () => {
             method: "get",
             data: {}
         }).then( row => { 
-            console.log(row)
+             
             var this_page = row.data.length? row.data[0]: {}; 
             var settings = row?.settings?.length ? row.settings[0]: null;
             var social_links = row?.social_links || [];

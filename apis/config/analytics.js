@@ -2,7 +2,7 @@ const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 const { GoogleAuth } = require('google-auth-library');
 
 // Log the environment variable to confirm it is set correctly.
-console.log('GOOGLE_APPLICATION_CREDENTIALS:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
+//console.log('GOOGLE_APPLICATION_CREDENTIALS:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 // Using a default constructor instructs the client to use the credentials
 // specified in GOOGLE_APPLICATION_CREDENTIALS environment variable.
@@ -37,7 +37,7 @@ async function runReport() {
   let totalSessions = 0;
   let weightedBounceRateSum = 0;
 
-  console.log('Report result:');
+  //console.log('Report result:');
   response.rows.forEach((row) => {
     const landingPage = row.dimensionValues[0].value;
     const sessions = parseFloat(row.metricValues[0].value);
@@ -46,12 +46,12 @@ async function runReport() {
     totalSessions += sessions;
     weightedBounceRateSum += sessions * bounceRate;
 
-    console.log(`Landing Page: ${landingPage}, Sessions: ${sessions}, Bounce Rate: ${bounceRate}`);
+    //console.log(`Landing Page: ${landingPage}, Sessions: ${sessions}, Bounce Rate: ${bounceRate}`);
   });
 
   const totalBounceRate = weightedBounceRateSum / totalSessions;
 
-  console.log(`Total Bounce Rate: ${totalBounceRate.toFixed(2)}%`);
+  //console.log(`Total Bounce Rate: ${totalBounceRate.toFixed(2)}%`);
 }
 
 runReport().catch(console.error);

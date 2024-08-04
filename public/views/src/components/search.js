@@ -220,7 +220,7 @@ var SearchComponents = () => {
         </>);
     }
 
-    console.log(upcoming)
+    
 
     return (
         <> 

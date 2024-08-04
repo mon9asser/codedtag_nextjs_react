@@ -131,7 +131,7 @@ class CustomCodeBlok {
 
         selectLanguage.addEventListener('change', function (e) {
             const lang = selectLanguage.value;
-            console.log(lang)
+            //console.log(lang)
             codeFooter.querySelector('span').innerHTML = lang.toUpperCase();
             const pre = codeContainer.querySelector('pre');
             pre.className = `hljs language-${lang}`;

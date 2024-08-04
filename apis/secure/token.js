@@ -22,7 +22,7 @@ tokenRouter.get("/hash-request", async(req, res) => {
 
     // validate api keys 
     if( api_keys !== Config.api_keys ) {
-        console.log('tract 2')
+       //console.log('tract 2')
         return res.send({
             is_error: true, 
             message: 'Invalid credentials',
@@ -54,7 +54,7 @@ tokenRouter.get("/hash-request", async(req, res) => {
         });
 
     } catch (error) {
-        console.log('tract 3')
+       // console.log('tract 3')
         return res.send({
             is_error: true, 
             message: 'Invalid credentials',

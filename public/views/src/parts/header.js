@@ -13,10 +13,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 var Header = ({menus, settings}) => {
      
     var session = JSON.parse(localStorage.getItem("session"));
-    console.log({
-        _____sess: session
-    })
-
+  
     var [upcoming, upcoming_change] = React.useState({
         nav_left: null,
         nav_right: null,

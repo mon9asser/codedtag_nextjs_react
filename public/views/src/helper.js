@@ -336,7 +336,7 @@ class HelperData {
             } else {
               to_be_state.type= 'success';
             }
-            console.log(to_be_state, res)
+            //console.log(to_be_state, res)
             response_results_callback(to_be_state);
 
             setTimeout(() => {
@@ -883,7 +883,7 @@ class HelperData {
 
 
     TutorialsContent = ({ blocks, tutorials, ad_camp }) => {
-      console.log(ad_camp);
+     // console.log(ad_camp);
       var header_count = 0;
       var end_section = 0;
 
@@ -1264,7 +1264,7 @@ class HelperData {
             data = {...data, ...additional}
           }
 
-          console.log(`${Settings.server.api}/${api}`);
+         // console.log(`${Settings.server.api}/${api}`);
           var reqs = await axios({
             method: method,
             url: `${Settings.server.api}/${api}`,
@@ -1274,7 +1274,7 @@ class HelperData {
               ...headers
             }
           });
-          console.log(reqs);
+          //console.log(reqs);
           try {
           if( reqs.status === 200 ) {
               return reqs.data;
@@ -1634,7 +1634,7 @@ class HelperData {
               press_type: presstype,
               is_pressed: true
             })
-            console.log(feedback);
+           // console.log(feedback);
             var response = await this.sendRequest({
               api: "comments/create-update",
               data: feedback, 
@@ -1688,7 +1688,7 @@ class HelperData {
 
             feedback.thumb= true;
 
-            console.log(feedback);
+            //console.log(feedback);
             setTimeout(() => submit_feedback(e, press_type), 100);
             e.preventDefault();
 

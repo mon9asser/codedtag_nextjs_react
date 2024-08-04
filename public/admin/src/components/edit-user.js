@@ -209,7 +209,7 @@ class EditUserWrapper extends Component {
             social_links: this.state.social_links
         };
 
-        console.log(data_object);
+        //console.log(data_object);
 
         if (this.state.password !== "") {
             data_object.password = this.state.password;

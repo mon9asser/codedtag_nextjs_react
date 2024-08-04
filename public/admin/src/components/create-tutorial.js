@@ -305,7 +305,7 @@ class CreateTutorial extends Component {
 
             return;
         }
-        console.log(request);
+        //console.log(request);
         this.setState({ 
             is_pressed: false, 
             show_message: "show_message",

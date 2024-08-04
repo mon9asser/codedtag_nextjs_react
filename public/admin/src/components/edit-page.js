@@ -94,16 +94,16 @@ var Tools = {
                 // Any additional payload data if needed
             },
             onUpload: (file) => {
-                console.log("Uploading file:", file);
+               // console.log("Uploading file:", file);
             },
             onUploadComplete: (response) => {
-                console.log("Upload complete response:", response);
+               // console.log("Upload complete response:", response);
             },
             onUploadError: (error) => {
-                console.log("Upload error:", error);
+              //  console.log("Upload error:", error);
             },
             onUploadStart: () => {
-                console.log("Upload started");
+              //  console.log("Upload started");
             }
     
         }

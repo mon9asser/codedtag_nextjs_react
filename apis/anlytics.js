@@ -110,9 +110,9 @@ async function saveReportData() {
       const reportData = await runReport();
       await Analytics.deleteMany({}); // Delete old data
       await Analytics.insertMany(reportData);
-      console.log('Report data saved successfully');
+      //console.log('Report data saved successfully');
     } catch (error) {
-      console.error('Error saving report data', error);
+      //console.error('Error saving report data', error);
     }
 
 }

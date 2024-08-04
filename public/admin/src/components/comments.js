@@ -38,7 +38,7 @@ class Comments extends Component {
                     totalPages: response.data.totalPages
                 });
             } else {
-                console.log(response.message);
+                //console.log(response.message);
             }
         }).catch(error => console.error('Error fetching comments:', error));
     }
@@ -64,7 +64,7 @@ class Comments extends Component {
                     comments: this.state.comments.filter(comment => comment._id !== commentId)
                 });
             } else {
-                console.log(response.message);
+               // console.log(response.message);
             }
         }).catch(error => console.error('Error deleting comment:', error));
     }

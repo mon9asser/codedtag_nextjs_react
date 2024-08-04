@@ -22,7 +22,7 @@ redirectsRouter.get("/:folder/", [
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
-        console.log('Validation errors:', errors.array());
+        // ('Validation errors:', errors.array());
         return res.sendFile(path.join(__dirname, './../public/views/build', 'index.html'));
     }
     
@@ -57,7 +57,7 @@ redirectsRouter.get("/:folder/:subfolder/", [
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
-        console.log('Validation errors:', errors.array());
+        //console.log('Validation errors:', errors.array());
         return res.sendFile(path.join(__dirname, './../public/views/build', 'index.html'));
     }
 

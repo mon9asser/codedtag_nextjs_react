@@ -99,13 +99,13 @@ class ManageLinks extends Component {
 
     handleStatusCodeFilterChange = (event) => {
         this.setState({ statusCodeFilter: event.target.value, currentPage: 1 }, () => {
-            console.log("Status Code Filter Changed:", this.state.statusCodeFilter);
+           // console.log("Status Code Filter Changed:", this.state.statusCodeFilter);
         });
     };
 
     handleExternalFilterChange = (event) => {
         this.setState({ externalFilter: event.target.value, currentPage: 1 }, () => {
-            console.log("External Filter Changed:", this.state.externalFilter);
+            //console.log("External Filter Changed:", this.state.externalFilter);
         });
     };
 

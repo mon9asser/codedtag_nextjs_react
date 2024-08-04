@@ -31,7 +31,7 @@ const Redirects = () => {
         method: 'GET',
         data: {}
       });
-      console.log(response);
+      //console.log(response);
       setRedirects(response.data);
     } catch (error) {
       console.error('Error fetching redirects:', error);

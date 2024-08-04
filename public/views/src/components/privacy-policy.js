@@ -141,7 +141,7 @@ var PrivacyPolicyPage = () => {
                 <meta name="twitter:card" content="summary_large_image"/> 
                 <meta name="twitter:image" content={upcoming?.article_thumbnail_url}/>
             </Helmet>
-                    {console.log(upcoming)}
+                   
             <Header menus={upcoming.menus} settings={upcoming.settings}/> 
             
             <div className="max-850 offset-left offset-right mt-space-long plr-block"> 

@@ -61,7 +61,7 @@ class tutorialsList {
 
   save(blockContent) {
     const select = blockContent.querySelector('select');
-    console.log(select)
+    //console.log(select)
     return {
       selectedValue: select.value,
     };
