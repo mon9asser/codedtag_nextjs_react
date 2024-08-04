@@ -1,26 +1,26 @@
 const express = require("express");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const fs = require("fs");
+const https = require("https");
 
 const { Config } = require("./config/options");
 const axios = require("axios");
 
-
-// cron jobs => google analytics 
+// Importing cron jobs for Google Analytics
 require("./apis/anlytics");
 
 const app = express();
 
 const corsOptions = {
     origin: "*",
-    credentials: true,  
-    optionSuccessStatus: 200,
+    credentials: true,
+    optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
- 
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -29,12 +29,12 @@ app.use(helmet());
 // Rate limiting configuration
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 300, // Limit each IP to 200 requests per windowMs
+    max: 300, // Limit each IP to 300 requests per windowMs
     message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 app.use(apiLimiter);
 
-// Routers  
+// Importing routers
 const { tokenRouter } = require("./apis/secure/token");
 const { mediaRouter } = require("./apis/media");
 const { userRouters } = require("./apis/users");
@@ -51,14 +51,14 @@ const { commentsRouter } = require("./apis/comments");
 const { analyticsRouter } = require("./apis/google-analytics");
 const { analyticsRouter2 } = require("./apis/analytics-report");
 const { sitemapRouter } = require("./apis/sitemap");
-const { redirectsRouter }  = require("./apis/redirects");
-const { redirectRouter }  = require("./apis/redirect");
+const { redirectsRouter } = require("./apis/redirects");
+const { redirectRouter } = require("./apis/redirect");
 const { utillRouter } = require("./apis/utils");
 
 // Serve static files for React app
 app.use(express.static(path.join(__dirname, 'public/views/build')));
 
-// Serve static files for uploads ( media )
+// Serve static files for uploads (media)
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
 // API Routes
@@ -82,12 +82,12 @@ app.use(Config.server.api, utillRouter);
 
 // Sitemap and robots files
 app.use(Config.server.sitemap, sitemapRouter);
-app.use(Config.server.redirects, redirectsRouter)
+app.use(Config.server.redirects, redirectsRouter);
 
 // Proxy route
 app.get(Config.server.api + '/proxy', async (req, res) => {
     try {
-        const url = decodeURIComponent(req.query.url); 
+        const url = decodeURIComponent(req.query.url);
         const response = await axios.get(url, {
             maxRedirects: 0,
             validateStatus: status => status >= 200 && status < 400,
@@ -97,15 +97,15 @@ app.get(Config.server.api + '/proxy', async (req, res) => {
         const isRedirect = status >= 300 && status < 400;
 
         res.json({
-            is_error: false, 
-            data: { status, type: statusText, is_redirect: isRedirect, url }, 
+            is_error: false,
+            data: { status, type: statusText, is_redirect: isRedirect, url },
             message: "Fetched Successfully!"
         });
 
-    } catch (error) { 
+    } catch (error) {
         res.json({
-            is_error: true, 
-            data: null, 
+            is_error: true,
+            data: null,
             message: "Something went wrong"
         });
     }
@@ -116,4 +116,13 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/views/build', 'index.html'));
 });
 
-app.listen(Config.server.port, () => console.log(`The server is running on port ${Config.server.port}`));
+// Load SSL certificate and key
+const sslOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/freeaccountingtutorial.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/freeaccountingtutorial.com/cert.pem'),
+};
+
+// Create HTTPS server
+https.createServer(sslOptions, app).listen(Config.server.port, () => {
+    console.log(`The server is running on port ${Config.server.port}`);
+});
