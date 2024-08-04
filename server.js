@@ -132,6 +132,14 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/views/build', 'index.html'));
 });
 
+app.use((req, res, next) => {
+    if (req.hostname === 'admin.freeaccountingtutorial.com') {
+        res.sendFile(path.join(__dirname, 'public/admin/build', 'index.html'));
+    } else {
+        next();
+    }
+});
+
 // Load SSL certificate and key
 const sslOptions = {
     key: fs.readFileSync('/etc/letsencrypt/live/freeaccountingtutorial.com/privkey.pem'),
