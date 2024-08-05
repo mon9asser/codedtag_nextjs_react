@@ -12,7 +12,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import {PageNotFound} from './404'
   
-var TurorialComponent = () => {
+var TutorialComponent = () => {
 
     const navigate = useNavigate(); 
 
@@ -335,4 +335,4 @@ var TurorialComponent = () => {
     );
 }
 
-export { TurorialComponent };
+export { TutorialComponent };
