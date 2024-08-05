@@ -181,6 +181,9 @@ var HomepageComponents = () => {
             footer_elms,*/
     var HomepageComponentsParts = () => {
          
+        window.nonce = "<%= nonce %>";
+        __webpack_nonce__ = window.nonce;
+        
         return (
             <>
                 <Helmet>
