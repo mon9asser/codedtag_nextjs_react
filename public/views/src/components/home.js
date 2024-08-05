@@ -9,12 +9,16 @@ import { Helper } from "../helper";
 import { Helmet } from "react-helmet";
 import { Settings } from "../settings"; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
- 
+import crypto from 'crypto';
  
 import {PageNotFound} from './404'
 
 import bannerImage from './../assets/img/banner.png';
 import underlineBg from './../assets/img/underline.png';
+
+function generateNonce() {
+    return crypto.randomBytes(16).toString('base64');
+}
 
 var HomepageComponents = () => {
 
@@ -24,7 +28,8 @@ var HomepageComponents = () => {
         site_url: null,
         settings: null,
         menus: null,
-        ads: null
+        ads: null,
+        nonce: '1452'
     });
 
     // functions  
@@ -40,6 +45,10 @@ var HomepageComponents = () => {
     // Contexts 
     React.useEffect(() => {
        
+        response_upcoming_callback({
+            nonce: generateNonce()
+        })
+
         Helper.sendRequest({  
             api: `home-page/get`,
             method: "get",
@@ -186,7 +195,7 @@ var HomepageComponents = () => {
                 <Helmet>
                     <title>{upcoming.settings.site_meta_title}</title>
                     <meta name="description" content={upcoming.settings.site_meta_description}/>
-                    <script type="application/ld+json">
+                    <script nonce={upcoming.nonce} type="application/ld+json">
                         {
                             `
                             {
