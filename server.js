@@ -5,8 +5,7 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const fs = require("fs");
-const https = require("https");
-const crypto = require('crypto');
+const https = require("https"); 
 
 const { Config } = require("./config/options");
 const axios = require("axios");
@@ -42,14 +41,7 @@ app.use(
     })
 );
 
-app.use((req, res, next) => {
-    res.locals.nonce = crypto.randomBytes(16).toString('base64');
-    res.setHeader(
-      "Content-Security-Policy",
-      `default-src 'self'; script-src 'self' 'unsafe-hashes' 'nonce-${res.locals.nonce}';`
-    );
-    next();
-});
+ 
   
 
   
