@@ -9,7 +9,7 @@ import { Helper } from "../helper";
 import { Helmet } from "react-helmet";
 import { Settings } from "../settings"; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import crypto from 'crypto';
+ 
  
 import {PageNotFound} from './404'
 
@@ -17,9 +17,10 @@ import bannerImage from './../assets/img/banner.png';
 import underlineBg from './../assets/img/underline.png';
 
 function generateNonce() {
-    return crypto.randomBytes(16).toString('base64');
+    const array = new Uint8Array(16);
+    window.crypto.getRandomValues(array);
+    return btoa(String.fromCharCode.apply(null, array));
 }
-
 var HomepageComponents = () => {
 
     var [ upcoming, upcoming_change ] = React.useState({
