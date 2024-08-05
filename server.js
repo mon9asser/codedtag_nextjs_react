@@ -30,7 +30,7 @@ app.use(
     helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: ["'self'"],
-        connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com', 'https://admin.freeaccountingtutorial.com', 'https://freeaccountingtutorial.com/admin/'],
+        connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com', 'https://admin.freeaccountingtutorial.com', 'https://freeaccountingtutorial.com'],
         scriptSrc: ["'self'", "'sha256-V+/U3qbjHKP0SaNQhMwYNm62gfWX4QHwPJ7We1PXokI='", (req, res) => `'nonce-${res.locals.nonce}'`],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
