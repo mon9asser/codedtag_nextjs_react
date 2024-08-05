@@ -31,7 +31,7 @@ const SearchComponents = lazy(() => import('./components/search.js').then(module
 var WrappApplication = () => {
   
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Helper.PreLoader type={'article'} />}>
       <Routes>
           <Route path="/" element={<HomepageComponents/>} />
           <Route path="/contact-us/" element={<ContactPage />} /> 
