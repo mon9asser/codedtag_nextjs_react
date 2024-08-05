@@ -182,14 +182,14 @@ var HomepageComponents = () => {
     var HomepageComponentsParts = () => {
          
         window.nonce = "<%= nonce %>";
-        __webpack_nonce__ = window.nonce;
-        
+        var __webpack_nonce__ = window.nonce;
+
         return (
             <>
                 <Helmet>
                     <title>{upcoming.settings.site_meta_title}</title>
                     <meta name="description" content={upcoming.settings.site_meta_description}/>
-                    <script nonce={window.nonce} type="application/ld+json">
+                    <script nonce={__webpack_nonce__} type="application/ld+json">
                         {
                             `
                             {
