@@ -144,7 +144,7 @@ var Header = ({menus, settings}) => {
                 <Helmet>
                     {
                         upcoming?.settings?.site_icon == "" || upcoming?.settings?.site_icon == undefined? "": 
-                        <link rel="icon" type="image/png" sizes="16x16" href={upcoming?.settings?.site_icon}/>
+                        <link rel="icon" type="image/webp" sizes="16x16" href={upcoming?.settings?.site_icon}/>
                     }
                 </Helmet>
                 <Helper.DynamicHelmet elements={upcoming.settings?.header_elms} />
