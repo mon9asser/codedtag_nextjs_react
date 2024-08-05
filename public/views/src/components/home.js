@@ -201,7 +201,7 @@ var HomepageComponents = () => {
                 <Helmet>
                     <title>{upcoming.settings.site_meta_title}</title>
                     <meta name="description" content={upcoming.settings.site_meta_description}/>
-                    <script nonce={'d1rt25rt8sdsgh1231sdf'} type="application/ld+json">
+                    <script nonce={'rRz8YXz8zNp5l3L+'} type="application/ld+json">
                         {
                             `
                             {
