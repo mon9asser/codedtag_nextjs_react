@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && npx postcss build/static/css/*.css -o build/static/css/main.css",
+    "build": "react-scripts build && npx postcss build/static/css/*.css -d build/static/css/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
