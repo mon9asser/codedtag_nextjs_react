@@ -103,6 +103,11 @@ let settingsSchema = new Schema({
         trim: true,
         default: ""
     },
+    site_icon: {
+        type: String,
+        trim: true,
+        default: ""
+    },
     ads_between_texts_every_words: {
         type: Number, 
         default: 400

@@ -33,6 +33,7 @@ class Settings extends Component {
             banner_site_title: "",
             site_name: "",
             site_logo: "",
+            site_icon: "",
             banner_site_description: "",
             banner_image_url: "",
             site_address: "",
@@ -82,6 +83,7 @@ class Settings extends Component {
             banner_site_title: settings.banner_site_title,
             site_name: settings.site_name,
             site_logo: settings.site_logo,
+            site_icon: settings.site_icon,
             banner_site_description: settings.banner_site_description,
             banner_image_url: settings.banner_image_url,
             site_address: settings.site_address,
@@ -190,6 +192,7 @@ class Settings extends Component {
             banner_site_title: this.state.banner_site_title,
             site_name: this.state.site_name,
             site_logo: this.state.site_logo,
+            site_icon: this.state.site_icon,
             banner_site_description: this.state.banner_site_description,
             banner_image_url: this.state.banner_image_url,
             site_address: this.state.site_address,
@@ -270,6 +273,17 @@ class Settings extends Component {
                                         </div>
                                     </div>
 
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">Site Logo URL</label>
+                                        <div className="control">
+                                            <input 
+                                                value={this.state.site_icon}
+                                                placeholder="Site Icon URL"
+                                                onChange={e => this.setState({ site_icon: e.target.value })}
+                                                className="input" type="text" />
+                                        </div>
+                                    </div>
+                                    
                                     <div className="field" style={{ marginTop: "25px" }}>
                                         <label className="label">Banner Site Title</label>
                                         <div className="control">

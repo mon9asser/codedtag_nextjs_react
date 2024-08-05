@@ -3,6 +3,7 @@ import logo from './../assets/img/logo-1.png';
 import {Helper} from './../helper';
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from 'react-lazy-load-image-component'; 
+import { Helmet } from "react-helmet";
  
 /*
  <Helper.DynamicHelmet elements={upcoming.settings.header_elms} />
@@ -140,6 +141,12 @@ var Header = ({menus, settings}) => {
 
         return (
             <>
+                <Helmet>
+                    {
+                        upcoming?.settings?.site_icon == "" || upcoming?.settings?.site_icon == undefined? "": 
+                        <link rel="icon" type="image/png" sizes="16x16" href={upcoming?.settings?.site_icon}/>
+                    }
+                </Helmet>
                 <Helper.DynamicHelmet elements={upcoming.settings?.header_elms} />
                 
                 <aside ref={sidebarRef} className="aside responsive-aside"> 
