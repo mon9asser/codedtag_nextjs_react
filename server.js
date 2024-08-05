@@ -6,6 +6,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const fs = require("fs");
 const https = require("https");
+const crypto = require('crypto');
 
 const { Config } = require("./config/options");
 const axios = require("axios");
