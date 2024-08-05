@@ -31,16 +31,16 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com', 'https://admin.freeaccountingtutorial.com', 'https://freeaccountingtutorial.com'],
-        //scriptSrc: ["'self'", "'sha256-V+/U3qbjHKP0SaNQhMwYNm62gfWX4QHwPJ7We1PXokI='", (req, res) => `'nonce-${res.locals.nonce}'`],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         imgSrc: ["'self'", 'data:'],
         mediaSrc: ["*"],
+        scriptSrc: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/'],
         // You can add other directives as needed
       },
     })
-);
+);      
 
   
 // Rate limiting configuration
