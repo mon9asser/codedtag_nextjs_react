@@ -7,6 +7,9 @@ const helmet = require("helmet");
 const fs = require("fs");
 const https = require("https"); 
 
+const crypto = require('crypto');
+
+
 const { Config } = require("./config/options");
 const axios = require("axios");
 
@@ -26,6 +29,12 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(helmet());
 
+app.use((req, res, next) => {
+    res.locals.nonce = crypto.randomBytes(16).toString('base64');
+    next();
+});
+
+
 app.use(
     helmet.contentSecurityPolicy({
       directives: {
@@ -36,13 +45,16 @@ app.use(
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         imgSrc: ["'self'", 'data:'],
         mediaSrc: ["*"],
-        scriptSrc: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/'],
+        scriptSrc: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/', (req, res) => `'nonce-${res.locals.nonce}'`],
         frameSrc: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/'],
+        scriptSrcAttr: ["'nonce-${res.locals.nonce}'"],
         // You can add other directives as needed
       },
     })
   );
+  
     
+
 
   
 // Rate limiting configuration
