@@ -195,43 +195,46 @@ var HomepageComponents = () => {
     /*header_elms,
             footer_elms,*/
     var HomepageComponentsParts = () => {
-         
+        
+        var jsonLdContent = `
+            {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "CodedTag",
+                "url": "${upcoming.site_url}",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "${upcoming.site_url}search?q={search_result}",
+                    "query-input": "required name=search_result"
+                },
+                "sameAs": [${upcoming.settings.social_links}],
+                "author": {
+                    "@type": "Person",
+                    "name": "Montasser Mossallem"
+                },
+                "description": "${upcoming.settings.site_meta_description}",
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "${upcoming.settings.site_name}",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "${upcoming.settings.site_logo}"
+                    }
+                }
+            }
+            `;
+
+
         return (
             <>
                 <Helmet>
                     <title>{upcoming.settings.site_meta_title}</title>
                     <meta name="description" content={upcoming.settings.site_meta_description}/>
-                    <script nonce={'rRz8YXz8zNp5l3L+'} type="application/ld+json">
-                        {
-                            `
-                            {
-                                "@context": "https://schema.org",
-                                "@type": "WebSite",
-                                "name": "CodedTag",
-                                "url": "${upcoming.site_url}",
-                                "potentialAction": {
-                                    "@type": "SearchAction",
-                                    "target": "${upcoming.site_url}search?q={search_result}",
-                                    "query-input": "required name=search_result"
-                                },
-                                "sameAs": [${upcoming.settings.social_links}],
-                                "author": {
-                                    "@type": "Person",
-                                    "name": "Montasser Mossallem"
-                                },
-                                "description": "${upcoming.settings.site_meta_description}",
-                                "publisher": {
-                                    "@type": "Organization",
-                                    "name": "${upcoming.settings.site_name}",
-                                    "logo": {
-                                        "@type": "ImageObject",
-                                        "url": "${upcoming.settings.site_logo}"
-                                    }
-                                }
-                            }
-                            `
-                        }
-                    </script>
+                    <script
+                        type="application/ld+json"
+                        nonce={upcoming.nonce}
+                        dangerouslySetInnerHTML={{ __html: jsonLdContent }}
+                    /> 
 
                     <link rel="canonical" href={upcoming.site_url}/>
                     <meta property="og:locale" content="en_US"/>
