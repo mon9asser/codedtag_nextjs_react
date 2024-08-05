@@ -39,7 +39,14 @@ app.use(
         // You can add other directives as needed
       },
     })
-  );
+);
+
+app.use((req, res, next) => {
+res.locals.nonce = crypto.randomBytes(16).toString('base64');
+res.setHeader("Content-Security-Policy", `script-src 'self' 'nonce-${res.locals.nonce}'`);
+next();
+});
+  
 
   
 // Rate limiting configuration
