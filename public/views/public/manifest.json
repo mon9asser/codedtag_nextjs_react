@@ -1,6 +1,6 @@
 {
-  "short_name": "FreeAccountingTutorial",
-  "name": "Free Accounting Tutorial",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
@@ -22,5 +22,5 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://cdnjs.cloudflare.com; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/; object-src 'self'"
 }
