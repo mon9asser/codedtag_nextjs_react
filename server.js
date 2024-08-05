@@ -37,10 +37,12 @@ app.use(
         imgSrc: ["'self'", 'data:'],
         mediaSrc: ["*"],
         scriptSrc: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/'],
+        frameSrc: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/'],
         // You can add other directives as needed
       },
     })
-);      
+  );
+    
 
   
 // Rate limiting configuration
