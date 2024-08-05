@@ -34,7 +34,7 @@ app.use((req, res, next) => {
     next();
 });
 
-/*
+
 app.use(
     helmet.contentSecurityPolicy({
       directives: {
@@ -53,26 +53,7 @@ app.use(
     })
   );
   
-*/
-
-app.use(
-    helmet.contentSecurityPolicy({
-      directives: {
-        defaultSrc: ["'self'"],
-        connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com', 'https://admin.freeaccountingtutorial.com', 'https://freeaccountingtutorial.com'],
-        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        imgSrc: ["'self'", 'data:'],
-        mediaSrc: ["*"],
-        scriptSrc: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/', (req, res) => `'nonce-${res.locals.nonce}'`],
-        frameSrc: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/'],
-        scriptSrcAttr: [`'nonce-${res.locals.nonce}'`],
-        // You can add other directives as needed
-      },
-    })
-  );
-  
+    
 
 
   
