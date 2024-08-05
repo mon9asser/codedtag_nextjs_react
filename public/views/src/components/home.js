@@ -17,10 +17,15 @@ import bannerImage from './../assets/img/banner.png';
 import underlineBg from './../assets/img/underline.png';
 
 function generateNonce() {
-    const array = new Uint8Array(16);
-    window.crypto.getRandomValues(array);
-    return btoa(String.fromCharCode.apply(null, array));
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let nonce = '';
+    for (let i = 0; i < 16; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      nonce += charset[randomIndex];
+    }
+    return nonce;
 }
+
 var HomepageComponents = () => {
 
     var [ upcoming, upcoming_change ] = React.useState({
