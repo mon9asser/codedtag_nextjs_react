@@ -152,8 +152,6 @@ var Header = ({menus, settings}) => {
 
                     <div ref={sidebarContentRef} className="aside-content white-bg" id="sidebar-content"> 
                         <div className="flexbox items-center content-center site-logo-container">
-                            {console.log(upcoming.settings?.site_logo)}
-                            {console.log(upcoming.settings)}
                             <a className="site-logo" href="#"><img src={ (upcoming.settings != null && upcoming.settings?.site_logo != "")? upcoming.settings.site_logo: logo} alt="Logo Site" width="135" height="36" /></a>
                         </div>
                         
