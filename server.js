@@ -43,9 +43,12 @@ app.use(
 );
 
 app.use((req, res, next) => {
-res.locals.nonce = crypto.randomBytes(16).toString('base64');
-res.setHeader("Content-Security-Policy", `script-src 'self' 'nonce-${res.locals.nonce}'`);
-next();
+    res.locals.nonce = crypto.randomBytes(16).toString('base64');
+    res.setHeader(
+      "Content-Security-Policy",
+      `default-src 'self'; script-src 'self' 'unsafe-hashes' 'nonce-${res.locals.nonce}';`
+    );
+    next();
 });
   
 
