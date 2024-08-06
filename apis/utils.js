@@ -75,7 +75,7 @@ utillRouter.get('/search', middlewareTokens, async (req, res) => {
 }); 
 
 
-utilRouter.get('/robots.txt', async (req, res) => {
+utillRouter.get('/robots.txt', async (req, res) => {
     try {
         // Define the robots.txt content
         let robotsContent = `User-agent: *\nDisallow: /`;
