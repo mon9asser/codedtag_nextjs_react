@@ -1,0 +1,193 @@
+/etc/nginx/sites-available/
+
+// =========================================================
+// =>> /etc/nginx/sites-available/
+// =========================================================
+
+1- eratags.com
+
+server {
+    listen 80;
+    server_name eratags.com www.eratags.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name eratags.com www.eratags.com;
+
+    ssl_certificate /etc/letsencrypt/live/eratags.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/eratags.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Add Content Security Policy header
+    #add_header Content-Security-Policy "script-src 'self' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/; object-src 'self';";
+
+    # Other headers can be added here
+    #add_header X-Content-Type-Options nosniff;
+    #add_header X-Frame-Options DENY;
+    #add_header X-XSS-Protection "1; mode=block";
+
+    location / {
+        proxy_pass https://141.136.35.135:1000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+ 
+2- admin.eratags.com
+
+server {
+    listen 80;
+    server_name admin.eratags.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name admin.eratags.com;
+
+    ssl_certificate /etc/letsencrypt/live/admin.eratags.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/admin.eratags.com/privkey.pem;
+
+    root /var/www/eratags.com/public/admin/build;
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+}
+ 
+
+
+3- api.eratags.com
+
+server {
+    if ($host = api.eratags.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name api.eratags.com;
+    return 301 https://$host$request_uri;
+
+
+}
+
+server {
+    listen 443 ssl;
+    server_name api.eratags.com;
+    ssl_certificate /etc/letsencrypt/live/api.eratags.com-0001/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/api.eratags.com-0001/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    add_header Content-Security-Policy "default-src 'self'; connect-src 'self' https://api.eratags.com";
+
+    location / {
+        proxy_pass https://141.136.35.135:1000/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+}
+
+
+
+
+
+// =========================================================
+// =>> /etc/nginx/nginx.conf { NO UPDATE HERE AS IT FOR ALL }
+// =========================================================
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+error_log /var/log/nginx/error.log;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+        worker_connections 768;
+        # multi_accept on;
+}
+
+http {
+
+        ##
+        # Basic Settings
+        ##
+
+        sendfile on;
+        tcp_nopush on;
+        types_hash_max_size 2048;
+        # server_tokens off;
+
+        # server_names_hash_bucket_size 64;
+        # server_name_in_redirect off;
+
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        ##
+        # SSL Settings
+        ##
+
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; # Dropping SSLv3, ref: POODLE
+        ssl_prefer_server_ciphers on;
+
+        ##
+        # Logging Settings
+        ##
+
+        access_log /var/log/nginx/access.log;
+
+        ##
+        # Gzip Settings
+        ##
+
+        gzip on;
+
+        gzip_vary on;
+        gzip_proxied any;
+        gzip_comp_level 6;
+        # gzip_buffers 16 8k;
+        # gzip_http_version 1.1;
+        gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_min_length 256;
+        gzip_disable "msie6";
+        ##
+        # Virtual Host Configs
+        ##
+
+        include /etc/nginx/conf.d/*.conf;
+        include /etc/nginx/sites-enabled/*;
+}
+
+
+#mail {
+#       # See sample authentication script at:
+#       # http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
+#
+#       # auth_http localhost/auth.php;
+#       # pop3_capabilities "TOP" "USER";
+#       # imap_capabilities "IMAP4rev1" "UIDPLUS";
+#
+#       server {
+#               listen     localhost:110;
+#               protocol   pop3;
+#               proxy      on;
+#       }
+#
+#       server {
+#               listen     localhost:143;
+#               protocol   imap;
+#               proxy      on;
+#       }
+#}
