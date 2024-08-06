@@ -1,7 +1,7 @@
 const Settings = {
 
     server: {
-        api: "https://api.freeaccountingtutorial.com"
+        api: "https://api.eratags.com"
     },
 
     google: {

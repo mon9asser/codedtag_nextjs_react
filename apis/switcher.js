@@ -15,9 +15,9 @@ var sites = [
         property_id: "317812519"
     },
     { 
-        db_name: "aaa_freeaccountingtutorial",
-        domain: "FreeAccountingTutorial.com",
-        name: "FreeAccountingTutorial",
+        db_name: "aaa_codedtag",
+        domain: "eratags.com",
+        name: "codedtag",
         index: 1, 
         property_id: "446426355"
     }

@@ -3,11 +3,11 @@ const { db_name } = require("./db")
  
 const Config = { 
 
-    dashboard_url: "https://admin.freeaccountingtutorial.com/dashboard",
-    media_url: `https://freeaccountingtutorial.com/uploads`,
-    site_url: "https://freeaccountingtutorial.com",
-    admin: "admin.freeaccountingtutorial.com",
-    login_url: "https://admin.freeaccountingtutorial.com/login", 
+    dashboard_url: "https://admin.eratags.com/dashboard",
+    media_url: `https://codedtag.com/uploads`,
+    site_url: "https://eratags.com",
+    admin: "admin.eratags.com",
+    login_url: "https://admin.eratags.com/login", 
     redirect_to: "/tutorials",
 
     server: {
@@ -15,7 +15,7 @@ const Config = {
         sitemap: "", // slug shuould be started with slash /
         robots: "", // slug shuould be started with slash /
         api: "/api",
-        port: process.env.port || 1000 
+        port: process.env.port || 2000 
     },
     
     // serve image uploads on server

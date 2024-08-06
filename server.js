@@ -30,7 +30,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", 'https://api.freeaccountingtutorial.com', 'https://admin.freeaccountingtutorial.com', 'https://freeaccountingtutorial.com'],
+      connectSrc: ["'self'", 'https://api.eratags.com', 'https://admin.eratags.com', 'https://eratags.com'],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
@@ -143,8 +143,8 @@ app.get('*', (req, res) => {
 
 // Load SSL certificate and key
 const sslOptions = {
-    key: fs.readFileSync('/etc/letsencrypt/live/freeaccountingtutorial.com/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/freeaccountingtutorial.com/cert.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/eratags.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/eratags.com/cert.pem'),
 };
 
 // Create HTTPS server
