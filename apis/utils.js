@@ -74,5 +74,25 @@ utillRouter.get('/search', middlewareTokens, async (req, res) => {
     }
 }); 
 
- 
+
+utilRouter.get('/robots.txt', async (req, res) => {
+    try {
+        // Define the robots.txt content
+        let robotsContent = `User-agent: *\nDisallow: /`;
+
+        // Ensure line breaks are properly handled
+        robotsContent = robotsContent.replace(/\r?\n/g, '\n');
+
+        // Set the content type to plain text
+        res.type('text/plain');
+
+        // Send the robots.txt content as the response
+        res.send(robotsContent);
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error('Error fetching robots.txt content:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 module.exports = { utillRouter }
