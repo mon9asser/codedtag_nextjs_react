@@ -125,7 +125,7 @@ var Footer = ({menus, settings}) => {
                             {   
                                 upcoming.nav_links.length ?
                                 <div className="lg-4 md-6 plr-15 ptb-15"> 
-                                    <h2 className="title">Follow Us</h2>
+                                    <h2 className="title">Links</h2>
                                     <ul className="inline-list tag-list custom-widget-links font-14 no-borders-list no-effect flex-wrap">
                                         {upcoming.nav_links.map(x => <li key={x._id}><Link target={x.openInNewTab?"_blank": ""} to={x.link}>{x.title}</Link></li>)}
                                     </ul>
