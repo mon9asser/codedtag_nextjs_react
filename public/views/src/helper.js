@@ -1201,7 +1201,19 @@ class HelperData {
     }
     
     async sendRequest ({api, method, data, headers, is_create } = null) {
-        
+      
+        /*code for deletion later*/
+        var sess = localStorage.getItem("session");
+        if( sess == null ) {
+          console.log("site is private")
+          return {
+            data: [],
+            message: "Site is not public for now",
+            is_error: true
+          }
+        }
+        /*end code for deletion later*/
+
         var generate_token = await this.generateToken(navigator.userAgent)
         if( generate_token.is_error ) {
           return; 
