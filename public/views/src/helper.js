@@ -1203,8 +1203,9 @@ class HelperData {
     async sendRequest ({api, method, data, headers, is_create } = null) {
       
         /*code for deletion later*/
-        var sess = localStorage.getItem("session");
-        if( sess == null ) {
+        var session = localStorage.getItem("session");
+        console.log(session);
+        if( session == null ) {
           console.log("site is private")
           return {
             data: [],
