@@ -4,7 +4,7 @@ const { db_name } = require("./db")
 const Config = { 
 
     dashboard_url: "https://admin.eratags.com/dashboard",
-    media_url: `https://codedtag.com/uploads`,
+    media_url: `https://media.codedtag.com`,
     site_url: "https://eratags.com",
     admin: "admin.eratags.com",
     login_url: "https://admin.eratags.com/login", 

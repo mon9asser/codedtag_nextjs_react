@@ -30,7 +30,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", 'https://api.eratags.com', 'https://admin.eratags.com', 'https://eratags.com'],
+      connectSrc: ["'self'", 'https://api.codedtag.com', 'https://admin.codedtag.com', 'https://media.codedtag.com', 'https://codedtag.com'],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
@@ -76,7 +76,7 @@ const { utillRouter } = require("./apis/utils");
 
 // Serve static files for React app
 // Middleware to serve static files for the main site
-app.use(express.static(path.join(__dirname, 'public/views/build')));
+// app.use(express.static(path.join(__dirname, 'public/views/build')));
  
 // Serve static files for uploads (media)
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
@@ -101,8 +101,8 @@ app.use(Config.server.api, analyticsRouter2);
 app.use(Config.server.api, utillRouter);
 
 // Sitemap and robots files
-app.use(Config.server.sitemap, sitemapRouter);
-app.use(Config.server.redirects, redirectsRouter);
+app.use(Config.server.api, sitemapRouter);
+// app.use(Config.server.redirects, redirectsRouter);
 
 // Proxy route
 app.get(Config.server.api + '/proxy', async (req, res) => {
@@ -129,13 +129,6 @@ app.get(Config.server.api + '/proxy', async (req, res) => {
             message: "Something went wrong"
         });
     }
-});
-
-// Handle all other routes with the React app
-app.get('*', (req, res) => {
-    var public_folder = 'public/views/build'; 
-    res.sendFile(path.join(__dirname, public_folder, 'index.html'));
-
 });
 
  
