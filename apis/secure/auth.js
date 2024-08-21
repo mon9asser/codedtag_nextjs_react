@@ -6,7 +6,7 @@ const {Config} = require("./../../config/options")
 // Middleware to verify token
 const verifyToken = (req, res, next) => {
     
-  var token = req.headers['authorization']?.split(' ')[1];
+  var token = req.headers['authorization'];
   var api_keys = req.headers['x-api-key'];
   
   if( api_keys == undefined  ) {
@@ -34,12 +34,7 @@ const verifyToken = (req, res, next) => {
       });
   }
   
-  
   try {
-	  
-	  
-	  
-  /*
     jwt.verify(token, Config.jwt_secret, (err, decoded) => {
 
       if (err || decoded.agent == undefined || decoded.site_name == undefined ) { 
@@ -62,16 +57,7 @@ const verifyToken = (req, res, next) => {
       next();
 
     });
-	*/
-	
-	
-	var decoded = jwt.verify(token, Config.jwt_secret);
-	
-	console.log(decoded);
-	next();
   } catch (error) {
-	  console.log("---------------------------------Error")
-	  console.log(error);
     return res.send({
       message: 'Invalid Credentials.',
       is_error: true, 
