@@ -35,7 +35,9 @@ const verifyToken = (req, res, next) => {
   }
   
   try {
-    jwt.verify(token, Config.jwt_secret, (err, decoded) => {
+	  
+	
+    /*jwt.verify(token, Config.jwt_secret, (err, decoded) => {
 
       if (err || decoded.agent == undefined || decoded.site_name == undefined ) { 
         return res.send({
@@ -56,7 +58,11 @@ const verifyToken = (req, res, next) => {
       req.crypted_usr = decoded;
       next();
 
-    });
+    });*/
+	
+	var decoded = jwt.verify(token, Config.jwt_secret);
+	console.log(decoded);
+	next();
   } catch (error) {
     return res.send({
       message: 'Invalid Credentials.',
