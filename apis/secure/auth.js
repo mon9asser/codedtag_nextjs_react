@@ -35,10 +35,14 @@ const verifyToken = (req, res, next) => {
       });
   }
   
+  // Decode the token without verification
+const decoded = jwt.decode(token, { complete: true });
+console.log('Manually decoded token:', decoded);
+
+  
   try {
 	  
-	 console.log('token ::', token);
-	 console.log('Config.jwt_secret ::',Config.jwt_secret);
+	
 	 
     jwt.verify(token, Config.jwt_secret, (err, decoded) => {
 	
