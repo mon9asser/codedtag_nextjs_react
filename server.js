@@ -46,6 +46,8 @@ app.use(
 
   
 // Rate limiting configuration
+app.set('trust proxy', true);
+
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 300, // Limit each IP to 300 requests per windowMs
