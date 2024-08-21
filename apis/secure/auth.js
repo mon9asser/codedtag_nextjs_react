@@ -35,10 +35,10 @@ const verifyToken = (req, res, next) => {
   }
   
   try {
-	  console.log("jwt_secret", Config.jwt_secret)
+	  console.log("token", token)
     jwt.verify(token, Config.jwt_secret, (err, decoded) => {
 	
-	console.log("sitename_dsco", decoded.agent, decoded.site_name)
+	console.log("----sitename_dsco", decoded.agent, decoded.site_name)
 	
       if (err || decoded.agent == undefined || decoded.site_name == undefined ) { 
         return res.send({
@@ -49,7 +49,8 @@ const verifyToken = (req, res, next) => {
       } 
 	  
 	  
-
+		console.log("----agent", decoded.agent)
+		console.log("----site_name", decoded.site_name)
       if(decoded.site_name !== 'c_o_d_e_d_t_a_g_for_t_u_t_o_r_i_a_l_s') {
         return res.send({
             message: 'Invalid Credentials.',
@@ -58,6 +59,7 @@ const verifyToken = (req, res, next) => {
         });
       }
        
+   console.log("----decoded", decoded) 
       req.crypted_usr = decoded;
       next();
 
