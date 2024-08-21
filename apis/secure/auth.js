@@ -35,28 +35,65 @@ const verifyToken = (req, res, next) => {
   }
   
   try {
-    jwt.verify(token, Config.jwt_secret, (err, decoded) => {
+    jwt.verify(token, secret, (err, decoded) => {
+		if (err) {
+			if (err.name === 'TokenExpiredError') {
+				console.error('Token expired error:', err.message);
+				return res.send({
+					message: 'Token has expired.',
+					is_error: true,
+					data: []
+				});
+			} else {
+				console.error('Token verification error:', err.message);
+				return res.send({
+					message: 'Invalid Credentials.',
+					is_error: true,
+					data: []
+				});
+			}
+		}
 
-      if (err || decoded.agent == undefined || decoded.site_name == undefined ) { 
-        return res.send({
-            message: 'Invalid Credentials.',
-            is_error: true, 
-            data: []
-        });
-      } 
+		// Check if decoded is null or undefined
+		if (!decoded) {
+			console.error('Decoded token is null or undefined:', decoded);
+			return res.send({
+				message: 'Invalid Credentials.',
+				is_error: true,
+				data: []
+			});
+		}
 
-      if(decoded.site_name !== 'c_o_d_e_d_t_a_g_for_t_u_t_o_r_i_a_l_s') {
-        return res.send({
-            message: 'Invalid Credentials.',
-            is_error: true, 
-            data: []
-        });
-      }
-       
-      req.crypted_usr = decoded;
-      next();
+		// Check if decoded has expected properties
+		if (!decoded.agent || !decoded.site_name) {
+			console.error('Decoded token missing properties:', decoded);
+			return res.send({
+				message: 'Invalid Credentials.',
+				is_error: true,
+				data: []
+			});
+		}
 
-    });
+		console.log("----sitename_dsco", decoded.agent, decoded.site_name);
+
+		// Validate the site_name
+		if (decoded.site_name !== 'c_o_d_e_d_t_a_g_for_t_u_t_o_r_i_a_l_s') {
+			return res.send({
+				message: 'Invalid Credentials.',
+				is_error: true,
+				data: []
+			});
+		}
+
+		console.log("----agent", decoded.agent);
+		console.log("----site_name", decoded.site_name);
+		console.log("----decoded", decoded);
+
+		// Proceed with the request
+		req.crypted_usr = decoded;
+		next();
+	});
+
   } catch (error) {
     return res.send({
       message: 'Invalid Credentials.',
