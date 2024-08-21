@@ -421,7 +421,7 @@ function SubscribeComponents ({is_footer, title, description, camp_data, setting
       setRestult(old_objec);
   } 
  
-  var send_data = (e) => {
+  var send_data = async (e) => {
     
     e.preventDefault();
 
@@ -429,37 +429,38 @@ function SubscribeComponents ({is_footer, title, description, camp_data, setting
       is_pressed: true
     }); 
 
-    Helper.sendRequest({
+    var row = await Helper.sendRequest({
       api: 'user/subscribe',
       data: {
         email: email
       },
       method: 'post'
-    }).then( async row => {
-      
-      var res =  await row.json(); 
-      var to_be_state = {};
-      to_be_state.message= res.data;
-      to_be_state.cls= 'show';
-      to_be_state.is_pressed= false;
-
-      if( res.is_error ) { 
-        to_be_state.type= 'error';
-      } else {
-        to_be_state.type= 'success';
-      }
-      //console.log(to_be_state, res)
-      response_results_callback(to_be_state);
-
-      setTimeout(() => {
-        response_results_callback({
-          message: '',
-          cls: '',
-          type: ''
-        });
-      }, 3000)
-
     });
+    
+    
+    
+    var res =  await row.json(); 
+    
+    var to_be_state = {};
+    to_be_state.message= res.data;
+    to_be_state.cls= 'show';
+    to_be_state.is_pressed= false;
+
+    if( res.is_error ) { 
+      to_be_state.type= 'error';
+    } else {
+      to_be_state.type= 'success';
+    }
+    //console.log(to_be_state, res)
+    response_results_callback(to_be_state);
+
+    setTimeout(() => {
+      response_results_callback({
+        message: '',
+        cls: '',
+        type: ''
+      });
+    }, 3000)
 
 
   }
