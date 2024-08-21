@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
     
   var token = req.headers['authorization'];
   var api_keys = req.headers['x-api-key'];
-  console.log("api_keys", api_keys)
+  
   if( api_keys == undefined  ) {
     return res.send({
         message: 'Invalid Credentials',
@@ -16,10 +16,9 @@ const verifyToken = (req, res, next) => {
         data: []
     });
   } 
-	 console.log("api_keys2", Config.api_keys)
-	console.log("1:========>>", api_keys.toString() != Config.api_keys.toString())
-	console.log("2:========>>", api_keys.toString() )
-	console.log("3:========>>", Config.api_keys.toString() )
+	 
+ console.log("api_keys       :=> ", api_keys)
+ console.log("Config.api_keys:=> ", Config.api_keys)
   if( api_keys.toString() != Config.api_keys.toString() ) {
     return res.send({
         message: 'Invalid Credentials',
