@@ -48,7 +48,7 @@ app.use(
 // Rate limiting configuration
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 300, // Limit each IP to 300 requests per windowMs
+    max: 1000, // Limit each IP to 300 requests per windowMs
     message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 app.use(apiLimiter);
