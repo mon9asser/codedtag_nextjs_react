@@ -36,7 +36,10 @@ const verifyToken = (req, res, next) => {
   }
   
   try {
-	 console.log('Config.jwt_secret ::', Config.jwt_secret);
+	  
+	 console.log('token ::', token);
+	 console.log('Config.jwt_secret ::',Config.jwt_secret);
+	 
     jwt.verify(token, Config.jwt_secret, (err, decoded) => {
 	
 	console.log("----sitename_dsco", decoded.agent, decoded.site_name)
