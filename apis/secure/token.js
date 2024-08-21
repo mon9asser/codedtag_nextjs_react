@@ -40,12 +40,14 @@ tokenRouter.get("/hash-request", async(req, res) => {
       
     // Options
     const options = {
-        expiresIn: '30m' // Token will expire in 1 miuntes
+        expiresIn: '1m' // Token will expire in 1 miuntes
     };
       
     try {
         // Generating the token
         const token = jwt.sign(payload, secretKey, options);
+		
+		console.log(token);
         
         return res.send({
             data: token,
