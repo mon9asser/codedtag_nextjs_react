@@ -17,10 +17,10 @@ const verifyToken = (req, res, next) => {
     });
   } 
 	 console.log("api_keys2", Config.api_keys)
-	console.log("1:========>>", api_keys.toString() !== Config.api_keys.toString())
+	console.log("1:========>>", api_keys.toString() != Config.api_keys.toString())
 	console.log("2:========>>", api_keys.toString() )
 	console.log("3:========>>", Config.api_keys.toString() )
-  if( api_keys.toString() !== Config.api_keys.toString() ) {
+  if( api_keys.toString() != Config.api_keys.toString() ) {
     return res.send({
         message: 'Invalid Credentials',
         is_error: true, 
