@@ -56,7 +56,7 @@ tokenRouter.get("/hash-request", async(req, res) => {
         });
 
     } catch (error) {
-       // console.log('tract 3')
+		console.log(error)
         return res.send({
             is_error: true, 
             message: 'Invalid credentials',
