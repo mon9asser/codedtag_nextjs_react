@@ -64,6 +64,7 @@ const verifyToken = (req, res, next) => {
 	console.log(decoded);
 	next();
   } catch (error) {
+	  console.log(error);
     return res.send({
       message: 'Invalid Credentials.',
       is_error: true, 
