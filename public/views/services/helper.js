@@ -164,7 +164,7 @@ class HelperData {
   generateToken = async () => {
      
     const staticData = await fetch(`${Config.api}/hash-request`, {
-      cache: 'force-cache',
+      //cache: 'force-cache',
       headers: {
         "x-api-key": Config.app_key,
         "agent": 'User Agent Data'
@@ -197,7 +197,7 @@ class HelperData {
     headers["authorization"] = token;
     
     var requestObject = { 
-      cache: 'force-cache',
+     // cache: 'force-cache',
       headers,
       method 
     }
