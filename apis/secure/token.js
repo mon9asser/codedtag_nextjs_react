@@ -40,7 +40,7 @@ tokenRouter.get("/hash-request", async(req, res) => {
       
     // Options
     const options = {
-        expiresIn: '1m' // Token will expire in 1 miuntes
+        expiresIn: '2m' // Token will expire in 1 miuntes
     };
       
     try {
