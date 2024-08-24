@@ -297,8 +297,9 @@ export async function getServerSideProps(context) {
                 }
             }
 
+            
             // assign beside title 
-            if( json.data.settings?.beside_post_title != "") { 
+            if( json.data.settings?.beside_post_title != "" && json.data.post.enable_beside_title ) { 
                 json.data.post.meta_title = json.data.post.meta_title + " " + json.data.settings?.beside_post_title;
             }
 

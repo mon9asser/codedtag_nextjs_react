@@ -271,8 +271,8 @@ export async function getServerSideProps(context) {
                 }
             } 
             json.data.settings.site_address = site_url;
-
-            if( json.data.settings?.beside_post_title != "") {
+             
+            if( json.data.settings?.beside_post_title != "" && json.data.tutorial.options.enable_beside_title) {
                 // json.data.settings?.beside_post_title
                 if( json.data.tutorial?.meta_title) {
                     json.data.tutorial.meta_title = json.data.tutorial.meta_title + " " + json.data.settings?.beside_post_title;
