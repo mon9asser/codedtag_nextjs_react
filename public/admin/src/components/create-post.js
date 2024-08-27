@@ -152,6 +152,7 @@ class CreatePost extends Component {
             selected_tabs: null, // array  
             post_id: "", 
             meta_title: "",
+            enable_beside_title: true,
             slug: "",
             keyphrase: "",
             meta_description: "",
@@ -576,6 +577,7 @@ class CreatePost extends Component {
             links: this.state.initialState.links,
             blocks: this.state.initialState.blocks,
             meta_title: this.state.meta_title,
+            enable_beside_title: this.state.enable_beside_title,
             slug: this.state.slug,
             meta_description: this.state.meta_description,
             article_thumbnail_url: this.state.article_thumbnail_url,
@@ -771,8 +773,22 @@ class CreatePost extends Component {
                                         <span style={{color: "blue"}}>
                                             {this.state.calculate_meta_title_chars} Characters
                                         </span>
+                                    </label>
+                                    <label className="flexbox items-center" style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <input 
+                                            checked={this.state.enable_beside_title} 
+                                            onChange={() => this.setState(prevState => ({ 
+                                                enable_beside_title: !prevState.enable_beside_title 
+                                            }))} 
+                                            className="mr-8" 
+                                            type="checkbox" 
+                                        />
+                                        <span style={{ marginLeft: 5, fontSize: "14px" }}>
+                                            Enable Beside Meta Title
+                                        </span>
                                     </label> 
 
+                                    <label className="flexbox items-center"> <input checked={this.state.enable_beside_title} onChange={(e) => this.setState({ enable_beside_title: !this.state.enable_beside_title })} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Enable Beside Meta Title </span> </label>
                                     <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '80px'}}>
                                             Slug

@@ -151,6 +151,7 @@ class CreatePage extends Component {
             keyphrase: "",
             article_thumbnail_url: "",
             meta_description: "",
+            enable_beside_title:true,
             tutorials: [],
             tutorial: {
                 name: "",
@@ -568,6 +569,7 @@ class CreatePage extends Component {
             meta_title: this.state.meta_title,
             slug: this.state.slug,
             meta_description: this.state.meta_description,
+            enable_beside_title: this.state.enable_beside_title,
             tutorial: this.state.tutorial,
             allow_search_engine: this.state.allow_search_engine,
             enable_ads: this.state.enable_ads,
@@ -716,6 +718,17 @@ class CreatePage extends Component {
                                         <span style={{color: "blue"}}>
                                             {this.state.calculate_meta_title_chars} Characters
                                         </span>
+                                    </label> 
+
+                                    <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <span style={{flexBasis: '80px'}}>
+                                            Enable Beside Title 
+                                        </span>
+                                        <input 
+                                            type="checkbox"
+                                            checked={this.state.enable_beside_title} 
+                                            onChange={e => !this.state.enable_beside_title}
+                                        /> 
                                     </label> 
 
                                     <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>

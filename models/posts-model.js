@@ -25,6 +25,10 @@ let postsSchema = new Schema({
         trim: true,
         default: ""
     },
+	enable_beside_title: {
+        type: Boolean,  
+        default: true
+    },
     links: {
         type: Array,  
         default: []

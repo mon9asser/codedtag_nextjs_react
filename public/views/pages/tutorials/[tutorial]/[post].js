@@ -314,7 +314,7 @@ export async function getServerSideProps(context) {
             } 
             json.data.settings.site_address = site_url;
              
-            if( json.data.settings?.beside_post_title != "") { 
+            if( json.data.settings?.beside_post_title != "" && json.data.post.enable_beside_title ) { 
                 json.data.post.meta_title = json.data.post.meta_title + " " + json.data.settings?.beside_post_title;
             }
 
@@ -324,7 +324,7 @@ export async function getServerSideProps(context) {
             var company_links = json.data.menus?.filter( x=> x.menu_name === "company_nav_links")
             var follow_links = json.data.menus?.filter( x=> x.menu_name === 'follow_nav_links');
             var nav_links = json.data.menus?.filter( x=> x.menu_name === 'tags_nav_links');
-
+             
             upcoming = {                 
                 nav_right,
                 nav_left,
