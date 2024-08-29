@@ -1048,3 +1048,8 @@ ul li a.expanded-a::after{
     font-weight: 100;
     margin-bottom: 20px;
  }
+
+ .content-tble-mobile-block ul {
+    height: 100%;
+    overflow-y: auto;
+ }

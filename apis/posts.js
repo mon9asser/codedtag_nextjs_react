@@ -880,13 +880,13 @@ postRouter.get("/post-page/get", middlewareTokens, async (req, res) => {
             }  
         }
          
-        var post = await Posts.findOne({slug: post_slug, post_type: 0,  'selected_tab._id': to_find});
+        var post = await Posts.findOne({slug: post_slug, post_type: 0, 'tutorial.id': tutorial._id.toString() ,  'selected_tab._id': to_find});
          
         if(post == null ) {
             throw new Error("The page could not be found");  
         } 
         
-        var posts = await Posts.find({post_type: 0, 'selected_tab._id': to_find });
+        var posts = await Posts.find({post_type: 0, 'tutorial.id': tutorial._id.toString(), 'selected_tab._id': to_find });
         
         // add counter
         post.views = ( tutorial.views + 1 )
