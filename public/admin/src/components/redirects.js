@@ -111,6 +111,9 @@ const Redirects = () => {
       <NavbarContainer />
       <SidebarContainer />
       <section className="section main-section">
+        <div style={{border: "1px solid #ddd", padding: '10px', width: '100%', marginBottom: '10px', marginTop: '10px'}}>
+        Note: You should restart the next.js server once you saved redirects list
+        </div>
         <div style={{ margin: "20px", border: '3px solid #dfdfdf', padding: '20px' }}>
           <div style={{ display: "flex" }}>
             <button onClick={addRedirect} style={styles.addButton}>Add Redirect</button>
@@ -130,14 +133,14 @@ const Redirects = () => {
                 <input
                   name="from"
                   value={redirect.from}
-                  placeholder="From URL Slug: /php/"
+                  placeholder="/php/ or /php/:id/"
                   onChange={(e) => handleChange(e, redirectIndex)}
                   style={styles.input}
                 />
                 <input
                   name="to"
                   value={redirect.to}
-                  placeholder="To URL Slug: /tutorials/php/"
+                  placeholder="/tutorials/php/ or /tutorials/php/:id/"
                   onChange={(e) => handleChange(e, redirectIndex)}
                   style={styles.input}
                 />
@@ -152,15 +155,7 @@ const Redirects = () => {
                     <option key={type.value} value={type.value}>{type.text}</option>
                   ))}
                 </select>
-                <label style={styles.label}>
-                  <input
-                    type="checkbox"
-                    name="isFolder"
-                    checked={redirect.isFolder}
-                    onChange={(e) => handleChange(e, redirectIndex)}
-                  />
-                  Is Folder
-                </label>
+                 
                 <button onClick={() => deleteRedirect(redirectIndex)} style={styles.deleteButton}>Delete</button>
               </div>
             </div>

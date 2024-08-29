@@ -5,6 +5,9 @@
   "dependencies": {
     "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/state": "0.18.7",
+    "@codemirror/theme-one-dark": "0.18.1",
+    "@codemirror/view": "0.18.19",
     "@editorjs/checklist": "^1.6.0",
     "@editorjs/code": "^2.9.0",
     "@editorjs/delimiter": "^1.4.0",
@@ -24,7 +27,6 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@uiw/react-codemirror": "^4.23.0",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "buffer": "^6.0.3",
@@ -77,6 +79,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@hammaadhrasheedh/editorjs-iframe": "^1.0.21"
+    "@hammaadhrasheedh/editorjs-iframe": "^1.0.21" 
   }
 }
