@@ -78,10 +78,14 @@ postRouter.post("/upload-image", upload.single('image'), async (req, res) => {
             resizeWidth = 800;
         }
 
+        if (metadata.width < 500) {
+            resizeWidth = 500;
+        }
+
         // Resize and convert image to WebP
         await sharp(filePath)
             .resize(resizeWidth) // Resize to the calculated width
-            .toFormat('webp', { quality: 80 })
+            .toFormat('webp', { quality: 95 })
             .toFile(`${uploadPath}/${new_file_name}`);
           
         var file_url = `${Config.media_url}/${year}/${month}/${day}/${new_file_name}`;
