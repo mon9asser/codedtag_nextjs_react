@@ -4,7 +4,7 @@ import { SidebarContainer } from "./parts/sidebar.js";
 import {YouTubeEmbed} from "./parts/embed-iframe.js"
 import { createReactEditorJS } from 'react-editor-js';
 import StickyBox from "react-sticky-box";
-import { CustomImageTool } from "./parts/image-class.js"
+import { CustomImageTool, CustomImageTool2 } from "./parts/image-class.js"
 import withRouter from "./parts/with-router.js";
 import withNavigate from "./parts/with-navigate.js";
 
@@ -115,6 +115,11 @@ var Tools = {
             
         }
     },
+    customImage: {
+        class: CustomImageTool2,
+        inlineToolbar: true,
+    },
+    
     code: CustomCodeBlok 
  
 };
