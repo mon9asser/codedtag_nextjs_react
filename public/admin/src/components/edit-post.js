@@ -863,7 +863,7 @@ class wrappedEditPost extends Component {
 
         console.log("editor page is loaded ...")
         const stats = [
-            { title: 'Total Words', value: this.state.initialState.total_words },
+            { title: 'Total of Words', value: this.state.initialState.total_words },
             { title: 'Total Charachters', value: this.state.initialState.total_chars },
             { title: 'Total Links', value:  this.state.initialState.links.length },
             { title: 'Total Blocks', value: this.state.initialState.blocks.length },
