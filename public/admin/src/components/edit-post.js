@@ -77,7 +77,22 @@ var Tools = {
         config: {
             endpoints: {
                 byFile: `${Settings.server.api}/upload-image`,  
-                byUrl: `${Settings.server.api}/get-image`,
+                //byUrl: `${Settings.server.api}/get-image`,
+            }, 
+            uploader: { 
+
+                uploadByUrl(url) {
+                    return new Promise((resolve) => {
+                        // Directly resolve the URL without server interaction
+                        resolve({
+                            success: 1,
+                            file: {
+                                url: url // Pass the URL directly to the editor
+                            }
+                        });
+                    });
+                },
+
             }, 
             additionalRequestHeaders: {
                 // Any additional headers if needed
@@ -96,8 +111,8 @@ var Tools = {
             },
             onUploadStart: () => {
                // console.log("Upload started");
-            }
-    
+            },
+            
         }
     },
     code: CustomCodeBlok 
