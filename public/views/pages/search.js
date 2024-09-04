@@ -132,7 +132,7 @@ export default function Search({ upcoming }) {
             <Head>
                 <title>{`Search on ${upcoming.settings.site_name}`}</title>
                 <meta name="description" content={upcoming.settings.site_meta_description} />
-                <link rel="canonical" href={`${upcoming.site_url}search`}/>
+                <link rel="canonical" href={`${upcoming.site_url}search/`}/>
                 <meta property="og:locale" content="en_US"/>
                 <meta property="og:type" content="article"/>
 

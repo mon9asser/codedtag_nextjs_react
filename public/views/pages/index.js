@@ -89,7 +89,37 @@ export default function Home({upcoming}){
                                     </div>
                                 )
                             })
-                        ): ''
+                        ): (
+                            
+                            //upcoming.latest_posts.length
+                            <>
+                                <ul className="latest-post-list">
+                                   {
+                                    upcoming.latest_posts.map(x => { 
+                                        var href = `${upcoming.site_url}tutorials/${x.tutorial.slug}/`;
+                                        if(x.selected_tab && x.selected_tab._id != 'root') {
+                                            href =`${href}t/${x.selected_tab.slug}/` 
+                                        }
+                                        href= `${href}${x.slug}/`;
+                                        
+                                        return (
+                                            <li key={x._id}>
+                                                <Link href={href}>
+                                                    <div className='post-thum'>
+                                                        <Image alt={x.meta_title} src={x.article_thumbnail_url} width="90" height="195" />
+                                                    </div>
+                                                    <div className='post-data'>
+                                                        <h3>{x.meta_title}</h3>
+                                                        <span>{Helper.formatDate(x.updated_date)}</span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        )
+                                    })
+                                   }
+                                </ul>
+                            </>
+                        )
                     }
 
                     
@@ -165,8 +195,9 @@ export default function Home({upcoming}){
                 <meta property="og:description" content={upcoming.settings.site_meta_description}/>
                 <meta property="og:url" content={upcoming.site_url}/>
                 <meta property="og:site_name" content={upcoming.settings.site_name}/> 
-                <meta property="og:image" content={upcoming.settings.site_thumbnail_url} />
+                
                 <meta name="twitter:card" content="summary_large_image"/> 
+                <meta property="og:image" content={upcoming.settings.site_thumbnail_url} />
                 <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
                 <script
                     type="application/ld+json" 
@@ -269,6 +300,7 @@ export async function getServerSideProps(context) {
           if( request.status == 200) {
         
               var json = await request.json(); 
+              
               var site_url = json.data.settings.site_address;
               if(site_url) {
                     var url_array = site_url.split('/');
@@ -289,19 +321,27 @@ export async function getServerSideProps(context) {
               var company_links = json.data.menus?.filter( x=> x.menu_name === "company_nav_links")
               var follow_links = json.data.menus?.filter( x=> x.menu_name === 'follow_nav_links');
               var nav_links = json.data.menus?.filter( x=> x.menu_name === 'tags_nav_links');
+              
+              var posts = json.data.posts.filter(x => x.post_type == 0);
+              if(posts.length) {
+                posts = posts.slice(-6)
+              }
+
                
+              
               upcoming = {
-                  tutorials: json.data.tutorials,
-                  posts: json.data.posts, 
-                  settings: json.data.settings,
-                  nav_right,
-                  nav_left,
-                  company_links,
-                  follow_links,
-                  nav_links,
-                  site_url,
-                  menus: json.data.menus,
-                  ads: json.data.ads
+                latest_posts: posts,
+                tutorials: json.data.tutorials,
+                posts: json.data.posts, 
+                settings: json.data.settings,
+                nav_right,
+                nav_left,
+                company_links,
+                follow_links,
+                nav_links,
+                site_url,
+                menus: json.data.menus,
+                ads: json.data.ads
               };
         
           }

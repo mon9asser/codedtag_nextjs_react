@@ -311,21 +311,12 @@ textarea:focus {
   /* styles.css */
 .list-container {
     margin: 20px 0;
+    color: #0a0a23;
   }
   
   .list-container ol, .list-container ul {
     margin: 0;
-    padding: 0;
-    list-style-position: inside;
-  }
-  
-  .list-container li {
-    padding: 10px 15px;
-    margin-bottom: 5px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 16px;
+    padding: 0;   
   }
   
   .list-container ol {
@@ -334,6 +325,13 @@ textarea:focus {
   
   .list-container ul {
     list-style-type: disc;
+  }
+
+  .list-container ul li, 
+  .list-container ol li {
+    margin-bottom: 6px; 
+    margin-left: 20px;
+    font-size: 16px;
   }
   
   @media (max-width: 600px) {
@@ -777,7 +775,7 @@ ul li a.expanded-a::after{
 
 .hljs {
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 .modified-date {
@@ -1048,6 +1046,69 @@ ul li a.expanded-a::after{
     font-weight: 100;
     margin-bottom: 20px;
  }
+
+ .latest-post-list {
+    margin-top: 20px;
+    list-style: none; 
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+ }
+
+ .latest-post-list li {
+    max-width: 45%;
+    width: 100%; 
+    border: 1px dashed #ddd;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+ }
+
+ @media only screen and (max-width: 700px) {
+    .latest-post-list li {
+        max-width: 95%;
+    }
+ }
+
+ .latest-post-list li img {
+    flex: 1;
+    object-fit: cover;
+    height: 90px;
+    width: 110px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+ }
+
+ .latest-post-list li a{
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .latest-post-list li a .post-thum {
+    flex-shrink: 0;
+ }
+
+ .latest-post-list li a .post-data {
+    
+    flex-grow: 1;
+ }
+
+ .latest-post-list li a .post-data h3 {
+    font-size: 13px;
+    line-height: 1.6;
+    font-weight: bold;
+ }
+
+ .latest-post-list li a .post-data span {
+    font-size: 12px;
+ }
+
 
  .content-tble-mobile-block ul {
     height: 100%;

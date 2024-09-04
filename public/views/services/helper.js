@@ -192,7 +192,7 @@ class HelperData {
         token = response.data;
       }
     } 
-    console.log(token)
+
     headers["x-api-key"] = Config.app_key 
     headers["authorization"] = token;
     

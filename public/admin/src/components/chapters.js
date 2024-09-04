@@ -54,7 +54,7 @@ class Chapters extends Component {
         
         var request = await Helper.sendRequest({
             method: "get",
-            api: `post/get?post_type=0`,
+            api: `post/get-published?post_type=0`,
             data: {},
         });
 

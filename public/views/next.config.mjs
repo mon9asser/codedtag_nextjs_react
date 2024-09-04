@@ -2,39 +2,15 @@
 import os from 'os';
 
 const nextConfig = { 
+    reactStrictMode: true,
+    productionBrowserSourceMaps: true, 
     trailingSlash: true,  
     images: {
         remotePatterns: [
-            {
-                protocol: 'http',
-                hostname: 'localhost',
-                pathname: '/**',
-            }, 
-            
-            {
-                protocol: 'https',
-                hostname: 'eratags.com',
-                pathname: '/**',
-            },
-            
-            {
-              protocol: 'https',
-              hostname: 'media.eratags.com',
-              pathname: '/**',
-            },
-
-            {
-              protocol: 'https',
-              hostname: 'codedtag.com',
-              pathname: '/**',
-          },
-          
           {
-            protocol: 'https',
-            hostname: 'media.codedtag.com',
-            pathname: '/**',
-          },
-
+              protocol: 'https',
+              hostname: '**',
+          }
         ],
     }, 
     
@@ -83,7 +59,7 @@ const nextConfig = {
         var api_key = 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132';
     
         try {
-            var httHashReq = await fetch("https://api.eratags.com/hash-request", {
+            var httHashReq = await fetch("https://api.freeaccountingtutorial.com/hash-request", {
                 cache: 'force-cache',
                 headers: {
                   "x-api-key": api_key,
@@ -100,7 +76,7 @@ const nextConfig = {
     
             var token = hash_json.data;
     
-            var redirect_http = await fetch("https://api.eratags.com/redirects", {
+            var redirect_http = await fetch("https://api.freeaccountingtutorial.com/redirects", {
                 cache: 'force-cache',
                 headers: {
                   "x-api-key": api_key,
@@ -136,7 +112,13 @@ const nextConfig = {
                     permanent: parseInt(x.redirectType) == 301 ? true : false,
                 };
             });
-    
+            
+            redirects.push({
+              source: '/Root',
+              destination: '/',
+              permanent: true,
+            });
+
             return redirects;
     
         } catch (error) {

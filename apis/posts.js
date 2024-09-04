@@ -778,6 +778,73 @@ postRouter.get("/post/get", middlewareTokens, async (req, res) => {
 
 
 
+postRouter.get("/post/get-published", middlewareTokens, async (req, res) => {
+    
+    try {
+        
+        const post_type = req.query.post_type;
+        const post_id = req.query.post_id;
+        const page_template = req.query.page_template;
+
+        var query_object = {};
+        if( post_type != undefined ) {
+            query_object = { ...query_object, post_type: post_type };
+        }
+
+        if( page_template != undefined ) {
+            query_object = { ...query_object, page_template: page_template };
+        }
+
+        if( post_id != undefined ) {
+            query_object = { ...query_object, _id: post_id };
+        }
+
+        query_object.is_published = true
+        
+        // Fetch posts based on the post_type
+        const posts = await Posts.find(query_object);
+        const settings = await Sets.find({});
+        const users = await Usr.find({email: "moun2030@gmail.com"});
+        const menus = await Menus.find({});
+
+        var social_links = [];
+
+        if(users.length) {
+            var user = users[0];
+            social_links = user.social_links?user.social_links: [] 
+        }
+
+        if (posts.length > 0) {
+            res.status(200).send({
+                is_error: false,
+                data: posts,
+                message: "Posts retrieved successfully",
+                settings: settings,
+                menus,
+                social_links: social_links
+            });
+        } else {
+            res.send({
+                is_error: true,
+                data: [],
+                message: "No posts found for the given post_type",
+                settings: settings,
+                menus,
+                social_links: social_links
+            });
+        }
+
+    } catch (error) {
+         
+        res.status(400).send({
+            is_error: true,
+            data: null,
+            message: error.message || "An error occurred while retrieving posts"
+        });
+    }
+})
+
+
 postRouter.get("/tutorials-page/get", middlewareTokens, async (req, res) => {
     
     try {
@@ -884,19 +951,20 @@ postRouter.get("/post-page/get", middlewareTokens, async (req, res) => {
             }  
         }
          
-        var post = await Posts.findOne({slug: post_slug, post_type: 0, 'tutorial.id': tutorial._id.toString() ,  'selected_tab._id': to_find});
+        var post = await Posts.findOne({slug: post_slug, is_published: true, post_type: 0, 'tutorial.id': tutorial._id.toString() ,  'selected_tab._id': to_find});
          
         if(post == null ) {
             throw new Error("The page could not be found");  
         } 
         
-        var posts = await Posts.find({post_type: 0, 'tutorial.id': tutorial._id.toString(), 'selected_tab._id': to_find });
+        var posts = await Posts.find({post_type: 0, is_published: true, 'tutorial.id': tutorial._id.toString(), 'selected_tab._id': to_find });
         
         // add counter
         post.views = ( tutorial.views + 1 )
         await post.save();
     
         var chapters = await Chapters.find({'tutorial.id': tutorial._id.toString(), "tab._id": to_find });
+
         var menus = await Menus.find({})
         var ads = await AdCampaign.find({page: 'single_page', is_enabled: true});
 

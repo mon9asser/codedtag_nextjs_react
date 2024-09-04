@@ -113,7 +113,7 @@ export default function Tutorials({upcoming}) {
                 },
                 "mainEntityOfPage": {
                     "@type": "WebPage",
-                    "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
+                    "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/"
                 },
                 "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/",
                 "articleSection": "${upcoming.tutorial?.tag}",
@@ -140,7 +140,7 @@ export default function Tutorials({upcoming}) {
                                 "position": 3,
                                 "name": "${upcoming.tutorial?.tutorial_title}",
                                 "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/"
-                            }, 
+                            }  
                         ]
                 }
             }
