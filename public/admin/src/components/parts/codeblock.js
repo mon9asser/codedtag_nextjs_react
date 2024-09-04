@@ -1,7 +1,7 @@
 import hljs from 'highlight.js';
- 
+
 class CustomCodeBlok {
- 
+
     constructor(initialData = {}) {
         this.initialData = initialData;
     }
@@ -19,14 +19,37 @@ class CustomCodeBlok {
         const codeElem = codeContainer.querySelector('code');
         
         if (this.initialData) {
-            textareaElem.value = this.initialData.data.value || '';
+            if (textareaElem) {
+                textareaElem.value = this.initialData.data.value || '';
+            } else {
+                console.error("Textarea element not found.");
+            }
             
             const language = this.initialData.data.language_type || 'plaintext';
             
-            textareaElem.dataset.lang = language;
-            codeElem.innerHTML = hljs.highlight(textareaElem.value, {language}).value;
-            codeContainer.querySelector('.language-type').innerText = language.toUpperCase();
-            codeContainer.querySelector('pre').className = `hljs language-${language}`;
+            if (textareaElem) {
+                textareaElem.dataset.lang = language;
+            }
+            
+            if (codeElem) {
+                codeElem.innerHTML = hljs.highlight(textareaElem.value, {language}).value;
+            } else {
+                console.error("Code element not found.");
+            }
+
+            const languageTypeElem = codeContainer.querySelector('.language-type');
+            if (languageTypeElem) {
+                languageTypeElem.innerText = language.toUpperCase();
+            } else {
+                console.error("Language type element not found.");
+            }
+
+            const preElem = codeContainer.querySelector('pre');
+            if (preElem) {
+                preElem.className = `hljs language-${language}`;
+            } else {
+                console.error("Pre element not found.");
+            }
         }
     }
 
@@ -37,11 +60,10 @@ class CustomCodeBlok {
         };
     }
     
-    languages () {
+    languages() {
         return hljs.listLanguages(); 
     }
 
-    // merge and combine HLJS within editor
     render() {
         // Create code container
         const codeContainer = document.createElement('div');
@@ -62,30 +84,45 @@ class CustomCodeBlok {
                     </g>
                 </svg>
             </span>
-            <div className='hljs-copy-and-controller'>
-                <div className='hljs-lang-combox'></div>
+            <div class='hljs-copy-and-controller'>
+                <div class='hljs-lang-combox'></div>  
             </div>
         `;
+         
 
         // ComboBox for languages
         const comboBox = document.createElement('label');
         comboBox.className = 'label-selector';
         comboBox.setAttribute('contenteditable', 'false');
-        comboBox.innerHTML = `<span>Language Code:</span><div className='select-wrapper'><select className='select-language'></select></div>`;
+        comboBox.innerHTML = `<span>Language Code:</span><div class='select-wrapper'><select class='select-language'></select></div>`;
         const selectLanguage = comboBox.querySelector('.select-language');
+        console.log('selectLanguage:', selectLanguage); // Debugging log
 
         // Populate select options
-        const languages = this.languages(); // Assuming this is defined elsewhere
-        languages.forEach(lang => {
-            const option = document.createElement('option');
-            option.value = lang;
-            option.innerHTML = lang.toUpperCase();
-            option.selected = lang === 'plaintext';
-            selectLanguage.appendChild(option);
-        });
+        const languages = this.languages();
+        if (selectLanguage) {
+            
+            languages.forEach(lang => {
+                 
+                const option = document.createElement('option');
+                option.value = lang;
+                option.innerHTML = lang.toUpperCase();
+                option.selected = lang == this.initialData.data.language_type;
+                selectLanguage.appendChild(option);
+            });
+
+        } else {
+            console.error("Select element for languages not found.");
+        }
 
         // Append comboBox to codeHeader
-        codeHeader.querySelector('.hljs-lang-combox').appendChild(comboBox);
+        const langComboBox = codeHeader.querySelector('.hljs-lang-combox');
+        console.log('langComboBox:', langComboBox); // Debugging log
+        if (langComboBox) {
+            langComboBox.appendChild(comboBox);
+        } else {
+            console.error("Language ComboBox container not found in the codeHeader.");
+        }
 
         // Code Section
         const block = document.createElement('div');
@@ -113,63 +150,59 @@ class CustomCodeBlok {
         codeContainer.appendChild(codeFooter);
         
         // Event listeners
-        textareaElem.addEventListener('input', function (e) {
-            e.preventDefault();
-            var language = textareaElem.dataset.lang == undefined ? "plaintext": textareaElem.dataset.lang
-             
-            code.innerHTML = hljs.highlight(textareaElem.value, {language: language}).value;
-        });
+        if (textareaElem) {
+            textareaElem.addEventListener('input', function (e) {
+                e.preventDefault();
+                const language = textareaElem.dataset.lang || "plaintext";
+                code.innerHTML = hljs.highlight(textareaElem.value, { language }).value;
+            });
 
-        var _this = this;
+            textareaElem.addEventListener('keydown', (e) => {
+                if (e.code === 'Tab') { 
+                    this.tabHandler(e);
+                }
+            });
+        } else {
+            console.error("Textarea element not found.");
+        }
 
-        textareaElem.addEventListener('keydown', function (e) {
-            if (e.code === 'Tab') { 
-                // Assuming tabHandler is defined elsewhere
-                _this.tabHandler(e);
-            }
-        });
+        if (selectLanguage) {
+            selectLanguage.addEventListener('change', function () {
+                const lang = selectLanguage.value;
+                codeFooter.querySelector('span').innerHTML = lang.toUpperCase();
+                const pre = codeContainer.querySelector('pre');
+                pre.className = `hljs language-${lang}`;
+                textareaElem.dataset.lang = lang;
+                code.innerHTML = hljs.highlight(textareaElem.value, { language: lang }).value;
+            });
+        } else {
+            console.error("Select language element not found.");
+        }
 
-        selectLanguage.addEventListener('change', function (e) {
-            const lang = selectLanguage.value;
-            //console.log(lang)
-            codeFooter.querySelector('span').innerHTML = lang.toUpperCase();
-            const pre = codeContainer.querySelector('pre');
-            pre.className = `hljs language-${lang}`;
-            textareaElem.dataset.lang = lang;
-            code.innerHTML = hljs.highlight(textareaElem.value, {language: lang}).value;
-        });
-        
         // Return the codeContainer element
         this.setInitialData(codeContainer);
 
         return codeContainer;
-
     }
 
     save(blockContent) {
-
         const copy = blockContent.cloneNode(true); // Deep clone the node
-        var textarea = copy.querySelector('.cdx-input');
-         
+        const textarea = copy.querySelector('.cdx-input');
+        
         return {
-            language_type: textarea.getAttribute("data-lang") == null ? "plaintext" : textarea.getAttribute("data-lang"),
+            language_type: textarea.getAttribute("data-lang") || "plaintext",
             value: textarea.value,
             enabled_compiler: false
         };
-        /*
-        return copy; // Returns the cloned node
-        return copy.innerHTML; // Returns the HTML content of the cloned node
-        */
-    
     }
 
     getCharAtPosition(str, position) {
         let char = '';
         for (; char !== '\n' && position > 0;) {
-            position = position - 1;
+            position -= 1;
             char = str.substr(position, 1);
         }
-        return char === '\n' && (position += 1), position;
+        return char === '\n' ? position + 1 : position;
     }
     
     tabHandler = (event) => {
@@ -188,22 +221,17 @@ class CustomCodeBlok {
         if (!shiftKey) {
             newCursorPosition = cursorPosition + spaces.length;
             textarea.value = textValue.substring(0, cursorPosition) + spaces + textValue.substring(cursorPosition);
-        
             code.innerHTML = hljs.highlightAuto(textarea.value).value;
         } else {
-            const lineStart = this.getCharAtPosition(textValue, cursorPosition); // Assuming this function is defined
+            const lineStart = this.getCharAtPosition(textValue, cursorPosition);
             if (textValue.substr(lineStart, spaces.length) !== spaces) return;
             textarea.value = textValue.substring(0, lineStart) + textValue.substring(lineStart + spaces.length);
-        
             code.innerHTML = hljs.highlightAuto(textarea.value).value;
             newCursorPosition = cursorPosition - spaces.length;
         }
         
         textarea.setSelectionRange(newCursorPosition, newCursorPosition);
-        
     }
-         
 }
 
-
-export { CustomCodeBlok }
+export { CustomCodeBlok };
