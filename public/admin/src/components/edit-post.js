@@ -861,6 +861,7 @@ class wrappedEditPost extends Component {
 
     render() {
 
+        console.log("editor page is loaded ...")
         const stats = [
             { title: 'Total Words', value: this.state.initialState.total_words },
             { title: 'Total Charachters', value: this.state.initialState.total_chars },
