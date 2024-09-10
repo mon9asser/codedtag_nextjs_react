@@ -178,7 +178,7 @@ export default function Contact ({upcoming}) {
 
                 <div className="wrapper max-960 offset-left offset-right mt-20 mb-10">
                     <header className="container-col-75">
-                        <h1 className="headline">{upcoming.post_title}</h1>
+                        <h1 className="headline">{Helper.decodeHtmlEntities(upcoming.post_title)}</h1>
                     </header>
                 </div>
 

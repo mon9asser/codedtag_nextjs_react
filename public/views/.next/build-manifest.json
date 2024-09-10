@@ -26,11 +26,6 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/tutorials": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/tutorials.js"
-    ],
     "/tutorials/[tutorial]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -41,10 +36,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/tutorials/[tutorial]/[post].js"
     ],
-    "/tutorials/[tutorial]/t/[tab]": [
+    "/tutorials/[tutorial]/t/[tab]/[post]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/tutorials/[tutorial]/t/[tab].js"
+      "static/chunks/pages/tutorials/[tutorial]/t/[tab]/[post].js"
     ]
   },
   "ampFirstPages": []

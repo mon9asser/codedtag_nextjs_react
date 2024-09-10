@@ -80,9 +80,9 @@ export default function Tutorials({upcoming}) {
                     nav_right: upcoming.nav_right
                 }}
             />
-            <div className="max-1050 offset-left offset-right mt-space-long plr-block ptb-60"> 
+            <div className="max-850 offset-left offset-right mt-space-long plr-block ptb-60"> 
                 <header className="flexbox content-center column-direction mb-30">
-                    <h1 className="tutorial-headline mt-h">{upcoming.post_title}</h1>
+                    <h1 className="tutorial-headline mt-h">{Helper.decodeHtmlEntities(upcoming.post_title)}</h1>
                     <div className="flexbox items-center author-section mt-5"> 
                         <div className="flexbox content-center auth-name">
                             <i>Last Update: { Helper.formatDate(upcoming.updated_date)}</i>

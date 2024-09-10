@@ -173,7 +173,7 @@ var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
           const tag = part.match(/^\[h([1-6])/)[1];
           const content = part.replace(/^\[h[1-6]\]/, '').trim();
           const TagName = `h${tag}`;
-          return <TagName key={index} className="tutorial-subheadline">{content}</TagName>;
+          return <TagName key={index} className="tutorial-subheadline">{Helper.decodeHtmlEntities(content)}</TagName>;
         }
         // Chapters and posts shortcode
         else if (part.startsWith('[chapters-posts]')) {
@@ -503,7 +503,7 @@ function SubscribeComponents ({is_footer, title, description, camp_data, setting
 
 
 var TutorialLinks = ({upcoming, built_url, ad_camp}) => {
-
+  
   var counter_ads = 0;
   var ads_every = upcoming.settings?.ads_between_navs_in_chapters ?upcoming.settings.ads_between_navs_in_chapters: 4;
   return (
@@ -577,7 +577,7 @@ var GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
           const tag = part.match(/^\[h([1-6])/)[1];
           const content = part.replace(/^\[h[1-6]\]/, '').trim();
           const TagName = `h${tag}`;
-          return <TagName key={index} className="tutorial-subheadline">{content}</TagName>;
+          return <TagName key={index} className="tutorial-subheadline">{Helper.decodeHtmlEntities(content)}</TagName>;
         }
         // Chapters and posts shortcode
         else if (part.startsWith('[chapters-posts]')) {
@@ -654,7 +654,7 @@ const ResponsiveTable = ({ data }) => {
 }; 
 
 var TutorialsList = ({ index, data, chapter_title, built_url }) => {
-      
+  
   return ( 
      
       <div className="container white-grey-bg category-container update-chpt">
@@ -668,7 +668,7 @@ var TutorialsList = ({ index, data, chapter_title, built_url }) => {
            } 
            <div className="chapter-cont">
               <ul className="tuts-categ">
-                  {data.map(x => <li key={x._id}><Link href={`${built_url}${x.slug}/`}>{x.post_title}</Link></li>)} 
+                  {data.map(x => <li key={x._id}><Link href={`${built_url}${x.slug}/`}>{ Helper.decodeHtmlEntities(x.post_title)}</Link></li>)} 
               </ul>
            </div>
       </div>
@@ -725,7 +725,7 @@ function TutorialsContent({ blocks, tutorials, ad_camp }){
                {createElement(
                  `h${Math.min(Math.max(x?.data?.level, 1), 6)}`,
                  { key: `${x.id}-heading`, style: { textAlign: x?.data?.alignment } },
-                 x?.data?.text
+                 Helper.decodeHtmlEntities(x?.data?.text)
                )}
                <AdCompaignBox
                  key={`${x.id}-ad-after`}
@@ -759,7 +759,7 @@ function TutorialsContent({ blocks, tutorials, ad_camp }){
                  return (
                    <Fragment key={`frage-box-${x.id}`}>
 
-                     <div className="row content-center" key={x.id}>
+                     <div className="row mlr--15" key={x.id}>
                        {filtered.map(item => (
                          <div
                            key={item._id}
@@ -889,7 +889,7 @@ var GenerateTutorialContent_1 = ({ data, upcoming, built_url, ad_camp }) => {
           const tag = part.match(/^\[h([1-6])/)[1];
           const content = part.replace(/^\[h[1-6]\]/, '').trim();
           const TagName = `h${tag}`;
-          return <TagName key={index} className="tutorial-subheadline">{content}</TagName>;
+          return <TagName key={index} className="tutorial-subheadline">{Helper.decodeHtmlEntities(content)}</TagName>;
         }
         // Chapters and posts shortcode
         else if (part.startsWith('[chapters-posts]')) {
@@ -1129,7 +1129,7 @@ var ArticleContentSingle = ({blocks, helper}) => {
           } else if (x.type == 'header') { 
 
             return ( 
-              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, x?.data?.text)
+              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, Helper.decodeHtmlEntities(x?.data?.text))
             )
 
           } else if (x.type == 'youtubeEmbed') {
@@ -1199,7 +1199,7 @@ var NextPrevPagination = ({site_url, tutorial_slug, type, data, current_post_slu
         <Link href={prev_link} className="flexbox direction-row items-center hover-to-left">
             <i className="left-arrow-pagin"></i>
             <span>
-                <span className="d-none d-sm-block">{prev.post_title}</span> 
+                <span className="d-none d-sm-block">{Helper.decodeHtmlEntities(prev.post_title)}</span> 
                 <span className="d-block d-sm-none">Prev</span> 
             </span>
         </Link> 
@@ -1210,7 +1210,7 @@ var NextPrevPagination = ({site_url, tutorial_slug, type, data, current_post_slu
           ( next == undefined ) ? '':
           <Link href={next_link} className="flexbox direction-row items-center hover-to-right auto-right">
               <span>
-                  <span className="d-none d-sm-block">{next.post_title}</span> 
+                  <span className="d-none d-sm-block">{Helper.decodeHtmlEntities(next.post_title)}</span> 
                   <span className="d-block d-sm-none">Next</span>
               </span>
               <i className="right-arrow-pagin"></i>
@@ -1223,7 +1223,7 @@ var NextPrevPagination = ({site_url, tutorial_slug, type, data, current_post_slu
 var Breadcrumbs = ({data}) => {
   return (
     <ul className="breadcrumbs">
-        {data.map((x, index) => <li key={index} className='sub-title'><Link href={x.url}>{x.title}</Link></li>)}
+        {data.map((x, index) => <li key={index} className='sub-title'><Link href={x.url}>{Helper.decodeHtmlEntities(x.title)}</Link></li>)}
     </ul>
   );
 }
@@ -1305,7 +1305,7 @@ var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, t
                               <ul id={`item-${chapter._id}`} className={`collapsible list-items ${is_expaned ? 'expanded': ''}`}>
                                 {chapter.posts.map(x => (
                                   <li key={x._id}>
-                                    <Link className={current_post_slug == x.slug ? 'selected_tab': ''} href={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                                    <Link className={current_post_slug == x.slug ? 'selected_tab': ''} href={`${link_url}${x.slug}/`}>{Helper.decodeHtmlEntities(x.post_title)}</Link>
                                   </li>
                                 ))} 
                                 
@@ -1319,7 +1319,7 @@ var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, t
                           <ul className="block-list custom-aside-tuts list-items">
                             {chapter.posts.map(x => (
                               <li key={x._id}>
-                                <Link className={current_post_slug == x.slug ? 'selected_tab': ''} href={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                                <Link className={current_post_slug == x.slug ? 'selected_tab': ''} href={`${link_url}${x.slug}/`}>{Helper.decodeHtmlEntities(x.post_title)}</Link>
                               </li>
                             ))}
                           </ul>
@@ -1362,7 +1362,7 @@ var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, t
                     return (
                       <Fragment key={post._id}>
                         <li key={post._id}>
-                          <Link className={current_post_slug == post.slug ? 'selected_tab': ''} href={`${link_url}${post.slug}/`}>{post.post_title}</Link>
+                          <Link className={current_post_slug == post.slug ? 'selected_tab': ''} href={`${link_url}${post.slug}/`}>{Helper.decodeHtmlEntities(post.post_title)}</Link>
                         </li>
                       </Fragment>
                     );
@@ -1438,10 +1438,10 @@ const TableOfContent = ({ data }) => {
             {data.map((x, index) => (
               <li key={index}>
                 <a
-                  href={x.href ? '#' + x.href : '#'}
+                  href={x.href ? '#' + Helper.decodeHtmlEntities(x.href) : '#'}
                   onClick={(e) => handleSmoothScroll(e, x.href)}
                 >
-                  {x.title}
+                  {Helper.decodeHtmlEntities(x.title)}
                 </a>
               </li>
             ))}
@@ -1502,7 +1502,7 @@ var ArticleContent = ({blocks}) => {
           } else if (x.type == 'header') { 
 
             return ( 
-              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, x?.data?.text)
+              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, Helper.decodeHtmlEntities(x?.data?.text))
             )
 
           } else if (x.type == 'youtubeEmbed') {

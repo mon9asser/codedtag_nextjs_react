@@ -33,17 +33,19 @@ export default function Tab ({upcoming}) {
          
 
         return (
-            <header className="wrapper max-1150 offset-left offset-right">
+            <div className="wrapper max-1150 offset-left offset-right">
                     <div className="row mlr--15">
                         <div className="md-9 text-center offset-left offset-right p-all-15 flexbox content-center column-direction tutorial-header-block"> 
                             
-                            <AdCompaignBox data={upcoming.ads} position={'before_title'}/>
+                            <header>
+                                <AdCompaignBox data={upcoming.ads} position={'before_title'}/>
 
-                            <h1 className="tutorial-headline">
-                                {upcoming.tab?.title}
-                            </h1>
-                            
-                            <AdCompaignBox data={upcoming.ads} position={'after_title'}/>
+                                <h1 className="tutorial-headline">
+                                    {Helper.decodeHtmlEntities(upcoming.tab?.title)}
+                                </h1>
+
+                                <AdCompaignBox data={upcoming.ads} position={'after_title'}/>
+                            </header>
                             
                             <span className="sub-title">{upcoming.tutorial?.selected_category.name} </span>
                                 
@@ -84,7 +86,7 @@ export default function Tab ({upcoming}) {
 
                         </div>
                     </div>
-            </header>
+            </div>
         );
     }
 
