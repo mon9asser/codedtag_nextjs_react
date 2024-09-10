@@ -1,0 +1,60 @@
+"use strict";(()=>{var t={};t.id=58,t.ids=[58,660],t.modules={3616:(t,e,a)=>{a.a(t,async(t,s)=>{try{a.r(e),a.d(e,{config:()=>h,default:()=>m,getServerSideProps:()=>x,getStaticPaths:()=>g,getStaticProps:()=>p,reportWebVitals:()=>_,routeModule:()=>y,unstable_getServerProps:()=>v,unstable_getServerSideProps:()=>$,unstable_getStaticParams:()=>j,unstable_getStaticPaths:()=>f,unstable_getStaticProps:()=>b});var i=a(7093),r=a(5244),n=a(1323),l=a(1682),o=a.n(l),u=a(8269),d=a(5818),c=t([d]);d=(c.then?(await c)():c)[0];let m=(0,n.l)(d,"default"),p=(0,n.l)(d,"getStaticProps"),g=(0,n.l)(d,"getStaticPaths"),x=(0,n.l)(d,"getServerSideProps"),h=(0,n.l)(d,"config"),_=(0,n.l)(d,"reportWebVitals"),b=(0,n.l)(d,"unstable_getStaticProps"),f=(0,n.l)(d,"unstable_getStaticPaths"),j=(0,n.l)(d,"unstable_getStaticParams"),v=(0,n.l)(d,"unstable_getServerProps"),$=(0,n.l)(d,"unstable_getServerSideProps"),y=new i.PagesRouteModule({definition:{kind:r.x.PAGES,page:"/tutorials/[tutorial]/t/[tab]",pathname:"/tutorials/[tutorial]/t/[tab]",bundlePath:"",filename:""},components:{App:u.default,Document:o()},userland:d});s()}catch(t){s(t)}})},5818:(t,e,a)=>{a.a(t,async(t,s)=>{try{a.r(e),a.d(e,{default:()=>x,getServerSideProps:()=>h});var i=a(997);a(4542);var r=a(968),n=a.n(r);a(5675);var l=a(2905),o=a(2299),u=a(7790),d=a(4352),c=a(4800);a(1163);var m=a(1664),p=a.n(m);a(9332);var g=t([l,u,d,c]);function x({upcoming:t}){if(!t)return i.jsx(c.z5,{});let e=(0,l.default)(t.settings.header),a=(0,l.default)(t.settings.footer);var s=()=>i.jsx("header",{className:"wrapper max-1150 offset-left offset-right",children:i.jsx("div",{className:"row mlr--15",children:(0,i.jsxs)("div",{className:"md-9 text-center offset-left offset-right p-all-15 flexbox content-center column-direction tutorial-header-block",children:[i.jsx(c._H,{data:t.ads,position:"before_title"}),i.jsx("h1",{className:"tutorial-headline",children:t.tab?.title}),i.jsx(c._H,{data:t.ads,position:"after_title"}),(0,i.jsxs)("span",{className:"sub-title",children:[t.tutorial?.selected_category.name," "]}),t.tutorial?.tabs?.length?(0,i.jsxs)("ul",{className:"no-list-style flexbox gap-50 content-center items-center flex-wrap bold-list tab-lang-categories",children:[i.jsx("li",{children:i.jsx(p(),{href:`/tutorials/${t.tutorial?.slug}/`,children:"Tutorials"})}),t.tutorial?.tabs.map(e=>i.jsx("li",{children:i.jsx(p(),{href:e?.slug.indexOf("http")==-1?`/tutorials/${t.tutorial?.slug}/t/${e?.slug}/`:e?.slug,children:e?.title})},e._id))]}):"",i.jsx(c._H,{data:t.ads,position:"after_tab_links"}),(0,i.jsxs)("ul",{className:"content-center no-list-style flexbox gap-50 items-center flex-wrap list-in-tuts",children:[i.jsx("li",{children:(0,i.jsxs)(i.Fragment,{children:[i.jsx("span",{children:o.W.formatNumber(t.posts?.length)}),i.jsx("span",{children:"Tutorials"})]})}),i.jsx("li",{children:(0,i.jsxs)(i.Fragment,{children:[i.jsx("span",{children:o.W.formatNumber(t.tutorial?.duration.split(" ")[0])}),i.jsx("span",{children:t.tutorial?.duration.split(" ")[1]})]})}),i.jsx("li",{children:(0,i.jsxs)(i.Fragment,{children:[i.jsx("span",{children:t.tutorial?.reviews}),i.jsx("span",{children:"Reviews"})]})}),i.jsx("li",{children:(0,i.jsxs)(i.Fragment,{children:[i.jsx("span",{children:o.W.formatNumber(t.tutorial?.views)}),i.jsx("span",{children:"Views"})]})})]}),i.jsx(c._H,{data:t.ads,position:"after_tutorial_statistics"}),i.jsx("div",{className:"mt-20 content-elem",children:i.jsx(c.eA,{ad_camp:t.ads,built_url:`${t.site_url}tutorials/${t.tutorial.slug}/t/${t.tab.slug}/`,upcoming:t,data:t.tab.description})})]})})}),r=`
+                            {
+                                "@context": "https://schema.org",
+                                "@type": "Article",
+                                "headline": "${t.tab?.title}",
+                                "author": {
+                                    "@type": "Organization",
+                                    "name": "${t.settings?.site_name}"
+                                },
+                                "datePublished": "${t.tutorial?.date_published}",   
+                                "dateModified": "${t.tutorial?.date_updated}",   
+                                "description": "${t.tab?.meta_description}",
+                                "publisher": {
+                                    "@type": "Organization",
+                                    "name": "${t.settings?.site_name}",
+                                    "logo": {
+                                        "@type": "ImageObject",
+                                        "url": "${t.settings?.site_logo}"  
+                                    }
+                                },
+                                "mainEntityOfPage": {
+                                    "@type": "WebPage",
+                                    "@id": "${t.site_url}tutorials/${t.tutorial?.slug}/t/${t.tab?.slug}/",
+                                },
+                                "url": "${t.site_url}tutorials/${t.tutorial?.slug}/t/${t.tab?.slug}",
+                                "articleSection": "${t.tutorial?.tag}",
+                                "keywords": "${t.tutorial?.keyphrase}",
+                                "image": "${t.tutorial?.thumbnail_url}",
+                                "breadcrumb": {
+                                        "@context": "https://schema.org",
+                                        "@type": "BreadcrumbList",
+                                        "itemListElement": [
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 1,
+                                                "name": "Home",
+                                                "item": "${t.site_url}"
+                                            },
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 2,
+                                                "name": "Tutorials",
+                                                "item": "${t.site_url}tutorials/"
+                                            },
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 3,
+                                                "name": "${t.tutorial?.tutorial_title}",
+                                                "item": "${t.site_url}tutorials/${t.tutorial?.slug}/"
+                                            },
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 4,
+                                                "name": "${t.tab?.title}",
+                                                "item": "${t.site_url}tutorials/${t.tutorial?.slug}/t/${t.tab?.slug}/"
+                                            }, 
+                                        ]
+                                }
+                            }
+            `;return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(n(),{children:[i.jsx("title",{children:t.tab?.meta_title}),i.jsx("meta",{name:"description",content:t.tab?.meta_description}),t.tab?.hide_from_search_engines?i.jsx("meta",{name:"robots",content:"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"}):"",i.jsx("link",{rel:"canonical",href:`${t.site_url}tutorials/${t.tutorial?.slug}/t/${t.tab?.slug}/`}),i.jsx("meta",{property:"og:locale",content:"en_US"}),i.jsx("meta",{property:"og:type",content:"article"}),i.jsx("meta",{property:"og:title",content:t.tab?.meta_title}),i.jsx("meta",{property:"og:description",content:t.tab?.meta_description}),i.jsx("meta",{property:"og:url",content:`${t.site_url}tutorials/${t.tutorial?.slug}/t/${t.tab?.slug}/`}),i.jsx("meta",{property:"og:site_name",content:t.settings.site_name}),i.jsx("meta",{property:"og:image",content:t.tutorial?.thumbnail_url}),i.jsx("meta",{name:"twitter:card",content:"summary_large_image"}),i.jsx("meta",{name:"twitter:image",content:t.tutorial?.thumbnail_url}),i.jsx("script",{type:"application/ld+json",dangerouslySetInnerHTML:{__html:r}}),e]}),i.jsx(u.Z,{settings:t.settings,menus:{nav_left:t.nav_left,nav_right:t.nav_right}}),i.jsx(()=>i.jsx(i.Fragment,{children:(0,i.jsxs)("main",{className:"wrapper max-1250 offset-left offset-right ptb-50",children:[i.jsx(s,{}),i.jsx("div",{className:"wrapper max-800 text-center chapter-block-hlght box-vote-block",children:""==t.settings.share_social_buttons?"":(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)("span",{children:["Share ",i.jsx("b",{className:"share-txt-on",children:t.tab.title})," on:"]}),i.jsx("div",{className:"flexbox gap-15 share-box",children:i.jsx(c.Du,{platforms:t.settings.share_social_buttons,url:`${t.site_url}tutorials/${t.tutorial.slug}/t/${t.tab.slug}/`,title:t.tab.meta_title,size:32,height:"32px",width:"32px",radius:!t.settings.circle_buttons})})]})}),i.jsx(c.VH,{data_id:t.tab._id,data_title:t.tab.title,feeadback_title:"How Would You Like to Rate This Content?"})]})}),{}),i.jsx(d.Z,{settings:t.settings,menus:{company_links:t.company_links,follow_links:t.follow_links,nav_links:t.nav_links}}),a]})}async function h(t){var e=t.params,a=e.tutorial,s=e.tab,i=await o.W.sendRequest({api:`tutorial-page/get?tut_name=${a}&tab=${s}`,method:"get"});if(!i.ok)throw Error("Server is offline");var r={};if(200==i.status){var n=await i.json();if(n.is_error&&!n.data.length)return{notFound:!0};var l=n.data.settings.site_address;if(l){var u=l.split("/");""!=u[u.length-1]&&(l+="/")}n.data.settings.site_address=l;var d=null,c=n.data?.tutorial?.tabs?.filter(t=>t.slug==s);if(c?.length&&(d=c[0]),null==d)return{notFound:!0};if(n.data.settings?.beside_post_title!=""&&d?.meta_title&&(d.meta_title=d.meta_title+" "+n.data.settings?.beside_post_title),n.data.tutorial?.options){var m={...n.data.tutorial?.options};n.data.tutorial.options={...m,...d}}var p=n.data.menus?.filter(t=>"main_menu"===t.menu_name),g=n.data.menus?.filter(t=>"main_nav_right"===t.menu_name),x=n.data.menus?.filter(t=>"company_nav_links"===t.menu_name),h=n.data.menus?.filter(t=>"follow_nav_links"===t.menu_name),_=n.data.menus?.filter(t=>"tags_nav_links"===t.menu_name);r={ads:n.data.ads,tab:d,tutorial:n.data.tutorial,posts:n.data.posts,chapters:n.data.chapters,settings:n.data.settings,menus:n.data.menus,is_redirect:n.redirect,nav_right:g,nav_left:p,company_links:x,follow_links:h,nav_links:_,site_url:l}}return{props:{upcoming:r}}}[l,u,d,c]=g.then?(await g)():g,s()}catch(t){s(t)}})},1604:t=>{t.exports=require("he")},2934:t=>{t.exports=require("next/dist/client/components/action-async-storage.external.js")},4580:t=>{t.exports=require("next/dist/client/components/request-async-storage.external.js")},5869:t=>{t.exports=require("next/dist/client/components/static-generation-async-storage.external.js")},2785:t=>{t.exports=require("next/dist/compiled/next-server/pages.runtime.prod.js")},968:t=>{t.exports=require("next/head")},6689:t=>{t.exports=require("react")},6405:t=>{t.exports=require("react-dom")},2368:t=>{t.exports=require("react-highlight")},997:t=>{t.exports=require("react/jsx-runtime")},2905:t=>{t.exports=import("html-react-parser")},2017:t=>{t.exports=import("react-share")},7147:t=>{t.exports=require("fs")},1017:t=>{t.exports=require("path")},2781:t=>{t.exports=require("stream")},9796:t=>{t.exports=require("zlib")}};var e=require("../../../../webpack-runtime.js");e.C(t);var a=t=>e(e.s=t),s=e.X(0,[682,723,332,821],()=>a(3616));module.exports=s})();
