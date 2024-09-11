@@ -16,14 +16,11 @@ require("./apis/anlytics");
 const app = express();
 
 const corsOptions = {
-    origin: ['https://admin.codedtag.com', 'https://api.codedtag.com', 'https://media.codedtag.com', 'https://admin.eratags.com', 'https://api.eratags.com', 'https://media.eratags.com'],
+    origin: "*",
     credentials: true,
     optionsSuccessStatus: 200,
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'CT-public-api-key'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-
 };
-app.use(cors(corsOptions)); 
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
