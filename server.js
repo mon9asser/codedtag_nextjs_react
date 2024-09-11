@@ -16,7 +16,7 @@ require("./apis/anlytics");
 const app = express();
 
 const corsOptions = {
-    origin: "*",
+    origin: ['https://admin.codedtag.com', 'https://api.codedtag.com', 'https://media.codedtag.com', 'https://admin.eratags.com', 'https://api.eratags.com', 'https://media.eratags.com'],
     credentials: true,
     optionsSuccessStatus: 200,
 };
