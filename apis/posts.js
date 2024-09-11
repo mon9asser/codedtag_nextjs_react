@@ -586,6 +586,9 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
                     ...link_data.data
                 };
             } catch (err) {
+                console.log(err)
+                console.log('tract 3: catch error ')
+                
                 return {
                     ...link,
                     status: 404,
