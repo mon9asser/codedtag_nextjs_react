@@ -21,7 +21,7 @@ const app = express();
     optionsSuccessStatus: 200,
 };*/
 const corsOptions = {
-    origin: 'http://localhost:3000', // Allow only this origin
+    origin: [ 'http://localhost:3000', 'https://api.codedtag.com', 'https://admin.codedtag.com', 'https://media.codedtag.com', 'https://eratags.com', 'https://api.eratags.com', 'https://admin.eratags.com', 'https://media.eratags.com', 'https://eratags.com' ], // Allow only this origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // This is required for cookies to work with CORS
     optionsSuccessStatus: 200,
