@@ -14,20 +14,21 @@ const axios = require("axios");
 require("./apis/anlytics");
 
 const app = express();
-app.set('trust proxy', 1);
+
 const corsOptions = {
     origin: ['https://admin.codedtag.com', 'https://api.codedtag.com', 'https://media.codedtag.com', 'https://admin.eratags.com', 'https://api.eratags.com', 'https://media.eratags.com'],
     credentials: true,
     optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'CT-public-api-key'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+
 };
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+app.use(cors(corsOptions)); 
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(helmet());
 
-/*
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -44,19 +45,16 @@ app.use(
     },
   })
 );
-  */
+  
 
   
 // Rate limiting configuration
-/*
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 300, // Limit each IP to 300 requests per windowMs
     message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 app.use(apiLimiter);
-*/
-
 
 // Importing routers
 const { tokenRouter } = require("./apis/secure/token");
