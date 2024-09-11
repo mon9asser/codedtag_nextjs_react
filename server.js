@@ -14,7 +14,7 @@ const axios = require("axios");
 require("./apis/anlytics");
 
 const app = express();
-
+app.set('trust proxy', 1);
 /*const corsOptions = {
     origin: "*",
     credentials: true,
@@ -51,8 +51,7 @@ app.use(
     },
   })
 );
-  
-app.set('trust proxy', true);
+   
   
 // Rate limiting configuration
 const apiLimiter = rateLimit({
