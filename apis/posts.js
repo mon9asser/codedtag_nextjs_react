@@ -541,7 +541,8 @@ postRouter.post("/post/update-link", middlewareTokens, async (req, res) => {
     //res.send({post_id, paragraph_id, keyword, target, url, updated_url, updated_target, updated_keyword})
 });
 
-postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
+// middlewareTokens
+postRouter.get("/post-links/get", async (req, res) => {
      
     try {
         const post_type = req.query.post_type;
@@ -568,11 +569,7 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
             }));
         });
          
-        return res.send({
-            is_error: false,
-            data: links,
-            message: "Posts retrieved successfully"
-        })
+        
 
         // Validate all links in parallel
         const validatedLinks = await Promise.all(links.map(async link => {
