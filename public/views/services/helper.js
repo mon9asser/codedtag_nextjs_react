@@ -5,6 +5,11 @@ import Script from 'next/script';
 
 class HelperData {
 
+  decodeHtmlEntities(text) {
+    return he.decode(text);  
+  }
+
+
   validateEmail(email){
     // var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
      var re =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -152,11 +157,11 @@ class HelperData {
       'January', 'February', 'March', 'April', 'May', 'June', 
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-
+    
     
     return {
         value: datetimeValue,
-        text: `${monthNames[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`
+        text: textValue// `${monthNames[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`
     };
   }
      

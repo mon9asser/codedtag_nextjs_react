@@ -5,7 +5,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Helper } from '../helper';
 
 // import { NotificationContainer, NotificationManager } from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
+//import 'react-notifications/lib/notifications.css';
 import { Settings } from '../settings';
 
 class Login extends Component {

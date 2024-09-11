@@ -63,7 +63,7 @@ class Settings extends Component {
     async componentDidMount() {
         // load data 
         var getter = await Helper.sendRequest({
-            api: "/settings/get",
+            api: "settings/get",
             data: {},
             method: "get"
         });

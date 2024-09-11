@@ -8,11 +8,15 @@
     "static/hsMzzGr2UqMuSATPlWeua/_buildManifest.js",
     "static/hsMzzGr2UqMuSATPlWeua/_ssgManifest.js"
   ],
+<<<<<<< HEAD
   "rootMainFiles": [
     "static/chunks/webpack-1d508d8e9e4ae5f1.js",
     "static/chunks/fd9d1056-a29bb05338ce100b.js",
     "static/chunks/main-app-8a81bfef10bb17d0.js"
   ],
+=======
+  "rootMainFiles": [],
+>>>>>>> 3f8800f8a4adc57dce57430b071dff05c8296c05
   "pages": {
     "/": [
       "static/chunks/webpack-1d508d8e9e4ae5f1.js",
@@ -99,6 +103,7 @@
       "static/chunks/pages/tutorials/[tutorial]-1d66b91b4eb75bed.js"
     ],
     "/tutorials/[tutorial]/[post]": [
+<<<<<<< HEAD
       "static/chunks/webpack-1d508d8e9e4ae5f1.js",
       "static/chunks/framework-ee5cbdf6f0551e35.js",
       "static/chunks/main-66f0b14ff4915c39.js",
@@ -123,6 +128,21 @@
       "static/chunks/332-6aeb398f4b6f8bdb.js",
       "static/chunks/519-0b1ca1d8f97063ac.js",
       "static/chunks/pages/tutorials/[tutorial]/t/[tab]/[post]-26098ce1b4844df3.js"
+=======
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/tutorials/[tutorial]/[post].js"
+    ],
+    "/tutorials/[tutorial]/t/[tab]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/tutorials/[tutorial]/t/[tab].js"
+    ],
+    "/tutorials/[tutorial]/t/[tab]/[post]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/tutorials/[tutorial]/t/[tab]/[post].js"
+>>>>>>> 3f8800f8a4adc57dce57430b071dff05c8296c05
     ]
   },
   "ampFirstPages": []

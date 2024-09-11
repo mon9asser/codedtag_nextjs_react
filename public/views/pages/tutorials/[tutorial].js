@@ -40,7 +40,7 @@ export default function Tutorials({upcoming}) {
                             <AdCompaignBox data={upcoming.ads} position={'before_title'} />
 
                             <h1 className="tutorial-headline">
-                                {upcoming.tutorial?.tutorial_title} 
+                                {Helper.decodeHtmlEntities(upcoming.tutorial?.tutorial_title)}
                             </h1>
                             
                             <AdCompaignBox data={upcoming.ads} position={'after_title'} />

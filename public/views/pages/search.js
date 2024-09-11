@@ -58,7 +58,7 @@ export default function Search({ upcoming }) {
 
                 <div className='text-left search-block-header'>
                     <AdCompaignBox data={upcoming.ads} position={'before_title'} />
-                    <h1 className='custom-headline section-head ssreash'>Search results for <b>{upcoming.result_title}</b></h1>
+                    <h1 className='custom-headline section-head ssreash'>Search results for <b>{Helper.decodeHtmlEntities(upcoming.result_title)}</b></h1>
                     <span className='search-result-row'>{upcoming.results.length} results found</span>
                     <AdCompaignBox data={upcoming.ads} position={'after_title'} />
                 </div>

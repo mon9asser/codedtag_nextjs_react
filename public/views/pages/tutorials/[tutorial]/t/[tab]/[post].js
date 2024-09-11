@@ -140,9 +140,9 @@ export default function TabPost({upcoming}) {
                             <AdCompaignBox data={upcoming.ads} position={'before_title'}/>
 
                             <header className="flexbox content-center column-direction mb-30">
-                                <h1 className="tutorial-headline mt-h">{upcoming.post.post_title}</h1>
+                                <h1 className="tutorial-headline mt-h">{Helper.decodeHtmlEntities(upcoming.post.post_title)}</h1>
                                 <i className="modified-date">
-                                Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
+                                    Last updated on <time dateTime={Helper.formated_published_date(upcoming.post.updated_date).value}>{Helper.formated_published_date(upcoming.post.updated_date).text}</time>
                                 </i>
                             </header> 
 
@@ -168,9 +168,7 @@ export default function TabPost({upcoming}) {
                                 </>
                             ): ""
                         }
-                        
-
-                        
+                         
                         <div className="wrapper max-800 text-center chapter-block-hlght box-vote-block"> 
                             {
                                 upcoming.settings.share_social_buttons == '' ? ''
@@ -202,7 +200,6 @@ export default function TabPost({upcoming}) {
     }
     return (
         <>
-
             <Head>
                 <title>{upcoming.post?.meta_title}</title>
                 <meta name="description" content={upcoming.post?.meta_description} />
@@ -248,12 +245,10 @@ export default function TabPost({upcoming}) {
 
 export async function getServerSideProps(context) {   
 
-    try {
-         
-       
-        var prm = context.params;
-         
+    try { 
 
+        var prm = context.params;
+        
         var request = await Helper.sendRequest({  
             api: `post-page/get?tut_name=${prm.tutorial}&post_slug=${prm.post}&tab=${prm.tab}`,
             method: "get",

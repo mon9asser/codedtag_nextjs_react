@@ -846,3 +846,7 @@ body {
 .aside:hover {
     left: 0em;
 }
+
+.open_this_modal {
+    background-color: rgba(0, 0, 0, 0.6);
+}
