@@ -22,6 +22,8 @@ class ManageLinks extends Component {
                 target: "",
                 rel: ""
             },
+            replace_link_target: "_blank",
+            replace_link_type: "",
             site_name: "",
             show_modal: "none",
             is_pressed: false,
@@ -59,23 +61,51 @@ class ManageLinks extends Component {
 
         var link_data = [...this.state.links_in_group]
         
-        
+         
         // replace link 
         var updatedLinks = link_data.map( x => {
-            x.url = x.url.replace(this.state.find_link, new_link )
-            x.new_element = x.element.replace(this.state.find_link, new_link )
-            x.new_element = x.element.replace(this.state.find_link, new_link )
-            x.rel = this.state. 
-            x.link_type = this.state. 
-            x.target = this.state. 
-            return x; 
+            var replaced_url = x.url.replace(this.state.find_link, this.state.replace_link );
+           var links = {
+                selected_link: {
+                    post_id: x.post_id,
+                    paragraph_id: x.paragraph_id,
+                    url:  x.url,
+                    keyword: x.keyword,
+                    target: x.target,
+                    rel: x.rel === undefined ? "" : x.rel
+                },
+                link_to_update: {
+                    url: replaced_url,
+                    keyword: x.keyword, 
+                    rel: this.state.replace_link_type,
+                    target: this.state.replace_link_target,
+                    site_name: this.state.site_name
+                }
+           };
+
+           return links;
+
         });
 
-        console.log(updatedLinks);
+       
 
         // replace links to main array => links
         
+        
         // send request to save them in database
+        updatedLinks.map( async x => {
+
+            var request = await Helper.sendRequest({
+                api: 'post/update-link',
+                method: 'POST',
+                data: {
+                    update: x.link_to_update,
+                    old: x.selected_link
+                }
+            });
+            // https://xxxxxxxxxxxxx.com/javascript/
+            console.log(request);
+        });
 
     }
 
@@ -166,6 +196,7 @@ class ManageLinks extends Component {
             }
 
             const links = response.data; 
+            console.log(links)
             this.setState({ links, totalPages: Math.ceil(links.length / this.state.postsPerPage) });
         } catch (error) {
             console.error("Failed to fetch links:", error);
