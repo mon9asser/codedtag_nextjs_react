@@ -542,7 +542,7 @@ postRouter.post("/post/update-link", middlewareTokens, async (req, res) => {
 });
 
 postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
-    console.log('tract 1: working ')
+     
     try {
         const post_type = req.query.post_type;
         const query_object = post_type ? { post_type: post_type } : {};
@@ -557,7 +557,7 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
                 message: "No links found!"
             });
         }
-        console.log('tract 2: working ')
+         
         // Flatten the links with related post data
         const links = posts.flatMap(post => {
             return (post.links || []).map(link => ({
@@ -567,8 +567,12 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
                 slug: post.slug
             }));
         });
-        
-        console.log('tract => 3: ', links.length);
+         
+        return res.send({
+            is_error: false,
+            data: links,
+            message: "Posts retrieved successfully"
+        })
 
         // Validate all links in parallel
         const validatedLinks = await Promise.all(links.map(async link => {
@@ -618,8 +622,7 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
                 message: "No posts found for the given post_type"
             });
         }
-
-        console.log('tract 3: working ')
+ 
     } catch (error) {
          
         console.log('tract 4: error ')

@@ -191,6 +191,7 @@ class ManageLinks extends Component {
                 data: {}
             });
 
+            console.log(response);
             if (response.is_error || !response.data.length) {
                 return;
             }

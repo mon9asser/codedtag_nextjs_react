@@ -16,8 +16,13 @@ require("./apis/anlytics");
 const app = express();
 
 const corsOptions = {
-    origin: "*",
+ 
+    
+    origin: ['https://admin.eratags.com', 'https://admin.codedtag.com', 'http://localhost:3000'], // Allow your client origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'CT-public-api-key'],
     credentials: true,
+
     optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));

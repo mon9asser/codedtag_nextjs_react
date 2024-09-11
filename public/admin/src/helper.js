@@ -169,7 +169,7 @@ class HelperData {
           var reqs = await axios({
             method: method,
             url: `${Settings.server.api}/${api}`,
-            data: data,
+            data: data, 
             headers: {
               'CT-public-api-key': Settings.keys.public,
               ...headers
