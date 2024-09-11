@@ -568,6 +568,8 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
             }));
         });
         
+        console.log('tract => 3: ', links.length);
+
         // Validate all links in parallel
         const validatedLinks = await Promise.all(links.map(async link => {
             try {
@@ -600,17 +602,17 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
             }
         }));
 
-        console.log('validatedLinks: working ')
+        console.log('validatedLinks: working ', validatedLinks.length)
         if (validatedLinks.length > 0) {
             console.log('Code is validated ', validatedLinks.length)
-            res.status(200).send({
+            return res.status(200).send({
                 is_error: false,
                 data: validatedLinks,
                 message: "Posts retrieved successfully"
             });
         } else {
             console.log('Code else ', validatedLinks.length)
-            res.status(404).send({
+            return res.status(404).send({
                 is_error: true,
                 data: null,
                 message: "No posts found for the given post_type"
@@ -621,7 +623,7 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
     } catch (error) {
          
         console.log('tract 4: error ')
-        res.status(400).send({
+        return res.status(400).send({
             is_error: true,
             data: null,
             message: error.message || "An error occurred while retrieving posts"
