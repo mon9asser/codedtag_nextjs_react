@@ -14,7 +14,7 @@ const axios = require("axios");
 require("./apis/anlytics");
 
 const app = express();
-
+app.set('trust proxy', 1);
 const corsOptions = {
     origin: ['https://admin.codedtag.com', 'https://api.codedtag.com', 'https://media.codedtag.com', 'https://admin.eratags.com', 'https://api.eratags.com', 'https://media.eratags.com'],
     credentials: true,
@@ -27,6 +27,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(helmet());
 
+/*
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -43,7 +44,7 @@ app.use(
     },
   })
 );
-  
+  */
 
   
 // Rate limiting configuration
