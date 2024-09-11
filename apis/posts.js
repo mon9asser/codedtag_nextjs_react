@@ -581,7 +581,7 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
                         url: ''
                     };
                 }
-                console.log('tract CCCC: working ', link_data.is_error)
+                
                 return {
                     ...link,
                     ...link_data.data
@@ -601,12 +601,14 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
         }));
 
         if (validatedLinks.length > 0) {
+            console.log('Code is validated ', validatedLinks.length)
             res.status(200).send({
                 is_error: false,
                 data: validatedLinks,
                 message: "Posts retrieved successfully"
             });
         } else {
+            console.log('Code else ', validatedLinks.length)
             res.status(404).send({
                 is_error: true,
                 data: null,
