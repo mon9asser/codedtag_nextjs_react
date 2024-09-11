@@ -54,7 +54,7 @@ class ManageLinks extends Component {
         }
 
         var new_links = this.state.links.filter( x => x.url.indexOf(find_link) !== -1 );
-        console.kog({filters: new_links})
+        console.log({filters: new_links})
         console.log(this.state.links);
 
     }
