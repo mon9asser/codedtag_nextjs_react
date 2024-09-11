@@ -20,6 +20,9 @@ const app = express();
     credentials: true,
     optionsSuccessStatus: 200,
 };*/
+
+
+
 const corsOptions = {
     origin: [ 'http://localhost:3000', 'https://api.codedtag.com', 'https://admin.codedtag.com', 'https://media.codedtag.com', 'https://eratags.com', 'https://api.eratags.com', 'https://admin.eratags.com', 'https://media.eratags.com', 'https://eratags.com' ], // Allow only this origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -49,7 +52,7 @@ app.use(
   })
 );
   
-
+app.set('trust proxy', true);
   
 // Rate limiting configuration
 const apiLimiter = rateLimit({
