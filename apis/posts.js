@@ -602,7 +602,10 @@ postRouter.get("/post-links/get", async (req, res) => {
         }
     }));
 
-     
+    return res.send({
+        data: validatedLinks, 
+    })
+        
     if (validatedLinks.length > 0) { 
         return res.status(200).send({
             is_error: false,
