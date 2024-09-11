@@ -567,7 +567,7 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
                 slug: post.slug
             }));
         });
-
+        console.log('tract A: working ')
         // Validate all links in parallel
         const validatedLinks = await Promise.all(links.map(async link => {
             try {
@@ -581,6 +581,7 @@ postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
                         url: ''
                     };
                 }
+                console.log('tract CCCC: working ', link_data.is_error)
                 return {
                     ...link,
                     ...link_data.data
