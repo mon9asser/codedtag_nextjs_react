@@ -632,7 +632,7 @@ const ResponsiveTable = ({ data }) => {
                   {withHeadings && (
                       <tr>
                           {content[0].map((heading, index) => (
-                              <th key={index}>{heading}</th>
+                              <th key={index}>{Helper.decodeHtmlEntities(heading)}</th>
                           ))}
                       </tr>
                   )}
@@ -641,9 +641,7 @@ const ResponsiveTable = ({ data }) => {
                   {content.slice(withHeadings ? 1 : 0).map((row, rowIndex) => (
                       <tr key={rowIndex}>
                           {row.map((cell, cellIndex) => (
-                              <td key={cellIndex} data-label={withHeadings ? content[0][cellIndex] : `Column ${cellIndex + 1}`}>
-                                  {cell}
-                              </td>
+                              <td key={cellIndex} data-label={withHeadings ? content[0][cellIndex] : `Column ${cellIndex + 1}`} dangerouslySetInnerHTML={{__html: Helper.decodeHtmlEntities(cell)}}/>
                           ))}
                       </tr>
                   ))}
@@ -1129,7 +1127,7 @@ var ArticleContentSingle = ({blocks, helper}) => {
           } else if (x.type == 'header') { 
 
             return ( 
-              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, Helper.decodeHtmlEntities(x?.data?.text))
+              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(`section-${x?.data?.text}`), style:{textAlign: x?.data?.alignment }}, Helper.decodeHtmlEntities(x?.data?.text))
             )
 
           } else if (x.type == 'youtubeEmbed') {
@@ -1416,12 +1414,10 @@ const TableOfContent = ({ data }) => {
 
   const handleSmoothScroll = (e, href) => {
     e.preventDefault();
-
-     
-    const targetElement = document.querySelector( '#'+ href);
-     
-    if (targetElement) {
+    
+    const targetElement = document.querySelector( '#section-'+ href);
       
+    if (targetElement) { 
       targetElement.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -1438,7 +1434,7 @@ const TableOfContent = ({ data }) => {
             {data.map((x, index) => (
               <li key={index}>
                 <a
-                  href={x.href ? '#' + Helper.decodeHtmlEntities(x.href) : '#'}
+                  href={x.href ? '#section-' + Helper.decodeHtmlEntities(x.href) : '#'}
                   onClick={(e) => handleSmoothScroll(e, x.href)}
                 >
                   {Helper.decodeHtmlEntities(x.title)}
@@ -1502,7 +1498,7 @@ var ArticleContent = ({blocks}) => {
           } else if (x.type == 'header') { 
 
             return ( 
-              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, Helper.decodeHtmlEntities(x?.data?.text))
+              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(`section-${x?.data?.text}`), style:{textAlign: x?.data?.alignment }}, Helper.decodeHtmlEntities(x?.data?.text))
             )
 
           } else if (x.type == 'youtubeEmbed') {

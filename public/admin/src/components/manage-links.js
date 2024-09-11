@@ -30,8 +30,66 @@ class ManageLinks extends Component {
             request_message: "",
             postsPerPage: 10,
             statusCodeFilter: "all",
-            externalFilter: "all"
+            externalFilter: "all",
+            find_link: "",
+            replace_link: "",
+            enable_change_links_by_group: false,
+            links_count: null 
         };
+    }
+
+    findLinkData = () => {
+        
+        var find_link = this.state.find_link;
+        var replace_link = this.state.replace_link;
+
+        if( find_link == "" ) {
+            alert("You must add the link to search about it");
+            return;  
+        }
+
+        if( replace_link == "" ) {
+            alert("Replace link value should be not empty!");
+            return;  
+        }
+
+        var new_links = this.state.links.filter( x => x.url.indexOf(find_link) !== -1 );
+        console.kog({filters: new_links})
+        console.log(this.state.links);
+
+    }
+
+    ChangeByGroupModal = () => {
+        const { enable_change_links_by_group } = this.state;
+        return (
+            <div className={`modal ${this.state.enable_change_links_by_group ? "open_this_modal" : ""}`}>
+                <div className="modal-background-close"></div>
+                <div className="modal-card">
+                    <header className="modal-card-head">
+                        Change Links by Group ( Find & Replace )
+                    </header>
+                    <section className="modal-card-body">
+                        <div style={{marginBottom: '15px'}}>
+                            Number of Found Links: {this.state.links_count == null? " Not Started": <b>{this.state.links_count}</b>}
+                        </div>
+                        <div>
+                            <input onChange={e => this.setState({find_link: e.target.value})} value={this.state.find_link} type="text" placeholder="Find Link"/>
+                            <input onChange={e => this.setState({replace_link: e.target.value})} value={this.state.replace_link} type="text" placeholder="Replace the New Link" style={{marginTop:15}}/>
+                            <input onChange={e => this.setState({replace_link_type: e.target.value})} value={this.state.replace_link_type} type="text" placeholder="Link Type: example: noreferrer noopener" style={{marginTop:15}}/>
+                            <input onChange={e => this.setState({replace_link_target: e.target.value})} value={this.state.replace_link_target} type="text" placeholder="Target: example: _blank" style={{marginTop:15}}/>
+                        </div>
+                        
+                    </section>
+                    <footer className="modal-card-foot">
+                        <button onClick={e => this.setState({enable_change_links_by_group: false})} className="button">Close</button>
+                        <div style={{marginLeft: 'auto'}}>
+                            <button onClick={this.findLinkData} className="button blue">Count Links</button>
+                            <button className="button green">SaveChanges</button>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        );
     }
 
     fetchCurrentSite = async () => {
@@ -67,8 +125,7 @@ class ManageLinks extends Component {
                 return;
             }
 
-            const links = response.data;
-
+            const links = response.data; 
             this.setState({ links, totalPages: Math.ceil(links.length / this.state.postsPerPage) });
         } catch (error) {
             console.error("Failed to fetch links:", error);
@@ -356,8 +413,19 @@ class ManageLinks extends Component {
                         <div style={{ display: 'flex', justifyContent: "center", flexWrap: 'wrap', gap: '20px', marginBottom: '20px' }}>
                             {this.renderStatusCounts()}
                         </div>
+                       
+                        <this.ChangeByGroupModal/>
 
                         <div style={{ display: 'flex', gap: '20px', marginBottom: '50px', justifyContent: "center" }}>
+                            
+                            <button onClick={e => {
+                                this.setState({
+                                    enable_change_links_by_group: true
+                                })
+                            }} className="button green">
+                                Change Links by Group
+                            </button>
+
                             <select
                                 onChange={this.handlePostsPerPageChange}
                                 value={postsPerPage}

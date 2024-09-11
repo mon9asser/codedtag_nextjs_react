@@ -496,6 +496,7 @@ class pageWrapped extends Component {
             <div className={`modal ${this.state.post_confirmation_deletion ? "open_this_modal" : ""}`}>
                 <div className="modal-background"></div>
                 <div className="modal-card">
+                    
                     <header className="modal-card-head">
                         <p className="modal-card-title">Confirm Deletion Process</p>
                     </header>

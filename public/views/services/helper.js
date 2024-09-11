@@ -158,10 +158,7 @@ class HelperData {
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
     
-    console.log({
-      value: datetimeValue,
-      text: `${monthNames[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`
-  });
+    
     return {
         value: datetimeValue,
         text: textValue// `${monthNames[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`
