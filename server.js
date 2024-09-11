@@ -16,13 +16,8 @@ require("./apis/anlytics");
 const app = express();
 
 const corsOptions = {
- 
-    
-    origin: ['https://admin.eratags.com', 'https://admin.codedtag.com', 'http://localhost:3000'], // Allow your client origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'CT-public-api-key'],
+    origin: "*",
     credentials: true,
-
     optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
@@ -53,7 +48,7 @@ app.use(
 // Rate limiting configuration
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 1000, // Limit each IP to 300 requests per windowMs
+    max: 300, // Limit each IP to 300 requests per windowMs
     message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 app.use(apiLimiter);
