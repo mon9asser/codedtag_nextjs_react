@@ -89,6 +89,7 @@ class HelperData {
         try {
             const url = decodeURIComponent(link); 
              
+            
             const response = await axios.get(url, {
                 maxRedirects: 0,
                 validateStatus: function (status) {

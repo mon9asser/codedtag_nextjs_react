@@ -11,6 +11,49 @@ class HelperData {
         return re.test(email);
     }
 
+    validateHttpsStatus = async (link) => {
+      
+        const url =  decodeURIComponent(link);
+    
+        try {
+            const response = await axios.get(url, {
+                // Increase maxRedirects to follow redirects
+                maxRedirects: 5, 
+                validateStatus: function (status) {
+                    // Accept status codes between 200 and 400 (valid and redirect responses)
+                    return status >= 200 && status < 400; 
+                }
+            });
+            
+            console.log(response);
+
+            const { status, statusText } = response;
+            const is_redirect = status >= 300 && status < 400;
+    
+            const objex = {
+                status,
+                type: statusText,
+                is_redirect,
+                url
+            };
+    
+            return {
+                is_error: false,
+                data: objex,
+                message: "Fetched Successfully!"
+            };
+        } catch (error) {
+            // Check if it's an actual 404 error or a CORS issue
+            console.error("Error fetching URL:", error);
+    
+            return {
+                is_error: true,
+                data: null,
+                message: error.response ? `Error: ${error.response.status}` : "Failed to fetch"
+            };
+        }
+    };
+
     formatNumber(num) {
         if (num >= 1000000000000) {
             return (num / 1000000000000).toFixed(1).replace(/\.0$/, '') + 'T';

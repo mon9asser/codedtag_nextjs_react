@@ -183,26 +183,56 @@ class ManageLinks extends Component {
         await this.fetchLinks();
     }
 
-    fetchLinks = async () => {
-        try {
-            const response = await Helper.sendRequest({
-                api: "post-links/get",
-                method: "get",
-                data: {}
-            });
-
-            console.log(response);
-
+    fetchLinks = () => {
+        Helper.sendRequest({
+            api: "post-links/get",
+            method: "get",
+            data: {}
+        }).then(response => {
             if (response.is_error || !response.data.length) {
                 return;
             }
-
-            const links = response.data; 
-            // console.log(links)
-            this.setState({ links, totalPages: Math.ceil(links.length / this.state.postsPerPage) });
-        } catch (error) {
+    
+            const get_links = response.data;
+    
+            // Use Promise.all with .then() for handling async operations
+            Promise.all(
+                get_links.map(link =>
+                    Helper.validateHttpsStatus(link.url)
+                        .then(link_data => {
+                            if (link_data.is_error) {
+                                return {
+                                    ...link,
+                                    status: 404,
+                                    type: '',
+                                    is_redirect: false,
+                                    url: link.url
+                                };
+                            }
+                            return {
+                                ...link_data.data,
+                                ...link
+                            };
+                        })
+                        .catch(error => {
+                            return {
+                                ...link,
+                                status: 404,
+                                type: '',
+                                is_redirect: false,
+                                url: link.url
+                            };
+                        })
+                )
+            ).then(links => {
+                this.setState({
+                    links,
+                    totalPages: Math.ceil(links.length / this.state.postsPerPage)
+                });
+            });
+        }).catch(error => {
             console.error("Failed to fetch links:", error);
-        }
+        });
     };
 
     handleDelete = async (linkId) => {
@@ -573,7 +603,10 @@ class ManageLinks extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {displayedLinks.map((link, index) => (
+                                    {displayedLinks.map((link, index) => {
+                                        
+                                        
+                                        return (
                                         <tr key={index}>
                                             <td data-label="Post Title" style={{ maxWidth: "200px" }}>{link.post_title}</td>
                                             <td data-label="Paragraph ID">{link.paragraph_id}</td>
@@ -613,7 +646,7 @@ class ManageLinks extends Component {
                                                 </button>
                                             </td>
                                         </tr>
-                                    ))}
+                                    )})}
                                 </tbody>
                             </table>
                             <div className="table-pagination">
