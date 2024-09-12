@@ -192,12 +192,13 @@ class ManageLinks extends Component {
             });
 
             console.log(response);
+
             if (response.is_error || !response.data.length) {
                 return;
             }
 
             const links = response.data; 
-            console.log(links)
+            // console.log(links)
             this.setState({ links, totalPages: Math.ceil(links.length / this.state.postsPerPage) });
         } catch (error) {
             console.error("Failed to fetch links:", error);
