@@ -640,9 +640,6 @@ postRouter.get("/post-links/get", async (req, res) => {
     const post_type = req.query.post_type;
     const query_object = post_type ? { post_type: post_type } : {};
     
-    const post_type = req.query.post_type;
-    const query_object = post_type ? { post_type: post_type } : {};
-
     // Fetch posts based on the post_type
     const posts = await Posts.find(query_object);
 
