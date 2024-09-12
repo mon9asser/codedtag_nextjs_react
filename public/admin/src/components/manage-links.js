@@ -183,17 +183,18 @@ class ManageLinks extends Component {
         await this.fetchLinks();
     }
 
-    validateLink = () => {
+    validateLink = async () => {
 
-        Helper.sendRequest({
+       var request = await Helper.sendRequest({
             api: "post/validate_urls",
             method: "post",
             data: {
-                url:"https://codedtag.com/compilers"
+                url: encodeURIComponent("https://codedtag.com/compilers")
             }
-        }).then(response => {
-            console.log(response);
         });
+
+
+        console.log(request)
 
     }
 

@@ -545,7 +545,7 @@ postRouter.post("/post/update-link", middlewareTokens, async (req, res) => {
 postRouter.post("/post/validate_urls", middlewareTokens, async (req, res) => {
     
     var url = decodeURIComponent(req.body.url);
-    console.log(url);
+     
     var objx = {
         is_error: true,
         data: null,
@@ -553,7 +553,7 @@ postRouter.post("/post/validate_urls", middlewareTokens, async (req, res) => {
     } 
 
     if( url == undefined ) {
-        return res.status(404).send(objx);
+        return res.send(objx);
     }
 
     var link_data = await Helper.link_validator(url);
@@ -567,12 +567,12 @@ postRouter.post("/post/validate_urls", middlewareTokens, async (req, res) => {
             url: url
         };
 
-        return res.status(404).send(objx);
+        return res.send(objx);
     }
  
-    return res.status(link_data.data.status).send({
+    return res.send({
         is_error: link_data.is_error,
-        data:[link_data.data],
+        data: link_data.data,
         message: link_data.message
     });
 });
