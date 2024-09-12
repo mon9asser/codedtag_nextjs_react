@@ -183,13 +183,27 @@ class ManageLinks extends Component {
         await this.fetchLinks();
     }
 
+    validateLink = () => {
+
+        Helper.sendRequest({
+            api: "validate_urls",
+            method: "get",
+            data: {
+                url: encodeURIComponent("https://codedtag.com/compilers")
+            }
+        }).then(response => {
+            console.log(response);
+        });
+
+    }
+
     fetchLinks = () => {
         Helper.sendRequest({
             api: "post-links/get",
             method: "get",
             data: {}
         }).then(response => {
-            
+
             if (response.is_error || !response.data.length) {
                 return;
             }
@@ -498,7 +512,7 @@ class ManageLinks extends Component {
                                     enable_change_links_by_group: true
                                 })
                             }} className="button green">
-                                Change Links by Group
+                                Change Links
                             </button>
 
                             <select
@@ -555,6 +569,10 @@ class ManageLinks extends Component {
                                 <option value="true">External Links</option>
                                 <option value="false">Internal Links</option>
                             </select>
+
+                            <button onClick={this.validateLink} className="button red">
+                                Validate Links
+                            </button>
                         </div> 
 
                         <div className="card-content tble">
