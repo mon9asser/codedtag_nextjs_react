@@ -189,47 +189,19 @@ class ManageLinks extends Component {
             method: "get",
             data: {}
         }).then(response => {
+            
             if (response.is_error || !response.data.length) {
                 return;
             }
     
-            const get_links = response.data;
-    
-            // Use Promise.all with .then() for handling async operations
-            Promise.all(
-                get_links.map(link =>
-                    Helper.validateHttpsStatus(link.url)
-                        .then(link_data => {
-                            if (link_data.is_error) {
-                                return {
-                                    ...link,
-                                    status: 404,
-                                    type: '',
-                                    is_redirect: false,
-                                    url: link.url
-                                };
-                            }
-                            return {
-                                ...link_data.data,
-                                ...link
-                            };
-                        })
-                        .catch(error => {
-                            return {
-                                ...link,
-                                status: 404,
-                                type: '',
-                                is_redirect: false,
-                                url: link.url
-                            };
-                        })
-                )
-            ).then(links => {
-                this.setState({
-                    links,
-                    totalPages: Math.ceil(links.length / this.state.postsPerPage)
-                });
+            const links = response.data;
+            
+            this.setState({
+                links,
+                totalPages: Math.ceil(links.length / this.state.postsPerPage)
             });
+
+            
         }).catch(error => {
             console.error("Failed to fetch links:", error);
         });

@@ -541,6 +541,37 @@ postRouter.post("/post/update-link", middlewareTokens, async (req, res) => {
     //res.send({post_id, paragraph_id, keyword, target, url, updated_url, updated_target, updated_keyword})
 });
 
+
+postRouter.post("/validate_urls", middlewareTokens, async (req, res) => {
+    
+    var url = req.body.url;
+
+    var objx = {
+        is_error: true,
+        data: null,
+        message: "success"
+    } 
+
+    if( url == undefined ) {
+        return res.status(404).send(objx);
+    }
+
+    var link_data = await Helper.link_validator(url);
+    if (link_data.is_error) {
+
+        objx.data = {
+            status: 404,
+            type: '',
+            is_redirect: false,
+            url: url
+        };
+
+        return res.status(404).send(objx);
+    }
+
+    return res.status(link_data.data.status).send(link_data);
+});
+
 // middlewareTokens
 postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
 
