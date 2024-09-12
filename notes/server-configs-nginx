@@ -6,11 +6,11 @@
 // =>> /etc/nginx/sites-available/
 // =========================================================
 
-1- eratags.com
+1- codedtag.com
  
 server {
     listen 80;
-    server_name eratags.com www.eratags.com;
+    server_name codedtag.com www.codedtag.com;
 
     location / {
         proxy_pass https://141.136.35.135:2000;
@@ -24,12 +24,12 @@ server {
     }
 } 
 
-2- admin.eratags.com
+2- admin.codedtag.com
 
  
 server {
     listen 80;
-    server_name admin.eratags.com;
+    server_name admin.codedtag.com;
 
     root /var/www/codedtag.com/public/admin/build;
     index index.html;
@@ -42,11 +42,11 @@ server {
  
 
 
-3- api.eratags.com
+3- api.codedtag.com
 
 server {
     listen 80;
-    server_name api.eratags.com;
+    server_name api.codedtag.com;
 
     location / {
         proxy_pass https://141.136.35.135:2000/api/;
@@ -66,9 +66,9 @@ server {
 // =>> Enable sites by linking
 // =========================================================
 
-sudo ln -s /etc/nginx/sites-available/eratags.com /etc/nginx/sites-enabled/
-sudo ln -s /etc/nginx/sites-available/admin.eratags.com /etc/nginx/sites-enabled/
-sudo ln -s /etc/nginx/sites-available/api.eratags.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/codedtag.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/admin.codedtag.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/api.codedtag.com /etc/nginx/sites-enabled/
 
 
 // =========================================================
@@ -81,9 +81,9 @@ sudo systemctl reload nginx
 // =>>Obtain the SSL Certificate
 // =========================================================
 
-sudo certbot --nginx -d eratags.com -d www.eratags.com
-sudo certbot --nginx -d admin.eratags.com  
-sudo certbot --nginx -d api.eratags.com  
+sudo certbot --nginx -d codedtag.com -d www.codedtag.com
+sudo certbot --nginx -d admin.codedtag.com  
+sudo certbot --nginx -d api.codedtag.com  
 
 sudo certbot renew --dry-run
 

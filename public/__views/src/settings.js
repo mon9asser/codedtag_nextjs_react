@@ -1,7 +1,7 @@
 const Settings = {
 
     server: {
-        api: "https://api.eratags.com"
+        api: "https://api.codedtag.com"
     },
 
     google: {

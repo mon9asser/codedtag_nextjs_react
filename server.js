@@ -24,7 +24,7 @@ app.set('trust proxy', 1);
 
 
 const corsOptions = {
-    origin: [ 'http://localhost:3000', 'https://api.codedtag.com', 'https://admin.codedtag.com', 'https://media.codedtag.com', 'https://eratags.com', 'https://api.eratags.com', 'https://admin.eratags.com', 'https://media.eratags.com', 'https://eratags.com' ], // Allow only this origin
+    origin: [  'https://api.codedtag.com', 'https://admin.codedtag.com', 'https://media.codedtag.com', 'https://codedtag.com' ], // Allow only this origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // This is required for cookies to work with CORS
     optionsSuccessStatus: 200,
@@ -39,7 +39,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", 'http://localhost:3000', 'https://api.codedtag.com', 'https://admin.codedtag.com', 'https://media.codedtag.com', 'https://eratags.com', 'https://api.eratags.com', 'https://admin.eratags.com', 'https://media.eratags.com', 'https://eratags.com'],
+      connectSrc: ["'self'", 'https://api.codedtag.com', 'https://admin.codedtag.com', 'https://media.codedtag.com', 'https://codedtag.com'],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       styleSrcElem: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
@@ -145,8 +145,8 @@ app.get(Config.server.api + '/proxy', async (req, res) => {
 
 // Load SSL certificate and key
 const sslOptions = {
-    key: fs.readFileSync('/etc/letsencrypt/live/eratags.com/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/eratags.com/cert.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/codedtag.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/codedtag.com/cert.pem'),
 };
 
 // Create HTTPS server

@@ -16,7 +16,7 @@ var sites = [
     },
     { 
         db_name: "aaa_codedtag",
-        domain: "eratags.com",
+        domain: "codedtag.com",
         name: "codedtag",
         index: 1, 
         property_id: "446426355"
