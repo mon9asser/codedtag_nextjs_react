@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const express = require("express");
 const { name, domain } = require("./../config/db");
 const {middlewareTokens} = require("./secure/middlewares")
-
+const pLimit = require('p-limit');
 var postRouter = express.Router();
 var path = require("path");
 var fs = require("fs");
@@ -635,37 +635,39 @@ postRouter.get("/post-links/get", async (req, res) => {
 });
 */
 
-postRouter.get("/post-links/get", async (req, res) => {
-      
-    const post_type = req.query.post_type;
-    const query_object = post_type ? { post_type: post_type } : {};
-    
-    // Fetch posts based on the post_type
-    const posts = await Posts.find(query_object);
-
-    if (!posts.length) {
-        return res.status(404).send({
-            is_error: true,
-            data: null,
-            message: "No links found!"
-        });
+ 
+function chunkArray(array, size) {
+    const chunked = [];
+    for (let i = 0; i < array.length; i += size) {
+        chunked.push(array.slice(i, size + i));
     }
-        
-    // Flatten the links with related post data
-    const links = posts.flatMap(post => {
-        return (post.links || []).map(link => ({
-            ...link,
-            post_id: post._id,
-            post_title: post.post_title,
-            slug: post.slug
-        }));
-    });
-    
-    // Validate all links in parallel
-    const validatedLinks = await Promise.all(links.map(async link => {
-        try {
-            const link_data = await Helper.link_validator(link.url);
-            if (link_data.is_error) {
+    return chunked;
+}
+
+// Function to process links in batches
+async function processInBatches(links, batchSize, concurrencyLimit) {
+    const chunkedLinks = chunkArray(links, batchSize);
+    const limit = pLimit(concurrencyLimit);  // Control concurrency
+    const validatedLinks = [];
+
+    for (const batch of chunkedLinks) {
+        const validatedBatch = await Promise.all(batch.map(link => limit(async () => {
+            try {
+                const link_data = await Helper.link_validator(link.url);
+                
+                // If the link validation fails, return 404 data
+                return link_data.is_error ? {
+                    ...link,
+                    status: 404,
+                    type: '',
+                    is_redirect: false,
+                    url: ''
+                } : {
+                    ...link,
+                    ...link_data.data
+                };
+            } catch (err) {
+                console.error(err);
                 return {
                     ...link,
                     status: 404,
@@ -674,27 +676,56 @@ postRouter.get("/post-links/get", async (req, res) => {
                     url: ''
                 };
             }
-            
-            return {
-                ...link,
-                ...link_data.data
-            };
-        } catch (err) {
-            console.log(err)
-            console.log('tract 3: catch error ')
-            
-            return {
-                ...link,
-                status: 404,
-                type: '',
-                is_redirect: false,
-                url: ''
-            };
-        }
-    }));
+        })));
+        
+        validatedLinks.push(...validatedBatch);
+    }
 
-    res.send(validatedLinks);
+    return validatedLinks;
+}
+
+postRouter.get("/post-links/get", async (req, res) => {
+    try {
+        const post_type = req.query.post_type;
+        const query_object = post_type ? { post_type: post_type } : {};
+        
+        // Fetch posts based on the post_type
+        const posts = await Posts.find(query_object);
+
+        if (!posts.length) {
+            return res.status(404).send({
+                is_error: true,
+                data: null,
+                message: "No links found!"
+            });
+        }
+        
+        // Flatten the links with related post data
+        const links = posts.flatMap(post => {
+            return (post.links || []).map(link => ({
+                ...link,
+                post_id: post._id,
+                post_title: post.post_title,
+                slug: post.slug
+            }));
+        });
+
+        // Validate links in batches with concurrency control
+        const batchSize = 50;   // Define batch size
+        const concurrencyLimit = 10;  // Define concurrency limit for validating links
+        const validatedLinks = await processInBatches(links, batchSize, concurrencyLimit);
+
+        // Send the validated links as the response
+        res.send(validatedLinks);
+    } catch (err) {
+        console.error('Error in /post-links/get API:', err);
+        res.status(500).send({
+            is_error: true,
+            message: "An error occurred while processing the request."
+        });
+    }
 });
+
 
 
 postRouter.get("/post-links/get/v1", middlewareTokens, async (req, res) => {
