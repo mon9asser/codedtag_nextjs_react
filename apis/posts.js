@@ -542,7 +542,7 @@ postRouter.post("/post/update-link", middlewareTokens, async (req, res) => {
 });
 
 
-postRouter.post("/validate_urls", middlewareTokens, async (req, res) => {
+postRouter.post("/post/validate_urls", middlewareTokens, async (req, res) => {
     
     var url = decodeURIComponent(req.body.url);
     console.log(url);

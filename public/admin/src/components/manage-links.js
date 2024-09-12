@@ -186,10 +186,10 @@ class ManageLinks extends Component {
     validateLink = () => {
 
         Helper.sendRequest({
-            api: "validate_urls",
-            method: "get",
+            api: "post/validate_urls",
+            method: "post",
             data: {
-                url: encodeURIComponent("https://codedtag.com/compilers")
+                url:"https://codedtag.com/compilers"
             }
         }).then(response => {
             console.log(response);
