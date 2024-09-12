@@ -661,7 +661,39 @@ postRouter.get("/post-links/get", async (req, res) => {
         }));
     });
     
-    res.send(links);
+    // Validate all links in parallel
+    const validatedLinks = await Promise.all(links.map(async link => {
+        try {
+            const link_data = await Helper.link_validator(link.url);
+            if (link_data.is_error) {
+                return {
+                    ...link,
+                    status: 404,
+                    type: '',
+                    is_redirect: false,
+                    url: ''
+                };
+            }
+            
+            return {
+                ...link,
+                ...link_data.data
+            };
+        } catch (err) {
+            console.log(err)
+            console.log('tract 3: catch error ')
+            
+            return {
+                ...link,
+                status: 404,
+                type: '',
+                is_redirect: false,
+                url: ''
+            };
+        }
+    }));
+
+    res.send(validatedLinks);
 });
 
 
