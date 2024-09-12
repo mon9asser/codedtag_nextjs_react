@@ -218,8 +218,7 @@ class HelperData {
               ...headers
             }
           });
-          
-          console.log(reqs);
+           
           if( reqs.status === 200 ) {
               return reqs.data;
           } else { 

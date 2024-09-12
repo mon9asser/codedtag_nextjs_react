@@ -183,18 +183,39 @@ class ManageLinks extends Component {
         await this.fetchLinks();
     }
 
-    validateLink = async () => {
+    is_valid_url = async ( url ) => {
 
-       var request = await Helper.sendRequest({
+        var request = await Helper.sendRequest({
             api: "post/validate_urls",
             method: "post",
             data: {
-                url: encodeURIComponent("https://codedtag.com/compilers")
+                url: encodeURIComponent(url)
             }
         });
 
+        return request;
+    }
 
-        console.log(request)
+    validateLink = async () => {
+        
+        if(!this.state.links || !this.state.links.length) {
+            alert("No links found, wait until load the webpage ");
+            return;
+        }
+
+        var length = this.state.links.length; 
+        var links  = [...this.state.links];
+        var completed = 0; 
+
+        links.map( async (x,i) => {
+            
+            var validate = await this.is_valid_url(x.url);
+            console.log(validate);
+
+            return x;
+        })
+
+        console.log(links);
 
     }
 
