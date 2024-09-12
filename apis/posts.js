@@ -542,98 +542,41 @@ postRouter.post("/post/update-link", middlewareTokens, async (req, res) => {
 });
 
 // middlewareTokens
-postRouter.get("/post-links/get", async (req, res) => {
-     
-    try {
-        const post_type = req.query.post_type;
-        const query_object = post_type ? { post_type: post_type } : {};
+postRouter.get("/post-links/get", middlewareTokens, async (req, res) => {
 
-        // Fetch posts based on the post_type
-        const posts = await Posts.find(query_object);
+    const post_type = req.query.post_type;
+    const query_object = post_type ? { post_type: post_type } : {};
 
-        if (!posts.length) {
-            return res.status(404).send({
-                is_error: true,
-                data: null,
-                message: "No links found!"
-            });
-        }
-         
-        // Flatten the links with related post data
-        const links = posts.flatMap(post => {
-            return (post.links || []).map(link => ({
-                ...link,
-                post_id: post._id,
-                post_title: post.post_title,
-                slug: post.slug
-            }));
-        });
-         
-        
+    // Fetch posts based on the post_type
+    const posts = await Posts.find(query_object);
 
-        // Validate all links in parallel
-        const validatedLinks = await Promise.all(links.map(async link => {
-            try {
-                const link_data = await Helper.link_validator(link.url);
-                if (link_data.is_error) {
-                    return {
-                        ...link,
-                        status: 404,
-                        type: '',
-                        is_redirect: false,
-                        url: ''
-                    };
-                }
-                
-                return {
-                    ...link,
-                    ...link_data.data
-                };
-            } catch (err) {
-                console.log(err)
-                console.log('tract 3: catch error ')
-                
-                return {
-                    ...link,
-                    status: 404,
-                    type: '',
-                    is_redirect: false,
-                    url: ''
-                };
-            }
-        }));
-
-        console.log('validatedLinks: working ', validatedLinks.length)
-        if (validatedLinks.length > 0) {
-            console.log('Code is validated ', validatedLinks.length)
-            return res.status(200).send({
-                is_error: false,
-                data: validatedLinks,
-                message: "Posts retrieved successfully"
-            });
-        } else {
-            console.log('Code else ', validatedLinks.length)
-            return res.status(404).send({
-                is_error: true,
-                data: null,
-                message: "No posts found for the given post_type"
-            });
-        }
- 
-    } catch (error) {
-         
-        console.log('tract 4: error ')
-        return res.status(400).send({
+    if (!posts.length) {
+        return res.status(404).send({
             is_error: true,
             data: null,
-            message: error.message || "An error occurred while retrieving posts"
+            message: "No links found!"
         });
     }
+        
+    // Flatten the links with related post data
+    const links = posts.flatMap(post => {
+        return (post.links || []).map(link => ({
+            ...link,
+            post_id: post._id,
+            post_title: post.post_title,
+            slug: post.slug
+        }));
+    });
 
-    console.log('Finished Up ')
+    return res.status(200).send({
+        is_error: false,
+        data: links,
+        message: "Links of Posts retrieved successfully!"
+    });
+    
 });
 
-
+ 
 postRouter.get("/post-links/get/v1", middlewareTokens, async (req, res) => {
     
     try {
