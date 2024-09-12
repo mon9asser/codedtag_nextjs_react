@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 1001",
+    "dev": "next dev -p 2001",
     "build": "next build",
-    "start": "next start -p 1001",
+    "start": "next start -p 2001",
     "lint": "next lint",
     "play": "forever start -c 'npm run start' ./"
   },

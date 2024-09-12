@@ -22,6 +22,7 @@ class ManageLinks extends Component {
                 target: "",
                 rel: ""
             },
+            start_validating: false, 
             replace_link_target: "_blank",
             replace_link_type: "",
             site_name: "",
@@ -122,6 +123,7 @@ class ManageLinks extends Component {
         var new_links = this.state.links.filter( x => x.url.indexOf(find_link) !== -1 );
         var number_links = new_links.length ? `${new_links.length} Links`: 'No Links Found !';
 
+        console.log(new_links);
         this.setState({
             links_in_group: new_links,
             links_count: number_links
@@ -198,24 +200,44 @@ class ManageLinks extends Component {
 
     validateLink = async () => {
         
+
         if(!this.state.links || !this.state.links.length) {
             alert("No links found, wait until load the webpage ");
             return;
         }
 
+        this.setState({start_validating: true })
+
         var length = this.state.links.length; 
         var links  = [...this.state.links];
         var completed = 0; 
 
-        links.map( async (x,i) => {
-            
-            var validate = await this.is_valid_url(x.url);
-            console.log(validate);
+        const updatedLinks = await Promise.all(
+            links.map(async (x, i) => {
+                var validate = await this.is_valid_url(x.url);
+                 
+                if(validate.is_error) {
+                    return {
+                        ...x, 
+                        is_redirect: false,
+                        status: 404,
+                        type: "OK"
+                    };
+                }
+    
+                return {
+                    ...x,
+                    ...validate.data
+                };
+            })
+        );
 
-            return x;
-        })
-
-        console.log(links);
+        if(updatedLinks) {
+            this.setState({
+                start_validating: false,
+                links: updatedLinks
+            })
+        }
 
     }
 
@@ -381,6 +403,7 @@ class ManageLinks extends Component {
             "300": "Multiple Choices",
             "301": "Moved Permanently",
             "302": "Found",
+            "307": "Temporary Redirect",
             "400": "Bad Request",
             "404": "Not Found",
             "500": "Internal Server Error",
@@ -570,7 +593,8 @@ class ManageLinks extends Component {
                                 <option value="204">204</option>
                                 <option value="300">300</option>
                                 <option value="301">301</option>
-                                <option value="302">302</option>
+                                <option value="302">302</option> 
+                                <option value="307">307</option>
                                 <option value="400">400</option>
                                 <option value="404">404</option>
                                 <option value="500">500</option>
@@ -593,7 +617,12 @@ class ManageLinks extends Component {
                             </select>
 
                             <button onClick={this.validateLink} className="button red">
-                                Validate Links
+                                
+                                {
+                                    this.state.start_validating ?
+                                    <span className="loader"></span>
+                                    : "Validate Links"
+                                }
                             </button>
                         </div> 
 
