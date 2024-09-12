@@ -542,7 +542,6 @@ postRouter.post("/post/update-link", middlewareTokens, async (req, res) => {
 });
 
 // middlewareTokens
-/*
 postRouter.get("/post-links/get", async (req, res) => {
      
     try {
@@ -633,101 +632,6 @@ postRouter.get("/post-links/get", async (req, res) => {
 
     console.log('Finished Up ')
 });
-*/
-
-postRouter.get("/post-links/get", async (req, res) => {
-    try {
-        // Dynamically import pLimit inside the function
-        const pLimit = (await import('p-limit')).default;
-        const post_type = req.query.post_type;
-        const query_object = post_type ? { post_type: post_type } : {};
-
-        // Fetch posts based on the post_type
-        const posts = await Posts.find(query_object);
-
-        if (!posts.length) {
-            return res.status(404).send({
-                is_error: true,
-                data: null,
-                message: "No links found!"
-            });
-        }
-        
-        // Flatten the links with related post data
-        const links = posts.flatMap(post => {
-            return (post.links || []).map(link => ({
-                ...link,
-                post_id: post._id,
-                post_title: post.post_title,
-                slug: post.slug
-            }));
-        });
-
-        // Validate links in batches with concurrency control
-        const batchSize = 50;   // Define batch size
-        const concurrencyLimit = 10;  // Define concurrency limit for validating links
-        const validatedLinks = await processInBatches(links, batchSize, concurrencyLimit, pLimit);
-
-        // Send the validated links as the response
-        res.send(validatedLinks);
-    } catch (err) {
-        console.error('Error in /post-links/get API:', err);
-        res.status(500).send({
-            is_error: true,
-            message: "An error occurred while processing the request."
-        });
-    }
-});
-
-// Function to process links in batches (same as before)
-async function processInBatches(links, batchSize, concurrencyLimit, pLimit) {
-    const chunkedLinks = chunkArray(links, batchSize);
-    const limit = pLimit(concurrencyLimit);  // Control concurrency
-    const validatedLinks = [];
-
-    for (const batch of chunkedLinks) {
-        const validatedBatch = await Promise.all(batch.map(link => limit(async () => {
-            try {
-                const link_data = await Helper.link_validator(link.url);
-                
-                // If the link validation fails, return 404 data
-                return link_data.is_error ? {
-                    ...link,
-                    status: 404,
-                    type: '',
-                    is_redirect: false,
-                    url: ''
-                } : {
-                    ...link,
-                    ...link_data.data
-                };
-            } catch (err) {
-                console.error(err);
-                return {
-                    ...link,
-                    status: 404,
-                    type: '',
-                    is_redirect: false,
-                    url: ''
-                };
-            }
-        })));
-        
-        validatedLinks.push(...validatedBatch);
-    }
-
-    return validatedLinks;
-}
-
-// Function to split an array into chunks (same as before)
-function chunkArray(array, size) {
-    const chunked = [];
-    for (let i = 0; i < array.length; i += size) {
-        chunked.push(array.slice(i, size + i));
-    }
-    return chunked;
-}
-
 
 
 postRouter.get("/post-links/get/v1", middlewareTokens, async (req, res) => {
