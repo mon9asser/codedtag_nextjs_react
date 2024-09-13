@@ -34,23 +34,23 @@ export default function Search({ upcoming }) {
         return (
             <div className="error-message-container">
                 
-                <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'before_title'} />
+                <AdCompaignBox  data={upcoming.ads} position={'before_title'} />
                 <h1 className='custom-headline section-head'>Find What You're Looking For!</h1>
-                 <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_title'} />
+                 <AdCompaignBox  data={upcoming.ads} position={'after_title'} />
                 <p>
                     Welcome to our search page! Here, you can find exactly what you're looking for in just a few clicks.
                 </p>
 
                 <SearchComponent/>
-                 <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'before_search_results'} />
+                 <AdCompaignBox  data={upcoming.ads} position={'before_search_results'} />
                 <p>
                     Simply type your keywords into the search bar above, then hit on the search button and we'll show you the most relevant results. 
                 </p>
-                 <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'inside_content'} />
+                 <AdCompaignBox  data={upcoming.ads} position={'inside_content'} />
                 <p>
                 Whether you're searching for articles, tutorials, or products, our search tool makes it easy to discover the information you need.
                 </p>
-                 <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_search_results'} />
+                 <AdCompaignBox  data={upcoming.ads} position={'after_search_results'} />
             </div>          
         )
     }
@@ -60,14 +60,14 @@ export default function Search({ upcoming }) {
             <>
 
                 <div className='text-left search-block-header'>
-                     <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'before_title'} />
+                     <AdCompaignBox  data={upcoming.ads} position={'before_title'} />
                     <h1 className='custom-headline section-head ssreash'>Search results for <b>{Helper.decodeHtmlEntities(upcoming.result_title)}</b></h1>
                     <span className='search-result-row'>{upcoming.results.length} results found</span>
-                     <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_title'} />
+                     <AdCompaignBox  data={upcoming.ads} position={'after_title'} />
                 </div>
 
                 <div className='search-block-body'>
-                     <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'before_search_results'} />
+                     <AdCompaignBox  data={upcoming.ads} position={'before_search_results'} />
                     {
                         upcoming.results.length ? (
                             <ul className='searched-items'> 
@@ -87,7 +87,7 @@ export default function Search({ upcoming }) {
                                             {
                                                 ( key_value == 12 && upcoming.results.length >= 21 ) &&
                                                 <li className='contain-li-ads'>
-                                                     <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'inside_content'} />
+                                                     <AdCompaignBox  data={upcoming.ads} position={'inside_content'} />
                                                 </li>
                                             }
                                         </Fragment>
@@ -98,7 +98,7 @@ export default function Search({ upcoming }) {
                         ): <p className='text-left'>No results found!</p>
                     }
                     
-                     <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_search_results'} />
+                     <AdCompaignBox  data={upcoming.ads} position={'after_search_results'} />
                 </div>
             </>
         )

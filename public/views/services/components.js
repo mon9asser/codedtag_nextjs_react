@@ -175,7 +175,7 @@ var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div>
 
-                <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_1'}/> 
+                <AdCompaignBox  data={ad_camp} position={'after_youtube_video_content_1'}/> 
             </Fragment>
           );
         }
@@ -201,7 +201,7 @@ var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })}
 
-      <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_tutorial_description_1'}/>
+      <AdCompaignBox  data={ad_camp} position={'after_tutorial_description_1'}/>
     </>
   );
 }
@@ -533,7 +533,7 @@ var TutorialLinks = ({upcoming, built_url, ad_camp}) => {
                        
                       return ( 
                         <Fragment key={chapter._id} > 
-                          { (k % ads_every == 0 ) &&  <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
+                          { (k % ads_every == 0 ) &&  <AdCompaignBox  data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
                           <TutorialsList built_url={built_url} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/>
                         </Fragment>
                        );
@@ -548,7 +548,7 @@ var TutorialLinks = ({upcoming, built_url, ad_camp}) => {
                           }
                           return ( 
                           <Fragment key={k} >
-                              { (k % ads_every == 0 ) &&  <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
+                              { (k % ads_every == 0 ) &&  <AdCompaignBox  data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
                               <TutorialsList built_url={built_url} data={posts} index={k}/>
                            </Fragment>
                         );
@@ -579,7 +579,7 @@ var GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
                 <div className="mt-25">
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div> 
-                 <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_2'}/>
+                 <AdCompaignBox  data={ad_camp} position={'after_youtube_video_content_2'}/>
             </Fragment>
           );
         }
@@ -605,7 +605,7 @@ var GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })} 
       
-      <AdCompaignBox settings={upcoming.settings} classes='wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center' data={ad_camp} position={'after_tutorial_description_2'}/>
+      <AdCompaignBox  classes='wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center' data={ad_camp} position={'after_tutorial_description_2'}/>
     </>
   );
 
@@ -889,7 +889,7 @@ var GenerateTutorialContent_1 = ({ data, upcoming, built_url, ad_camp }) => {
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div>
 
-                 <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_1'}/> 
+                 <AdCompaignBox  data={ad_camp} position={'after_youtube_video_content_1'}/> 
             </Fragment>
           );
         }
@@ -915,7 +915,7 @@ var GenerateTutorialContent_1 = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })}
 
-       <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_tutorial_description_1'}/>
+       <AdCompaignBox  data={ad_camp} position={'after_tutorial_description_1'}/>
     </>
   );
 }
@@ -1380,7 +1380,7 @@ var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, t
               </ul>
 
               {
-                x.length >= settings.ads_between_navs_every_list ?  <AdCompaignBox settings={upcoming.settings} data={ads} position={`in_sidebar_${elem_list}`}/>: ''
+                x.length >= settings.ads_between_navs_every_list ?  <AdCompaignBox  data={ads} position={`in_sidebar_${elem_list}`}/>: ''
               }
             </Fragment>
           )

@@ -39,13 +39,13 @@ export default function Tutorials({upcoming}) {
                         <div className="md-9 text-center offset-left offset-right p-all-15 flexbox content-center column-direction tutorial-header-block"> 
                             
                             
-                             <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'before_title'} />
+                             <AdCompaignBox  data={upcoming.ads} position={'before_title'} />
 
                             <h1 className="tutorial-headline">
                                 {Helper.decodeHtmlEntities(upcoming.tutorial?.tutorial_title)}
                             </h1>
                             
-                             <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_title'} />
+                             <AdCompaignBox  data={upcoming.ads} position={'after_title'} />
                             
                             <span className="sub-title">{upcoming.tutorial?.selected_category.name} </span>
                                 
@@ -56,7 +56,7 @@ export default function Tutorials({upcoming}) {
                                         <li><Link href={`/tutorials/${upcoming.tutorial?.slug}/`}>Tutorials</Link></li>
                                         {upcoming.tutorial?.tabs.map(tb => <li key={tb._id}><Link href={tb?.slug.indexOf('http') == -1 ? `/tutorials/${upcoming.tutorial?.slug}/t/${tb?.slug}/`: tb?.slug }>{tb?.title}</Link></li>)}
                                     </ul>
-                                     <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_tab_links'} />
+                                     <AdCompaignBox  data={upcoming.ads} position={'after_tab_links'} />
                                 </>
                                 :""
                             } 
@@ -80,7 +80,7 @@ export default function Tutorials({upcoming}) {
                                 </li>   
                             </ul>
                             
-                             <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_tutorial_statistics'} />
+                             <AdCompaignBox  data={upcoming.ads} position={'after_tutorial_statistics'} />
                              
                             <div className="mt-20 content-elem">
                                 <GenerateTutorialContent_1 ad_camp={upcoming.ads} built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/`} upcoming={upcoming} data={upcoming.tutorial.description} />

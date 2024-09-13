@@ -41,13 +41,13 @@ export default function Tab ({upcoming}) {
                         <div className="md-9 text-center offset-left offset-right p-all-15 flexbox content-center column-direction tutorial-header-block"> 
                             
                             <header>
-                                <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'before_title'}/>
+                                <AdCompaignBox  data={upcoming.ads} position={'before_title'}/>
 
                                 <h1 className="tutorial-headline">
                                     {Helper.decodeHtmlEntities(upcoming.tab?.title)}
                                 </h1>
 
-                                <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_title'}/>
+                                <AdCompaignBox  data={upcoming.ads} position={'after_title'}/>
                             </header>
                             
                             <span className="sub-title">{upcoming.tutorial?.selected_category.name} </span>
@@ -61,7 +61,7 @@ export default function Tab ({upcoming}) {
                                 :""
                             } 
 
-                            <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_tab_links'}/>
+                            <AdCompaignBox  data={upcoming.ads} position={'after_tab_links'}/>
 
                             <ul className="content-center no-list-style flexbox gap-50 items-center flex-wrap list-in-tuts">
 
@@ -81,7 +81,7 @@ export default function Tab ({upcoming}) {
                                 </li>   
                             </ul>
                             
-                            <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_tutorial_statistics'}/>
+                            <AdCompaignBox  data={upcoming.ads} position={'after_tutorial_statistics'}/>
 
                             <div className="mt-20 content-elem">
                                 <GenerateTutorialContent_tab ad_camp={upcoming.ads} built_url={`${upcoming.site_url}tutorials/${upcoming.tutorial.slug}/t/${upcoming.tab.slug}/`} upcoming={upcoming} data={upcoming.tab.description} />

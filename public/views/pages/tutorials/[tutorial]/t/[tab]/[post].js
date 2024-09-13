@@ -124,7 +124,7 @@ export default function TabPost({upcoming}) {
 
                             <StickyBox offsetTop={85} offsetBottom={20}>
                                 
-                                <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'before_sidebar'} />
+                                <AdCompaignBox  data={upcoming.ads} position={'before_sidebar'} />
 
                                 {
                                     upcoming.tab.sidebar_content == 'chapters' && upcoming.chapters.length != 0 ?
@@ -141,7 +141,7 @@ export default function TabPost({upcoming}) {
                     <div className={`plr-20 md-2-content main-content flex-order-1-md ${upcoming.tutorial.options.sidebar_content == 'none'?'md-9 auto-sides': 'md-8'}`}>
                         <div className="max-1150 offset-left offset-right">
                             
-                            <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'before_title'}/>
+                            <AdCompaignBox  data={upcoming.ads} position={'before_title'}/>
 
                             <header className="flexbox content-center column-direction mb-30">
                                 <h1 className="tutorial-headline mt-h">{Helper.decodeHtmlEntities(upcoming.post.post_title)}</h1>
@@ -150,7 +150,7 @@ export default function TabPost({upcoming}) {
                                 </i>
                             </header> 
 
-                            <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={'after_title'}/>
+                            <AdCompaignBox  data={upcoming.ads} position={'after_title'}/>
 
                             <div className="lg-2-content tutorial-content content-section">
                                 <ArticleContentSingle helper={{ads: upcoming.ads, settings: upcoming.settings}} blocks={upcoming.post.blocks}/>
@@ -193,7 +193,7 @@ export default function TabPost({upcoming}) {
                                 </>
                             }
                         </div>
-                        <AdCompaignBox settings={upcoming.settings} data={upcoming.ads} position={`after_contents`}/>
+                        <AdCompaignBox  data={upcoming.ads} position={`after_contents`}/>
                         <FeedBackBlock data_id={upcoming.post._id} data_title={upcoming.post.post_title}/>
                     </div>
 
