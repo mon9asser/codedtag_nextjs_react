@@ -3,20 +3,8 @@ import { useEffect } from "react";
 export default function AdCompaignBox({ position, data, classes, settings }) {
   
     useEffect(() => {
-      
-      const intervalId = setInterval(() => {
-        try {
-          if (window.adsbygoogle) {
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            clearInterval(intervalId);
-          }
-        } catch (err) {
-          console.error("Error pushing ads: ", err);
-          clearInterval(intervalId); // Clear interval in case of errors
-        }
-      }, 100);
-  
-      return () => clearInterval(intervalId); // Cleanup on unmount
+      if (adsbygoogle && !adsbygoogle.loaded)
+        (adsbygoogle = window.adsbygoogle || []).push({});
     }, []);
   
   

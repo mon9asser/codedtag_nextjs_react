@@ -39,6 +39,8 @@ export default function MyApp({ Component, pageProps }) {
   
   var settings = (pageProps.upcoming == undefined || pageProps == undefined) ? null: pageProps.upcoming.settings; 
  
+  console.log(settings.google_ads.enabled);
+  
   return (
     <div className={poppins.className}>
         <Component {...pageProps} />
@@ -72,6 +74,9 @@ export default function MyApp({ Component, pageProps }) {
 
         
         {
+          
+          
+
           (settings != null && settings.google_ads.enabled) && (
             <Script
               async
