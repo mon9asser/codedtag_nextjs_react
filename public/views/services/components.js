@@ -113,7 +113,8 @@ function SearchComponent ({searchType}) {
 
 }
 
-function AdCompaignBox({ position, data, classes }) {
+function AdCompaignBoxOld({ position, data, classes }) {
+
   const adRef = useRef(null);
 
   if (!data) {
@@ -146,6 +147,40 @@ function AdCompaignBox({ position, data, classes }) {
 
   return <div className={combinedClasses} ref={adRef}></div>;
 };
+
+ 
+
+function AdCompaignBox({ position, data, classes }) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+
+    if (window.adsbygoogle && isClient) {
+      // Push to render any dynamically inserted ads
+      window.adsbygoogle.push({});
+    }
+  }, [isClient]);
+
+
+  if (!isClient) {
+    return null; // Don't render anything on the server-side
+  }
+
+  if (!data || !data.length) {
+    return null;
+  }
+
+  const index = data.findIndex((x) => x.position === position);
+  if (index === -1) {
+    return null;
+  }
+
+  const campaignBox = data[index].code;
+  const combinedClasses = classes ? `ad-box ${classes}` : 'ad-box';  
+  return <div className={combinedClasses} dangerouslySetInnerHTML={{ __html: campaignBox }} />;
+  
+}
 
 var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
   // Split the data by the delimiter "|"
