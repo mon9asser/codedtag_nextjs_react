@@ -6,8 +6,11 @@ import parse from 'html-react-parser'
 import { Helper } from "./../../../../services/helper";
 import Header from "./../../../../parts/header";
 import Footer from "./../../../../parts/footer"; 
-import {  
-  AdCompaignBox, 
+import dynamic from "next/dynamic";
+const AdCompaignBox = dynamic(() => import("./../../../../services/ad_campaign"), {
+    ssr: false,
+});
+import {   
   ServerOffline, 
   SocialShare,
   FeedBackBlock, 

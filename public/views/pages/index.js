@@ -9,8 +9,11 @@ import Header from "./../parts/header";
 import Footer from "./../parts/footer"; 
 import Link from "next/link";
 import Script from "next/script";
-import {
-    AdCompaignBox,
+import dynamic from "next/dynamic";
+const AdCompaignBox = dynamic(() => import("./../services/ad_campaign"), {
+    ssr: false,
+});
+import { 
     SubscribeComponents,
     ServerOffline
 } from "./../services/components"; 

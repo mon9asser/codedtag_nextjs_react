@@ -6,6 +6,12 @@ import { Helper } from "./helper";
 import Head from "next/head";
 import Highlight from 'react-highlight'
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const AdCompaignBox = dynamic(() => import("./ad_campaign"), {
+  ssr: false,
+});
+ 
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -150,40 +156,7 @@ function AdCompaignBoxOld({ position, data, classes }) {
 
  
 
-function AdCompaignBox({ position, data, classes, settings }) {
-  
-  useEffect(() => {
-    
-    const intervalId = setInterval(() => {
-      try {
-        if (window.adsbygoogle) {
-          (adsbygoogle = window.adsbygoogle || []).push({});
-          clearInterval(intervalId);
-        }
-      } catch (err) {
-        console.error("Error pushing ads: ", err);
-        clearInterval(intervalId); // Clear interval in case of errors
-      }
-    }, 100);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
-
-
-  if (!data || !data.length) {
-    return null;
-  }
-
-  const index = data.findIndex((x) => x.position === position);
-  if (index === -1) {
-    return null;
-  }
-
-  const campaignBox = data[index].code;
-  const combinedClasses = classes ? `ad-box ${classes}` : 'ad-box';  
-  return <div className={combinedClasses} dangerouslySetInnerHTML={{ __html: campaignBox }} />;
-  
-}
 
 var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
   // Split the data by the delimiter "|"
@@ -1604,8 +1577,7 @@ var TableOfContent = ({data}) => {
   )
 }*/
 export {
-  SearchComponent,
-  AdCompaignBox,
+  SearchComponent, 
   SubscribeComponents,
   TutorialsContent,
   ServerOffline,
