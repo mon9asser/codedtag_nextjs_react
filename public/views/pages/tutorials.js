@@ -90,7 +90,7 @@ export default function Tutorials({upcoming}) {
                     </div>
                 </header> 
                 <div className="lg-2-content tutorial-content content-section">
-                    <TutorialsContent ad_camp={upcoming.ads} blocks={upcoming.blocks} tutorials={upcoming.tutorials}/>
+                    <TutorialsContent settings={upcoming.settings} ad_camp={upcoming.ads} blocks={upcoming.blocks} tutorials={upcoming.tutorials}/>
                 </div> 
             </div>
 

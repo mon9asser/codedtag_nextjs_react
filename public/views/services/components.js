@@ -150,22 +150,25 @@ function AdCompaignBoxOld({ position, data, classes }) {
 
  
 
-function AdCompaignBox({ position, data, classes }) {
-  const [isClient, setIsClient] = useState(false);
-
+function AdCompaignBox({ position, data, classes, settings }) {
+  
   useEffect(() => {
-    setIsClient(true);
+    
+    const intervalId = setInterval(() => {
+      try {
+        if (window.adsbygoogle) {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+          clearInterval(intervalId);
+        }
+      } catch (err) {
+        console.error("Error pushing ads: ", err);
+        clearInterval(intervalId); // Clear interval in case of errors
+      }
+    }, 100);
 
-    if (window.adsbygoogle && isClient) {
-      // Push to render any dynamically inserted ads
-      window.adsbygoogle.push({});
-    }
-  }, [isClient]);
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
 
-
-  if (!isClient) {
-    return null; // Don't render anything on the server-side
-  }
 
   if (!data || !data.length) {
     return null;
@@ -199,7 +202,7 @@ var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div>
 
-                <AdCompaignBox data={ad_camp} position={'after_youtube_video_content_1'}/> 
+                <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_1'}/> 
             </Fragment>
           );
         }
@@ -225,7 +228,7 @@ var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })}
 
-      <AdCompaignBox data={ad_camp} position={'after_tutorial_description_1'}/>
+      <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_tutorial_description_1'}/>
     </>
   );
 }
@@ -518,7 +521,7 @@ function SubscribeComponents ({is_footer, title, description, camp_data, setting
 
       <div style={is_middle ? {margin: "0 auto"}: {}}>
         <div className={`response-msg ${result.cls} ${result.type}`}>{result.message}</div>
-          <AdCompaignBox position="before_subscribe" data={camp_data}/> 
+          <AdCompaignBox settings={settings} position="before_subscribe" data={camp_data}/> 
           <form className="set-center form-group set-focus" action="/" method="get"> 
               <input type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@email.com" />
               <button className="btn primary-btn" type="submit" onClick={send_data}>
@@ -529,7 +532,7 @@ function SubscribeComponents ({is_footer, title, description, camp_data, setting
                 }
               </button>
           </form>
-          <AdCompaignBox position="after_subscribe" data={camp_data}/> 
+          <AdCompaignBox settings={settings} position="after_subscribe" data={camp_data}/> 
       </div>
     </>
   )
@@ -557,7 +560,7 @@ var TutorialLinks = ({upcoming, built_url, ad_camp}) => {
                        
                       return ( 
                         <Fragment key={chapter._id} > 
-                          { (k % ads_every == 0 ) && <AdCompaignBox data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
+                          { (k % ads_every == 0 ) &&  <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
                           <TutorialsList built_url={built_url} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/>
                         </Fragment>
                        );
@@ -572,7 +575,7 @@ var TutorialLinks = ({upcoming, built_url, ad_camp}) => {
                           }
                           return ( 
                           <Fragment key={k} >
-                              { (k % ads_every == 0 ) && <AdCompaignBox data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
+                              { (k % ads_every == 0 ) &&  <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
                               <TutorialsList built_url={built_url} data={posts} index={k}/>
                            </Fragment>
                         );
@@ -603,7 +606,7 @@ var GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
                 <div className="mt-25">
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div> 
-                <AdCompaignBox data={ad_camp} position={'after_youtube_video_content_2'}/>
+                 <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_2'}/>
             </Fragment>
           );
         }
@@ -629,7 +632,7 @@ var GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })} 
       
-      <AdCompaignBox classes='wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center' data={ad_camp} position={'after_tutorial_description_2'}/>
+      <AdCompaignBox settings={upcoming.settings} classes='wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center' data={ad_camp} position={'after_tutorial_description_2'}/>
     </>
   );
 
@@ -709,7 +712,7 @@ var TutorialsList = ({ index, data, chapter_title, built_url }) => {
   );
 }
 
-function TutorialsContent({ blocks, tutorials, ad_camp }){
+function TutorialsContent({ blocks, tutorials, ad_camp, settings }){
   // console.log(ad_camp);
    var header_count = 0;
    var end_section = 0;
@@ -750,7 +753,7 @@ function TutorialsContent({ blocks, tutorials, ad_camp }){
                header_count += 1;
 
                return <Fragment key={`${x.id}-block-header`}>
-               <AdCompaignBox
+               <AdCompaignBox settings={settings}
                  key={`${x.id}-ad-before`}
                  position={`before_section_title_${header_count}`}
                  data={ad_camp}
@@ -760,7 +763,7 @@ function TutorialsContent({ blocks, tutorials, ad_camp }){
                  { key: `${x.id}-heading`, style: { textAlign: x?.data?.alignment } },
                  Helper.decodeHtmlEntities(x?.data?.text)
                )}
-               <AdCompaignBox
+               <AdCompaignBox settings={settings}
                  key={`${x.id}-ad-after`}
                  position={`after_section_title_${header_count}`}
                  data={ad_camp}
@@ -825,7 +828,7 @@ function TutorialsContent({ blocks, tutorials, ad_camp }){
                        ))}
                      </div>
 
-                     <AdCompaignBox
+                     <AdCompaignBox settings={settings}
                        key={`${x.id}-ad-end-of-section`}
                        position={`end_of_category_section_${end_section}`}
                        data={ad_camp}
@@ -913,7 +916,7 @@ var GenerateTutorialContent_1 = ({ data, upcoming, built_url, ad_camp }) => {
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div>
 
-                <AdCompaignBox data={ad_camp} position={'after_youtube_video_content_1'}/> 
+                 <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_1'}/> 
             </Fragment>
           );
         }
@@ -939,7 +942,7 @@ var GenerateTutorialContent_1 = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })}
 
-      <AdCompaignBox data={ad_camp} position={'after_tutorial_description_1'}/>
+       <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_tutorial_description_1'}/>
     </>
   );
 }
@@ -1128,7 +1131,7 @@ var ArticleContentSingle = ({blocks, helper}) => {
             var ad_campaign_element = '';
             if( text_counter >= words_every ) {
               ad_counter++; 
-              ad_campaign_element = <AdCompaignBox data={ads} position={`inside_content_${ad_counter}`}/>;
+              ad_campaign_element =  <AdCompaignBox settings={settings} data={ads} position={`inside_content_${ad_counter}`}/>;
               text_counter = 0;
             }
             
@@ -1364,7 +1367,7 @@ var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, t
 
               </ul>
                
-              <AdCompaignBox data={ads} position={`in_sidebar_${elem_list}`}/>
+               <AdCompaignBox settings={settings} data={ads} position={`in_sidebar_${elem_list}`}/>
                 
             </Fragment>
           )
@@ -1404,7 +1407,7 @@ var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, t
               </ul>
 
               {
-                x.length >= settings.ads_between_navs_every_list ? <AdCompaignBox data={ads} position={`in_sidebar_${elem_list}`}/>: ''
+                x.length >= settings.ads_between_navs_every_list ?  <AdCompaignBox settings={upcoming.settings} data={ads} position={`in_sidebar_${elem_list}`}/>: ''
               }
             </Fragment>
           )

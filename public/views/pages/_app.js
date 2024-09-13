@@ -1,6 +1,7 @@
 import { Poppins } from 'next/font/google';
 import "@/app/globals.css"; // Import your global styles
 import Head from 'next/head';
+import Script from 'next/script';
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800'],
   subsets: ['latin'],
@@ -8,9 +9,83 @@ const poppins = Poppins({
 });
 
 export default function MyApp({ Component, pageProps }) {
+  
+  /*
+  google_analytics: {
+        enabled: {
+            type: Boolean,
+            trim: true,
+            default: false
+        },
+        field: {
+            type: String,
+            trim: true,
+            default: ""
+        },
+    },
+    google_ads: {
+        enabled: {
+            type: Boolean,
+            trim: true,
+            default: false
+        },
+        field: {
+            type: String,
+            trim: true,
+            default: ""
+        },
+    },
+  */
+  
+  var settings = pageProps.upcoming.settings;
+  var adBlocks = pageProps.upcoming.ads;
+  console.log(settings.google_analytics)
+  console.log(settings.google_ads)
+  console.log(adBlocks) 
   return (
     <div className={poppins.className}>
         <Component {...pageProps} />
+        
+
+        {
+          // Google Analytics 
+          settings.google_analytics.enabled && (
+            <>
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${settings.google_analytics.field}`}
+                strategy="afterInteractive"
+                crossOrigin="anonymous" 
+              />
+
+              <Script
+                id="google-analytics-init"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${settings.google_analytics.field}');
+                  `,
+                }}
+              />
+            </>
+          )
+        }
+
+        
+        {
+          settings.google_ads.enabled && (
+            <Script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
+              strategy="lazyOnload"
+              crossOrigin="anonymous"
+              onLoad={() => window.adsbygoogle.push({})}
+            />
+          )
+        } 
+
         <Head>
             <link rel="manifest" href="/icons/manifest.json" />
             <meta name="theme-color" content="#000000" />
@@ -20,3 +95,5 @@ export default function MyApp({ Component, pageProps }) {
     </div>
   );
 }
+
+ 
