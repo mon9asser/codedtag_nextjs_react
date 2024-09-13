@@ -1,7 +1,7 @@
 import { useEffect } from "react";
  
 export default function AdCompaignBox({ position, data, classes, settings }) {
-  
+    /*
     useEffect(() => {
 
       setTimeout(() => {
@@ -11,7 +11,7 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
         }
       }, 100)
     }, []);
-  
+    */
   
     if (!data || !data.length) {
       return null;
