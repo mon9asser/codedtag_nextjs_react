@@ -44,6 +44,10 @@ class Settings extends Component {
                 enabled: false,
                 field: "",
             },
+            google_ads: {
+                enabled: false,
+                field: "",
+            },
             robots_file_contents: "",
             ads_file_contents: '',
             is_pressed: false,
@@ -93,6 +97,7 @@ class Settings extends Component {
             robots_file_contents: settings.robots_file_contents,
             ads_file_contents: settings.ads_file_contents,
             google_analytics: settings.google_analytics,
+            google_ads: settings.google_ads,
             footer: settings.footer,
             header: settings.header,
             subscribe_description: settings.subscribe_description,
@@ -202,6 +207,7 @@ class Settings extends Component {
             robots_file_contents: this.state.robots_file_contents,
             ads_file_contents: this.state.ads_file_contents,
             google_analytics: this.state.google_analytics,
+            google_ads: this.state.google_ads,
             header: this.state.header_value,
             footer: this.state.footer_value,
             subscribe_title: this.state.subscribe_title,
@@ -380,6 +386,17 @@ class Settings extends Component {
                                                 Enable
                                             </label>
                                             <input onChange={e => this.setState({ google_analytics: { ...this.state.google_analytics, field: e.target.value } })} value={this.state.google_analytics.field} className="input" type="text" placeholder="Google Analytics" />
+                                        </div>
+                                    </div>
+
+                                    <div className="field" style={{ marginTop: "25px" }}>
+                                        <label className="label">Google Adsense</label>
+                                        <div className="control">
+                                            <label>
+                                                <input checked={this.state.google_ads.enabled} onChange={e => this.setState({ google_ads: { ...this.state.google_ads, enabled: e.target.checked } })} type="checkbox" />
+                                                Enable
+                                            </label>
+                                            <input onChange={e => this.setState({ google_ads: { ...this.state.google_ads, field: e.target.value } })} value={this.state.google_ads.field} className="input" type="text" placeholder="Google Analytics" />
                                         </div>
                                     </div>
             
