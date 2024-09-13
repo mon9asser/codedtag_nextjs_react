@@ -115,11 +115,8 @@ settingsRouter.get("/site_options", middlewareTokens, async (req, res) => {
         var settings = await Sets.find({});
 
         var data = {
-            google_ads: {
-                settings: settings.google_ads,
-                ads: ads
-            },
-            google_analytics: settings.google_analytics,
+            ads,
+            settings
         }
 
         return res.send({

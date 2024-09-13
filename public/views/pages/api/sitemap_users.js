@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   try {
     // Using your custom Helper.sendRequest to fetch the JSON data
     const reqs = await Helper.sendRequest({
-      api: '/sitemap_users', // Path relative to the base URL in Helper
+      api: 'sitemap_users', // Path relative to the base URL in Helper
       method: 'get', 
     });
     

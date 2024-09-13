@@ -4,10 +4,10 @@ export default async function handler(req, res) {
   try {
     // Using your custom Helper.sendRequest to fetch the JSON data
     const reqs = await Helper.sendRequest({
-      api: '/robots', // Path relative to the base URL in Helper
+      api: 'robots', // Path relative to the base URL in Helper
       method: 'get',
     });
-
+     
     var response = await reqs.json();
      
     if (!response.success || !response.data || typeof response.data.content !== 'string') {
