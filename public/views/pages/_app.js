@@ -37,11 +37,8 @@ export default function MyApp({ Component, pageProps }) {
     },
   */
   
-  var settings = pageProps.upcoming.settings;
-  var adBlocks = pageProps.upcoming.ads;
-  console.log(settings.google_analytics)
-  console.log(settings.google_ads)
-  console.log(adBlocks) 
+  var settings = (pageProps.upcoming == undefined || pageProps == undefined) ? null: pageProps.upcoming.settings; 
+ 
   return (
     <div className={poppins.className}>
         <Component {...pageProps} />
@@ -49,7 +46,7 @@ export default function MyApp({ Component, pageProps }) {
 
         {
           // Google Analytics 
-          settings.google_analytics.enabled && (
+          (settings != null && settings.google_analytics.enabled) && (
             <>
               <Script
                 src={`https://www.googletagmanager.com/gtag/js?id=${settings.google_analytics.field}`}
@@ -75,7 +72,7 @@ export default function MyApp({ Component, pageProps }) {
 
         
         {
-          settings.google_ads.enabled && (
+          (settings != null && settings.google_ads.enabled) && (
             <Script
               async
               src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
