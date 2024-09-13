@@ -81,7 +81,7 @@ export default function MyApp({ Component, pageProps }) {
               src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
               strategy="lazyOnload"
               crossOrigin="anonymous"
-              onLoad={() => window.adsbygoogle.push({})}
+             // onLoad={() => (adsbygoogle = window.adsbygoogle || []).push({})}
             />
           )
         } 
