@@ -3,8 +3,13 @@ import { useEffect } from "react";
 export default function AdCompaignBox({ position, data, classes, settings }) {
   
     useEffect(() => {
-      if (adsbygoogle && !adsbygoogle.loaded)
-        (adsbygoogle = window.adsbygoogle || []).push({});
+
+      setTimeout(() => {
+        if( adsbygoogle != undefined ) {
+          if ( adsbygoogle && !adsbygoogle.loaded)
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+      }, 100)
     }, []);
   
   
