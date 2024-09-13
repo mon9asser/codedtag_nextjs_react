@@ -76,6 +76,18 @@ let settingsSchema = new Schema({
             default: ""
         },
     },
+    google_ads: {
+        enabled: {
+            type: Boolean,
+            trim: true,
+            default: false
+        },
+        field: {
+            type: String,
+            trim: true,
+            default: ""
+        },
+    },
     robots_file_contents: {
         type: String,
         default: ""

@@ -6,6 +6,7 @@ const fs = require("fs");
 const multer = require("multer");
 const {Config} = require("./../config/options");
 const { Sets } = require("./../models/settings-model"); 
+const {AdCampaign} = require("./../models/ad_campaign-model")
 const {middlewareTokens} = require("./secure/middlewares")
 
 /*
@@ -103,5 +104,40 @@ settingsRouter.get("/settings/get", middlewareTokens, async (req, res) => {
         });
     }
 });
+
+
+// access site options and google scripts 
+settingsRouter.get("/site_options", middlewareTokens, async (req, res) => {
+    
+    try {
+
+        var ads = await AdCampaign.find({});
+        var settings = await Sets.find({});
+
+        var data = {
+            google_ads: {
+                settings: settings.google_ads,
+                ads: ads
+            },
+            google_analytics: settings.google_analytics,
+        }
+
+        return res.send({
+            is_error: false, 
+            data: data, 
+            message: "Data Fetched Successfully !"
+        });
+
+    } catch (error) {
+        
+        return res.send({
+            is_error: true, 
+            data: [], 
+            message: "Something went wrong!"
+        });
+
+    }
+
+})
 
 module.exports = { settingsRouter }
