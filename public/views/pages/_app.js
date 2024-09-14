@@ -2,6 +2,7 @@ import { Poppins } from 'next/font/google';
 import "@/app/globals.css"; // Import your global styles
 import Head from 'next/head';
 import Script from 'next/script';
+import { useEffect } from 'react';
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800'],
   subsets: ['latin'],
@@ -42,6 +43,25 @@ export default function MyApp({ Component, pageProps }) {
   if( settings != null )
   console.log(settings.google_ads.enabled);
 
+
+  useEffect(() => {
+    if (settings && settings.google_ads.enabled) {
+      // Ensure this only runs once after ads have been rendered
+      const adSlots = document.getElementsByClassName('adsbygoogle');
+
+      for (var i = 0; i < adSlots.length; i++) {
+        const adSlot = adSlots[i];
+        if (!adSlot.hasAttribute('data-adsbygoogle-status')) {
+          // Initialize only if not already done
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+      }
+
+      // Optional: Log the number of ad slots found
+      console.log("Number of ad slots initialized: " + adSlots.length);
+    }
+  }, [settings]);
+
   return (
     <div className={poppins.className}>
         <Component {...pageProps} />
@@ -81,7 +101,7 @@ export default function MyApp({ Component, pageProps }) {
               src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
               strategy="lazyOnload"
               crossOrigin="anonymous"
-              onLoad={() => {
+              /*onLoad={() => {
                   // Once the AdSense script has loaded, find ad slots and initialize them
                   var adSlots = document.getElementsByClassName('adsbygoogle');
                   
@@ -92,7 +112,7 @@ export default function MyApp({ Component, pageProps }) {
                   
                   // Optional: Log the number of ad slots found
                   console.log("Number of ad slots initialized: " + adSlots.length);
-              }}
+              }}*/
             />
           )  
         } 
