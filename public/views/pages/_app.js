@@ -2,7 +2,7 @@ import { Poppins } from 'next/font/google';
 import "@/app/globals.css"; // Import your global styles
 import Head from 'next/head';
 import Script from 'next/script';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800'],
   subsets: ['latin'],
@@ -11,6 +11,8 @@ const poppins = Poppins({
 
 export default function MyApp({ Component, pageProps }) {
   
+  const [adsbygoogleLoaded, setAdsbygoogleLoaded] = useState(false);
+
   /*
   google_analytics: {
         enabled: {
@@ -45,8 +47,8 @@ export default function MyApp({ Component, pageProps }) {
 
 
   useEffect(() => {
-    if (settings && settings.google_ads.enabled) {
-      // Ensure this only runs once after ads have been rendered
+    if (adsbygoogleLoaded && settings && settings.google_ads.enabled) {
+      // Ensure this only runs once after ads have been rendered and the AdSense script has loaded
       const adSlots = document.getElementsByClassName('adsbygoogle');
 
       for (var i = 0; i < adSlots.length; i++) {
@@ -60,7 +62,7 @@ export default function MyApp({ Component, pageProps }) {
       // Optional: Log the number of ad slots found
       console.log("Number of ad slots initialized: " + adSlots.length);
     }
-  }, [settings]);
+  }, [adsbygoogleLoaded, settings]); 
 
   return (
     <div className={poppins.className}>
@@ -101,18 +103,10 @@ export default function MyApp({ Component, pageProps }) {
               src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
               strategy="lazyOnload"
               crossOrigin="anonymous"
-              /*onLoad={() => {
-                  // Once the AdSense script has loaded, find ad slots and initialize them
-                  var adSlots = document.getElementsByClassName('adsbygoogle');
-                  
-                  // Loop through all ad slots and initialize each one
-                  for (var i = 0; i < adSlots.length; i++) {
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                  }
-                  
-                  // Optional: Log the number of ad slots found
-                  console.log("Number of ad slots initialized: " + adSlots.length);
-              }}*/
+              onLoad={() => {
+                // Mark the AdSense script as loaded
+                setAdsbygoogleLoaded(true);
+              }}  
             />
           )  
         } 
