@@ -1,6 +1,12 @@
 {
-  "pages\\index.js -> ./../services/ad_campaign": {
-    "id": "pages\\index.js -> ./../services/ad_campaign",
+  "pages\\tutorials\\[tutorial].js -> ./../../services/ad_campaign": {
+    "id": "pages\\tutorials\\[tutorial].js -> ./../../services/ad_campaign",
+    "files": [
+      "static/chunks/services_ad_campaign_js.js"
+    ]
+  },
+  "pages\\tutorials\\[tutorial]\\[post].js -> ./../../../services/ad_campaign": {
+    "id": "pages\\tutorials\\[tutorial]\\[post].js -> ./../../../services/ad_campaign",
     "files": [
       "static/chunks/services_ad_campaign_js.js"
     ]

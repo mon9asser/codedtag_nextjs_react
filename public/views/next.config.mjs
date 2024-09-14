@@ -125,7 +125,8 @@ const nextConfig = {
             console.error('Error in redirects function:', error);
             return [];
         }
-    }    
+    },
+     
 };
 
 export default nextConfig;

@@ -79,9 +79,20 @@ export default function MyApp({ Component, pageProps }) {
             <Script
               async
               src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
-              strategy="afterInteractive"
+              strategy="lazyOnload"
               crossOrigin="anonymous"
-             // onLoad={() => (adsbygoogle = window.adsbygoogle || []).push({})}
+              onLoad={() => {
+                  // Once the AdSense script has loaded, find ad slots and initialize them
+                  var adSlots = document.getElementsByClassName('adsbygoogle');
+                  
+                  // Loop through all ad slots and initialize each one
+                  for (var i = 0; i < adSlots.length; i++) {
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                  }
+                  
+                  // Optional: Log the number of ad slots found
+                  console.log("Number of ad slots initialized: " + adSlots.length);
+              }}
             />
           )  
         } 
@@ -92,7 +103,7 @@ export default function MyApp({ Component, pageProps }) {
             <link rel="manifest" href="/icons/manifest.json" />
             <meta name="theme-color" content="#000000" />
             <link rel="icon" href="/icons/favicon.ico" />
-            <link rel="apple-touch-icon" href="/icons/logo192.png" />
+            <link rel="apple-touch-icon" href="/icons/logo192.png" /> 
         </Head>
     </div>
   );
