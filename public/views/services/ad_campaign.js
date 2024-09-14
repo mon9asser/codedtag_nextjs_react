@@ -56,7 +56,7 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
       return acc;
     }, {});
 
-    return <ins className="adsbygoogle" style={styleObject} {...dataAttributes}></ins>;
+    return <div className={combinedClasses}><ins className="adsbygoogle" style={styleObject} {...dataAttributes}></ins></div>;
   }
 
   return <div className={combinedClasses} dangerouslySetInnerHTML={{ __html: props_data.sponser_data }} />;
