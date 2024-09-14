@@ -1,1 +1,6 @@
-{"/_app":"pages/_app.js","/_error":"pages/_error.js","/api/ads":"pages/api/ads.js","/api/robots":"pages/api/robots.js","/api/sitemap_articles":"pages/api/sitemap_articles.js","/api/sitemap_index":"pages/api/sitemap_index.js","/api/sitemap_pages":"pages/api/sitemap_pages.js","/api/sitemap_tabs":"pages/api/sitemap_tabs.js","/api/sitemap_tutorials":"pages/api/sitemap_tutorials.js","/api/sitemap_users":"pages/api/sitemap_users.js","/about-us":"pages/about-us.js","/privacy-policy":"pages/privacy-policy.js","/contact-us":"pages/contact-us.js","/search":"pages/search.js","/terms-and-conditions":"pages/terms-and-conditions.js","/tutorials":"pages/tutorials.js","/_document":"pages/_document.js","/":"pages/index.js","/tutorials/[tutorial]":"pages/tutorials/[tutorial].js","/tutorials/[tutorial]/t/[tab]":"pages/tutorials/[tutorial]/t/[tab].js","/tutorials/[tutorial]/[post]":"pages/tutorials/[tutorial]/[post].js","/tutorials/[tutorial]/t/[tab]/[post]":"pages/tutorials/[tutorial]/t/[tab]/[post].js","/404":"pages/404.html"}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/": "pages/index.js"
+}

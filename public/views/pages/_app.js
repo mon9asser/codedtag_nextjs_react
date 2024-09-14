@@ -74,20 +74,19 @@ export default function MyApp({ Component, pageProps }) {
         }
 
         
-        {
-          
-          
-
-          (settings != null && settings.google_ads.enabled) && (
+        { 
+          ( settings != null && settings.google_ads.enabled ) && (
             <Script
               async
               src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
-              strategy="lazyOnload"
+              strategy="afterInteractive"
               crossOrigin="anonymous"
              // onLoad={() => (adsbygoogle = window.adsbygoogle || []).push({})}
             />
-          )
+          )  
         } 
+
+        
 
         <Head>
             <link rel="manifest" href="/icons/manifest.json" />
