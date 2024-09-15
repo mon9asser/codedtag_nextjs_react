@@ -50,7 +50,7 @@ export default function MyApp({ Component, pageProps }) {
             <meta name="theme-color" content="#000000" />
             <link rel="icon" href="/icons/favicon.ico" />
             <link rel="apple-touch-icon" href="/icons/logo192.png" /> 
-
+        
             { 
               ( settings != null && settings.google_ads.enabled ) && (
                 <script

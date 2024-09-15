@@ -9,10 +9,11 @@ import Footer from "./../parts/footer";
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import Script from "next/script";  
-import dynamic from "next/dynamic"; 
+/*import dynamic from "next/dynamic"; 
 const AdCompaignBox = dynamic(() => import("./../services/ad_campaign"), {
     ssr: false,
-});
+});*/
+import AdCompaignBox from "./../services/ad_campaign";
 
 import { 
     SearchComponent,
