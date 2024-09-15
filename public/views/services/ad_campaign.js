@@ -49,7 +49,7 @@ function AdCompaignBoxOld({ position, data, classes, settings }) {
 */
 
 
-/*
+
 export default function AdCompaignBox({ position, data, classes, settings }) {
   if (!data || !data.length) {
     return null;
@@ -111,9 +111,9 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
 
   return <div className={combinedClasses} dangerouslySetInnerHTML={{ __html: props_data.sponser_data }} />;
 }
-*/
 
 
+/*
 export default function AdCompaignBox({ position, data, classes, settings }) {
   if (!data || !data.length) {
     return null;
@@ -181,3 +181,4 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
   return <div className={combinedClasses} dangerouslySetInnerHTML={{ __html: props_data.sponser_data }} />;
 }
 
+*/
