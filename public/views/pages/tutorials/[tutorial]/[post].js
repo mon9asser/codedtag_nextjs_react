@@ -3,8 +3,11 @@ import StickyBox from "react-sticky-box";
 import {Helper} from "./../../../services/helper"
 import Header from "./../../../parts/header";
 import Footer from "./../../../parts/footer"; 
- 
-import AdCompaignBox from "./../../../services/ad_campaign";
+  
+import dynamic from "next/dynamic"; 
+const AdCompaignBox = dynamic(() => import("./../../../services/ad_campaign"), {
+    ssr: false,
+});
 import { 
     ArticleSidebar,
     Breadcrumbs, 

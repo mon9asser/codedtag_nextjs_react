@@ -5,11 +5,12 @@ import Link from "next/link";
 import { Helper } from "./helper";
 import Head from "next/head";
 import Highlight from 'react-highlight'
-import Image from "next/image";
+import Image from "next/image"; 
 import dynamic from "next/dynamic";
-
-import AdCompaignBox from "./../services/ad_campaign"; 
  
+const AdCompaignBox = dynamic(() => import("./../services/ad_campaign"), {
+    ssr: false,
+});
 import {
   EmailShareButton,
   FacebookShareButton,
