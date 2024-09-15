@@ -1,20 +1,44 @@
 {
-  "pages\\tutorials\\[tutorial].js -> ./../../services/ad_campaign": {
-    "id": "pages\\tutorials\\[tutorial].js -> ./../../services/ad_campaign",
+  "pages\\index.js -> ./../services/ad_campaign": {
+    "id": 30775,
     "files": [
-      "static/chunks/services_ad_campaign_js.js"
+      "static/chunks/775.8fb7621995b04311.js"
+    ]
+  },
+  "pages\\search.js -> ./../services/ad_campaign": {
+    "id": 30775,
+    "files": [
+      "static/chunks/775.8fb7621995b04311.js"
+    ]
+  },
+  "pages\\tutorials\\[tutorial].js -> ./../../services/ad_campaign": {
+    "id": 30775,
+    "files": [
+      "static/chunks/775.8fb7621995b04311.js"
+    ]
+  },
+  "pages\\tutorials\\[tutorial]\\[post].js -> ./../../../services/ad_campaign": {
+    "id": 30775,
+    "files": [
+      "static/chunks/775.8fb7621995b04311.js"
+    ]
+  },
+  "pages\\tutorials\\[tutorial]\\t\\[tab].js -> ./../../../../services/ad_campaign": {
+    "id": 30775,
+    "files": [
+      "static/chunks/775.8fb7621995b04311.js"
     ]
   },
   "pages\\tutorials\\[tutorial]\\t\\[tab]\\[post].js -> ./../../../../../services/ad_campaign": {
-    "id": "pages\\tutorials\\[tutorial]\\t\\[tab]\\[post].js -> ./../../../../../services/ad_campaign",
+    "id": 30775,
     "files": [
-      "static/chunks/services_ad_campaign_js.js"
+      "static/chunks/775.8fb7621995b04311.js"
     ]
   },
   "services\\components.js -> ./../services/ad_campaign": {
-    "id": "services\\components.js -> ./../services/ad_campaign",
+    "id": 30775,
     "files": [
-      "static/chunks/services_ad_campaign_js.js"
+      "static/chunks/775.8fb7621995b04311.js"
     ]
   }
 }
