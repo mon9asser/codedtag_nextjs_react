@@ -6,7 +6,7 @@ import Highlight from 'react-highlight'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link, Element, animateScroll as scroll } from 'react-scroll';
 import { Link as RouterLink, useNavigate} from 'react-router-dom';
-
+ 
 import { Helmet } from 'react-helmet';
 
 import {
@@ -291,7 +291,7 @@ class HelperData {
       );    
   };
 
-    SubscribeComponents = ({is_footer, title, description, camp_data }) => {
+    SubscribeComponents = ({is_footer, title, description, camp_data, settings }) => {
          
         var [email, setEmail] = React.useState('')
         var [result, setRestult] = React.useState({
@@ -369,7 +369,7 @@ class HelperData {
             
             <div>
               <div className={`response-msg ${result.cls} ${result.type}`}>{result.message}</div>
-                <this.AdCompaignBox position="before_subscribe" data={camp_data}/> 
+                <AdCompaignBox settings={settings} position="before_subscribe" data={camp_data}/> 
                 <form className="set-center form-group set-focus" action="/" method="get"> 
                     <input type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@email.com" />
                     <button className="btn primary-btn" type="submit" onClick={send_data}>
@@ -380,7 +380,7 @@ class HelperData {
                       }
                     </button>
                 </form>
-                <this.AdCompaignBox position="after_subscribe" data={camp_data}/> 
+                <AdCompaignBox settings={settings} position="after_subscribe" data={camp_data}/> 
             </div>
           </>
         )

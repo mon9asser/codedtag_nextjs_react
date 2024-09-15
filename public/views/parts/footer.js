@@ -46,9 +46,10 @@ export default function Footer({settings, menus}) {
                         <div className="lg-4 md-6 plr-15 ptb-15"> 
                             <SubscribeComponents 
                                 is_footer={true}
+                                settings={settings}
                                 title={settings.subscribe_title}
                                 description={settings.subscribe_description}
-                            /> 
+                            />  
                         </div>
                     </div>
                 </div>

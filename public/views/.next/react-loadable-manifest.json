@@ -1,0 +1,32 @@
+{
+  "pages\\tutorials\\[tutorial].js -> ./../../services/ad_campaign": {
+    "id": "pages\\tutorials\\[tutorial].js -> ./../../services/ad_campaign",
+    "files": [
+      "static/chunks/services_ad_campaign_js.js"
+    ]
+  },
+  "pages\\tutorials\\[tutorial]\\[post].js -> ./../../../services/ad_campaign": {
+    "id": "pages\\tutorials\\[tutorial]\\[post].js -> ./../../../services/ad_campaign",
+    "files": [
+      "static/chunks/services_ad_campaign_js.js"
+    ]
+  },
+  "pages\\tutorials\\[tutorial]\\t\\[tab].js -> ./../../../../services/ad_campaign": {
+    "id": "pages\\tutorials\\[tutorial]\\t\\[tab].js -> ./../../../../services/ad_campaign",
+    "files": [
+      "static/chunks/services_ad_campaign_js.js"
+    ]
+  },
+  "pages\\tutorials\\[tutorial]\\t\\[tab]\\[post].js -> ./../../../../../services/ad_campaign": {
+    "id": "pages\\tutorials\\[tutorial]\\t\\[tab]\\[post].js -> ./../../../../../services/ad_campaign",
+    "files": [
+      "static/chunks/services_ad_campaign_js.js"
+    ]
+  },
+  "services\\components.js -> ./../services/ad_campaign": {
+    "id": "services\\components.js -> ./../services/ad_campaign",
+    "files": [
+      "static/chunks/services_ad_campaign_js.js"
+    ]
+  }
+}

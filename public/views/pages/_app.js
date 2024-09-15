@@ -25,13 +25,13 @@ export default function MyApp({ Component, pageProps }) {
             <>
               <Script
                 src={`https://www.googletagmanager.com/gtag/js?id=${settings.google_analytics.field}`}
-                strategy="afterInteractive"
+                strategy="lazyOnload"
                 crossOrigin="anonymous" 
               />
 
               <Script
                 id="google-analytics-init"
-                strategy="afterInteractive"
+                strategy="lazyOnload"
                 dangerouslySetInnerHTML={{
                   __html: `
                     window.dataLayer = window.dataLayer || [];
@@ -44,21 +44,25 @@ export default function MyApp({ Component, pageProps }) {
             </>
           )
         }
-        { 
-          ( settings != null && settings.google_ads.enabled ) && (
-            <Script
-              async
-              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
-              strategy="afterInteractive"
-              crossOrigin="anonymous" 
-            />
-          )  
-        }
+        
         <Head>
             <link rel="manifest" href="/icons/manifest.json" />
             <meta name="theme-color" content="#000000" />
             <link rel="icon" href="/icons/favicon.ico" />
             <link rel="apple-touch-icon" href="/icons/logo192.png" /> 
+
+            { /*
+              ( settings != null && settings.google_ads.enabled ) && (
+                <script
+                  async
+                  id="adsbygoogle-script-tag"
+                  src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`}
+                  crossOrigin="anonymous" 
+                />
+              )  
+              */
+            }
+
         </Head>
     </div>
   );

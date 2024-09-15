@@ -174,7 +174,7 @@ var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div>
 
-                <AdCompaignBox  data={ad_camp} position={'after_youtube_video_content_1'}/> 
+                <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_1'}/> 
             </Fragment>
           );
         }
@@ -200,7 +200,7 @@ var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })}
 
-      <AdCompaignBox  data={ad_camp} position={'after_tutorial_description_1'}/>
+      <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_tutorial_description_1'}/>
     </>
   );
 }
@@ -408,6 +408,8 @@ var FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
 }
 
 function SubscribeComponents ({is_footer, title, description, camp_data, settings }) {
+
+  var main_settings = settings; 
   
   var is_middle = false; 
   if( settings != undefined && settings.banner_image_url == "" ) {
@@ -473,7 +475,7 @@ function SubscribeComponents ({is_footer, title, description, camp_data, setting
 
 
   }
-
+  
   return (
     <>
       {
@@ -493,7 +495,12 @@ function SubscribeComponents ({is_footer, title, description, camp_data, setting
 
       <div style={is_middle ? {margin: "0 auto"}: {}}>
         <div className={`response-msg ${result.cls} ${result.type}`}>{result.message}</div>
-          <AdCompaignBox settings={settings} position="before_subscribe" data={camp_data}/> 
+          
+          {
+            is_footer ? '':
+            <AdCompaignBox settings={main_settings} position="before_subscribe" data={camp_data}/> 
+          }
+          
           <form className="set-center form-group set-focus" action="/" method="get"> 
               <input type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@email.com" />
               <button className="btn primary-btn" type="submit" onClick={send_data}>
@@ -504,8 +511,12 @@ function SubscribeComponents ({is_footer, title, description, camp_data, setting
                 }
               </button>
           </form>
-          <AdCompaignBox settings={settings} position="after_subscribe" data={camp_data}/> 
-      </div>
+          {
+            is_footer ? '':
+            <AdCompaignBox settings={main_settings} position="after_subscribe" data={camp_data}/> 
+          }
+          
+        </div>
     </>
   )
 }
@@ -532,7 +543,7 @@ var TutorialLinks = ({upcoming, built_url, ad_camp}) => {
                        
                       return ( 
                         <Fragment key={chapter._id} > 
-                          { (k % ads_every == 0 ) &&  <AdCompaignBox  data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
+                          { (k % ads_every == 0 ) &&  <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
                           <TutorialsList built_url={built_url} data={chapter.posts} chapter_title={chapter.chapter_title} index={k}/>
                         </Fragment>
                        );
@@ -547,7 +558,7 @@ var TutorialLinks = ({upcoming, built_url, ad_camp}) => {
                           }
                           return ( 
                           <Fragment key={k} >
-                              { (k % ads_every == 0 ) &&  <AdCompaignBox  data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
+                              { (k % ads_every == 0 ) &&  <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={`between_row_ad_${counter_ads}`}/>}
                               <TutorialsList built_url={built_url} data={posts} index={k}/>
                            </Fragment>
                         );
@@ -578,7 +589,7 @@ var GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
                 <div className="mt-25">
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div> 
-                 <AdCompaignBox  data={ad_camp} position={'after_youtube_video_content_2'}/>
+                 <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_2'}/>
             </Fragment>
           );
         }
@@ -604,7 +615,7 @@ var GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })} 
       
-      <AdCompaignBox  classes='wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center' data={ad_camp} position={'after_tutorial_description_2'}/>
+      <AdCompaignBox settings={upcoming.settings} classes='wrapper chapter-elements max-1150 offset-left offset-right mt-30 flexbox gap-20 flex-wrap content-center' data={ad_camp} position={'after_tutorial_description_2'}/>
     </>
   );
 
@@ -888,7 +899,7 @@ var GenerateTutorialContent_1 = ({ data, upcoming, built_url, ad_camp }) => {
                   <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
                 </div>
 
-                 <AdCompaignBox  data={ad_camp} position={'after_youtube_video_content_1'}/> 
+                 <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_youtube_video_content_1'}/> 
             </Fragment>
           );
         }
@@ -914,7 +925,7 @@ var GenerateTutorialContent_1 = ({ data, upcoming, built_url, ad_camp }) => {
         }
       })}
 
-       <AdCompaignBox  data={ad_camp} position={'after_tutorial_description_1'}/>
+       <AdCompaignBox settings={upcoming.settings} data={ad_camp} position={'after_tutorial_description_1'}/>
     </>
   );
 }
@@ -1379,7 +1390,7 @@ var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, t
               </ul>
 
               {
-                x.length >= settings.ads_between_navs_every_list ?  <AdCompaignBox  data={ads} position={`in_sidebar_${elem_list}`}/>: ''
+                x.length >= settings.ads_between_navs_every_list ?  <AdCompaignBox settings={settings} data={ads} position={`in_sidebar_${elem_list}`}/>: ''
               }
             </Fragment>
           )
