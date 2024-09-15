@@ -157,7 +157,7 @@ export default function Tab ({upcoming}) {
                                 },
                                 "mainEntityOfPage": {
                                     "@type": "WebPage",
-                                    "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/",
+                                    "@id": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/"
                                 },
                                 "url": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}",
                                 "articleSection": "${upcoming.tutorial?.tag}",
@@ -190,7 +190,7 @@ export default function Tab ({upcoming}) {
                                                 "position": 4,
                                                 "name": "${upcoming.tab?.title}",
                                                 "item": "${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/t/${upcoming.tab?.slug}/"
-                                            }, 
+                                            }
                                         ]
                                 }
                             }

@@ -1,4 +1,4 @@
-import { useEffect } from "react"; 
+import { useEffect, useState } from "react"; 
 
 /*
 
@@ -114,12 +114,9 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
 
 
 export default function AdCompaignBox({ position, data, classes, settings }) {
-  
-  console.log(position, settings);
- 
-  return null; 
+   
   const [isAdSenseLoaded, setIsAdSenseLoaded] = useState(false);
-
+  
   if (!data || !data.length) {
     return null;
   }
@@ -128,11 +125,15 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
   if (index === -1) {
     return null;
   }
-
-
+  
   useEffect(() => {
     
+   
     if( props_data.sponser_type === 'object' ) {
+
+      if( !settings.google_ads.enabled  ) { 
+        return;
+      } 
 
       // Check if the AdSense script is already present by id
       const isAdSenseScriptPresent = document.getElementById('adsbygoogle-script-tag');
@@ -143,7 +144,7 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
       if (!isAdSenseScriptPresent || !isAdSenseInitialized) {
         const script = document.createElement('script');
               script.id = 'adsbygoogle-script-tag';
-              script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2849519484046076';
+              script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_ads.field}`;
               script.async = true;
               script.crossOrigin = 'anonymous';
               script.onload = () => {
@@ -160,7 +161,7 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
     }
 
   }, [])
-
+  
   var campaignBox = data[index].code; 
   var props_data = null;
   try {
@@ -188,6 +189,11 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
   const combinedClasses = classes ? `ad-box ${classes}` : 'ad-box';
 
   if (props_data.sponser_type === 'object') {
+
+    if( !settings.google_ads.enabled  ) { 
+      return null;
+    } 
+
     const { style, ...otherProps } = props_data.sponser_data;
 
     // Convert style string to a React-compatible object with camelCase properties
@@ -218,7 +224,7 @@ export default function AdCompaignBox({ position, data, classes, settings }) {
           />
         )}
       </div>
-    );
+    ); 
   }
 
   return <div className={combinedClasses} dangerouslySetInnerHTML={{ __html: props_data.sponser_data }} />;

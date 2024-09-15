@@ -28,16 +28,6 @@
       "static/chunks/main.js",
       "static/chunks/pages/tutorials/[tutorial].js"
     ],
-    "/tutorials/[tutorial]/[post]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/tutorials/[tutorial]/[post].js"
-    ],
-    "/tutorials/[tutorial]/t/[tab]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/tutorials/[tutorial]/t/[tab].js"
-    ],
     "/tutorials/[tutorial]/t/[tab]/[post]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

@@ -51,7 +51,7 @@ export default function MyApp({ Component, pageProps }) {
             <link rel="icon" href="/icons/favicon.ico" />
             <link rel="apple-touch-icon" href="/icons/logo192.png" /> 
 
-            { /*
+            { 
               ( settings != null && settings.google_ads.enabled ) && (
                 <script
                   async
@@ -60,7 +60,6 @@ export default function MyApp({ Component, pageProps }) {
                   crossOrigin="anonymous" 
                 />
               )  
-              */
             }
 
         </Head>
