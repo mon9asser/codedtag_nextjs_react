@@ -8,10 +8,8 @@ import Header from "./../../../../../parts/header";
 import Footer from "./../../../../../parts/footer"; 
 import StickyBox from "react-sticky-box";
 import dynamic from "next/dynamic";
-const AdCompaignBox = dynamic(() => import("./../../../../../services/ad_campaign"), {
-    ssr: false,
-});
-
+ 
+import AdCompaignBox from "./../../../../../services/ad_campaign"; 
 import {   
     ArticleSidebar, 
     ArticleContentSingle,

@@ -1031,7 +1031,7 @@ ul li a.expanded-a::after{
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
-    text-align: center;
+    /*text-align: center;*/
  }
 
 

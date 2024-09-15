@@ -10,6 +10,7 @@
     "play": "forever start -c 'npm run start' ./"
   },
   "dependencies": {
+    "@ctrl/react-adsense": "^1.7.0",
     "he": "^1.2.0",
     "html-react-parser": "^5.1.12",
     "next": "14.2.5",

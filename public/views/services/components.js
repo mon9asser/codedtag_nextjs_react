@@ -8,9 +8,7 @@ import Highlight from 'react-highlight'
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-const AdCompaignBox = dynamic(() => import("./ad_campaign"), {
-  ssr: false,
-});
+import AdCompaignBox from "./../services/ad_campaign"; 
  
 import {
   EmailShareButton,

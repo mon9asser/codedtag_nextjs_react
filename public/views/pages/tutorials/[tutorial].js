@@ -10,9 +10,8 @@ import { ServerOffline } from "./../../services/components";
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import dynamic from "next/dynamic";
-const AdCompaignBox = dynamic(() => import("./../../services/ad_campaign"), {
-    ssr: false,
-});
+import AdCompaignBox from "./../../services/ad_campaign";
+
 import {   
     GenerateTutorialContent_1,
     GenerateTutorialContent_2,
