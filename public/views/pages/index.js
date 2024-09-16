@@ -98,7 +98,7 @@ export default function Home({upcoming}){
                             
                             //upcoming.latest_posts.length
                             <>
-                                <ul className="latest-post-list">
+                                {/*<ul className="latest-post-list">
                                    {
                                     upcoming.latest_posts.map(x => { 
                                         var href = `${upcoming.site_url}tutorials/${x.tutorial.slug}/`;
@@ -122,7 +122,7 @@ export default function Home({upcoming}){
                                         )
                                     })
                                    }
-                                </ul>
+                                </ul>*/}
                             </>
                         )
                     }
@@ -335,9 +335,9 @@ export async function getServerSideProps(context) {
                
               
               upcoming = {
-                latest_posts: posts,
+                //latest_posts: posts,
                 tutorials: json.data.tutorials,
-                posts: json.data.posts, 
+                // posts: json.data.posts,              
                 settings: json.data.settings,
                 nav_right,
                 nav_left,
@@ -345,7 +345,7 @@ export async function getServerSideProps(context) {
                 follow_links,
                 nav_links,
                 site_url,
-                menus: json.data.menus,
+                // menus: json.data.menus,              
                 ads: json.data.ads
               };
         

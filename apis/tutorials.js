@@ -205,8 +205,55 @@ tutorialRouter.get("/tutorial-page/get", middlewareTokens, async (req, res) => {
 
 
 
-
+/*
 tutorialRouter.get("/home-page/get", middlewareTokens, async (req, res) => {
+    
+    try {
+        
+
+
+        var tutorials = await Tutorial.find({ "options.publish": true }); 
+        var posts = await Posts.find({is_published: true });
+        var settings = await Sets.find({})
+        var menus = await Menus.find({});
+        var user = await Usr.find({email: 'moun2030@gmail.com'});
+        var ads = await AdCampaign.find({page:"homepage", is_enabled: true});
+
+        var _settings = settings.length ? settings[0].toObject() : {};
+         
+        if(settings.length && user.length) { 
+            var slinks = user[0].social_links.map( x => `"${x.social_link}"`)
+            _settings = {..._settings, social_links: slinks};
+        } 
+        
+        var response = {
+            tutorials,
+            posts,
+            settings:_settings, 
+            menus,
+            ads
+        } 
+    
+        res.send({
+            redirect: false, 
+            data: response,
+            is_error: false, 
+            message: "Fetched successfully!",
+        });
+ 
+    } catch (error) {
+         
+         return res.send( {
+             redirect: true, // for only page 404 
+             is_error: true, 
+             message: error.message || "Something went wrong",
+             data: []
+         })
+    }
+ })
+ */
+ 
+ tutorialRouter.get("/home-page/get", middlewareTokens, async (req, res) => {
     
     try {
         
