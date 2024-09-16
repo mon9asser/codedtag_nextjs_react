@@ -9,10 +9,10 @@ const nextConfig = {
         remotePatterns: [
           {
               protocol: 'https',
-              hostname: '**',
+              hostname: 'media.codedtag.com',
           }
         ],
-    }, 
+    },  
     
     async rewrites() {
         return [
