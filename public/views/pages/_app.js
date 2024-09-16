@@ -25,13 +25,13 @@ export default function MyApp({ Component, pageProps }) {
             <>
               <Script
                 src={`https://www.googletagmanager.com/gtag/js?id=${settings.google_analytics.field}`}
-                strategy="lazyOnload"
+                strategy="afterInteractive"
                 crossOrigin="anonymous" 
               />
 
               <Script
                 id="google-analytics-init"
-                strategy="lazyOnload"
+                strategy="afterInteractive"
                 dangerouslySetInnerHTML={{
                   __html: `
                     window.dataLayer = window.dataLayer || [];
