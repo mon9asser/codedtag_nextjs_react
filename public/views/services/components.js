@@ -2,15 +2,19 @@ import { useState, useRef, createElement, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { Fragment } from "react";
 import Link from "next/link";
-import { Helper } from "./helper";
+import dynamic from "next/dynamic";
+
+const Helper =  dynamic(() => import('./helper'), { ssr: false });
+
 import Head from "next/head";
 import Highlight from 'react-highlight'
 import Image from "next/image"; 
-import dynamic from "next/dynamic";
+
  
 const AdCompaignBox = dynamic(() => import("./../services/ad_campaign"), {
     ssr: false,
 });
+
 import {
   EmailShareButton,
   FacebookShareButton,
